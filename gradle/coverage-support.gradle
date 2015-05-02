@@ -1,0 +1,16 @@
+apply plugin: 'jacoco'
+
+
+test {
+    jacoco {
+        excludes = ["org.jtwig.parser.parboiled.*"]
+    }
+}
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: 'org/jtwig/parser/**')
+        })
+    }
+}

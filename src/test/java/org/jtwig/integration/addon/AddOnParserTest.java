@@ -1,0 +1,64 @@
+package org.jtwig.integration.addon;
+
+import org.jtwig.JtwigModel;
+import org.jtwig.context.RenderContext;
+import org.jtwig.integration.AbstractIntegrationTest;
+import org.jtwig.model.position.Position;
+import org.jtwig.model.tree.Node;
+import org.jtwig.parser.parboiled.ParserContext;
+import org.jtwig.parser.parboiled.base.LimitsParser;
+import org.jtwig.parser.parboiled.base.PositionTrackerParser;
+import org.jtwig.parser.parboiled.base.SpacingParser;
+import org.jtwig.parser.parboiled.node.AddonParser;
+import org.jtwig.render.Renderable;
+import org.jtwig.render.model.ByteArrayRenderable;
+import org.junit.Test;
+import org.parboiled.Rule;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.jtwig.configuration.ConfigurationBuilder.configuration;
+
+public class AddOnParserTest extends AbstractIntegrationTest {
+    @Test
+    public void addOn() throws Exception {
+        String result = defaultStringTemplate("{% hello %}", configuration()
+                .withAddOnParser(SimpleAddOnParser.class)
+                .build()).render(JtwigModel.newModel());
+
+        assertThat(result, is("Hello World!"));
+    }
+
+    public static class SimpleAddOnParser extends AddonParser {
+        public SimpleAddOnParser(ParserContext context) {
+            super(SimpleAddOnParser.class, context);
+        }
+
+        @Override
+        public Rule NodeRule() {
+            PositionTrackerParser positionTrackerParser = parserContext().parser(PositionTrackerParser.class);
+            LimitsParser limitsParser = parserContext().parser(LimitsParser.class);
+            SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
+            return Sequence(
+                    positionTrackerParser.PushPosition(),
+                    limitsParser.startCode(),
+                    spacingParser.Spacing(),
+                    String("hello"),
+                    spacingParser.Spacing(),
+                    limitsParser.endCode(),
+                    push(new SimpleAddOn(positionTrackerParser.pop()))
+            );
+        }
+    }
+
+    public static class SimpleAddOn extends Node {
+        protected SimpleAddOn(Position position) {
+            super(position);
+        }
+
+        @Override
+        public Renderable render(RenderContext context) {
+            return new ByteArrayRenderable("Hello World!".getBytes());
+        }
+    }
+}

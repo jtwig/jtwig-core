@@ -1,0 +1,4 @@
+apply plugin: 'maven'
+
+version = "1.0.0"
+group = "org.jtwig"
