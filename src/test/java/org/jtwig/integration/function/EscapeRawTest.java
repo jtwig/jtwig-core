@@ -14,10 +14,18 @@ public class EscapeRawTest extends AbstractIntegrationTest {
 
         assertThat(result, is("&"));
     }
+
     @Test
     public void latestApplyEscape() throws Exception {
         String result = defaultStringTemplate("{{ '&' | raw | escape }}").render(JtwigModel.newModel());
 
         assertThat(result, is("&amp;"));
+    }
+
+    @Test
+    public void latestApplyEscapeJavascript() throws Exception {
+        String result = defaultStringTemplate("{{ '\"' | raw | escape('js') }}").render(JtwigModel.newModel());
+
+        assertThat(result, is("\\\""));
     }
 }

@@ -5,7 +5,7 @@ import org.jtwig.context.model.ResourceContext;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.model.StringRenderable;
+import org.jtwig.render.impl.StringRenderable;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

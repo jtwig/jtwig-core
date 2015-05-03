@@ -1,5 +1,6 @@
-package org.jtwig.render.model;
+package org.jtwig.render.impl;
 
+import org.jtwig.render.RenderResult;
 import org.jtwig.render.Renderable;
 import org.junit.Test;
 
@@ -10,13 +11,13 @@ import static org.mockito.Mockito.verify;
 
 public class FutureRenderableTest {
     private FutureRenderable underTest;
-    private OutputStream outputStream = mock(OutputStream.class);
+    private RenderResult renderResult = mock(RenderResult.class);
 
     @Test(expected = IllegalStateException.class)
     public void unpopulatedShouldThrowAnIllegalStateException() throws Exception {
         underTest = new FutureRenderable();
 
-        underTest.accept(outputStream);
+        underTest.appendTo(renderResult);
     }
 
     @Test
@@ -25,9 +26,9 @@ public class FutureRenderableTest {
         underTest = new FutureRenderable();
         underTest.complete(renderable);
 
-        underTest.accept(outputStream);
+        underTest.appendTo(renderResult);
 
-        verify(renderable).accept(outputStream);
+        verify(renderable).appendTo(renderResult);
     }
 
     @Test(expected = IllegalStateException.class)

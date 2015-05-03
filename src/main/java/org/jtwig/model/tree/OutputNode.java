@@ -5,7 +5,7 @@ import org.jtwig.context.model.EscapeMode;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.model.StringRenderable;
+import org.jtwig.render.impl.StringRenderable;
 import org.jtwig.util.JtwigValue;
 
 public class OutputNode extends Node {

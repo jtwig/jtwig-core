@@ -9,9 +9,13 @@ public class SimplePositionParameterResolver implements PositionParameterResolve
     @Override
     public Optional<FunctionArgument> resolve(JavaMethodArgument javaMethodArgument, int position, InputParameterResolverContext<FunctionArgument> context) {
         if (!javaMethodArgument.isVarArg()) {
-            if (!context.isUsed(position)) {
-                context.markAsUsed(position);
-                return Optional.fromNullable(context.value(position));
+            if (context.size() > position) {
+                if (!context.isUsed(position)) {
+                    context.markAsUsed(position);
+                    return Optional.fromNullable(context.value(position));
+                } else {
+                    return Optional.absent();
+                }
             } else {
                 return Optional.absent();
             }

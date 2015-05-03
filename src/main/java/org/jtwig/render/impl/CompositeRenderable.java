@@ -1,8 +1,8 @@
-package org.jtwig.render.model;
+package org.jtwig.render.impl;
 
+import org.jtwig.render.RenderResult;
 import org.jtwig.render.Renderable;
 
-import java.io.OutputStream;
 import java.util.Collection;
 
 public class CompositeRenderable implements Renderable {
@@ -13,9 +13,9 @@ public class CompositeRenderable implements Renderable {
     }
 
     @Override
-    public void accept(OutputStream outputStream) {
+    public void appendTo(RenderResult result) {
         for (Renderable renderable : renderableCollection) {
-            renderable.accept(outputStream);
+            renderable.appendTo(result);
         }
     }
 }

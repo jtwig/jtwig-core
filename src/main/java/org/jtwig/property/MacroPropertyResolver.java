@@ -10,6 +10,7 @@ import org.jtwig.context.model.MacroContext;
 import org.jtwig.context.values.SimpleValueContext;
 import org.jtwig.context.values.ValueContext;
 import org.jtwig.functions.FunctionArgument;
+import org.jtwig.render.RenderResult;
 import org.jtwig.util.JtwigValue;
 
 import java.io.ByteArrayOutputStream;
@@ -45,15 +46,17 @@ public class MacroPropertyResolver implements PropertyResolver {
                     }
                 }
 
+                RenderResult renderResult = new RenderResult();
+
                 renderContextBuilder()
                     .withConfiguration(getRenderContext().configuration())
                     .withValueContext(valueContext)
                     .build()
                     .nodeRenderer()
                     .render(macro.getContent())
-                    .accept(outputStream);
+                    .appendTo(renderResult);
 
-                return new JtwigValue(outputStream.toString());
+                return new JtwigValue(renderResult.toString());
             }
         };
     }

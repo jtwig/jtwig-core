@@ -1,9 +1,8 @@
-package org.jtwig.render.model;
+package org.jtwig.render.impl;
 
+import org.jtwig.render.RenderResult;
 import org.jtwig.render.Renderable;
 import org.junit.Test;
-
-import java.io.OutputStream;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
@@ -11,7 +10,7 @@ import static org.mockito.Mockito.verify;
 
 public class CompositeRenderableTest {
 
-    private final OutputStream outputStream = mock(OutputStream.class);
+    private final RenderResult renderResult = mock(RenderResult.class);
     private CompositeRenderable underTest;
 
     @Test
@@ -20,9 +19,9 @@ public class CompositeRenderableTest {
         Renderable renderable2 = mock(Renderable.class);
 
         underTest = new CompositeRenderable(asList(renderable1, renderable2));
-        underTest.accept(outputStream);
+        underTest.appendTo(renderResult);
 
-        verify(renderable1).accept(outputStream);
-        verify(renderable2).accept(outputStream);
+        verify(renderable1).appendTo(renderResult);
+        verify(renderable2).appendTo(renderResult);
     }
 }

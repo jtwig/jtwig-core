@@ -133,4 +133,9 @@ public class JtwigValue implements Comparable<JtwigValue> {
         CHAR,
         OBJECT
     }
+
+    @Override
+    public String toString() {
+        return String.format("<%s>", value);
+    }
 }

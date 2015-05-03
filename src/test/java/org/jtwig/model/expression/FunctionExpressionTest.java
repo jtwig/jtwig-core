@@ -36,21 +36,9 @@ public class FunctionExpressionTest {
         assertThat(jtwigValue.asObject(), is(expectedResult));
     }
 
-    @Test
-    public void calculateWhenFunctionDoesNotExistButStrictModeDisabled() throws Exception {
-
-        when(context.configuration().parameter(STRICT_MODE)).thenReturn(false);
-        when(context.configuration().functionResolver().resolve(eq(functionIdentifier), anyList())).thenReturn(Optional.<Supplier>absent());
-
-        JtwigValue jtwigValue = underTest.calculate(context);
-
-        assertThat(jtwigValue.isNull(), is(true));
-    }
-
     @Test(expected = CalculationException.class)
-    public void calculateWhenFunctionDoesNotExistAndStrictModeEnabled() throws Exception {
+    public void calculateWhenFunctionDoesNotExist() throws Exception {
 
-        when(context.configuration().parameter(STRICT_MODE)).thenReturn(true);
         when(context.configuration().functionResolver().resolve(eq(functionIdentifier), anyList())).thenReturn(Optional.<Supplier>absent());
 
         underTest.calculate(context);

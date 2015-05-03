@@ -3,7 +3,7 @@ package org.jtwig.model.tree;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.model.StringRenderable;
+import org.jtwig.render.impl.StringRenderable;
 
 public class TextNode extends Node {
     private final String text;

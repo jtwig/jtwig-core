@@ -7,7 +7,7 @@ import org.jtwig.context.model.ResourceRenderResult;
 import org.jtwig.context.values.ScopedValueContext;
 import org.jtwig.context.values.ValueContext;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.model.OverrideRenderable;
+import org.jtwig.render.impl.OverrideRenderable;
 import org.jtwig.resource.Resource;
 
 import java.util.HashMap;

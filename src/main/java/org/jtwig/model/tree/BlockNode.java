@@ -4,7 +4,7 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.model.FutureRenderable;
+import org.jtwig.render.impl.FutureRenderable;
 
 public class BlockNode extends ContentNode {
     private final VariableExpression blockIdentifier;

@@ -9,7 +9,7 @@ import org.jtwig.context.model.NodeContext;
 import org.jtwig.context.model.ResourceContext;
 import org.jtwig.context.values.SimpleValueContext;
 import org.jtwig.context.values.ValueContext;
-import org.jtwig.render.model.OverrideRenderable;
+import org.jtwig.render.impl.OverrideRenderable;
 import org.jtwig.resource.Resource;
 import org.jtwig.util.JtwigValue;
 

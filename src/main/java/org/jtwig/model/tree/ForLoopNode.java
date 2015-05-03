@@ -8,7 +8,7 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.model.CompositeRenderable;
+import org.jtwig.render.impl.CompositeRenderable;
 import org.jtwig.util.Cursor;
 
 import java.util.ArrayList;

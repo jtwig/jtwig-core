@@ -3,8 +3,9 @@ package org.jtwig.context.model;
 import com.google.common.base.Optional;
 
 import org.jtwig.context.values.ValueContext;
+import org.jtwig.render.RenderResult;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.model.OverrideRenderable;
+import org.jtwig.render.impl.OverrideRenderable;
 import org.jtwig.resource.Resource;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +25,7 @@ public class ResourceContextTest {
     private final Resource resource = mock(Resource.class);
     private final HashMap<String, Macro> macros = new HashMap<>();
     private final Map<String, OverrideRenderable> blocks = new HashMap<>();
+    private final RenderResult renderResult = mock(RenderResult.class);
     private ValueContext valueContext = mock(ValueContext.class);
     private ResourceContext underTest = new ResourceContext(resource, macros, blocks, valueContext);
 
@@ -59,11 +61,10 @@ public class ResourceContextTest {
         underTest.register("one", renderable);
         underTest.register("one", renderableSecond);
 
-        OutputStream outputStream = mock(OutputStream.class);
-        blocks.get("one").accept(outputStream);
+        blocks.get("one").appendTo(renderResult);
 
-        verify(renderableSecond).accept(outputStream);
-        verify(renderable, never()).accept(outputStream);
+        verify(renderableSecond).appendTo(renderResult);
+        verify(renderable, never()).appendTo(renderResult);
     }
 
     @Test
@@ -90,20 +91,18 @@ public class ResourceContextTest {
 
     @Test
     public void currentBlockWhenNoOverrideBlock() throws Exception {
-        OutputStream outputStream = mock(OutputStream.class);
         Renderable renderable = mock(Renderable.class);
         underTest.register("test", renderable);
 
         Optional<OverrideRenderable> result = underTest.currentBlock();
 
         assertThat(result.isPresent(), is(true));
-        result.get().accept(outputStream);
-        verify(renderable).accept(outputStream);
+        result.get().appendTo(renderResult);
+        verify(renderable).appendTo(renderResult);
     }
 
     @Test
     public void currentBlockWhenOverrideBlock() throws Exception {
-        OutputStream outputStream = mock(OutputStream.class);
         blocks.put("test", new OverrideRenderable(mock(Renderable.class)));
         Renderable renderable = mock(Renderable.class);
         underTest.register("test", renderable);
@@ -111,8 +110,8 @@ public class ResourceContextTest {
         Optional<OverrideRenderable> result = underTest.currentBlock();
 
         assertThat(result.isPresent(), is(true));
-        result.get().accept(outputStream);
-        verify(renderable).accept(outputStream);
+        result.get().appendTo(renderResult);
+        verify(renderable).appendTo(renderResult);
     }
 
     @Test

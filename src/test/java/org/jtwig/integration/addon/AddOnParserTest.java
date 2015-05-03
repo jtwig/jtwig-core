@@ -12,7 +12,7 @@ import org.jtwig.parser.parboiled.base.PositionTrackerParser;
 import org.jtwig.parser.parboiled.base.SpacingParser;
 import org.jtwig.parser.parboiled.node.AddonParser;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.model.StringRenderable;
+import org.jtwig.render.impl.StringRenderable;
 import org.junit.Test;
 import org.parboiled.Rule;
 

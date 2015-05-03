@@ -47,6 +47,7 @@ public class SimplePositionParameterResolverTest {
         JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
         InputParameterResolverContext<FunctionArgument> context = mock(InputParameterResolverContext.class);
         when(javaMethodArgument.isVarArg()).thenReturn(false);
+        when(context.size()).thenReturn(1);
         when(context.isUsed(position)).thenReturn(false);
         when(context.value(position)).thenReturn(functionArgument);
 

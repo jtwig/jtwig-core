@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import org.jtwig.context.values.ValueContext;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.model.OverrideRenderable;
+import org.jtwig.render.impl.OverrideRenderable;
 import org.jtwig.resource.Resource;
 
 import java.util.Map;

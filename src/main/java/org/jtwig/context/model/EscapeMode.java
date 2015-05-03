@@ -15,6 +15,18 @@ public enum EscapeMode {
         public String apply(String input) {
             return StringEscapeUtils.escapeHtml4(input);
         }
+    }),
+    JS(new Function<String, String>() {
+        @Override
+        public String apply(String input) {
+            return StringEscapeUtils.escapeEcmaScript(input);
+        }
+    }),
+    JAVASCRIPT(new Function<String, String>() {
+        @Override
+        public String apply(String input) {
+            return StringEscapeUtils.escapeEcmaScript(input);
+        }
     })
     ;
 

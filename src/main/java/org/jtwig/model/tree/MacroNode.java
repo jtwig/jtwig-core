@@ -7,7 +7,7 @@ import org.jtwig.context.model.Macro;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.model.EmptyRenderable;
+import org.jtwig.render.impl.EmptyRenderable;
 
 import java.util.Collection;
 

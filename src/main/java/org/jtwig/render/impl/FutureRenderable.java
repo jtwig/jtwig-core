@@ -1,8 +1,7 @@
-package org.jtwig.render.model;
+package org.jtwig.render.impl;
 
+import org.jtwig.render.RenderResult;
 import org.jtwig.render.Renderable;
-
-import java.io.OutputStream;
 
 public class FutureRenderable implements Renderable {
     private Renderable renderable;
@@ -14,9 +13,9 @@ public class FutureRenderable implements Renderable {
     }
 
     @Override
-    public void accept(OutputStream outputStream) {
+    public void appendTo(RenderResult result) {
         if (renderable != null) {
-            renderable.accept(outputStream);
+            renderable.appendTo(result);
         } else {
             throw new IllegalStateException("Current renderable is in invalid state, it must be completed first");
         }

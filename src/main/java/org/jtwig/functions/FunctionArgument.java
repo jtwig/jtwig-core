@@ -19,4 +19,13 @@ public class FunctionArgument {
     public JtwigValue getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        if (name.isPresent()) {
+            return String.format("%s (%s)", value, name);
+        } else {
+            return value.toString();
+        }
+    }
 }

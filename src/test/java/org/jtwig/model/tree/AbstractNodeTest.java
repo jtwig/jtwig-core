@@ -2,8 +2,9 @@ package org.jtwig.model.tree;
 
 import org.jtwig.context.RenderContext;
 import org.jtwig.context.model.EscapeMode;
+import org.jtwig.render.RenderResult;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.model.StringRenderable;
+import org.jtwig.render.impl.StringRenderable;
 import org.junit.Before;
 
 import java.io.ByteArrayOutputStream;
@@ -20,14 +21,9 @@ public abstract class AbstractNodeTest {
     }
 
     protected String renderResult (Renderable renderable) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        renderable.accept(outputStream);
-        try {
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return outputStream.toString();
+        RenderResult renderResult = new RenderResult();
+        renderable.appendTo(renderResult);
+        return renderResult.toString();
     }
 
     protected void render(Node node, String content) {

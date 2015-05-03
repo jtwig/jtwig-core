@@ -1,11 +1,8 @@
-package org.jtwig.render.model;
+package org.jtwig.render.impl;
 
 import org.jtwig.context.model.EscapeMode;
-import org.jtwig.render.RenderException;
+import org.jtwig.render.RenderResult;
 import org.jtwig.render.Renderable;
-
-import java.io.IOException;
-import java.io.OutputStream;
 
 public class StringRenderable implements Renderable {
     private final String content;
@@ -17,11 +14,7 @@ public class StringRenderable implements Renderable {
     }
 
     @Override
-    public void accept(OutputStream outputStream) {
-        try {
-            outputStream.write(mode.escape(content).getBytes());
-        } catch (IOException e) {
-            throw new RenderException(e);
-        }
+    public void appendTo(RenderResult result) {
+        result.append(mode.escape(content));
     }
 }

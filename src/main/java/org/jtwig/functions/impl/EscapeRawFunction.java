@@ -19,6 +19,13 @@ public class EscapeRawFunction {
         return value;
     }
 
+
+    @JtwigFunction("escape")
+    public Object escape(@Parameter("value") Object value, @Parameter("mode") String mode) {
+        getRenderContext().currentNode().mode(EscapeMode.valueOf(mode.toUpperCase()));
+        return value;
+    }
+
     protected RenderContext getRenderContext() {
         return RenderContextHolder.get();
     }

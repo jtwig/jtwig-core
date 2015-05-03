@@ -1,10 +1,8 @@
-package org.jtwig.render.model;
+package org.jtwig.render.impl;
 
 import com.google.common.base.Optional;
-
+import org.jtwig.render.RenderResult;
 import org.jtwig.render.Renderable;
-
-import java.io.OutputStream;
 
 public class OverrideRenderable implements Renderable {
     private Optional<Renderable> override = Optional.absent();
@@ -20,8 +18,8 @@ public class OverrideRenderable implements Renderable {
     }
 
     @Override
-    public void accept(OutputStream outputStream) {
-        override.or(defaultContent).accept(outputStream);
+    public void appendTo(RenderResult result) {
+        override.or(defaultContent).appendTo(result);
     }
 
     public Renderable getDefault() {

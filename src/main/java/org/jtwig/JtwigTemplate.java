@@ -5,9 +5,12 @@ import org.jtwig.configuration.InitialEscapeModeParameter;
 import org.jtwig.context.RenderContext;
 import org.jtwig.context.RenderContextHolder;
 import org.jtwig.model.tree.Node;
+import org.jtwig.render.RenderException;
+import org.jtwig.render.RenderResult;
 import org.jtwig.resource.Resource;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 import static org.jtwig.configuration.InitialEscapeModeParameter.escapeMode;
@@ -24,12 +27,8 @@ public class JtwigTemplate {
     }
 
     public String render(JtwigModel model) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        render(model, outputStream);
-        return outputStream.toString();
-    }
+        RenderResult result = new RenderResult();
 
-    public void render(JtwigModel model, OutputStream outputStream) {
         Node compositeNode = configuration.parser().parse(template);
 
         RenderContext renderContext = renderContext()
@@ -42,9 +41,19 @@ public class JtwigTemplate {
         RenderContextHolder.set(renderContext);
 
         renderContext
-            .nodeRenderer()
-            .render(compositeNode)
-            .accept(outputStream);
+                .nodeRenderer()
+                .render(compositeNode)
+                .appendTo(result);
+
+        return result.toString();
+    }
+
+    public void render(JtwigModel model, OutputStream outputStream) {
+        try {
+            outputStream.write(render(model).getBytes());
+        } catch (IOException e) {
+            throw new RenderException(e);
+        }
     }
 
 }

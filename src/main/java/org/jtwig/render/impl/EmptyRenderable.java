@@ -1,8 +1,7 @@
-package org.jtwig.render.model;
+package org.jtwig.render.impl;
 
+import org.jtwig.render.RenderResult;
 import org.jtwig.render.Renderable;
-
-import java.io.OutputStream;
 
 public class EmptyRenderable implements Renderable {
     private static final EmptyRenderable instance = new EmptyRenderable();
@@ -13,7 +12,7 @@ public class EmptyRenderable implements Renderable {
     private EmptyRenderable () {}
 
     @Override
-    public void accept(OutputStream outputStream) {
+    public void appendTo(RenderResult result) {
 
     }
 }
