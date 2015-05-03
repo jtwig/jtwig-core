@@ -24,6 +24,15 @@ public class CompositionTest extends AbstractIntegrationTest {
     }
 
     @Test
+    public void composeWithFunctionWithParenthesis() throws Exception {
+        String result = defaultStringTemplate("{{ [1..10] | sum() }}", configuration()
+                .include(sumFunction()).build())
+                .render(JtwigModel.newModel());
+
+        assertThat(result, is("55"));
+    }
+
+    @Test
     public void composeWithFunction() throws Exception {
         String result = defaultStringTemplate("{{ 1 | plus(1) }}", configuration()
                 .include(plusFunction()).build())
