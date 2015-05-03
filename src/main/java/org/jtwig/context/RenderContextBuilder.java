@@ -3,10 +3,7 @@ package org.jtwig.context;
 import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.configuration.Configuration;
 import org.jtwig.context.impl.CoreRenderContext;
-import org.jtwig.context.model.EscapeMode;
-import org.jtwig.context.model.Macro;
-import org.jtwig.context.model.NodeContext;
-import org.jtwig.context.model.ResourceContext;
+import org.jtwig.context.model.*;
 import org.jtwig.context.values.SimpleValueContext;
 import org.jtwig.context.values.ValueContext;
 import org.jtwig.render.impl.OverrideRenderable;
@@ -60,6 +57,7 @@ public class RenderContextBuilder implements Builder<RenderContext> {
         resourceContextStack.push(new ResourceContext(resource, new HashMap<String, Macro>(), new HashMap<String, OverrideRenderable>(), valueContext));
         Stack<EscapeMode> escapeContextStack = new Stack<>();
         escapeContextStack.push(initialScapeMode);
-        return new CoreRenderContext(configuration, valueContextStack, resourceContextStack, nodeContextStack, escapeContextStack);
+        EscapeModeContext escapeModeContext = new EscapeModeContext(escapeContextStack);
+        return new CoreRenderContext(configuration, valueContextStack, resourceContextStack, nodeContextStack, escapeModeContext);
     }
 }

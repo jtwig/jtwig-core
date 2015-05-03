@@ -17,7 +17,7 @@ public abstract class AbstractNodeTest {
 
     @Before
     public void setUp() throws Exception {
-        when(renderContext.escapeMode()).thenReturn(EscapeMode.NONE);
+        when(renderContext.escapeContext().currentEscapeMode()).thenReturn(EscapeMode.NONE);
     }
 
     protected String renderResult (Renderable renderable) {

@@ -37,7 +37,7 @@ public class TextNode extends Node {
         String modifiedContent = text;
         modifiedContent = configuration.isTrimLeft() ? trimLeft(modifiedContent) : modifiedContent;
         modifiedContent = configuration.isTrimRight() ? trimRight(modifiedContent) : modifiedContent;
-        return new StringRenderable(modifiedContent, context.escapeMode());
+        return new StringRenderable(modifiedContent, context.escapeContext().currentEscapeMode());
     }
 
     public static class Configuration {

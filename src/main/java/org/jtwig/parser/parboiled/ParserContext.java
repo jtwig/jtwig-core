@@ -53,6 +53,7 @@ public class ParserContext {
         createParser(ExtendsNodeParser.class, context);
         createParser(EmbedNodeParser.class, context);
         createParser(OutputNodeParser.class, context);
+        createParser(AutoEscapeNodeParser.class, context);
 
         for (Class<? extends AddonParser> addOnParser : addOnParsers) {
             createParser((Class) addOnParser, context);

@@ -41,7 +41,7 @@ public class CompositeNodeParser extends NodeParser<CompositeNode> {
         public NodeListParser(ParserContext context) {
             super(NodeListParser.class, context);
 
-            contentParsers = new ArrayList<Class>(Arrays.<Class>asList(
+            contentParsers = new ArrayList<>(Arrays.<Class>asList(
                     BlockNodeParser.class,
                     EmbedNodeParser.class,
                     ForLoopNodeParser.class,
@@ -51,6 +51,7 @@ public class CompositeNodeParser extends NodeParser<CompositeNode> {
                     MacroNodeParser.class,
                     OutputNodeParser.class,
                     SetNodeParser.class,
+                    AutoEscapeNodeParser.class,
                     TextNodeParser.class
             ));
 

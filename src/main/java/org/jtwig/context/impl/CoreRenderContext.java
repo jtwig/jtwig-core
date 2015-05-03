@@ -3,6 +3,7 @@ package org.jtwig.context.impl;
 import org.jtwig.configuration.Configuration;
 import org.jtwig.context.RenderContext;
 import org.jtwig.context.model.EscapeMode;
+import org.jtwig.context.model.EscapeModeContext;
 import org.jtwig.context.model.NodeContext;
 import org.jtwig.context.model.ResourceContext;
 import org.jtwig.context.values.SimpleValueContext;
@@ -17,18 +18,18 @@ public class CoreRenderContext implements RenderContext {
     private final Stack<ValueContext> valueContextStack;
     private final Stack<ResourceContext> resourceContextStack;
     private final Stack<NodeContext> nodeContextStack;
-    private final Stack<EscapeMode> escapeModeStack;
+    private final EscapeModeContext escapeModeContext;
 
     public CoreRenderContext(Configuration configuration,
                              Stack<ValueContext> valueContextStack,
                              Stack<ResourceContext> resourceContextStack,
                              Stack<NodeContext> nodeContextStack,
-                             Stack<EscapeMode> escapeModeStack) {
+                             EscapeModeContext escapeModeContext) {
         this.configuration = configuration;
         this.valueContextStack = valueContextStack;
         this.resourceContextStack = resourceContextStack;
         this.nodeContextStack = nodeContextStack;
-        this.escapeModeStack = escapeModeStack;
+        this.escapeModeContext = escapeModeContext;
     }
 
     @Override
@@ -62,7 +63,7 @@ public class CoreRenderContext implements RenderContext {
     }
 
     @Override
-    public EscapeMode escapeMode() {
-        return escapeModeStack.peek();
+    public EscapeModeContext escapeContext() {
+        return escapeModeContext;
     }
 }

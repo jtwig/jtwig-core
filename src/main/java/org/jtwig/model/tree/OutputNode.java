@@ -24,7 +24,7 @@ public class OutputNode extends Node {
     public Renderable render(RenderContext context) {
         JtwigValue jtwigValue = expression.calculate(context);
         String string = jtwigValue.asString();
-        EscapeMode mode = context.currentNode().mode().or(context.escapeMode());
+        EscapeMode mode = context.currentNode().mode().or(context.escapeContext().currentEscapeMode());
         return new StringRenderable(string, mode);
     }
 }
