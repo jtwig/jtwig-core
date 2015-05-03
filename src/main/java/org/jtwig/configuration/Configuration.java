@@ -1,6 +1,7 @@
 package org.jtwig.configuration;
 
 import com.google.common.base.Function;
+import org.jtwig.functions.impl.json.JsonMapperFactory;
 import org.jtwig.functions.resolver.FunctionResolver;
 import org.jtwig.model.expression.lists.EnumerationListStrategy;
 import org.jtwig.parser.JtwigParser;
@@ -12,7 +13,7 @@ public interface Configuration {
     ResourceResolver resourceResolver();
     FunctionResolver functionResolver();
     PropertyResolver propertyResolver();
-    Function<Object,String> jsonMapper();
+    JsonMapperFactory jsonMapper();
     EnumerationListStrategy enumerationStrategy();
 
     <T> T parameter(String name, T defaultValue);

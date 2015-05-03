@@ -2,6 +2,11 @@ package org.jtwig.configuration;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import org.jtwig.functions.impl.JsonMapperFunction;
+import org.jtwig.functions.impl.json.CompositeJsonMapperFactory;
+import org.jtwig.functions.impl.json.Jackson2JsonMapperFactory;
+import org.jtwig.functions.impl.json.JacksonJsonMapperFactory;
+import org.jtwig.functions.impl.json.JsonMapperFactory;
 import org.jtwig.parser.parboiled.node.AddonParser;
 import org.jtwig.reflection.convert.Converter;
 import org.jtwig.reflection.resolver.argument.ArgumentResolver;
@@ -20,6 +25,7 @@ import org.jtwig.resource.resolver.ClasspathResourceResolver;
 import org.jtwig.resource.resolver.CompositeResourceResolver;
 import org.jtwig.resource.resolver.ResourceResolver;
 import org.jtwig.resource.util.RelativePathResolver;
+import org.jtwig.util.ClasspathFinder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,12 +38,12 @@ public class ConfigurationBuilder implements Builder<Configuration> {
     }
 
     private boolean defaults = true;
-    private Collection<ResourceResolver> resourceResolvers = new ArrayList<ResourceResolver>();
-    private Collection<PropertyResolver> propertyResolvers = new ArrayList<PropertyResolver>();
-    private Collection<EnumerationListStrategy> enumerationListStrategies = new ArrayList<EnumerationListStrategy>();
+    private Collection<ResourceResolver> resourceResolvers = new ArrayList<>();
+    private Collection<PropertyResolver> propertyResolvers = new ArrayList<>();
+    private Collection<EnumerationListStrategy> enumerationListStrategies = new ArrayList<>();
     private ParserConfigurationBuilder parserConfigurationBuilder = ParserConfigurationBuilder.parserConfiguration();
     private FunctionResolverBuilder functionResolverBuilder = FunctionResolverBuilder.newBuilder();
-    private Function<Object, String> jsonMapper;
+    private Collection<JsonMapperFactory> jsonMapperFactory = new ArrayList<>();
     private Collection<Class<? extends AddonParser>> addOnParsers = new ArrayList<>();
     private Map<String, Object> parameters = new HashMap<>();
 
@@ -53,8 +59,8 @@ public class ConfigurationBuilder implements Builder<Configuration> {
         return this;
     }
 
-    public ConfigurationBuilder withJsonMapper (Function<Object, String> jsonMapper) {
-        this.jsonMapper = jsonMapper;
+    public ConfigurationBuilder withJsonMapperFactory (JsonMapperFactory jsonMapperFactory) {
+        this.jsonMapperFactory.add(jsonMapperFactory);
         return this;
     }
 
@@ -135,6 +141,14 @@ public class ConfigurationBuilder implements Builder<Configuration> {
             enumerationListStrategies.add(new IntegerDescendingOrderEnumerationListStrategy());
             enumerationListStrategies.add(new CharAscendingOrderEnumerationListStrategy());
             enumerationListStrategies.add(new CharDescendingOrderEnumerationListStrategy());
+
+            // Json Mappers
+            ClasspathFinder classpathFinder = new ClasspathFinder(getClass().getClassLoader());
+            jsonMapperFactory.add(new Jackson2JsonMapperFactory(classpathFinder));
+            jsonMapperFactory.add(new JacksonJsonMapperFactory(classpathFinder));
+
+            // Functions
+            functionResolverBuilder.include(new JsonMapperFunction());
         }
 
         propertyResolvers.addAll(this.propertyResolvers);
@@ -148,7 +162,7 @@ public class ConfigurationBuilder implements Builder<Configuration> {
                 new CompositeResourceResolver(resourceResolvers),
                 functionResolverBuilder.build(),
                 new CompositePropertyResolver(propertyResolvers),
-                jsonMapper,
+                new CompositeJsonMapperFactory(jsonMapperFactory),
                 new CompositeEnumerationListStrategy(
                         enumerationListStrategies
                 ), parameters
@@ -160,16 +174,16 @@ public class ConfigurationBuilder implements Builder<Configuration> {
         private final ResourceResolver resourceResolver;
         private final FunctionResolver functionResolver;
         private final PropertyResolver propertyResolver;
-        private final Function<Object, String> jsonMapper;
+        private final JsonMapperFactory jsonMapperFactory;
         private final EnumerationListStrategy enumerationListStrategy;
         private final Map<String, Object> parameters;
 
-        public InternalConfiguration(JtwigParser jtwigParser, ResourceResolver resourceResolver, FunctionResolver functionResolver, PropertyResolver propertyResolver, Function<Object, String> jsonMapper, EnumerationListStrategy enumerationListStrategy, Map<String, Object> parameters) {
+        public InternalConfiguration(JtwigParser jtwigParser, ResourceResolver resourceResolver, FunctionResolver functionResolver, PropertyResolver propertyResolver, JsonMapperFactory jsonMapperFactory, EnumerationListStrategy enumerationListStrategy, Map<String, Object> parameters) {
             this.jtwigParser = jtwigParser;
             this.resourceResolver = resourceResolver;
             this.functionResolver = functionResolver;
             this.propertyResolver = propertyResolver;
-            this.jsonMapper = jsonMapper;
+            this.jsonMapperFactory = jsonMapperFactory;
             this.enumerationListStrategy = enumerationListStrategy;
             this.parameters = parameters;
         }
@@ -195,8 +209,8 @@ public class ConfigurationBuilder implements Builder<Configuration> {
         }
 
         @Override
-        public Function<Object, String> jsonMapper() {
-            return jsonMapper;
+        public JsonMapperFactory jsonMapper() {
+            return jsonMapperFactory;
         }
 
         @Override
