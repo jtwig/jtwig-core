@@ -2,6 +2,7 @@ package org.jtwig.integration.addon;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.context.RenderContext;
+import org.jtwig.context.model.EscapeMode;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.Node;
@@ -11,7 +12,7 @@ import org.jtwig.parser.parboiled.base.PositionTrackerParser;
 import org.jtwig.parser.parboiled.base.SpacingParser;
 import org.jtwig.parser.parboiled.node.AddonParser;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.model.ByteArrayRenderable;
+import org.jtwig.render.model.StringRenderable;
 import org.junit.Test;
 import org.parboiled.Rule;
 
@@ -58,7 +59,7 @@ public class AddOnParserTest extends AbstractIntegrationTest {
 
         @Override
         public Renderable render(RenderContext context) {
-            return new ByteArrayRenderable("Hello World!".getBytes());
+            return new StringRenderable("Hello World!", EscapeMode.NONE);
         }
     }
 }

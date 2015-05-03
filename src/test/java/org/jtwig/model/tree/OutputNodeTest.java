@@ -1,5 +1,8 @@
 package org.jtwig.model.tree;
 
+import com.google.common.base.Optional;
+import org.jtwig.context.model.EscapeMode;
+import org.jtwig.context.model.NodeContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
@@ -18,6 +21,9 @@ public class OutputNodeTest extends AbstractNodeTest {
 
     @Test
     public void render() throws Exception {
+        NodeContext nodeContext = mock(NodeContext.class);
+        when(renderContext().currentNode()).thenReturn(nodeContext);
+        when(nodeContext.mode()).thenReturn(Optional.<EscapeMode>absent());
         when(expression.calculate(renderContext())).thenReturn(new JtwigValue("test"));
 
         Renderable result = underTest.render(renderContext());

@@ -3,7 +3,7 @@ package org.jtwig.model.tree;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.model.ByteArrayRenderable;
+import org.jtwig.render.model.StringRenderable;
 
 public class TextNode extends Node {
     private final String text;
@@ -37,7 +37,7 @@ public class TextNode extends Node {
         String modifiedContent = text;
         modifiedContent = configuration.isTrimLeft() ? trimLeft(modifiedContent) : modifiedContent;
         modifiedContent = configuration.isTrimRight() ? trimRight(modifiedContent) : modifiedContent;
-        return new ByteArrayRenderable(modifiedContent.getBytes());
+        return new StringRenderable(modifiedContent, context.escapeMode());
     }
 
     public static class Configuration {

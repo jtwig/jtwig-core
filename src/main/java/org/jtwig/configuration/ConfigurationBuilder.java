@@ -2,6 +2,7 @@ package org.jtwig.configuration;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import org.jtwig.functions.impl.EscapeRawFunction;
 import org.jtwig.functions.impl.JsonMapperFunction;
 import org.jtwig.functions.impl.json.CompositeJsonMapperFactory;
 import org.jtwig.functions.impl.json.Jackson2JsonMapperFactory;
@@ -149,6 +150,7 @@ public class ConfigurationBuilder implements Builder<Configuration> {
 
             // Functions
             functionResolverBuilder.include(new JsonMapperFunction());
+            functionResolverBuilder.include(new EscapeRawFunction());
         }
 
         propertyResolvers.addAll(this.propertyResolvers);

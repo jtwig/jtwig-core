@@ -1,6 +1,7 @@
 package org.jtwig.model.tree;
 
 import org.jtwig.context.RenderContext;
+import org.jtwig.context.model.EscapeMode;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.TextNode;
 import org.jtwig.render.Renderable;
@@ -22,6 +23,11 @@ public class TextNodeTest extends AbstractNodeTest {
     private final RenderContext renderContext = mock(RenderContext.class);
     private final TextNode.Configuration configuration = mock(TextNode.Configuration.class);
     private TextNode underTest = new TextNode(position, CONTENT, configuration);
+
+    @Before
+    public void setUp() throws Exception {
+        when(renderContext.escapeMode()).thenReturn(EscapeMode.NONE);
+    }
 
     @Test
     public void renderWithoutTrim() throws Exception {

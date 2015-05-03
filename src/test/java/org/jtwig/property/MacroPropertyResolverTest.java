@@ -6,13 +6,14 @@ import org.jtwig.configuration.Configuration;
 import org.jtwig.context.RenderContext;
 import org.jtwig.context.impl.NodeRenderer;
 import org.jtwig.context.RenderContextBuilder;
+import org.jtwig.context.model.EscapeMode;
 import org.jtwig.context.model.Macro;
 import org.jtwig.context.model.MacroContext;
 import org.jtwig.context.values.ValueContext;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.Node;
-import org.jtwig.render.model.ByteArrayRenderable;
+import org.jtwig.render.model.StringRenderable;
 import org.jtwig.util.JtwigValue;
 import org.junit.Before;
 import org.junit.Test;
@@ -82,7 +83,7 @@ public class MacroPropertyResolverTest {
 
         macros.put(MACRO_NAME, new Macro(argumentNames, content));
         when(renderContext.nodeRenderer()).thenReturn(nodeRenderer);
-        when(nodeRenderer.render(content)).thenReturn(new ByteArrayRenderable("one".getBytes()));
+        when(nodeRenderer.render(content)).thenReturn(new StringRenderable("one", EscapeMode.NONE));
         PropertyResolveRequest request = new PropertyResolveRequest(position, macroContext, MACRO_NAME, arguments);
 
         Optional<JtwigValue> result = underTest.resolve(request);

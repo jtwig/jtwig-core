@@ -1,6 +1,7 @@
 package org.jtwig.context.impl;
 
 import org.jtwig.configuration.Configuration;
+import org.jtwig.context.model.EscapeMode;
 import org.jtwig.context.model.NodeContext;
 import org.jtwig.context.model.ResourceContext;
 import org.jtwig.context.values.ValueContext;
@@ -19,7 +20,8 @@ public class CoreRenderContextTest {
     private final Stack<ValueContext> modelStack = new Stack<>();
     private final Stack<ResourceContext> resourceContextStack = new Stack<ResourceContext>();
     private final Stack<NodeContext> nodeContextStack = new Stack<>();
-    private CoreRenderContext underTest = new CoreRenderContext(configuration, modelStack, resourceContextStack, nodeContextStack);
+    private final Stack<EscapeMode> escapeContextStack = new Stack<>();
+    private CoreRenderContext underTest = new CoreRenderContext(configuration, modelStack, resourceContextStack, nodeContextStack, escapeContextStack);
 
     @Before
     public void setUp() throws Exception {
