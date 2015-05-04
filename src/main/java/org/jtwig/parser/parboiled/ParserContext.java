@@ -43,6 +43,7 @@ public class ParserContext {
         createParser(AnyExpressionParser.class, context);
 
         createParser(SetNodeParser.class, context);
+        createParser(DoNodeParser.class, context);
         createParser(IncludeNodeParser.class, context);
         createParser(BlockNodeParser.class, context);
         createParser(IfNodeParser.class, context);

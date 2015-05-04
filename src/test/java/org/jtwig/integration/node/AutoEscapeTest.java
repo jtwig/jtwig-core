@@ -1,7 +1,8 @@
-package org.jtwig.integration;
+package org.jtwig.integration.node;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
+import org.jtwig.integration.AbstractIntegrationTest;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -25,7 +25,8 @@ public enum Keyword {
     IN("in"),
     AS("as"),
     AUTO_ESCAPE("autoescape"),
-    END_AUTO_ESCAPE("endautoescape");
+    END_AUTO_ESCAPE("endautoescape"),
+    DO("do");
 
     private final String symbol;
 
