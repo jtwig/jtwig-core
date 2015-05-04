@@ -42,10 +42,10 @@ public class BooleanFunctionsTest {
         assertFalse(underTest.isDefined(Undefined.UNDEFINED));
     }
 
-    @Test
-    public void divisable() throws Exception {
-        assertTrue(underTest.isDivisableBy(2, 1));
-    }
+//    @Test
+//    public void divisable() throws Exception {
+//        assertTrue(underTest.isDivisableBy(2, 1));
+//    }
 
     @Test
     public void isNull() throws Exception {

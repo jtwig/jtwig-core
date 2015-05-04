@@ -1,4 +1,4 @@
-package org.jtwig.integration.expression;
+package org.jtwig.integration.function;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.integration.AbstractIntegrationTest;
@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class BooleanFunctionsTest extends AbstractIntegrationTest {
+public class DefinedFunctionTest extends AbstractIntegrationTest {
     @Test
     public void definedWhenUndefined() throws Exception {
         String result = defaultStringTemplate("{% if (defined(asd)) %}ko{% else %}ok{% endif %}").render(JtwigModel.newModel());

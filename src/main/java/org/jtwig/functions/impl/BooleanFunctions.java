@@ -12,13 +12,18 @@ public class BooleanFunctions {
     public boolean isDefined(@Parameter Object value) {
         return value != Undefined.UNDEFINED;
     }
-
-    @JtwigFunction("divisable by")
-    public boolean isDivisableBy(@Parameter Number value, @Parameter Number dividend) {
-        double value1 = value.doubleValue();
-        double value2 = dividend.doubleValue();
-
-        return value1 % value2 == 0;
+//
+//    @JtwigFunction("divisable by")
+//    public boolean isDivisableBy(@Parameter Number value, @Parameter Number dividend) {
+//        double value1 = value.doubleValue();
+//        double value2 = dividend.doubleValue();
+//
+//        return value1 % value2 == 0;
+//    }
+//
+    @JtwigFunction("null")
+    public boolean isNull(@Parameter Object input) {
+        return input == null;
     }
 
     @JtwigFunction("even")
@@ -31,11 +36,6 @@ public class BooleanFunctions {
         return number % 2 == 1;
     }
 
-    @JtwigFunction("null")
-    public boolean isNull(@Parameter Object input) {
-        return input == null;
-    }
-
     @JtwigFunction("iterable")
     public boolean iterable(@Parameter Object input) {
         return input instanceof Iterable
@@ -46,6 +46,7 @@ public class BooleanFunctions {
     @JtwigFunction("empty")
     public boolean isEmpty(@Parameter Object input) {
         return isNull(input) ||
+                !isDefined(input) ||
                 isEmptyIterable(input) ||
                 isEmptyMap(input) ||
                 isZero(input);
