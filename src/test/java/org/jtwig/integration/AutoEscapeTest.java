@@ -28,4 +28,11 @@ public class AutoEscapeTest extends AbstractIntegrationTest {
         String result = template.render(JtwigModel.newModel());
         assertThat(result, is("&&amp;&"));
     }
+
+    @Test
+    public void nestedAutoEscapeFalse() throws Exception {
+        JtwigTemplate template = defaultStringTemplate("{% autoescape 'js' %}&{% autoescape false %}&{% endautoescape %}&{% endautoescape %}");
+        String result = template.render(JtwigModel.newModel());
+        assertThat(result, is("&&&"));
+    }
 }

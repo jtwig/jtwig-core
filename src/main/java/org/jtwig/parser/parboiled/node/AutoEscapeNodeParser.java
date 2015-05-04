@@ -6,6 +6,7 @@ import org.jtwig.model.tree.AutoEscapeNode;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.base.*;
 import org.jtwig.parser.parboiled.expression.AnyExpressionParser;
+import org.jtwig.parser.parboiled.expression.BooleanExpressionParser;
 import org.jtwig.parser.parboiled.expression.StringExpressionParser;
 import org.jtwig.parser.parboiled.model.Keyword;
 import org.parboiled.Rule;
@@ -73,6 +74,10 @@ public class AutoEscapeNodeParser extends NodeParser<AutoEscapeNode> {
                     Sequence(
                             parser.ExpressionRule(),
                             push(EscapeMode.valueOf(parser.pop().getConstantValue().toString().toUpperCase()))
+                    ),
+                    Sequence(
+                            String("false"),
+                            push(EscapeMode.NONE)
                     ),
                     push(null)
             );
