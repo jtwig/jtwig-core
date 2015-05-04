@@ -34,14 +34,18 @@ public class SelectionOperationCalculator implements BinaryOperationCalculator {
 
         return context.configuration().propertyResolver()
                 .resolve(new PropertyResolveRequest(position, value.asObject(), propertyName, functionArguments))
-                .or(throwUnresolvableException(position, propertyName));
+                .or(throwUnresolvableException(context, position, propertyName, value.asObject()));
     }
 
-    private Supplier<? extends JtwigValue> throwUnresolvableException(final Position position, final String propertyName) {
+    private Supplier<? extends JtwigValue> throwUnresolvableException(final RenderContext context, final Position position, final String propertyName, final Object value) {
         return new Supplier<JtwigValue>() {
             @Override
             public JtwigValue get() {
-                throw new CalculationException(errorMessage(position, String.format("Cannot resolve property '%s'", propertyName)));
+                if (context.configuration().strictMode()) {
+                    throw new CalculationException(errorMessage(position, String.format("Impossible to access an attribute '%s' on '%s'", propertyName, value)));
+                } else {
+                    return JtwigValue.empty();
+                }
             }
         };
     }

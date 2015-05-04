@@ -1,19 +1,17 @@
 package org.jtwig.functions.resolver;
 
 import com.google.common.base.Optional;
+import org.jtwig.functions.FunctionArgument;
+import org.jtwig.functions.annotations.Parameter;
 import org.jtwig.reflection.input.InputParameterResolver;
 import org.jtwig.reflection.model.java.JavaMethod;
 import org.jtwig.reflection.model.java.JavaMethodArgument;
-import org.jtwig.functions.FunctionArgument;
-import org.jtwig.functions.annotations.Parameter;
 import org.junit.Test;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

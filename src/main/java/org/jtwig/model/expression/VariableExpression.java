@@ -35,7 +35,7 @@ public class VariableExpression extends InjectableExpression {
             return valueOptional.get();
         } else {
             if (context.configuration().strictMode()) {
-                throw new CalculationException(errorMessage(getPosition(), String.format("Unable to resolve variable '%s'", identifier)));
+                throw new CalculationException(errorMessage(getPosition(), String.format("Variable '%s' undefined", identifier)));
             } else {
                 return JtwigValue.empty();
             }

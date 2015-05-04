@@ -33,6 +33,7 @@ public class ParserContext {
         createParser(StringExpressionParser.class, context);
         createParser(NumberExpressionParser.class, context);
         createParser(BooleanExpressionParser.class, context);
+        createParser(NullExpressionParser.class, context);
         createParser(ConstantExpressionParser.class, context);
         createParser(VariableExpressionParser.class, context);
         createParser(FunctionExpressionParser.class, context);

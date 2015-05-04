@@ -12,6 +12,7 @@ public class ConstantExpressionParser extends ExpressionParser<ConstantExpressio
     @Override
     public Rule ExpressionRule() {
         return FirstOf(
+                parserContext().parser(NullExpressionParser.class).ExpressionRule(),
                 parserContext().parser(BooleanExpressionParser.class).ExpressionRule(),
                 parserContext().parser(NumberExpressionParser.class).ExpressionRule(),
                 parserContext().parser(StringExpressionParser.class).ExpressionRule(),

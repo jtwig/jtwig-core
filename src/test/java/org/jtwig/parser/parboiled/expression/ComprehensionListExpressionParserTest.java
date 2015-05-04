@@ -1,6 +1,7 @@
 package org.jtwig.parser.parboiled.expression;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
 import org.jtwig.model.expression.ComprehensionListExpression;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.parser.ParseException;
@@ -28,7 +29,7 @@ public class ComprehensionListExpressionParserTest extends AbstractParserTest {
     }
     @Test
     public void missingEndBracketComprehension() throws Exception {
-        expectedException.expectCause(CoreMatchers.<Throwable>instanceOf(ParseException.class));
+        expectedException.expectCause((Matcher)CoreMatchers.instanceOf(ParseException.class));
 
         parse(underTest.ExpressionRule(), "[1..2");
     }

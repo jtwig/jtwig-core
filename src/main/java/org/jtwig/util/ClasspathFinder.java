@@ -1,5 +1,8 @@
 package org.jtwig.util;
 
+import com.google.common.base.Optional;
+import org.jtwig.reflection.model.java.JavaClass;
+
 import static java.lang.Class.forName;
 
 public class ClasspathFinder {
@@ -10,13 +13,14 @@ public class ClasspathFinder {
     }
 
     public boolean exists (String className) {
+        return load(className).isPresent();
+    }
+
+    public Optional<JavaClass> load(String className) {
         try {
-            forName(className, false, classLoader);
-            return true;
-        }
-        catch (Throwable ex) {
-            // Class or one of its dependencies is not present...
-            return false;
+            return Optional.of(new JavaClass(forName(className, false, classLoader)));
+        } catch (Exception e) {
+            return Optional.absent();
         }
     }
 }

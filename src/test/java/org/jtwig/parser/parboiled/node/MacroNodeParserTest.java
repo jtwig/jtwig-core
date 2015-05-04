@@ -5,7 +5,6 @@ import org.jtwig.parser.parboiled.AbstractParserTest;
 import org.junit.Test;
 import org.parboiled.support.ParsingResult;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -19,7 +18,7 @@ public class MacroNodeParserTest extends AbstractParserTest {
         assertThat(result.matched, is(true));
         MacroNode macroNode = result.valueStack.pop();
         assertThat(macroNode.getMacroName().getIdentifier(), is("test"));
-        assertThat(macroNode.getMacroArgumentNames(), hasSize(0));
+        assertThat(macroNode.getMacroArgumentNames().size(), is(0));
 
     }
 
@@ -30,7 +29,7 @@ public class MacroNodeParserTest extends AbstractParserTest {
         assertThat(result.matched, is(true));
         MacroNode macroNode = result.valueStack.pop();
         assertThat(macroNode.getMacroName().getIdentifier(), is("test"));
-        assertThat(macroNode.getMacroArgumentNames(), hasSize(1));
+        assertThat(macroNode.getMacroArgumentNames().size(), is(1));
         assertThat(macroNode.getMacroArgumentNames().iterator().next(), is("jtwig"));
 
     }

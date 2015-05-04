@@ -33,8 +33,8 @@ public enum Keyword {
     SPACELESS("spaceless"),
     END_SPACELESS("endspaceless"),
     FILTER("filter"),
-    END_FILTER("endfilter")
-    ;
+    END_FILTER("endfilter"),
+    NULL("null");
 
     private final String symbol;
 

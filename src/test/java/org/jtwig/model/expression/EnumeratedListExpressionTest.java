@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -29,7 +29,7 @@ public class EnumeratedListExpressionTest {
     public void calculateWhenEmpty() throws Exception {
         JtwigValue result = underTest.calculate(context);
 
-        assertThat(result.asCollection(), empty());
+        assertThat(result.asCollection().isEmpty(), is(true));
     }
 
     @Test

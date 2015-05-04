@@ -1,6 +1,5 @@
 package org.jtwig.integration.node;
 
-import org.hamcrest.CoreMatchers;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
@@ -32,7 +31,7 @@ public class ImportTest extends AbstractIntegrationTest {
     @Test
     public void importResourceNotFound() throws Exception {
         expectedException.expect(ResourceNotFoundException.class);
-        expectedException.expectMessage(CoreMatchers.containsString("Resource 'one' not found"));
+        expectedException.expectMessage(containsString("Resource 'one' not found"));
 
         defaultStringTemplate("{% import 'one' as blah %}")
                 .render(JtwigModel.newModel());

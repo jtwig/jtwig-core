@@ -5,7 +5,6 @@ import org.jtwig.parser.parboiled.AbstractParserTest;
 import org.junit.Test;
 import org.parboiled.support.ParsingResult;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -19,7 +18,7 @@ public class IfNodeParserTest extends AbstractParserTest {
 
         assertThat(result.matched, is(true));
         IfNode ifNode = result.valueStack.pop();
-        assertThat(ifNode.getConditionNodes(), hasSize(1));
+        assertThat(ifNode.getConditionNodes().size(), is(1));
     }
 
     @Test
@@ -29,7 +28,7 @@ public class IfNodeParserTest extends AbstractParserTest {
 
         assertThat(result.matched, is(true));
         IfNode ifNode = result.valueStack.pop();
-        assertThat(ifNode.getConditionNodes(), hasSize(2));
+        assertThat(ifNode.getConditionNodes().size(), is(2));
     }
 
     @Test
@@ -39,7 +38,7 @@ public class IfNodeParserTest extends AbstractParserTest {
 
         assertThat(result.matched, is(true));
         IfNode ifNode = result.valueStack.pop();
-        assertThat(ifNode.getConditionNodes(), hasSize(2));
+        assertThat(ifNode.getConditionNodes().size(), is(2));
     }
     @Test
     public void ifNodeWithMultipleElseIf() throws Exception {
@@ -48,6 +47,6 @@ public class IfNodeParserTest extends AbstractParserTest {
 
         assertThat(result.matched, is(true));
         IfNode ifNode = result.valueStack.pop();
-        assertThat(ifNode.getConditionNodes(), hasSize(3));
+        assertThat(ifNode.getConditionNodes().size(), is(3));
     }
 }

@@ -19,8 +19,10 @@ import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -75,17 +77,33 @@ public class SelectionOperationCalculatorTest {
     }
 
     @Test
-    public void calculateWhenItFailsToResolve() throws Exception {
+    public void calculateWhenItFailsToResolveWhenStrictModeEnabled() throws Exception {
         expectedException.expect(CalculationException.class);
-        expectedException.expectMessage(containsString("Cannot resolve property 'test'"));
+        expectedException.expectMessage(containsString("Impossible to access an attribute 'test' on 'null'"));
 
         JtwigValue leftOperandValue = mock(JtwigValue.class);
         when(renderContext.configuration()).thenReturn(configuration);
         when(configuration.propertyResolver()).thenReturn(propertyResolver);
+        when(configuration.strictMode()).thenReturn(true);
         when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.<JtwigValue>absent());
         when(leftOperand.calculate(renderContext)).thenReturn(leftOperandValue);
         Expression rightOperand = new FunctionExpression(position, "test", new ArrayList<Argument>());
 
         underTest.calculate(renderContext, position, leftOperand, rightOperand);
+    }
+
+    @Test
+    public void calculateWhenItFailsToResolveWhenStrictModeDisabled() throws Exception {
+        JtwigValue leftOperandValue = mock(JtwigValue.class);
+        when(renderContext.configuration()).thenReturn(configuration);
+        when(configuration.propertyResolver()).thenReturn(propertyResolver);
+        when(configuration.strictMode()).thenReturn(false);
+        when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.<JtwigValue>absent());
+        when(leftOperand.calculate(renderContext)).thenReturn(leftOperandValue);
+        Expression rightOperand = new FunctionExpression(position, "test", new ArrayList<Argument>());
+
+        JtwigValue result = underTest.calculate(renderContext, position, leftOperand, rightOperand);
+
+        assertThat(result.isUndefined(), is(true));
     }
 }

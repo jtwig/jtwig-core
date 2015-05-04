@@ -3,7 +3,6 @@ package org.jtwig.context.impl;
 import org.jtwig.context.RenderContext;
 import org.jtwig.context.model.NodeContext;
 import org.jtwig.context.values.ScopeType;
-import org.jtwig.context.values.ScopedValueContext;
 import org.jtwig.context.values.ValueContext;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.Renderable;
@@ -16,11 +15,8 @@ import java.util.Stack;
 
 import static junit.framework.Assert.assertSame;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class NodeRendererTest {
@@ -46,8 +42,8 @@ public class NodeRendererTest {
         when(node.render(renderContext)).thenAnswer(new Answer<Renderable>() {
             @Override
             public Renderable answer(InvocationOnMock invocation) throws Throwable {
-                assertThat(nodeContextStack, hasSize(1));
-                assertThat(valueContextStack, hasSize(2));
+                assertThat(nodeContextStack.size(), is(1));
+                assertThat(valueContextStack.size(), is(2));
                 assertSame(valueContextStack.peek(), valueContext);
                 return renderable;
             }
@@ -56,7 +52,7 @@ public class NodeRendererTest {
         Renderable render = underTest.render(node);
 
         assertThat(render, is(renderable));
-        assertThat(nodeContextStack, hasSize(0));
-        assertThat(valueContextStack, hasSize(1));
+        assertThat(nodeContextStack.size(), is(0));
+        assertThat(valueContextStack.size(), is(1));
     }
 }

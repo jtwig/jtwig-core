@@ -6,7 +6,6 @@ import org.jtwig.parser.parboiled.AbstractParserTest;
 import org.junit.Test;
 import org.parboiled.support.ParsingResult;
 
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
@@ -21,6 +20,6 @@ public class ExtendsNodeParserTest extends AbstractParserTest {
         assertThat(result.matched, is(true));
         ExtendsNode extendsNode = result.valueStack.pop();
         assertThat(extendsNode.getExtendsExpression(), instanceOf(ConstantExpression.class));
-        assertThat(extendsNode.getNodes(), hasSize(2));
+        assertThat(extendsNode.getNodes().size(), is(2));
     }
 }

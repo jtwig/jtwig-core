@@ -36,7 +36,7 @@ public class VariableExpressionTest {
 
         JtwigValue result = underTest.calculate(context);
 
-        assertThat(result.isPresent(), is(false));
+        assertThat(result.isUndefined(), is(true));
     }
 
     @Test(expected = CalculationException.class)

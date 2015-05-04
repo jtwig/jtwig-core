@@ -1,10 +1,8 @@
 package org.jtwig.util;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.internal.matchers.InstanceOf;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,10 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
 
 public class JtwigValueTest {
@@ -29,7 +25,7 @@ public class JtwigValueTest {
         underTest = new JtwigValue(null);
         Collection<Object> result = underTest.asCollection();
 
-        assertThat(result, empty());
+        assertThat(result.isEmpty(), is(true));
     }
 
     @Test

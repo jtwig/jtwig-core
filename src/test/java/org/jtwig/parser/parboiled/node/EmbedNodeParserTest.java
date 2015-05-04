@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.parboiled.support.ParsingResult;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
@@ -64,6 +63,6 @@ public class EmbedNodeParserTest extends AbstractParserTest {
         assertThat(embedNode.isIgnoreMissing(), is(true));
         assertThat(embedNode.isInheritModel(), is(false));
         assertThat(embedNode.getMapExpression(), instanceOf(VariableExpression.class));
-        assertThat(embedNode.getNodes(), hasSize(1));
+        assertThat(embedNode.getNodes().size(), is(1));
     }
 }

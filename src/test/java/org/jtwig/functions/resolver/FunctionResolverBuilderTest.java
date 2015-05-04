@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -103,7 +103,7 @@ public class FunctionResolverBuilderTest {
 
         underTest.include(function);
 
-        assertThat(functions.get(name), hasSize(1));
+        assertThat(functions.get(name).size(), is(1));
     }
 
     @Test

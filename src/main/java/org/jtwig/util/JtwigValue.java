@@ -10,7 +10,7 @@ import static java.util.Arrays.asList;
 
 public class JtwigValue implements Comparable<JtwigValue> {
     public static JtwigValue empty() {
-        return new JtwigValue(null);
+        return new JtwigValue(Undefined.UNDEFINED);
     }
 
     private final Object value;
@@ -125,6 +125,10 @@ public class JtwigValue implements Comparable<JtwigValue> {
 
     public Character asChar() {
         return asString().charAt(0);
+    }
+
+    public boolean isUndefined() {
+        return value == Undefined.UNDEFINED;
     }
 
     public enum Type {
