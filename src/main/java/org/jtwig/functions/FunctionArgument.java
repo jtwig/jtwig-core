@@ -23,7 +23,7 @@ public class FunctionArgument {
     @Override
     public String toString() {
         if (name.isPresent()) {
-            return String.format("%s (%s)", value, name);
+            return String.format("%s (%s)", value, name.get());
         } else {
             return value.toString();
         }

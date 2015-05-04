@@ -56,6 +56,7 @@ public class ParserContext {
         createParser(EmbedNodeParser.class, context);
         createParser(OutputNodeParser.class, context);
         createParser(AutoEscapeNodeParser.class, context);
+        createParser(VerbatimNodeParser.class, context);
 
         for (Class<? extends AddonParser> addOnParser : addOnParsers) {
             createParser((Class) addOnParser, context);

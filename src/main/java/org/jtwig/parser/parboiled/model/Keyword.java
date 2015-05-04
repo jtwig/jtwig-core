@@ -27,7 +27,9 @@ public enum Keyword {
     AUTO_ESCAPE("autoescape"),
     END_AUTO_ESCAPE("endautoescape"),
     DO("do"),
-    FLUSH("flush")
+    FLUSH("flush"),
+    VERBATIM("verbatim"),
+    END_VERBATIM("endverbatim")
     ;
 
     private final String symbol;
