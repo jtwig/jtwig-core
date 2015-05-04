@@ -167,6 +167,7 @@ public class ConfigurationBuilder implements Builder<Configuration> {
         functionResolverBuilder.include(new BooleanFunctions());
         functionResolverBuilder.include(new ConstantFunction(classpathFinder));
         functionResolverBuilder.include(new StringFunctions());
+        functionResolverBuilder.include(new ObjectFunctions());
 
         // converters
         functionResolverBuilder.withConverter(new ObjectToIntegerConverter());
