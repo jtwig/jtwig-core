@@ -29,7 +29,9 @@ public enum Keyword {
     DO("do"),
     FLUSH("flush"),
     VERBATIM("verbatim"),
-    END_VERBATIM("endverbatim")
+    END_VERBATIM("endverbatim"),
+    SPACELESS("spaceless"),
+    END_SPACELESS("endspaceless")
     ;
 
     private final String symbol;
