@@ -170,6 +170,7 @@ public class ConfigurationBuilder implements Builder<Configuration> {
         functionResolverBuilder.include(new StringFunctions());
         functionResolverBuilder.include(new ObjectFunctions());
         functionResolverBuilder.include(new MathFunctions());
+        functionResolverBuilder.include(new NumberFunctions());
 
         // converters
         functionResolverBuilder.withConverter(new ObjectToIntegerConverter());
