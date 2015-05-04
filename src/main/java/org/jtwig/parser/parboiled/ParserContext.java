@@ -44,6 +44,7 @@ public class ParserContext {
 
         createParser(SetNodeParser.class, context);
         createParser(DoNodeParser.class, context);
+        createParser(FlushNodeParser.class, context);
         createParser(IncludeNodeParser.class, context);
         createParser(BlockNodeParser.class, context);
         createParser(IfNodeParser.class, context);

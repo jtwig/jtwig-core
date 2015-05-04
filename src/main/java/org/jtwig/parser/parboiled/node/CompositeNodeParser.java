@@ -52,6 +52,7 @@ public class CompositeNodeParser extends NodeParser<CompositeNode> {
                     OutputNodeParser.class,
                     SetNodeParser.class,
                     DoNodeParser.class,
+                    FlushNodeParser.class,
                     AutoEscapeNodeParser.class,
                     TextNodeParser.class
             ));
