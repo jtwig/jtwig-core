@@ -9,6 +9,7 @@ import org.jtwig.content.spaces.HtmlSpaceRemover;
 import org.jtwig.content.spaces.SpaceRemover;
 import org.jtwig.context.model.EscapeMode;
 import org.jtwig.functions.SimpleFunction;
+import org.jtwig.functions.convert.ObjectToBigDecimalConverter;
 import org.jtwig.functions.convert.ObjectToIntegerConverter;
 import org.jtwig.functions.impl.*;
 import org.jtwig.functions.reference.FunctionReference;
@@ -168,9 +169,11 @@ public class ConfigurationBuilder implements Builder<Configuration> {
         functionResolverBuilder.include(new ConstantFunction(classpathFinder));
         functionResolverBuilder.include(new StringFunctions());
         functionResolverBuilder.include(new ObjectFunctions());
+        functionResolverBuilder.include(new MathFunctions());
 
         // converters
         functionResolverBuilder.withConverter(new ObjectToIntegerConverter());
+        functionResolverBuilder.withConverter(new ObjectToBigDecimalConverter());
 
         propertyResolvers.addAll(this.propertyResolvers);
         resourceResolvers.addAll(this.resourceResolvers);
