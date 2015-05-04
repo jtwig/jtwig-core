@@ -55,11 +55,6 @@ public class ConfigurationBuilder implements Builder<Configuration> {
     private ConfigurationBuilder() {
     }
 
-    public <T> ConfigurationBuilder withParameter(ConfigurationParameter<T> parameter, T value) {
-        this.parameters.put(parameter.name(), value);
-        return this;
-    }
-
     public ConfigurationBuilder withParameter(String name, Object value) {
         this.parameters.put(name, value);
         return this;
@@ -184,7 +179,8 @@ public class ConfigurationBuilder implements Builder<Configuration> {
                 new CompositeJsonMapperFactory(jsonMapperFactory),
                 new CompositeEnumerationListStrategy(
                         enumerationListStrategies
-                ), parameters,
+                ),
+                parameters,
                 strictMode,
                 spaceRemover,
                 mathContext,

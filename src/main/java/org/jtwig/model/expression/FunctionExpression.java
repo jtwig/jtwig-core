@@ -14,7 +14,7 @@ import org.jtwig.util.JtwigValue;
 
 import java.util.*;
 
-public class FunctionExpression extends Expression {
+public class FunctionExpression extends InjectableExpression {
     private final String functionIdentifier;
     private final Arguments arguments;
 
@@ -51,16 +51,19 @@ public class FunctionExpression extends Expression {
         }
     }
 
+    @Override
+    public Expression inject(Expression expression) {
+        List<Argument> arguments = new ArrayList<>();
+        arguments.add(new Argument(Optional.<String>absent(), expression));
+        arguments.addAll(getArguments().arguments);
+        return new FunctionExpression(getPosition(), functionIdentifier, arguments);
+    }
+
     public static class Arguments implements Iterable<Argument> {
         private final LinkedList<Argument> arguments;
 
         public Arguments(Collection<Argument> arguments) {
             this.arguments = new LinkedList<>(arguments);
-        }
-
-        public Arguments inject (Argument argument) {
-            arguments.addFirst(argument);
-            return this;
         }
 
         public int size() {

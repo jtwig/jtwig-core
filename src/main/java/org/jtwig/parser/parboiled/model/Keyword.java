@@ -31,7 +31,9 @@ public enum Keyword {
     VERBATIM("verbatim"),
     END_VERBATIM("endverbatim"),
     SPACELESS("spaceless"),
-    END_SPACELESS("endspaceless")
+    END_SPACELESS("endspaceless"),
+    FILTER("filter"),
+    END_FILTER("endfilter")
     ;
 
     private final String symbol;
