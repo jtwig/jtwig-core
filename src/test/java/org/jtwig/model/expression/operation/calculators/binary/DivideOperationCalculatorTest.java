@@ -1,6 +1,5 @@
 package org.jtwig.model.expression.operation.calculators.binary;
 
-import org.jtwig.configuration.MathContextParameter;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
@@ -27,7 +26,7 @@ public class DivideOperationCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(context.configuration().parameter(MathContextParameter.mathContext())).thenReturn(MathContext.DECIMAL32);
+        when(context.configuration().mathContext()).thenReturn(MathContext.DECIMAL32);
     }
 
     @Test

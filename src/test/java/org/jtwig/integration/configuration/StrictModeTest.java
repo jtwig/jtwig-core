@@ -9,7 +9,6 @@ import org.junit.rules.ExpectedException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.jtwig.JtwigModel.newModel;
-import static org.jtwig.configuration.BooleanConfigurationParameters.STRICT_MODE;
 import static org.jtwig.configuration.ConfigurationBuilder.configuration;
 
 public class StrictModeTest extends AbstractIntegrationTest {
@@ -21,13 +20,13 @@ public class StrictModeTest extends AbstractIntegrationTest {
         expectedException.expect(CalculationException.class);
 
         defaultStringTemplate("{{ undefined }}", configuration()
-                .withParameter(STRICT_MODE, true)
+                .withStrictMode(true)
                 .build()).render(newModel());
     }
     @Test
     public void strictModeInactive() throws Exception {
         String result = defaultStringTemplate("{{ undefined }}", configuration()
-                .withParameter(STRICT_MODE, false)
+                .withStrictMode(false)
                 .build()).render(newModel());
 
         assertThat(result, is(""));

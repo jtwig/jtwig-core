@@ -7,7 +7,6 @@ import org.jtwig.exceptions.CalculationException;
 import org.jtwig.model.position.Position;
 import org.jtwig.util.JtwigValue;
 
-import static org.jtwig.configuration.BooleanConfigurationParameters.STRICT_MODE;
 import static org.jtwig.util.ErrorMessageFormatter.errorMessage;
 
 public class VariableExpression extends Expression {
@@ -28,7 +27,7 @@ public class VariableExpression extends Expression {
         if (valueOptional.isPresent()) {
             return valueOptional.get();
         } else {
-            if (context.configuration().parameter(STRICT_MODE)) {
+            if (context.configuration().strictMode()) {
                 throw new CalculationException(errorMessage(getPosition(), String.format("Unable to resolve variable '%s'", identifier)));
             } else {
                 return JtwigValue.empty();

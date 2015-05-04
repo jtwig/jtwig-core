@@ -5,6 +5,7 @@ import org.jtwig.context.values.ScopeType;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.position.Traceable;
 import org.jtwig.render.Renderable;
+import org.jtwig.render.StringBuilderRenderResult;
 
 public abstract class Node implements Traceable {
     private final Position position;
@@ -23,4 +24,5 @@ public abstract class Node implements Traceable {
     public ScopeType scopeType () {
         return ScopeType.SHARE;
     }
+
 }

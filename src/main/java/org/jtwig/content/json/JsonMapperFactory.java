@@ -1,4 +1,4 @@
-package org.jtwig.functions.impl.json;
+package org.jtwig.content.json;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;

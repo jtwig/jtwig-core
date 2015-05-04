@@ -12,7 +12,7 @@ public class EmptyRenderable implements Renderable {
     private EmptyRenderable () {}
 
     @Override
-    public void appendTo(RenderResult result) {
-
+    public RenderResult appendTo(RenderResult result) {
+        return result;
     }
 }

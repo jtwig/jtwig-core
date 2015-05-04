@@ -4,7 +4,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Collections2;
-import org.apache.commons.lang3.StringUtils;
 import org.jtwig.context.RenderContext;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.functions.FunctionArgument;
@@ -14,8 +13,6 @@ import org.jtwig.util.ErrorMessageFormatter;
 import org.jtwig.util.JtwigValue;
 
 import java.util.*;
-
-import static org.jtwig.configuration.BooleanConfigurationParameters.STRICT_MODE;
 
 public class FunctionExpression extends Expression {
     private final String functionIdentifier;

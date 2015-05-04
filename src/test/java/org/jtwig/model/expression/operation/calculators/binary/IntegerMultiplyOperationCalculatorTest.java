@@ -1,6 +1,5 @@
 package org.jtwig.model.expression.operation.calculators.binary;
 
-import org.jtwig.configuration.MathContextParameter;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
@@ -12,10 +11,8 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
 public class IntegerMultiplyOperationCalculatorTest {
     private final RenderContext renderContext = mock(RenderContext.class, RETURNS_DEEP_STUBS);
@@ -24,7 +21,7 @@ public class IntegerMultiplyOperationCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(renderContext.configuration().parameter(MathContextParameter.mathContext())).thenReturn(MathContext.DECIMAL32);
+        when(renderContext.configuration().mathContext()).thenReturn(MathContext.DECIMAL32);
     }
 
     @Test

@@ -1,7 +1,6 @@
 package org.jtwig.model.expression;
 
 import com.google.common.base.Optional;
-import org.jtwig.configuration.BooleanConfigurationParameters;
 import org.jtwig.context.RenderContext;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.model.position.Position;
@@ -32,7 +31,7 @@ public class VariableExpressionTest {
 
     @Test
     public void calculateWhenVariableUndefinedAndStrictModeDisabled() throws Exception {
-        when(context.configuration().parameter(BooleanConfigurationParameters.STRICT_MODE)).thenReturn(false);
+        when(context.configuration().strictMode()).thenReturn(false);
         when(context.valueContext().value(identifier)).thenReturn(Optional.<JtwigValue>absent());
 
         JtwigValue result = underTest.calculate(context);
@@ -42,7 +41,7 @@ public class VariableExpressionTest {
 
     @Test(expected = CalculationException.class)
     public void calculateWhenVariableUndefinedAndStrictModeEnabled() throws Exception {
-        when(context.configuration().parameter(BooleanConfigurationParameters.STRICT_MODE)).thenReturn(true);
+        when(context.configuration().strictMode()).thenReturn(true);
         when(context.valueContext().value(identifier)).thenReturn(Optional.<JtwigValue>absent());
 
         underTest.calculate(context);

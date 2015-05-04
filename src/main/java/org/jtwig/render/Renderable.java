@@ -1,5 +1,5 @@
 package org.jtwig.render;
 
 public interface Renderable {
-    void appendTo (RenderResult result);
+    RenderResult appendTo (RenderResult result);
 }

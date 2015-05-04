@@ -4,12 +4,9 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.context.model.EscapeMode;
 import org.jtwig.context.model.EscapeModeContext;
 import org.jtwig.model.position.Position;
-import org.jtwig.model.tree.TextNode;
 import org.jtwig.render.Renderable;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.OutputStream;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;

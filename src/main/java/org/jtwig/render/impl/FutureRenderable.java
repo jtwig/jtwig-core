@@ -13,9 +13,10 @@ public class FutureRenderable implements Renderable {
     }
 
     @Override
-    public void appendTo(RenderResult result) {
+    public RenderResult appendTo(RenderResult result) {
         if (renderable != null) {
             renderable.appendTo(result);
+            return result;
         } else {
             throw new IllegalStateException("Current renderable is in invalid state, it must be completed first");
         }

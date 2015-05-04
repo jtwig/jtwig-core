@@ -13,9 +13,10 @@ public class CompositeRenderable implements Renderable {
     }
 
     @Override
-    public void appendTo(RenderResult result) {
+    public RenderResult appendTo(RenderResult result) {
         for (Renderable renderable : renderableCollection) {
             renderable.appendTo(result);
         }
+        return result;
     }
 }

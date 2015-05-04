@@ -1,6 +1,5 @@
 package org.jtwig.model.expression.operation.calculators.binary;
 
-import org.jtwig.configuration.MathContextParameter;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
@@ -18,7 +17,7 @@ public class IntegerDivideOperationCalculator implements BinaryOperationCalculat
                 .asNumber().setScale(0, RoundingMode.HALF_UP);
         return new JtwigValue(
                 leftValue
-                        .divide(rightValue, context.configuration().parameter(MathContextParameter.mathContext()))
+                        .divide(rightValue, context.configuration().mathContext())
                         .setScale(0, RoundingMode.HALF_UP)
         );
     }

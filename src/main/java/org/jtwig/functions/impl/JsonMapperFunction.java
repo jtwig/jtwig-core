@@ -6,7 +6,7 @@ import org.jtwig.context.RenderContextHolder;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.functions.annotations.JtwigFunction;
 import org.jtwig.functions.annotations.Parameter;
-import org.jtwig.functions.impl.json.JsonMapperFactory;
+import org.jtwig.content.json.JsonMapperFactory;
 import org.jtwig.util.OptionalUtils;
 
 public class JsonMapperFunction {

@@ -11,7 +11,8 @@ public class FlushRenderable implements Renderable {
     private FlushRenderable () {}
 
     @Override
-    public void appendTo(RenderResult result) {
+    public RenderResult appendTo(RenderResult result) {
         result.flush();
+        return result;
     }
 }

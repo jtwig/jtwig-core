@@ -2,12 +2,10 @@ package org.jtwig.context.impl;
 
 import org.jtwig.configuration.Configuration;
 import org.jtwig.context.RenderContext;
-import org.jtwig.context.model.EscapeMode;
-import org.jtwig.context.model.EscapeModeContext;
-import org.jtwig.context.model.NodeContext;
-import org.jtwig.context.model.ResourceContext;
+import org.jtwig.context.model.*;
 import org.jtwig.context.values.SimpleValueContext;
 import org.jtwig.context.values.ValueContext;
+import org.jtwig.render.RenderResult;
 import org.jtwig.util.JtwigValue;
 
 import java.util.HashMap;

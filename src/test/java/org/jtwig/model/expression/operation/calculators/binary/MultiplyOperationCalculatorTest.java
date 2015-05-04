@@ -1,6 +1,5 @@
 package org.jtwig.model.expression.operation.calculators.binary;
 
-import org.jtwig.configuration.MathContextParameter;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
@@ -22,7 +21,7 @@ public class MultiplyOperationCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(renderContext.configuration().parameter(MathContextParameter.mathContext())).thenReturn(MathContext.DECIMAL32);
+        when(renderContext.configuration().mathContext()).thenReturn(MathContext.DECIMAL32);
     }
 
     @Test

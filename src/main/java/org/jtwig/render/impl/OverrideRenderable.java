@@ -18,8 +18,9 @@ public class OverrideRenderable implements Renderable {
     }
 
     @Override
-    public void appendTo(RenderResult result) {
+    public RenderResult appendTo(RenderResult result) {
         override.or(defaultContent).appendTo(result);
+        return result;
     }
 
     public Renderable getDefault() {

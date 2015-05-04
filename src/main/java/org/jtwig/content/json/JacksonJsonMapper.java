@@ -1,19 +1,19 @@
-package org.jtwig.functions.impl.json;
+package org.jtwig.content.json;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.jtwig.exceptions.CalculationException;
 
 import java.io.IOException;
 
-public class Jackson2JsonMapper implements Function<Object, String> {
+public class JacksonJsonMapper implements Function<Object, String> {
     private final ObjectMapper OBJECT_MAPPER;
 
-    public Jackson2JsonMapper(ObjectMapper objectMapper) {
-        this.OBJECT_MAPPER = objectMapper;
+    public JacksonJsonMapper(ObjectMapper OBJECT_MAPPER) {
+        this.OBJECT_MAPPER = OBJECT_MAPPER;
     }
 
-    public Jackson2JsonMapper() {
+    public JacksonJsonMapper() {
         this.OBJECT_MAPPER = new ObjectMapper();
     }
 

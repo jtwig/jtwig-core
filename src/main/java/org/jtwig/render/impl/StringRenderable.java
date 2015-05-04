@@ -14,7 +14,8 @@ public class StringRenderable implements Renderable {
     }
 
     @Override
-    public void appendTo(RenderResult result) {
+    public RenderResult appendTo(RenderResult result) {
         result.append(mode.escape(content));
+        return result;
     }
 }

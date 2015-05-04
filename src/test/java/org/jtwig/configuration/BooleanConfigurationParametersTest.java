@@ -9,8 +9,8 @@ public class BooleanConfigurationParametersTest {
 
     @Test
     public void strictModeInactiveByDefault() throws Exception {
-        ConfigurationParameter<Boolean> configurationParameter = BooleanConfigurationParameters.STRICT_MODE;
+        Configuration configuration = ConfigurationBuilder.configuration().build();
 
-        assertThat(configurationParameter.defaultValue(), is(false));
+        assertThat(configuration.strictMode(), is(false));
     }
 }

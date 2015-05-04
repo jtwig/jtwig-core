@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import org.jtwig.configuration.Configuration;
 import org.jtwig.context.RenderContext;
-import org.jtwig.functions.impl.json.JsonMapperFactory;
+import org.jtwig.content.json.JsonMapperFactory;
 import org.junit.Before;
 import org.junit.Test;
 

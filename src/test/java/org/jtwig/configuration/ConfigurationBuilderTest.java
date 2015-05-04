@@ -20,17 +20,4 @@ public class ConfigurationBuilderTest {
         assertThat(propertyResolver.size(), is(6));
         assertThat(resourceResolver.size(), is(1));
     }
-    @Test
-    public void configurationWithoutDefaults() throws Exception {
-        Configuration result = ConfigurationBuilder
-                .configuration()
-                .overrideDefaults()
-                .build();
-
-        CompositePropertyResolver propertyResolver = (CompositePropertyResolver) result.propertyResolver();
-        CompositeResourceResolver resourceResolver = (CompositeResourceResolver) result.resourceResolver();
-
-        assertThat(propertyResolver.size(), is(0));
-        assertThat(resourceResolver.size(), is(0));
-    }
 }

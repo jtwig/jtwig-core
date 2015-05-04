@@ -1,6 +1,6 @@
-package org.jtwig.functions.impl.json;
+package org.jtwig.content.json;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.jtwig.exceptions.CalculationException;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,9 +14,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class Jackson2JsonMapperTest {
+public class JacksonJsonMapperTest {
     private final ObjectMapper objectMapper = mock(ObjectMapper.class);
-    private Jackson2JsonMapper underTest = new Jackson2JsonMapper(objectMapper);
+    private JacksonJsonMapper underTest = new JacksonJsonMapper(objectMapper);
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();

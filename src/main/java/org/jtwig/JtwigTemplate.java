@@ -11,7 +11,6 @@ import org.jtwig.resource.Resource;
 
 import java.io.OutputStream;
 
-import static org.jtwig.configuration.InitialEscapeModeParameter.escapeMode;
 import static org.jtwig.context.RenderContextBuilder.renderContext;
 
 public class JtwigTemplate {
@@ -42,7 +41,7 @@ public class JtwigTemplate {
                 .withConfiguration(configuration)
                 .withValueContext(model)
                 .withResource(template)
-                .withInitialEscapeMode(configuration.parameter(escapeMode()))
+                .withInitialEscapeMode(configuration.initialEscapeMode())
                 .build();
 
         RenderContextHolder.set(renderContext);
