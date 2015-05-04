@@ -33,6 +33,6 @@ public class UnaryOperationExpressionTest {
 
         JtwigValue result = underTest.calculate(context);
 
-        assertThat(result.asNumber(), is(new BigDecimal(-1)));
+        assertThat(result.mandatoryNumber(), is(new BigDecimal(-1)));
     }
 }

@@ -33,6 +33,6 @@ public class SumOperationCalculatorTest {
 
         JtwigValue result = underTest.calculate(renderContext, position, leftOperand, rightOperand);
 
-        assertThat(result.asNumber(), is(new BigDecimal("3.6")));
+        assertThat(result.mandatoryNumber(), is(new BigDecimal("3.6")));
     }
 }

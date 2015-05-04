@@ -50,7 +50,7 @@ public class CompositionTest extends AbstractIntegrationTest {
 
             @Override
             public Object execute(Object... arguments) {
-                return new JtwigValue(arguments[0]).asNumber().add(new JtwigValue(arguments[1]).asNumber());
+                return new JtwigValue(arguments[0]).mandatoryNumber().add(new JtwigValue(arguments[1]).mandatoryNumber());
             }
         };
     }
@@ -67,7 +67,7 @@ public class CompositionTest extends AbstractIntegrationTest {
                 BigDecimal result = BigDecimal.ZERO;
                 Collection<Object> objects = new JtwigValue(arguments[0]).asCollection();
                 for (Object object : objects) {
-                    result = result.add(new JtwigValue(object).asNumber());
+                    result = result.add(new JtwigValue(object).mandatoryNumber());
                 }
                 return result;
             }

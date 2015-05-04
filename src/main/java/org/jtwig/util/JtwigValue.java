@@ -1,7 +1,8 @@
 package org.jtwig.util;
 
+import com.google.common.base.*;
 import com.google.common.base.Objects;
-import com.google.common.base.Supplier;
+import com.google.common.base.Optional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -37,20 +38,24 @@ public class JtwigValue implements Comparable<JtwigValue> {
         return value;
     }
 
-    public BigDecimal asNumber() {
+    public Optional<BigDecimal> asNumber() {
         if (value instanceof BigDecimal) {
-            return (BigDecimal) value;
+            return Optional.of((BigDecimal) value);
         }
-        return new BigDecimal(ExpressionUtils.numberAsString(value).or(throwInvalidNumber(value)));
+
+        return ExpressionUtils.numberAsString(value)
+                .transform(new Function<String, BigDecimal>() {
+                    @Override
+                    public BigDecimal apply(String input) {
+                        return new BigDecimal(input);
+                    }
+                });
     }
 
-    private Supplier<String> throwInvalidNumber(final Object representation) {
-        return new Supplier<String>() {
-            @Override
-            public String get() {
-                throw new IllegalArgumentException(String.format("Unable to convert '%s' into a number", representation));
-            }
-        };
+    public BigDecimal mandatoryNumber () {
+        return asNumber()
+                .or(OptionalUtils.<BigDecimal, IllegalArgumentException>throwException(new IllegalArgumentException(String.format("Unable to convert '%s' into a number", value))))
+                ;
     }
 
     public Boolean asBoolean () {

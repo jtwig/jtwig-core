@@ -33,6 +33,6 @@ public class MultiplyOperationCalculatorTest {
 
         JtwigValue result = underTest.calculate(renderContext, position, leftOperand, rightOperand);
 
-        assertThat(result.asNumber(), is(new BigDecimal("2.99")));
+        assertThat(result.mandatoryNumber(), is(new BigDecimal("2.99")));
     }
 }

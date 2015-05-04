@@ -36,6 +36,6 @@ public class DivideOperationCalculatorTest {
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 
-        assertThat(result.asNumber(), is(new BigDecimal("0.5")));
+        assertThat(result.mandatoryNumber(), is(new BigDecimal("0.5")));
     }
 }

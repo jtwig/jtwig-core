@@ -9,11 +9,8 @@ import org.jtwig.content.spaces.HtmlSpaceRemover;
 import org.jtwig.content.spaces.SpaceRemover;
 import org.jtwig.context.model.EscapeMode;
 import org.jtwig.functions.SimpleFunction;
-import org.jtwig.functions.convert.BigDecimalToIntegerConverter;
-import org.jtwig.functions.impl.BooleanFunctions;
-import org.jtwig.functions.impl.ConstantFunction;
-import org.jtwig.functions.impl.EscapeRawFunction;
-import org.jtwig.functions.impl.JsonMapperFunction;
+import org.jtwig.functions.convert.ObjectToIntegerConverter;
+import org.jtwig.functions.impl.*;
 import org.jtwig.functions.reference.FunctionReference;
 import org.jtwig.functions.resolver.FunctionResolverBuilder;
 import org.jtwig.model.expression.lists.*;
@@ -169,9 +166,10 @@ public class ConfigurationBuilder implements Builder<Configuration> {
         functionResolverBuilder.include(new EscapeRawFunction());
         functionResolverBuilder.include(new BooleanFunctions());
         functionResolverBuilder.include(new ConstantFunction(classpathFinder));
+        functionResolverBuilder.include(new StringFunctions());
 
         // converters
-        functionResolverBuilder.withConverter(new BigDecimalToIntegerConverter());
+        functionResolverBuilder.withConverter(new ObjectToIntegerConverter());
 
         propertyResolvers.addAll(this.propertyResolvers);
         resourceResolvers.addAll(this.resourceResolvers);

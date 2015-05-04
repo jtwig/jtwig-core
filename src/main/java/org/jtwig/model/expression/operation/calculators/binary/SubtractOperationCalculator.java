@@ -10,6 +10,6 @@ public class SubtractOperationCalculator implements BinaryOperationCalculator {
     public JtwigValue calculate(RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
         JtwigValue leftValue = leftOperand.calculate(context);
         JtwigValue rightValue = rightOperand.calculate(context);
-        return new JtwigValue(leftValue.asNumber().subtract(rightValue.asNumber()));
+        return new JtwigValue(leftValue.mandatoryNumber().subtract(rightValue.mandatoryNumber()));
     }
 }

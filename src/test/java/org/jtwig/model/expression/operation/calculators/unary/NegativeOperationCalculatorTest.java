@@ -31,6 +31,6 @@ public class NegativeOperationCalculatorTest {
 
         JtwigValue result = underTest.calculate(renderContext, position, operand);
 
-        assertThat(result.asNumber(), is(new BigDecimal("-2.0")));
+        assertThat(result.mandatoryNumber(), is(new BigDecimal("-2.0")));
     }
 }

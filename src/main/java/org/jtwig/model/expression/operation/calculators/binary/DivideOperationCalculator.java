@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 public class DivideOperationCalculator implements BinaryOperationCalculator {
     @Override
     public JtwigValue calculate(RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
-        BigDecimal leftValue = leftOperand.calculate(context).asNumber();
-        BigDecimal rightValue = rightOperand.calculate(context).asNumber();
+        BigDecimal leftValue = leftOperand.calculate(context).mandatoryNumber();
+        BigDecimal rightValue = rightOperand.calculate(context).mandatoryNumber();
         BigDecimal value = leftValue
                 .divide(rightValue, context.configuration()
                         .mathContext());

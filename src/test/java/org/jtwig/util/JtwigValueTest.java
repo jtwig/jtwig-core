@@ -80,11 +80,11 @@ public class JtwigValueTest {
     }
 
     @Test
-    public void asNumberInvalid() throws Exception {
+    public void mandatoryNumberInvalid() throws Exception {
         expectedException.expect(IllegalArgumentException.class);
 
         underTest = new JtwigValue("a");
-        underTest.asNumber();
+        underTest.mandatoryNumber();
     }
 
     @Test

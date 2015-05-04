@@ -10,6 +10,6 @@ public class ModOperationCalculator implements BinaryOperationCalculator {
     public JtwigValue calculate(RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
         JtwigValue leftValue = leftOperand.calculate(context);
         JtwigValue rightValue = rightOperand.calculate(context);
-        return new JtwigValue(leftValue.asNumber().remainder(rightValue.asNumber(), context.configuration().mathContext()));
+        return new JtwigValue(leftValue.mandatoryNumber().remainder(rightValue.mandatoryNumber(), context.configuration().mathContext()));
     }
 }

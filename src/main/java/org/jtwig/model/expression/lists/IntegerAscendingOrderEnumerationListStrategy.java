@@ -11,8 +11,8 @@ public class IntegerAscendingOrderEnumerationListStrategy implements Enumeration
     public Optional<Collection<Object>> enumerate(JtwigValue left, JtwigValue right) {
         if (left.getType() == right.getType()) {
             if (left.getType() == JtwigValue.Type.NUMBER) {
-                int start = left.asNumber().intValue();
-                int end = right.asNumber().intValue();
+                int start = left.mandatoryNumber().intValue();
+                int end = right.mandatoryNumber().intValue();
                 if (start <= end) {
                     Collection<Object> result = new ArrayList<>();
                     while (start < end) {

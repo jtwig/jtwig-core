@@ -12,9 +12,9 @@ public class IntegerDivideOperationCalculator implements BinaryOperationCalculat
     @Override
     public JtwigValue calculate(RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
         BigDecimal leftValue = leftOperand.calculate(context)
-                .asNumber().setScale(0, RoundingMode.HALF_UP);
+                .mandatoryNumber().setScale(0, RoundingMode.HALF_UP);
         BigDecimal rightValue = rightOperand.calculate(context)
-                .asNumber().setScale(0, RoundingMode.HALF_UP);
+                .mandatoryNumber().setScale(0, RoundingMode.HALF_UP);
         return new JtwigValue(
                 leftValue
                         .divide(rightValue, context.configuration().mathContext())

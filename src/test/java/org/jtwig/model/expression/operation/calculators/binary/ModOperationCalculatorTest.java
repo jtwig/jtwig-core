@@ -33,6 +33,6 @@ public class ModOperationCalculatorTest {
 
         JtwigValue result = underTest.calculate(renderContext, position, leftOperand, rightOperand);
 
-        assertThat(result.asNumber(), is(new BigDecimal(1)));
+        assertThat(result.mandatoryNumber(), is(new BigDecimal(1)));
     }
 }
