@@ -4,6 +4,7 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.context.model.EscapeMode;
 import org.jtwig.render.RenderResult;
 import org.jtwig.render.Renderable;
+import org.jtwig.render.StringBuilderRenderResult;
 import org.jtwig.render.impl.StringRenderable;
 import org.junit.Before;
 
@@ -21,9 +22,9 @@ public abstract class AbstractNodeTest {
     }
 
     protected String renderResult (Renderable renderable) {
-        RenderResult renderResult = new RenderResult();
+        RenderResult renderResult = new StringBuilderRenderResult();
         renderable.appendTo(renderResult);
-        return renderResult.toString();
+        return renderResult.content();
     }
 
     protected void render(Node node, String content) {

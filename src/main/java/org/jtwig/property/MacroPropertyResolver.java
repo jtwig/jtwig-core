@@ -11,6 +11,7 @@ import org.jtwig.context.values.SimpleValueContext;
 import org.jtwig.context.values.ValueContext;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.render.RenderResult;
+import org.jtwig.render.StringBuilderRenderResult;
 import org.jtwig.util.JtwigValue;
 
 import java.io.ByteArrayOutputStream;
@@ -34,9 +35,6 @@ public class MacroPropertyResolver implements PropertyResolver {
         return new Function<Macro, JtwigValue>() {
             @Override
             public JtwigValue apply(Macro macro) {
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-
                 ValueContext valueContext = new SimpleValueContext(new HashMap<String, JtwigValue>());
 
                 Iterator<FunctionArgument> valueIterator = request.getArguments().iterator();
@@ -46,7 +44,7 @@ public class MacroPropertyResolver implements PropertyResolver {
                     }
                 }
 
-                RenderResult renderResult = new RenderResult();
+                RenderResult renderResult = new StringBuilderRenderResult();
 
                 renderContextBuilder()
                     .withConfiguration(getRenderContext().configuration())
@@ -56,7 +54,7 @@ public class MacroPropertyResolver implements PropertyResolver {
                     .render(macro.getContent())
                     .appendTo(renderResult);
 
-                return new JtwigValue(renderResult.toString());
+                return new JtwigValue(renderResult.content());
             }
         };
     }
