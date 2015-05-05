@@ -3,7 +3,8 @@ package org.jtwig.model.expression.operation.calculators.unary;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +28,7 @@ public class NegativeOperationCalculatorTest {
     @Test
     public void negative() throws Exception {
         Expression operand = mock(Expression.class);
-        when(operand.calculate(renderContext)).thenReturn(new JtwigValue(new BigDecimal("2.0")));
+        when(operand.calculate(renderContext)).thenReturn(JtwigValueFactory.create(new BigDecimal("2.0")));
 
         JtwigValue result = underTest.calculate(renderContext, position, operand);
 

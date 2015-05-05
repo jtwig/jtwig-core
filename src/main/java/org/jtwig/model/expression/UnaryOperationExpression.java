@@ -3,7 +3,7 @@ package org.jtwig.model.expression;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.operation.UnaryOperator;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 
 public class UnaryOperationExpression extends Expression {
     private final UnaryOperator operator;

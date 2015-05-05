@@ -2,7 +2,7 @@ package org.jtwig.model.expression;
 
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 
 public class TernaryOperationExpression extends Expression {
     private final Expression firstExpression;

@@ -2,7 +2,8 @@ package org.jtwig.model.expression;
 
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +36,7 @@ public class MapExpressionTest {
     public void calculateWhenNonEmpty() throws Exception {
         String key = "one";
         Expression value = mock(Expression.class);
-        when(value.calculate(context)).thenReturn(new JtwigValue("two"));
+        when(value.calculate(context)).thenReturn(JtwigValueFactory.create("two"));
         map.put(key, value);
 
         JtwigValue result = underTest.calculate(context);

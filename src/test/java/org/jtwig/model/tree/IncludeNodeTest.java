@@ -8,7 +8,8 @@ import org.jtwig.model.tree.include.IncludeConfiguration;
 import org.jtwig.render.Renderable;
 import org.jtwig.resource.Resource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -29,7 +30,7 @@ public class IncludeNodeTest extends AbstractNodeTest {
     @Test
     public void renderWhenResourceNotExistsAndIgnoreMissing() throws Exception {
         String path = "path";
-        when(configuration.getInclude().calculate(renderContext())).thenReturn(new JtwigValue(path));
+        when(configuration.getInclude().calculate(renderContext())).thenReturn(JtwigValueFactory.create(path));
         when(configuration.isIgnoreMissing()).thenReturn(true);
         when(renderContext().configuration().resourceResolver().resolve(any(Resource.class), eq(path))).thenReturn(Optional.<Resource>absent());
 
@@ -41,7 +42,7 @@ public class IncludeNodeTest extends AbstractNodeTest {
     @Test(expected = ResourceNotFoundException.class)
     public void renderWhenResourceNotExistsAndNotIgnoreMissing() throws Exception {
         String path = "path";
-        when(configuration.getInclude().calculate(renderContext())).thenReturn(new JtwigValue(path));
+        when(configuration.getInclude().calculate(renderContext())).thenReturn(JtwigValueFactory.create(path));
         when(configuration.isIgnoreMissing()).thenReturn(false);
         when(renderContext().configuration().resourceResolver().resolve(any(Resource.class), eq(path))).thenReturn(Optional.<Resource>absent());
 
@@ -54,7 +55,7 @@ public class IncludeNodeTest extends AbstractNodeTest {
         String path = "path";
         Resource resource = mock(Resource.class);
         ResourceRenderResult renderResult = mock(ResourceRenderResult.class, RETURNS_DEEP_STUBS);
-        when(configuration.getInclude().calculate(renderContext())).thenReturn(new JtwigValue(path));
+        when(configuration.getInclude().calculate(renderContext())).thenReturn(JtwigValueFactory.create(path));
         when(configuration.isIgnoreMissing()).thenReturn(true);
         when(renderContext().configuration().resourceResolver().resolve(any(Resource.class), eq(path))).thenReturn(Optional.of(resource));
         when(resourceRenderer.inheritModel(anyBoolean())).thenReturn(resourceRenderer);

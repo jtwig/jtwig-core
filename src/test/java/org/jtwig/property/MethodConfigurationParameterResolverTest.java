@@ -4,15 +4,13 @@ import com.google.common.base.Optional;
 
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.jtwig.property.MethodPropertyResolver.exactlyEqual;
 import static org.jtwig.property.MethodPropertyResolver.prefixedEqual;
@@ -44,7 +42,7 @@ public class MethodConfigurationParameterResolverTest {
     @Test
     public void resolveMethodWhenNameMatchesWithArguments() throws Exception {
         underTest = new MethodPropertyResolver(exactlyEqual());
-        arguments.add(new FunctionArgument(Optional.<String>absent(), new JtwigValue("test")));
+        arguments.add(new FunctionArgument(Optional.<String>absent(), JtwigValueFactory.create("test")));
         PropertyResolveRequest request = new PropertyResolveRequest(position, new SimpleTest(), "hello", arguments);
 
         Optional<JtwigValue> result = underTest.resolve(request);
@@ -56,7 +54,7 @@ public class MethodConfigurationParameterResolverTest {
     @Test
     public void resolveMethodWhenNameMatchesWithArgumentsNull() throws Exception {
         underTest = new MethodPropertyResolver(exactlyEqual());
-        arguments.add(new FunctionArgument(Optional.<String>absent(), new JtwigValue(null)));
+        arguments.add(new FunctionArgument(Optional.<String>absent(), JtwigValueFactory.create(null)));
         PropertyResolveRequest request = new PropertyResolveRequest(position, new SimpleTest(), "hello", arguments);
         Optional<JtwigValue> result = underTest.resolve(request);
 
@@ -67,7 +65,7 @@ public class MethodConfigurationParameterResolverTest {
     @Test
     public void resolveMethodWhenNameMatchesWithArgumentsNotMatchingType() throws Exception {
         underTest = new MethodPropertyResolver(exactlyEqual());
-        arguments.add(new FunctionArgument(Optional.<String>absent(), new JtwigValue(1)));
+        arguments.add(new FunctionArgument(Optional.<String>absent(), JtwigValueFactory.create(1)));
         PropertyResolveRequest request = new PropertyResolveRequest(position, new SimpleTest(), "hello", arguments);
 
         Optional<JtwigValue> result = underTest.resolve(request);

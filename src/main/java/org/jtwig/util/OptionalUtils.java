@@ -11,4 +11,13 @@ public class OptionalUtils {
             }
         };
     }
+
+    public static <T> Supplier<T> throwException (final String message) {
+        return new Supplier<T>() {
+            @Override
+            public T get() {
+                throw new IllegalArgumentException(message);
+            }
+        };
+    }
 }

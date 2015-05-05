@@ -6,7 +6,7 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.model.expression.function.Argument;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 import org.junit.Test;
 
 import java.util.ArrayList;

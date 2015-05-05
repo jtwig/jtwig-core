@@ -3,7 +3,8 @@ package org.jtwig.model.expression.operation.calculators.binary;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -15,10 +16,9 @@ public class IntegerMultiplyOperationCalculator implements BinaryOperationCalcul
                 .mandatoryNumber().setScale(0, RoundingMode.HALF_UP);
         BigDecimal rightValue = rightOperand.calculate(context)
                 .mandatoryNumber().setScale(0, RoundingMode.HALF_UP);
-        return new JtwigValue(
+        return JtwigValueFactory.create(
                 leftValue
                         .multiply(rightValue, context.configuration().mathContext())
-                        .setScale(0, RoundingMode.HALF_UP)
-        );
+                        .setScale(0, RoundingMode.HALF_UP));
     }
 }

@@ -5,8 +5,7 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.context.model.*;
 import org.jtwig.context.values.SimpleValueContext;
 import org.jtwig.context.values.ValueContext;
-import org.jtwig.render.RenderResult;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 
 import java.util.HashMap;
 import java.util.Stack;

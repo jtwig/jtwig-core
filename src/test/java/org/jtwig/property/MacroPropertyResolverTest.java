@@ -14,7 +14,7 @@ import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.impl.StringRenderable;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 import org.junit.Before;
 import org.junit.Test;
 

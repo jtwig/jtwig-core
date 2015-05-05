@@ -1,7 +1,8 @@
 package org.jtwig.model.expression.lists;
 
 import com.google.common.base.Optional;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -15,8 +16,8 @@ public class CharDescendingOrderEnumerationListStrategyTest {
 
     @Test
     public void enumerateWhenDifferentTypes() throws Exception {
-        JtwigValue left = new JtwigValue(1);
-        JtwigValue right = new JtwigValue('a');
+        JtwigValue left = JtwigValueFactory.create(1);
+        JtwigValue right = JtwigValueFactory.create('a');
 
         Optional<Collection<Object>> result = underTest.enumerate(left, right);
 
@@ -25,8 +26,8 @@ public class CharDescendingOrderEnumerationListStrategyTest {
 
     @Test
     public void enumerateWhenNotChar() throws Exception {
-        JtwigValue left = new JtwigValue(1);
-        JtwigValue right = new JtwigValue(2);
+        JtwigValue left = JtwigValueFactory.create(1);
+        JtwigValue right = JtwigValueFactory.create(2);
 
         Optional<Collection<Object>> result = underTest.enumerate(left, right);
 
@@ -35,8 +36,8 @@ public class CharDescendingOrderEnumerationListStrategyTest {
 
     @Test
     public void enumerateWhenLeftLowerThanRight() throws Exception {
-        JtwigValue left = new JtwigValue('a');
-        JtwigValue right = new JtwigValue('c');
+        JtwigValue left = JtwigValueFactory.create('a');
+        JtwigValue right = JtwigValueFactory.create('c');
 
         Optional<Collection<Object>> result = underTest.enumerate(left, right);
 
@@ -45,8 +46,8 @@ public class CharDescendingOrderEnumerationListStrategyTest {
 
     @Test
     public void enumerateWhenLeftGreaterThanRight() throws Exception {
-        JtwigValue left = new JtwigValue('c');
-        JtwigValue right = new JtwigValue('a');
+        JtwigValue left = JtwigValueFactory.create('c');
+        JtwigValue right = JtwigValueFactory.create('a');
 
         Optional<Collection<Object>> result = underTest.enumerate(left, right);
 

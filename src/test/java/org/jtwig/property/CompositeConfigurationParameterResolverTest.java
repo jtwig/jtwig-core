@@ -1,23 +1,17 @@
 package org.jtwig.property;
 
 import com.google.common.base.Optional;
-
-import org.jtwig.functions.FunctionArgument;
-import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 public class CompositeConfigurationParameterResolverTest {
 
@@ -54,7 +48,7 @@ public class CompositeConfigurationParameterResolverTest {
     public void resolveWhenResolversResolving() throws Exception {
         PropertyResolveRequest request = mock(PropertyResolveRequest.class);
         PropertyResolver propertyResolver = mock(PropertyResolver.class);
-        when(propertyResolver.resolve(request)).thenReturn(Optional.of(new JtwigValue("hi")));
+        when(propertyResolver.resolve(request)).thenReturn(Optional.of(JtwigValueFactory.create("hi")));
         resolvers.add(propertyResolver);
 
         Optional<JtwigValue> result = underTest.resolve(request);

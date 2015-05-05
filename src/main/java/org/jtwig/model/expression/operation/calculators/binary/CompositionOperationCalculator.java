@@ -5,7 +5,7 @@ import org.jtwig.exceptions.CalculationException;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.InjectableExpression;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 
 import static org.jtwig.util.ErrorMessageFormatter.errorMessage;
 

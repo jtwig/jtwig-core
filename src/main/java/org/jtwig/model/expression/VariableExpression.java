@@ -5,7 +5,8 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.model.expression.function.Argument;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 
 import java.util.Collections;
 
@@ -37,7 +38,7 @@ public class VariableExpression extends InjectableExpression {
             if (context.configuration().strictMode()) {
                 throw new CalculationException(errorMessage(getPosition(), String.format("Variable '%s' undefined", identifier)));
             } else {
-                return JtwigValue.empty();
+                return JtwigValueFactory.empty();
             }
         }
     }

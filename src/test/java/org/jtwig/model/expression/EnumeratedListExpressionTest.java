@@ -2,7 +2,8 @@ package org.jtwig.model.expression;
 
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +36,7 @@ public class EnumeratedListExpressionTest {
     @Test
     public void calculateWhenNonEmpty() throws Exception {
         Expression expression = mock(Expression.class);
-        when(expression.calculate(context)).thenReturn(new JtwigValue("asd"));
+        when(expression.calculate(context)).thenReturn(JtwigValueFactory.create("asd"));
         expressions.add(expression);
 
         JtwigValue result = underTest.calculate(context);

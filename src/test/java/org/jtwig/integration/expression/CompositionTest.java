@@ -3,7 +3,8 @@ package org.jtwig.integration.expression;
 import org.jtwig.JtwigModel;
 import org.jtwig.functions.SimpleFunction;
 import org.jtwig.integration.AbstractIntegrationTest;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -50,7 +51,7 @@ public class CompositionTest extends AbstractIntegrationTest {
 
             @Override
             public Object execute(Object... arguments) {
-                return new JtwigValue(arguments[0]).mandatoryNumber().add(new JtwigValue(arguments[1]).mandatoryNumber());
+                return JtwigValueFactory.create(arguments[0]).mandatoryNumber();
             }
         };
     }
@@ -65,9 +66,9 @@ public class CompositionTest extends AbstractIntegrationTest {
             @Override
             public Object execute(Object... arguments) {
                 BigDecimal result = BigDecimal.ZERO;
-                Collection<Object> objects = new JtwigValue(arguments[0]).asCollection();
+                Collection<Object> objects = JtwigValueFactory.create(arguments[0]).asCollection();
                 for (Object object : objects) {
-                    result = result.add(new JtwigValue(object).mandatoryNumber());
+                    result = result.add(JtwigValueFactory.create(object).mandatoryNumber());
                 }
                 return result;
             }

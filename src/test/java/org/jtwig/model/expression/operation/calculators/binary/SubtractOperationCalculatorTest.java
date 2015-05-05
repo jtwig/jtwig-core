@@ -3,7 +3,8 @@ package org.jtwig.model.expression.operation.calculators.binary;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,8 +29,8 @@ public class SubtractOperationCalculatorTest {
     public void subtract() throws Exception {
         Expression leftOperand = mock(Expression.class);
         Expression rightOperand = mock(Expression.class);
-        when(leftOperand.calculate(renderContext)).thenReturn(new JtwigValue(new BigDecimal("2.3")));
-        when(rightOperand.calculate(renderContext)).thenReturn(new JtwigValue(new BigDecimal("1.3")));
+        when(leftOperand.calculate(renderContext)).thenReturn(JtwigValueFactory.create(new BigDecimal("2.3")));
+        when(rightOperand.calculate(renderContext)).thenReturn(JtwigValueFactory.create(new BigDecimal("1.3")));
 
         JtwigValue result = underTest.calculate(renderContext, position, leftOperand, rightOperand);
 

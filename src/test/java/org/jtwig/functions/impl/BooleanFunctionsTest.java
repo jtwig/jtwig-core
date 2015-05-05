@@ -1,6 +1,6 @@
 package org.jtwig.functions.impl;
 
-import org.jtwig.util.Undefined;
+import org.jtwig.value.Undefined;
 import org.junit.Test;
 
 import java.util.ArrayList;

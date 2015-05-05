@@ -6,7 +6,8 @@ import com.google.common.collect.Collections2;
 import org.apache.commons.lang3.StringUtils;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.util.ErrorMessageFormatter;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +55,7 @@ public class MethodPropertyResolver implements PropertyResolver {
                     Collection<Object> arguments = extractValues(request.getArguments());
                     if (argumentsAreAssignable(arguments, asList(declaredMethod.getParameterTypes()))) {
                         try {
-                            return Optional.of(new JtwigValue(declaredMethod.invoke(request.getEntity(), arguments.toArray())));
+                            return Optional.of(JtwigValueFactory.create(declaredMethod.invoke(request.getEntity(), arguments.toArray())));
                         } catch (InvocationTargetException | IllegalAccessException e) {
                             logger.debug(ErrorMessageFormatter.errorMessage(request.getPosition(), String.format("Unable to execute method '%s' on '%s'", request.getPropertyName(), request.getEntity())), e);
                         }

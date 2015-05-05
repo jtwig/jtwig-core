@@ -3,7 +3,8 @@ package org.jtwig.model.expression.operation.calculators.binary;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -20,8 +21,8 @@ public class OrOperationCalculatorTest {
 
     @Test
     public void calculateWhenBothFalse() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(new JtwigValue(false));
-        when(rightOperand.calculate(context)).thenReturn(new JtwigValue(false));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.create(false));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.create(false));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 
@@ -30,7 +31,7 @@ public class OrOperationCalculatorTest {
 
     @Test
     public void calculateWhenFirstTrue() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(new JtwigValue(true));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.create(true));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 
@@ -40,8 +41,8 @@ public class OrOperationCalculatorTest {
 
     @Test
     public void calculateWhenFirstFalseSecondTrue() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(new JtwigValue(false));
-        when(rightOperand.calculate(context)).thenReturn(new JtwigValue(true));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.create(false));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.create(true));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 

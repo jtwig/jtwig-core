@@ -1,7 +1,7 @@
 package org.jtwig;
 
 import org.jtwig.context.values.SimpleValueContext;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 
 import java.util.HashMap;
 

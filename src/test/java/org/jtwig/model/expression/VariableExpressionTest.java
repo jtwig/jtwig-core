@@ -4,7 +4,8 @@ import com.google.common.base.Optional;
 import org.jtwig.context.RenderContext;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -21,7 +22,7 @@ public class VariableExpressionTest {
 
     @Test
     public void calculateWhenVariableDefined() throws Exception {
-        JtwigValue value = new JtwigValue("one");
+        JtwigValue value = JtwigValueFactory.create("one");
         when(context.valueContext().value(identifier)).thenReturn(Optional.of(value));
 
         JtwigValue result = underTest.calculate(context);

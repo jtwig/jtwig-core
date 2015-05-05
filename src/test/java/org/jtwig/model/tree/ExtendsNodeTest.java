@@ -7,7 +7,8 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
 import org.jtwig.resource.Resource;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +42,7 @@ public class ExtendsNodeTest extends AbstractNodeTest {
         ResourceRenderResult renderResult = mock(ResourceRenderResult.class);
 
         nodes.add(node);
-        when(expression.calculate(renderContext())).thenReturn(new JtwigValue("path"));
+        when(expression.calculate(renderContext())).thenReturn(JtwigValueFactory.create("path"));
         when(renderContext().configuration().resourceResolver().resolve(any(Resource.class), eq("path"))).thenReturn(Optional.of(resource));
         when(renderContext().resourceRenderer().render(resource)).thenReturn(renderResult);
         when(renderResult.renderable()).thenReturn(renderable);

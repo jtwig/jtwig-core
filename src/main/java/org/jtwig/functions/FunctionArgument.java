@@ -1,7 +1,7 @@
 package org.jtwig.functions;
 
 import com.google.common.base.Optional;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 
 public class FunctionArgument {
     private final Optional<String> name;

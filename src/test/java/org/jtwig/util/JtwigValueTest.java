@@ -1,5 +1,7 @@
 package org.jtwig.util;
 
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -22,7 +24,7 @@ public class JtwigValueTest {
 
     @Test
     public void asCollectionWhenNull() throws Exception {
-        underTest = new JtwigValue(null);
+        underTest = JtwigValueFactory.create(null);
         Collection<Object> result = underTest.asCollection();
 
         assertThat(result.isEmpty(), is(true));
@@ -32,7 +34,7 @@ public class JtwigValueTest {
     public void asCollectionWhenIterable() throws Exception {
         List<String> list = asList("one");
 
-        underTest = new JtwigValue((Iterable) list);
+        underTest = JtwigValueFactory.create((Iterable) list);
         Collection<Object> result = underTest.asCollection();
 
         assertThat(result, hasItem("one"));
@@ -40,7 +42,7 @@ public class JtwigValueTest {
 
     @Test
     public void asCollectionWhenArray() throws Exception {
-        underTest = new JtwigValue(new String[] { "test" });
+        underTest = JtwigValueFactory.create(new String[]{"test"});
         Collection<Object> result = underTest.asCollection();
 
         assertThat(result, hasItem("test"));
@@ -48,7 +50,9 @@ public class JtwigValueTest {
 
     @Test
     public void asCollectionWhenMap() throws Exception {
-        underTest = new JtwigValue(new HashMap<Object, Object>() {{ put("a", "b"); }});
+        underTest = JtwigValueFactory.create(new HashMap<Object, Object>() {{
+            put("a", "b");
+        }});
         Collection<Object> result = underTest.asCollection();
 
         assertThat(result, hasItem("b"));
@@ -56,7 +60,7 @@ public class JtwigValueTest {
 
     @Test
     public void asCollectionWhenSingleValue() throws Exception {
-        underTest = new JtwigValue(1);
+        underTest = JtwigValueFactory.create(1);
         Collection<Object> result = underTest.asCollection();
 
         assertThat(result, hasItem(1));
@@ -64,7 +68,7 @@ public class JtwigValueTest {
 
     @Test
     public void asMapWhenNull() throws Exception {
-        underTest = new JtwigValue(null);
+        underTest = JtwigValueFactory.create(null);
         Map<Object, Object> result = underTest.asMap();
 
         assertThat(result.isEmpty(), is(true));
@@ -72,7 +76,7 @@ public class JtwigValueTest {
 
     @Test
     public void asMapWhenSingleValue() throws Exception {
-        underTest = new JtwigValue("ola");
+        underTest = JtwigValueFactory.create("ola");
         Map<Object, Object> result = underTest.asMap();
 
         assertThat(result.isEmpty(), is(false));
@@ -83,13 +87,13 @@ public class JtwigValueTest {
     public void mandatoryNumberInvalid() throws Exception {
         expectedException.expect(IllegalArgumentException.class);
 
-        underTest = new JtwigValue("a");
+        underTest = JtwigValueFactory.create("a");
         underTest.mandatoryNumber();
     }
 
     @Test
     public void asMapWhenList() throws Exception {
-        underTest = new JtwigValue(asList("one"));
+        underTest = JtwigValueFactory.create(asList("one"));
         Map<Object, Object> result = underTest.asMap();
 
         assertThat(result.get(0), is((Object) "one"));
@@ -97,21 +101,21 @@ public class JtwigValueTest {
 
     @Test
     public void isPresentWhenNull() throws Exception {
-        underTest = new JtwigValue(null);
+        underTest = JtwigValueFactory.create(null);
         boolean result = underTest.isPresent();
         assertThat(result, is(false));
     }
 
     @Test
     public void isPresentWhenNonNull() throws Exception {
-        underTest = new JtwigValue(1);
+        underTest = JtwigValueFactory.create(1);
         boolean result = underTest.isPresent();
         assertThat(result, is(true));
     }
 
     @Test
     public void asMapWhenArray() throws Exception {
-        underTest = new JtwigValue(new Integer[]{1,2});
+        underTest = JtwigValueFactory.create(new Integer[]{1,2});
         Map<Object, Object> result = underTest.asMap();
 
         assertThat(result.get(0), is((Object) 1));
@@ -120,7 +124,7 @@ public class JtwigValueTest {
 
     @Test
     public void asMapWhenMap() throws Exception {
-        underTest = new JtwigValue(new HashMap<Object, Object>() {{ put("a", "b"); }});
+        underTest = JtwigValueFactory.create(new HashMap<Object, Object>() {{ put("a", "b"); }});
         Map<Object, Object> result = underTest.asMap();
 
         assertThat(result.get("a"), is((Object) "b"));

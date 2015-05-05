@@ -5,7 +5,7 @@ import org.jtwig.exceptions.CalculationException;
 import org.jtwig.model.expression.operation.BinaryOperator;
 import org.jtwig.model.position.Position;
 import org.jtwig.util.ErrorMessageFormatter;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 
 public class BinaryOperationExpression extends InjectableExpression {
     private final Expression leftOperand;

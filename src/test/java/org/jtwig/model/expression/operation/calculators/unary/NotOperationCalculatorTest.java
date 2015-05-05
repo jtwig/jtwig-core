@@ -3,7 +3,8 @@ package org.jtwig.model.expression.operation.calculators.unary;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,7 +27,7 @@ public class NotOperationCalculatorTest {
     @Test
     public void notWhenTrue() throws Exception {
         Expression operand = mock(Expression.class);
-        when(operand.calculate(renderContext)).thenReturn(new JtwigValue(false));
+        when(operand.calculate(renderContext)).thenReturn(JtwigValueFactory.create(false));
 
         JtwigValue result = underTest.calculate(renderContext, position, operand);
 
@@ -36,7 +37,7 @@ public class NotOperationCalculatorTest {
     @Test
     public void notWhenFalse() throws Exception {
         Expression operand = mock(Expression.class);
-        when(operand.calculate(renderContext)).thenReturn(new JtwigValue(true));
+        when(operand.calculate(renderContext)).thenReturn(JtwigValueFactory.create(true));
 
         JtwigValue result = underTest.calculate(renderContext, position, operand);
 

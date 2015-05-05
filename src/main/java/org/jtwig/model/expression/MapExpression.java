@@ -2,7 +2,8 @@ package org.jtwig.model.expression;
 
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +22,6 @@ public class MapExpression extends Expression {
         for (Map.Entry<String, Expression> entry : expressions.entrySet()) {
             result.put(entry.getKey(), entry.getValue().calculate(context).asObject());
         }
-        return new JtwigValue(result);
+        return JtwigValueFactory.create(result);
     }
 }

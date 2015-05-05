@@ -2,7 +2,8 @@ package org.jtwig.model.expression;
 
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 
 public class ConstantExpression extends Expression {
     private final Object value;
@@ -18,6 +19,6 @@ public class ConstantExpression extends Expression {
 
     @Override
     public JtwigValue calculate(RenderContext context) {
-        return new JtwigValue(value);
+        return JtwigValueFactory.create(value);
     }
 }

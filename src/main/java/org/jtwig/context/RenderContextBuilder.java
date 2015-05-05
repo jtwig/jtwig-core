@@ -8,7 +8,7 @@ import org.jtwig.context.values.SimpleValueContext;
 import org.jtwig.context.values.ValueContext;
 import org.jtwig.render.impl.OverrideRenderable;
 import org.jtwig.resource.Resource;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 
 import java.util.HashMap;
 import java.util.Stack;

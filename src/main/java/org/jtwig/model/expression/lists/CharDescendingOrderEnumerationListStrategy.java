@@ -1,7 +1,8 @@
 package org.jtwig.model.expression.lists;
 
 import com.google.common.base.Optional;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,7 +10,7 @@ import java.util.Collection;
 public class CharDescendingOrderEnumerationListStrategy implements EnumerationListStrategy {
     @Override
     public Optional<Collection<Object>> enumerate(JtwigValue left, JtwigValue right) {
-        if (left.getType() == right.getType() && left.getType() == JtwigValue.Type.CHAR) {
+        if (left.getType() == right.getType() && left.getType() == JtwigType.STRING) {
             Character start = left.asChar();
             Character end = right.asChar();
             if (start >= end) {

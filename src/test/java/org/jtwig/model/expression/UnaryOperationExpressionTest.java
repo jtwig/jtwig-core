@@ -3,7 +3,8 @@ package org.jtwig.model.expression;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.operation.UnaryOperator;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ public class UnaryOperationExpressionTest {
 
     @Test
     public void calculate() throws Exception {
-        when(operand.calculate(context)).thenReturn(new JtwigValue(1));
+        when(operand.calculate(context)).thenReturn(JtwigValueFactory.create(1));
 
         JtwigValue result = underTest.calculate(context);
 

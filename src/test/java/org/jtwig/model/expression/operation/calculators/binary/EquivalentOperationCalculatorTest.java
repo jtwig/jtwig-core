@@ -3,7 +3,8 @@ package org.jtwig.model.expression.operation.calculators.binary;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -21,8 +22,8 @@ public class EquivalentOperationCalculatorTest {
 
     @Test
     public void calculateWhenEqual() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(new JtwigValue(""));
-        when(rightOperand.calculate(context)).thenReturn(new JtwigValue(""));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.create(""));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.create(""));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 
@@ -31,8 +32,8 @@ public class EquivalentOperationCalculatorTest {
 
     @Test
     public void calculateWhenNotEqual() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(new JtwigValue("a"));
-        when(rightOperand.calculate(context)).thenReturn(new JtwigValue(""));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.create("a"));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.create(""));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 

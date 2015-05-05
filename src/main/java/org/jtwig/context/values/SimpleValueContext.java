@@ -1,8 +1,8 @@
 package org.jtwig.context.values;
 
 import com.google.common.base.Optional;
-
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 
 import java.util.Map;
 
@@ -20,7 +20,7 @@ public class SimpleValueContext implements ValueContext {
 
     @Override
     public SimpleValueContext add(String key, Object value) {
-        source.put(key, new JtwigValue(value));
+        source.put(key, JtwigValueFactory.create(value));
         return this;
     }
 }

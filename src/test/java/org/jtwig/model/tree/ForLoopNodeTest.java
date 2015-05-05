@@ -5,7 +5,8 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Test;
 
 import java.util.LinkedHashMap;
@@ -27,7 +28,7 @@ public class ForLoopNodeTest {
         JtwigModel jtwigModel = mock(JtwigModel.class);
         LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
         map.put("hello", "one");
-        when(expression.calculate(renderContext)).thenReturn(new JtwigValue(map));
+        when(expression.calculate(renderContext)).thenReturn(JtwigValueFactory.create(map));
         when(renderContext.valueContext()).thenReturn(jtwigModel);
         when(keyVariableExpression.getIdentifier()).thenReturn("key");
         when(variableExpression.getIdentifier()).thenReturn("value");
@@ -44,7 +45,7 @@ public class ForLoopNodeTest {
     public void renderWhenMapArrayIteration() throws Exception {
         JtwigModel jtwigModel = mock(JtwigModel.class);
         List<String> list = asList("hello", "test");
-        when(expression.calculate(renderContext)).thenReturn(new JtwigValue(list));
+        when(expression.calculate(renderContext)).thenReturn(JtwigValueFactory.create(list));
         when(renderContext.valueContext()).thenReturn(jtwigModel);
         when(keyVariableExpression.getIdentifier()).thenReturn("key");
         when(variableExpression.getIdentifier()).thenReturn("value");
@@ -63,7 +64,7 @@ public class ForLoopNodeTest {
     public void renderWhenArrayIteration() throws Exception {
         JtwigModel jtwigModel = mock(JtwigModel.class);
         List<String> list = asList("hello", "test");
-        when(expression.calculate(renderContext)).thenReturn(new JtwigValue(list));
+        when(expression.calculate(renderContext)).thenReturn(JtwigValueFactory.create(list));
         when(renderContext.valueContext()).thenReturn(jtwigModel);
         when(variableExpression.getIdentifier()).thenReturn("value");
 

@@ -12,7 +12,7 @@ import org.jtwig.model.expression.function.Argument;
 import org.jtwig.model.position.Position;
 import org.jtwig.property.PropertyResolveRequest;
 import org.jtwig.property.PropertyResolver;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

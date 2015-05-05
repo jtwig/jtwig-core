@@ -8,7 +8,8 @@ import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
 import org.jtwig.resource.Resource;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,7 +30,7 @@ public class ImportNodeTest extends AbstractNodeTest {
     public void render() throws Exception {
         String path = "";
         Resource resource = mock(Resource.class);
-        when(macroLocation.calculate(renderContext())).thenReturn(new JtwigValue(path));
+        when(macroLocation.calculate(renderContext())).thenReturn(JtwigValueFactory.create(path));
         when(renderContext.configuration().resourceResolver().resolve(any(Resource.class), eq(path))).thenReturn(Optional.of(resource));
 
         Renderable result = underTest.render(renderContext());

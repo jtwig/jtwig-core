@@ -12,9 +12,9 @@ import org.jtwig.context.values.ValueContext;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.render.RenderResult;
 import org.jtwig.render.StringBuilderRenderResult;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 
-import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -54,7 +54,7 @@ public class MacroPropertyResolver implements PropertyResolver {
                     .render(macro.getContent())
                     .appendTo(renderResult);
 
-                return new JtwigValue(renderResult.content());
+                return JtwigValueFactory.create(renderResult.content());
             }
         };
     }

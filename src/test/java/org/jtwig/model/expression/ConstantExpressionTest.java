@@ -2,7 +2,7 @@ package org.jtwig.model.expression;
 
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;

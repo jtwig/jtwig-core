@@ -4,7 +4,8 @@ import com.google.common.base.Optional;
 import org.jtwig.context.RenderContext;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.expression.Expression;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -20,7 +21,7 @@ public class ArgumentTest {
 
     @Test
     public void calculate() throws Exception {
-        JtwigValue value = new JtwigValue("");
+        JtwigValue value = JtwigValueFactory.create("");
         when(expression.calculate(context)).thenReturn(value);
         FunctionArgument result = underTest.calculate(context);
 

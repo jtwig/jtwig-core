@@ -10,7 +10,8 @@ import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.expression.function.Argument;
 import org.jtwig.model.position.Position;
 import org.jtwig.util.ErrorMessageFormatter;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 
 import java.util.*;
 
@@ -40,7 +41,7 @@ public class FunctionExpression extends InjectableExpression {
                 .transform(new Function<Supplier, JtwigValue>() {
                     @Override
                     public JtwigValue apply(Supplier input) {
-                        return new JtwigValue(input.get());
+                        return JtwigValueFactory.create(input.get());
                     }
                 });
 

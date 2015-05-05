@@ -1,9 +1,7 @@
 package org.jtwig.property;
 
 import com.google.common.base.Optional;
-import org.jtwig.util.JtwigValue;
-
-import java.util.Collection;
+import org.jtwig.value.JtwigValue;
 
 public interface PropertyResolver {
     Optional<JtwigValue> resolve(PropertyResolveRequest request);

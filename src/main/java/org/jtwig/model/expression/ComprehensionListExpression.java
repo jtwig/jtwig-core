@@ -6,7 +6,8 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.model.position.Position;
 import org.jtwig.util.ErrorMessageFormatter;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 
 import java.util.Collection;
 
@@ -30,7 +31,7 @@ public class ComprehensionListExpression extends Expression {
                 .transform(new Function<Collection<Object>, JtwigValue>() {
                     @Override
                     public JtwigValue apply(Collection<Object> input) {
-                        return new JtwigValue(input);
+                        return JtwigValueFactory.create(input);
                     }
                 })
                 .or(new Supplier<JtwigValue>() {

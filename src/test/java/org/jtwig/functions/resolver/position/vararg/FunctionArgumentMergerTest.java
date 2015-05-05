@@ -1,10 +1,10 @@
 package org.jtwig.functions.resolver.position.vararg;
 
 import org.jtwig.functions.FunctionArgument;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,8 +31,8 @@ public class FunctionArgumentMergerTest {
     public void mergeWhenNonEmpty() throws Exception {
         FunctionArgument functionArgument1 = mock(FunctionArgument.class);
         FunctionArgument functionArgument2 = mock(FunctionArgument.class);
-        when(functionArgument1.getValue()).thenReturn(new JtwigValue(null));
-        when(functionArgument2.getValue()).thenReturn(new JtwigValue(null));
+        when(functionArgument1.getValue()).thenReturn(JtwigValueFactory.create(null));
+        when(functionArgument2.getValue()).thenReturn(JtwigValueFactory.create(null));
         List<FunctionArgument> input = asList(functionArgument1, functionArgument2);
         when(arrayComponentExtractor.extract(input)).thenReturn(Object.class);
 

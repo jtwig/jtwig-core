@@ -3,11 +3,12 @@ package org.jtwig.model.expression.operation.calculators.binary;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 
 public class OrOperationCalculator implements BinaryOperationCalculator {
     @Override
     public JtwigValue calculate(RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
-        return new JtwigValue(leftOperand.calculate(context).asBoolean() || rightOperand.calculate(context).asBoolean());
+        return JtwigValueFactory.create(leftOperand.calculate(context).asBoolean() || rightOperand.calculate(context).asBoolean());
     }
 }

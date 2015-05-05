@@ -9,7 +9,8 @@ import org.jtwig.model.expression.FunctionExpression;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
 import org.jtwig.property.PropertyResolveRequest;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -44,7 +45,7 @@ public class SelectionOperationCalculator implements BinaryOperationCalculator {
                 if (context.configuration().strictMode()) {
                     throw new CalculationException(errorMessage(position, String.format("Impossible to access an attribute '%s' on '%s'", propertyName, value)));
                 } else {
-                    return JtwigValue.empty();
+                    return JtwigValueFactory.empty();
                 }
             }
         };

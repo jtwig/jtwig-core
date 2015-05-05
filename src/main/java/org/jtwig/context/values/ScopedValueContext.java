@@ -1,7 +1,7 @@
 package org.jtwig.context.values;
 
 import com.google.common.base.Optional;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 
 public class ScopedValueContext implements ValueContext {
     private final ValueContext parent;

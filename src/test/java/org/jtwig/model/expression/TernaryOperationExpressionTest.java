@@ -2,11 +2,12 @@ package org.jtwig.model.expression;
 
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class TernaryOperationExpressionTest {
@@ -19,8 +20,8 @@ public class TernaryOperationExpressionTest {
 
     @Test
     public void calculateWhenConditionTrue() throws Exception {
-        JtwigValue value = new JtwigValue("one");
-        when(condition.calculate(context)).thenReturn(new JtwigValue(true));
+        JtwigValue value = JtwigValueFactory.create("one");
+        when(condition.calculate(context)).thenReturn(JtwigValueFactory.create(true));
         when(ifTrueExpression.calculate(context)).thenReturn(value);
 
         JtwigValue result = underTest.calculate(context);
@@ -31,8 +32,8 @@ public class TernaryOperationExpressionTest {
 
     @Test
     public void calculateWhenConditionFalse() throws Exception {
-        JtwigValue value = new JtwigValue("one");
-        when(condition.calculate(context)).thenReturn(new JtwigValue(false));
+        JtwigValue value = JtwigValueFactory.create("one");
+        when(condition.calculate(context)).thenReturn(JtwigValueFactory.create(false));
         when(ifFalseExpression.calculate(context)).thenReturn(value);
 
         JtwigValue result = underTest.calculate(context);

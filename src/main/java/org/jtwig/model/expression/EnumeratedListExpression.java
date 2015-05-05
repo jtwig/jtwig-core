@@ -2,7 +2,8 @@ package org.jtwig.model.expression;
 
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +22,6 @@ public class EnumeratedListExpression extends Expression {
         for (Expression expression : expressions) {
             resolved.add(expression.calculate(context).asObject());
         }
-        return new JtwigValue(resolved);
+        return JtwigValueFactory.create(resolved);
     }
 }

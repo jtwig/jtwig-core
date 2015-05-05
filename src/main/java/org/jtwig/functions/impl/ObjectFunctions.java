@@ -2,7 +2,7 @@ package org.jtwig.functions.impl;
 
 import org.jtwig.functions.annotations.JtwigFunction;
 import org.jtwig.functions.annotations.Parameter;
-import org.jtwig.util.Undefined;
+import org.jtwig.value.Undefined;
 
 import java.lang.reflect.Array;
 

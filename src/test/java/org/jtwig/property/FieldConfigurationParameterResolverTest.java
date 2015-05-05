@@ -3,7 +3,7 @@ package org.jtwig.property;
 import com.google.common.base.Optional;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
 import org.junit.Before;
 import org.junit.Test;
 

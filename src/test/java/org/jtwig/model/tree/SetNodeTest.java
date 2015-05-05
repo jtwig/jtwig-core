@@ -4,7 +4,8 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigValueFactory;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -24,7 +25,7 @@ public class SetNodeTest extends AbstractNodeTest {
     public void render() throws Exception {
         Object value = new Object();
         when(variableExpression.getIdentifier()).thenReturn("one");
-        when(expression.calculate(renderContext())).thenReturn(new JtwigValue(value));
+        when(expression.calculate(renderContext())).thenReturn(JtwigValueFactory.create(value));
 
         Renderable result = underTest.render(renderContext());
 

@@ -1,7 +1,8 @@
 package org.jtwig.model.expression.lists;
 
 import com.google.common.base.Optional;
-import org.jtwig.util.JtwigValue;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.JtwigType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,7 +11,7 @@ public class IntegerAscendingOrderEnumerationListStrategy implements Enumeration
     @Override
     public Optional<Collection<Object>> enumerate(JtwigValue left, JtwigValue right) {
         if (left.getType() == right.getType()) {
-            if (left.getType() == JtwigValue.Type.NUMBER) {
+            if (left.getType() == JtwigType.NUMBER) {
                 int start = left.mandatoryNumber().intValue();
                 int end = right.mandatoryNumber().intValue();
                 if (start <= end) {
