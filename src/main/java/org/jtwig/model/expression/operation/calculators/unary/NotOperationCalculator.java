@@ -9,6 +9,6 @@ import org.jtwig.value.JtwigValueFactory;
 public class NotOperationCalculator implements UnaryOperationCalculator {
     @Override
     public JtwigValue calculate(RenderContext context, Position position, Expression operand) {
-        return JtwigValueFactory.create(!operand.calculate(context).asBoolean());
+        return JtwigValueFactory.value(!operand.calculate(context).asBoolean(), context.configuration().valueConfiguration());
     }
 }

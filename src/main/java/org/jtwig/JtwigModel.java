@@ -1,6 +1,7 @@
 package org.jtwig;
 
 import org.jtwig.context.values.SimpleValueContext;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
 
 import java.util.HashMap;
@@ -11,7 +12,7 @@ public class JtwigModel extends SimpleValueContext {
     }
 
     public JtwigModel() {
-        super(new HashMap<String, JtwigValue>());
+        super(new HashMap<String, Value>());
     }
 
     public JtwigModel with (String name, Object value) {

@@ -5,6 +5,7 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.context.model.*;
 import org.jtwig.context.values.SimpleValueContext;
 import org.jtwig.context.values.ValueContext;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
 
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class CoreRenderContext implements RenderContext {
 
     @Override
     public ResourceRenderer resourceRenderer() {
-        return new ResourceRenderer(this, resourceContextStack, valueContextStack, new SimpleValueContext(new HashMap<String, JtwigValue>()));
+        return new ResourceRenderer(this, resourceContextStack, valueContextStack, new SimpleValueContext(new HashMap<String, Value>()));
     }
 
     @Override

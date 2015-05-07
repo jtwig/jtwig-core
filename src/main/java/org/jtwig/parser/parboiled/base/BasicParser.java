@@ -7,7 +7,6 @@ import org.parboiled.BaseParser;
 import org.parboiled.MatcherContext;
 import org.parboiled.Rule;
 import org.parboiled.errors.BasicParseError;
-import org.parboiled.support.ValueStack;
 
 import java.util.List;
 
@@ -39,16 +38,5 @@ public class BasicParser<T> extends BaseParser<T> {
 
     public boolean throwException(String message) {
         throw new ParseException(ErrorMessageFormatter.errorMessage(parserContext.parser(PositionTrackerParser.class).currentPosition(), message));
-    }
-
-    // TODO: Remove
-    @Deprecated
-    public boolean printCurrentStack() {
-        ValueStack valueStack = getContext().getValueStack();
-        System.out.println("Printing stack");
-        for (Object value : valueStack) {
-            System.out.println(value);
-        }
-        return true;
     }
 }

@@ -4,8 +4,10 @@ import com.google.common.base.Optional;
 
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.position.Position;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
+import org.jtwig.value.configuration.NamedValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,42 +35,42 @@ public class MethodConfigurationParameterResolverTest {
         underTest = new MethodPropertyResolver(exactlyEqual());
 
         PropertyResolveRequest request = new PropertyResolveRequest(position, new SimpleTest(), "hello", arguments);
-        Optional<JtwigValue> result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
         assertThat(result.isPresent(), is(true));
-        assertEquals("oi", result.get().asObject());
+        assertEquals("oi", result.get().getValue());
     }
 
     @Test
     public void resolveMethodWhenNameMatchesWithArguments() throws Exception {
         underTest = new MethodPropertyResolver(exactlyEqual());
-        arguments.add(new FunctionArgument(Optional.<String>absent(), JtwigValueFactory.create("test")));
+        arguments.add(new FunctionArgument(Optional.<String>absent(), "test"));
         PropertyResolveRequest request = new PropertyResolveRequest(position, new SimpleTest(), "hello", arguments);
 
-        Optional<JtwigValue> result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
         assertThat(result.isPresent(), is(true));
-        assertEquals("test", result.get().asObject());
+        assertEquals("test", result.get().getValue());
     }
 
     @Test
     public void resolveMethodWhenNameMatchesWithArgumentsNull() throws Exception {
         underTest = new MethodPropertyResolver(exactlyEqual());
-        arguments.add(new FunctionArgument(Optional.<String>absent(), JtwigValueFactory.create(null)));
+        arguments.add(new FunctionArgument(Optional.<String>absent(), null));
         PropertyResolveRequest request = new PropertyResolveRequest(position, new SimpleTest(), "hello", arguments);
-        Optional<JtwigValue> result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
         assertThat(result.isPresent(), is(true));
-        assertEquals(null, result.get().asObject());
+        assertEquals(null, result.get().getValue());
     }
 
     @Test
     public void resolveMethodWhenNameMatchesWithArgumentsNotMatchingType() throws Exception {
         underTest = new MethodPropertyResolver(exactlyEqual());
-        arguments.add(new FunctionArgument(Optional.<String>absent(), JtwigValueFactory.create(1)));
+        arguments.add(new FunctionArgument(Optional.<String>absent(), 1));
         PropertyResolveRequest request = new PropertyResolveRequest(position, new SimpleTest(), "hello", arguments);
 
-        Optional<JtwigValue> result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
         assertThat(result.isPresent(), is(false));
     }
@@ -78,10 +80,10 @@ public class MethodConfigurationParameterResolverTest {
         underTest = new MethodPropertyResolver(prefixedEqual("get"));
         PropertyResolveRequest request = new PropertyResolveRequest(position, new SimpleTest(), "test", arguments);
 
-        Optional<JtwigValue> result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
         assertThat(result.isPresent(), is(true));
-        assertEquals("test", result.get().asObject());
+        assertEquals("test", result.get().getValue());
     }
 
     private static class SimpleTest {

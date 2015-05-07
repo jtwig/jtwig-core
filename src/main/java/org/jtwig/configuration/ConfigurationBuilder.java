@@ -27,6 +27,8 @@ import org.jtwig.resource.resolver.CompositeResourceResolver;
 import org.jtwig.resource.resolver.ResourceResolver;
 import org.jtwig.resource.util.RelativePathResolver;
 import org.jtwig.util.ClasspathFinder;
+import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.jtwig.value.configuration.ValueConfiguration;
 
 import java.math.MathContext;
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigurationBuilder implements Builder<Configuration> {
+
 
     public static ConfigurationBuilder configuration() {
         return new ConfigurationBuilder();
@@ -51,6 +54,7 @@ public class ConfigurationBuilder implements Builder<Configuration> {
     private FunctionResolverBuilder functionResolverBuilder = FunctionResolverBuilder.newBuilder();
     private Collection<JsonMapperFactory> jsonMapperFactory = new ArrayList<>();
     private Collection<Class<? extends AddonParser>> addOnParsers = new ArrayList<>();
+    private ValueConfiguration valueConfiguration = NamedValueConfiguration.COMPATIBLE_MODE;
     private Map<String, Object> parameters = new HashMap<>();
 
     private ConfigurationBuilder() {
@@ -136,6 +140,11 @@ public class ConfigurationBuilder implements Builder<Configuration> {
         return this;
     }
 
+    public ConfigurationBuilder withValueConfiguration (ValueConfiguration configuration) {
+        this.valueConfiguration = configuration;
+        return this;
+    }
+
     @Override
     public Configuration build() {
         Collection<PropertyResolver> propertyResolvers = new ArrayList<>();
@@ -195,8 +204,8 @@ public class ConfigurationBuilder implements Builder<Configuration> {
                 strictMode,
                 spaceRemover,
                 mathContext,
-                escapeMode
-        );
+                escapeMode,
+                valueConfiguration);
     }
 
 }

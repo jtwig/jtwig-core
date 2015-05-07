@@ -6,7 +6,7 @@ import org.jtwig.value.JtwigType;
 public class StringTypeExtractor implements TypeExtractor {
     @Override
     public Optional<JtwigType> extract(Object value) {
-        return CharSequence.class.isAssignableFrom(value.getClass()) ?
+        return CharSequence.class.isAssignableFrom(value.getClass()) || value instanceof Character ?
                 Optional.of(JtwigType.STRING) : Optional.<JtwigType>absent();
     }
 }

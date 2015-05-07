@@ -16,9 +16,9 @@ public class IntegerDivideOperationCalculator implements BinaryOperationCalculat
                 .mandatoryNumber().setScale(0, RoundingMode.HALF_UP);
         BigDecimal rightValue = rightOperand.calculate(context)
                 .mandatoryNumber().setScale(0, RoundingMode.HALF_UP);
-        return JtwigValueFactory.create(
+        return JtwigValueFactory.value(
                 leftValue
                         .divide(rightValue, context.configuration().mathContext())
-                        .setScale(0, RoundingMode.HALF_UP));
+                        .setScale(0, RoundingMode.HALF_UP), context.configuration().valueConfiguration());
     }
 }

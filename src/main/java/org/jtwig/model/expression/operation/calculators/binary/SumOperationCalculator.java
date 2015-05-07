@@ -11,6 +11,6 @@ public class SumOperationCalculator implements BinaryOperationCalculator {
     public JtwigValue calculate(RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
         JtwigValue leftValue = leftOperand.calculate(context);
         JtwigValue rightValue = rightOperand.calculate(context);
-        return JtwigValueFactory.create(leftValue.mandatoryNumber().add(rightValue.mandatoryNumber()));
+        return JtwigValueFactory.value(leftValue.mandatoryNumber().add(rightValue.mandatoryNumber()), context.configuration().valueConfiguration());
     }
 }

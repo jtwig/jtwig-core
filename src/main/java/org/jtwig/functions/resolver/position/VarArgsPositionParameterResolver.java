@@ -2,13 +2,11 @@ package org.jtwig.functions.resolver.position;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import org.jtwig.reflection.input.InputParameterResolverContext;
-import org.jtwig.reflection.model.java.JavaMethodArgument;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.functions.resolver.position.vararg.FromPositionExtractor;
 import org.jtwig.functions.resolver.position.vararg.FunctionArgumentMerger;
-import org.jtwig.value.JtwigValue;
-import org.jtwig.value.JtwigValueFactory;
+import org.jtwig.reflection.input.InputParameterResolverContext;
+import org.jtwig.reflection.model.java.JavaMethodArgument;
 
 import java.util.List;
 
@@ -24,7 +22,7 @@ public class VarArgsPositionParameterResolver implements PositionParameterResolv
     @Override
     public Optional<FunctionArgument> resolve(JavaMethodArgument javaMethodArgument, int position, InputParameterResolverContext<FunctionArgument> context) {
         if (javaMethodArgument.isVarArg()) {
-            if (context.size() <= position) return Optional.of(new FunctionArgument(Optional.<String>absent(), JtwigValueFactory.create(null)));
+            if (context.size() <= position) return Optional.of(new FunctionArgument(Optional.<String>absent(), null));
             return fromPositionExtractor
                     .extract(position, context)
                     .transform(getFunction());

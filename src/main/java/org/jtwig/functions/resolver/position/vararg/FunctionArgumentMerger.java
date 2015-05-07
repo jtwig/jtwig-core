@@ -16,13 +16,13 @@ public class FunctionArgumentMerger {
 
     public FunctionArgument merge (List<FunctionArgument> input) {
         if (input.isEmpty()) {
-            return new FunctionArgument(Optional.<String>absent(), JtwigValueFactory.create(null));
+            return new FunctionArgument(Optional.<String>absent(), null);
         }
         Class<?> type = arrayComponentExtractor.extract(input);
         Object[] instance = (Object[]) Array.newInstance(type, input.size());
         for (int i = 0; i < input.size(); i++) {
-            instance[i] = input.get(i).getValue().asObject();
+            instance[i] = input.get(i).getValue();
         }
-        return new FunctionArgument(Optional.<String>absent(), JtwigValueFactory.create(instance));
+        return new FunctionArgument(Optional.<String>absent(), instance);
     }
 }

@@ -6,8 +6,8 @@ import org.jtwig.context.model.NodeContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
-import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
+import org.jtwig.value.configuration.NamedValueConfiguration;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -25,7 +25,7 @@ public class OutputNodeTest extends AbstractNodeTest {
         NodeContext nodeContext = mock(NodeContext.class);
         when(renderContext().currentNode()).thenReturn(nodeContext);
         when(nodeContext.mode()).thenReturn(Optional.<EscapeMode>absent());
-        when(expression.calculate(renderContext())).thenReturn(JtwigValueFactory.create("test"));
+        when(expression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", NamedValueConfiguration.COMPATIBLE_MODE));
 
         Renderable result = underTest.render(renderContext());
 

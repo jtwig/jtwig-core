@@ -9,9 +9,9 @@ import org.jtwig.value.JtwigValueFactory;
 public class ConcatOperationCalculator implements BinaryOperationCalculator {
     @Override
     public JtwigValue calculate(RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
-        return JtwigValueFactory.create(new StringBuilder()
+        return JtwigValueFactory.value(new StringBuilder()
                 .append(leftOperand.calculate(context).asString())
                 .append(rightOperand.calculate(context).asString())
-                .toString());
+                .toString(), context.configuration().valueConfiguration());
     }
 }

@@ -5,6 +5,7 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.model.expression.function.Argument;
 import org.jtwig.model.position.Position;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
 
@@ -31,14 +32,14 @@ public class VariableExpression extends InjectableExpression {
 
     @Override
     public JtwigValue calculate(RenderContext context) {
-        Optional<JtwigValue> valueOptional = context.valueContext().value(identifier);
+        Optional<Value> valueOptional = context.valueContext().value(identifier);
         if (valueOptional.isPresent()) {
-            return valueOptional.get();
+            return JtwigValueFactory.value(valueOptional.get().getValue(), context.configuration().valueConfiguration());
         } else {
             if (context.configuration().strictMode()) {
                 throw new CalculationException(errorMessage(getPosition(), String.format("Variable '%s' undefined", identifier)));
             } else {
-                return JtwigValueFactory.empty();
+                return JtwigValueFactory.undefined(context.configuration().valueConfiguration());
             }
         }
     }

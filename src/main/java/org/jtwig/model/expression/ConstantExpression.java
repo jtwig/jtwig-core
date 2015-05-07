@@ -19,6 +19,6 @@ public class ConstantExpression extends Expression {
 
     @Override
     public JtwigValue calculate(RenderContext context) {
-        return JtwigValueFactory.create(value);
+        return JtwigValueFactory.value(value, context.configuration().valueConfiguration());
     }
 }

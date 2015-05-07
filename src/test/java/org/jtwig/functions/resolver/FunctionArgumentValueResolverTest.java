@@ -15,7 +15,7 @@ public class FunctionArgumentValueResolverTest {
     public void resolve() throws Exception {
         Object value = new Object();
         FunctionArgument functionArgument = mock(FunctionArgument.class, RETURNS_DEEP_STUBS);
-        when(functionArgument.getValue().asObject()).thenReturn(value);
+        when(functionArgument.getValue()).thenReturn(value);
 
         Object result = underTest.resolve(functionArgument);
 

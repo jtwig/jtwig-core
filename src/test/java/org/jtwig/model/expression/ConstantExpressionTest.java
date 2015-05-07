@@ -7,10 +7,11 @@ import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 
 public class ConstantExpressionTest {
-    private final RenderContext context = mock(RenderContext.class);
+    private final RenderContext context = mock(RenderContext.class, RETURNS_DEEP_STUBS);
     private ConstantExpression underTest;
 
     @Test

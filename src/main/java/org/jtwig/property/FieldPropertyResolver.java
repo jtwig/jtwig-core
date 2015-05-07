@@ -1,6 +1,7 @@
 package org.jtwig.property;
 
 import com.google.common.base.Optional;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.util.ErrorMessageFormatter;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
@@ -18,7 +19,7 @@ public class FieldPropertyResolver implements PropertyResolver {
     }
 
     @Override
-    public Optional<JtwigValue> resolve(PropertyResolveRequest request) {
+    public Optional<Value> resolve(PropertyResolveRequest request) {
         if (request.getArguments().isEmpty()) {
             try {
                 Field declaredField = request.getEntity().getClass().getDeclaredField(request.getPropertyName());
@@ -30,12 +31,12 @@ public class FieldPropertyResolver implements PropertyResolver {
         return Optional.absent();
     }
 
-    private Optional<JtwigValue> fieldValue(PropertyResolveRequest request, Field field) {
+    private Optional<Value> fieldValue(PropertyResolveRequest request, Field field) {
         try {
             if (tryPrivateField) {
                 field.setAccessible(true);
             }
-            return Optional.of(JtwigValueFactory.create(field.get(request.getEntity())));
+            return Optional.of(new Value(field.get(request.getEntity())));
         } catch (IllegalAccessException e) {
             logger.debug(ErrorMessageFormatter.errorMessage(request.getPosition(), String.format("Unable to get property '%s' value", field.getName())), e);
             return Optional.absent();

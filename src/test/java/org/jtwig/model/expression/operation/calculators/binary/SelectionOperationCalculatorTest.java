@@ -12,7 +12,10 @@ import org.jtwig.model.expression.function.Argument;
 import org.jtwig.model.position.Position;
 import org.jtwig.property.PropertyResolveRequest;
 import org.jtwig.property.PropertyResolver;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
+import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -21,14 +24,16 @@ import java.util.ArrayList;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class SelectionOperationCalculatorTest {
-    private final RenderContext renderContext = mock(RenderContext.class);
+    private final RenderContext renderContext = mock(RenderContext.class, RETURNS_DEEP_STUBS);
     private final Position position = mock(Position.class);
     private final Expression leftOperand = mock(Expression.class);
     private final Configuration configuration = mock(Configuration.class);
@@ -37,6 +42,11 @@ public class SelectionOperationCalculatorTest {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
+
+    @Before
+    public void setUp() throws Exception {
+        when(renderContext.configuration().valueConfiguration()).thenReturn(NamedValueConfiguration.COMPATIBLE_MODE);
+    }
 
     @Test
     public void calculateWhenRightElementNotVariableNorFunction() throws Exception {
@@ -48,22 +58,24 @@ public class SelectionOperationCalculatorTest {
 
     @Test
     public void calculateWhenRightElementVariable() throws Exception {
-        JtwigValue jtwigValue = mock(JtwigValue.class);
+        Value value = mock(Value.class);
+        when(value.getValue()).thenReturn("");
         JtwigValue leftOperandValue = mock(JtwigValue.class);
         when(renderContext.configuration()).thenReturn(configuration);
         when(configuration.propertyResolver()).thenReturn(propertyResolver);
-        when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.of(jtwigValue));
+        when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.of(value));
         when(leftOperand.calculate(renderContext)).thenReturn(leftOperandValue);
         VariableExpression rightOperand = new VariableExpression(position, "test");
 
         JtwigValue result = underTest.calculate(renderContext, position, leftOperand, rightOperand);
 
-        assertSame(result, jtwigValue);
+        assertEquals(result.asObject(), "");
     }
 
     @Test
     public void calculateWhenRightElementFunction() throws Exception {
-        JtwigValue jtwigValue = mock(JtwigValue.class);
+        Value jtwigValue = mock(Value.class);
+        when(jtwigValue.getValue()).thenReturn("");
         JtwigValue leftOperandValue = mock(JtwigValue.class);
         when(renderContext.configuration()).thenReturn(configuration);
         when(configuration.propertyResolver()).thenReturn(propertyResolver);
@@ -73,7 +85,7 @@ public class SelectionOperationCalculatorTest {
 
         JtwigValue result = underTest.calculate(renderContext, position, leftOperand, rightOperand);
 
-        assertSame(result, jtwigValue);
+        assertEquals(result.asObject(), "");
     }
 
     @Test
@@ -85,7 +97,7 @@ public class SelectionOperationCalculatorTest {
         when(renderContext.configuration()).thenReturn(configuration);
         when(configuration.propertyResolver()).thenReturn(propertyResolver);
         when(configuration.strictMode()).thenReturn(true);
-        when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.<JtwigValue>absent());
+        when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.<Value>absent());
         when(leftOperand.calculate(renderContext)).thenReturn(leftOperandValue);
         Expression rightOperand = new FunctionExpression(position, "test", new ArrayList<Argument>());
 
@@ -98,7 +110,7 @@ public class SelectionOperationCalculatorTest {
         when(renderContext.configuration()).thenReturn(configuration);
         when(configuration.propertyResolver()).thenReturn(propertyResolver);
         when(configuration.strictMode()).thenReturn(false);
-        when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.<JtwigValue>absent());
+        when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.<Value>absent());
         when(leftOperand.calculate(renderContext)).thenReturn(leftOperandValue);
         Expression rightOperand = new FunctionExpression(position, "test", new ArrayList<Argument>());
 

@@ -24,14 +24,14 @@ public class ComprehensionListExpression extends Expression {
 
 
     @Override
-    public JtwigValue calculate(RenderContext context) {
+    public JtwigValue calculate(final RenderContext context) {
         final JtwigValue startValue = start.calculate(context);
         final JtwigValue endValue = end.calculate(context);
         return context.configuration().enumerationStrategy().enumerate(startValue, endValue)
                 .transform(new Function<Collection<Object>, JtwigValue>() {
                     @Override
                     public JtwigValue apply(Collection<Object> input) {
-                        return JtwigValueFactory.create(input);
+                        return JtwigValueFactory.value(input, context.configuration().valueConfiguration());
                     }
                 })
                 .or(new Supplier<JtwigValue>() {

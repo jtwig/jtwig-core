@@ -34,14 +34,14 @@ public class FunctionExpression extends InjectableExpression {
     }
 
     @Override
-    public JtwigValue calculate(RenderContext context) {
+    public JtwigValue calculate(final RenderContext context) {
         List<FunctionArgument> calculatedArguments = arguments.calculate(context);
         Optional<JtwigValue> value = context.configuration().functionResolver()
                 .resolve(functionIdentifier, calculatedArguments)
                 .transform(new Function<Supplier, JtwigValue>() {
                     @Override
                     public JtwigValue apply(Supplier input) {
-                        return JtwigValueFactory.create(input.get());
+                        return JtwigValueFactory.value(input.get(), context.configuration().valueConfiguration());
                     }
                 });
 

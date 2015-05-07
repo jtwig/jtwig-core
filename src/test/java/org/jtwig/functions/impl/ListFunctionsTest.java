@@ -1,5 +1,7 @@
 package org.jtwig.functions.impl;
 
+import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.jtwig.value.configuration.ValueConfiguration;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -12,7 +14,12 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.Assert.*;
 
 public class ListFunctionsTest {
-    ListFunctions underTest = new ListFunctions();
+    ListFunctions underTest = new ListFunctions() {
+        @Override
+        protected ValueConfiguration getConfiguration() {
+            return NamedValueConfiguration.COMPATIBLE_MODE;
+        }
+    };
 
     @Test
     public void reverseList() throws Exception {
@@ -187,7 +194,7 @@ public class ListFunctionsTest {
     }
     @Test
     public void minPrefersCharsOverIntegers() throws Exception {
-        Object result = underTest.min(1,2,'a','e');
+        Object result = underTest.min(1, 2, 'a','e');
         assertEquals('a', result);
     }
     @Test

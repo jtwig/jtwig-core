@@ -22,6 +22,6 @@ public class EnumeratedListExpression extends Expression {
         for (Expression expression : expressions) {
             resolved.add(expression.calculate(context).asObject());
         }
-        return JtwigValueFactory.create(resolved);
+        return JtwigValueFactory.value(resolved, context.configuration().valueConfiguration());
     }
 }

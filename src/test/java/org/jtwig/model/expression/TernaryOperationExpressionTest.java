@@ -4,6 +4,7 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
+import org.jtwig.value.configuration.NamedValueConfiguration;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -20,8 +21,8 @@ public class TernaryOperationExpressionTest {
 
     @Test
     public void calculateWhenConditionTrue() throws Exception {
-        JtwigValue value = JtwigValueFactory.create("one");
-        when(condition.calculate(context)).thenReturn(JtwigValueFactory.create(true));
+        JtwigValue value = JtwigValueFactory.value("one", NamedValueConfiguration.COMPATIBLE_MODE);
+        when(condition.calculate(context)).thenReturn(JtwigValueFactory.value(true, NamedValueConfiguration.COMPATIBLE_MODE));
         when(ifTrueExpression.calculate(context)).thenReturn(value);
 
         JtwigValue result = underTest.calculate(context);
@@ -32,8 +33,8 @@ public class TernaryOperationExpressionTest {
 
     @Test
     public void calculateWhenConditionFalse() throws Exception {
-        JtwigValue value = JtwigValueFactory.create("one");
-        when(condition.calculate(context)).thenReturn(JtwigValueFactory.create(false));
+        JtwigValue value = JtwigValueFactory.value("one", NamedValueConfiguration.COMPATIBLE_MODE);
+        when(condition.calculate(context)).thenReturn(JtwigValueFactory.value(false, NamedValueConfiguration.COMPATIBLE_MODE));
         when(ifFalseExpression.calculate(context)).thenReturn(value);
 
         JtwigValue result = underTest.calculate(context);

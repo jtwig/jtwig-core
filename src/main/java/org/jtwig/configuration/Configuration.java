@@ -8,6 +8,7 @@ import org.jtwig.model.expression.lists.EnumerationListStrategy;
 import org.jtwig.parser.JtwigParser;
 import org.jtwig.property.PropertyResolver;
 import org.jtwig.resource.resolver.ResourceResolver;
+import org.jtwig.value.configuration.ValueConfiguration;
 
 import java.math.MathContext;
 
@@ -22,6 +23,7 @@ public interface Configuration {
     boolean strictMode ();
     MathContext mathContext ();
     EscapeMode initialEscapeMode ();
+    ValueConfiguration valueConfiguration ();
 
     <T> T parameter(String name, T defaultValue);
 }

@@ -1,6 +1,7 @@
 package org.jtwig.context.values;
 
 import com.google.common.base.Optional;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
 import org.junit.Test;
 
@@ -25,11 +26,11 @@ public class ScopedValueContextTest {
 
     @Test
     public void valueIfParentContains() throws Exception {
-        JtwigValue jtwigValue = mock(JtwigValue.class);
-        when(local.value("one")).thenReturn(Optional.<JtwigValue>absent());
-        when(parent.value("one")).thenReturn(Optional.<JtwigValue>of(jtwigValue));
+        Value jtwigValue = mock(Value.class);
+        when(local.value("one")).thenReturn(Optional.<Value>absent());
+        when(parent.value("one")).thenReturn(Optional.<Value>of(jtwigValue));
 
-        Optional<JtwigValue> result = underTest.value("one");
+        Optional<Value> result = underTest.value("one");
 
         verify(local).value("one");
         assertThat(result.isPresent(), is(true));
@@ -38,11 +39,11 @@ public class ScopedValueContextTest {
 
     @Test
     public void valueIfLocalContains() throws Exception {
-        JtwigValue jtwigValue = mock(JtwigValue.class);
-        when(local.value("one")).thenReturn(Optional.<JtwigValue>of(jtwigValue));
-        when(parent.value("one")).thenReturn(Optional.<JtwigValue>absent());
+        Value jtwigValue = mock(Value.class);
+        when(local.value("one")).thenReturn(Optional.<Value>of(jtwigValue));
+        when(parent.value("one")).thenReturn(Optional.<Value>absent());
 
-        Optional<JtwigValue> result = underTest.value("one");
+        Optional<Value> result = underTest.value("one");
 
         verify(parent, never()).value("one");
         assertThat(result.isPresent(), is(true));

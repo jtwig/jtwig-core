@@ -9,6 +9,6 @@ import org.jtwig.value.JtwigValueFactory;
 public class AndOperationCalculator implements BinaryOperationCalculator {
     @Override
     public JtwigValue calculate(RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
-        return JtwigValueFactory.create(leftOperand.calculate(context).asBoolean() && rightOperand.calculate(context).asBoolean());
+        return JtwigValueFactory.value(leftOperand.calculate(context).asBoolean() && rightOperand.calculate(context).asBoolean(), context.configuration().valueConfiguration());
     }
 }

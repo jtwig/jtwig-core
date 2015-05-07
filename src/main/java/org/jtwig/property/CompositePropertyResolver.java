@@ -1,6 +1,7 @@
 package org.jtwig.property;
 
 import com.google.common.base.Optional;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
 
 import java.util.Collection;
@@ -13,9 +14,9 @@ public class CompositePropertyResolver implements PropertyResolver {
     }
 
     @Override
-    public Optional<JtwigValue> resolve(PropertyResolveRequest request) {
+    public Optional<Value> resolve(PropertyResolveRequest request) {
         for (PropertyResolver propertyResolver : propertyResolvers) {
-            Optional<JtwigValue> optional = propertyResolver.resolve(request);
+            Optional<Value> optional = propertyResolver.resolve(request);
             if (optional.isPresent()) {
                 return optional;
             }

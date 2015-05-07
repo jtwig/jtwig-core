@@ -1,6 +1,7 @@
 package org.jtwig.context.values;
 
 import com.google.common.base.Optional;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
 
 public class ScopedValueContext implements ValueContext {
@@ -13,8 +14,8 @@ public class ScopedValueContext implements ValueContext {
     }
 
     @Override
-    public Optional<JtwigValue> value(String key) {
-        Optional<JtwigValue> value = local.value(key);
+    public Optional<Value> value(String key) {
+        Optional<Value> value = local.value(key);
         if (!value.isPresent()) {
             return parent.value(key);
         } else {

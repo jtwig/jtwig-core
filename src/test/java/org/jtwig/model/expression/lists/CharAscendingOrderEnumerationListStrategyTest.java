@@ -3,6 +3,7 @@ package org.jtwig.model.expression.lists;
 import com.google.common.base.Optional;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
+import org.jtwig.value.configuration.NamedValueConfiguration;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -15,8 +16,8 @@ public class CharAscendingOrderEnumerationListStrategyTest {
 
     @Test
     public void enumerateWhenDifferentTypes() throws Exception {
-        JtwigValue left = JtwigValueFactory.create(1);
-        JtwigValue right = JtwigValueFactory.create('a');
+        JtwigValue left = JtwigValueFactory.value(1, NamedValueConfiguration.COMPATIBLE_MODE);
+        JtwigValue right = JtwigValueFactory.value('a', NamedValueConfiguration.COMPATIBLE_MODE);
 
         Optional<Collection<Object>> result = underTest.enumerate(left, right);
 
@@ -25,8 +26,8 @@ public class CharAscendingOrderEnumerationListStrategyTest {
 
     @Test
     public void enumerateWhenNotChar() throws Exception {
-        JtwigValue left = JtwigValueFactory.create(1);
-        JtwigValue right = JtwigValueFactory.create(2);
+        JtwigValue left = JtwigValueFactory.value(1, NamedValueConfiguration.COMPATIBLE_MODE);
+        JtwigValue right = JtwigValueFactory.value(2, NamedValueConfiguration.COMPATIBLE_MODE);
 
         Optional<Collection<Object>> result = underTest.enumerate(left, right);
 
@@ -35,8 +36,8 @@ public class CharAscendingOrderEnumerationListStrategyTest {
 
     @Test
     public void enumerateWhenLeftLowerThanRight() throws Exception {
-        JtwigValue left = JtwigValueFactory.create('a');
-        JtwigValue right = JtwigValueFactory.create('c');
+        JtwigValue left = JtwigValueFactory.value('a', NamedValueConfiguration.COMPATIBLE_MODE);
+        JtwigValue right = JtwigValueFactory.value('c', NamedValueConfiguration.COMPATIBLE_MODE);
 
         Optional<Collection<Object>> result = underTest.enumerate(left, right);
 
@@ -45,8 +46,8 @@ public class CharAscendingOrderEnumerationListStrategyTest {
 
     @Test
     public void enumerateWhenLeftGreaterThanRight() throws Exception {
-        JtwigValue left = JtwigValueFactory.create('c');
-        JtwigValue right = JtwigValueFactory.create('a');
+        JtwigValue left = JtwigValueFactory.value('c', NamedValueConfiguration.COMPATIBLE_MODE);
+        JtwigValue right = JtwigValueFactory.value('a', NamedValueConfiguration.COMPATIBLE_MODE);
 
         Optional<Collection<Object>> result = underTest.enumerate(left, right);
 

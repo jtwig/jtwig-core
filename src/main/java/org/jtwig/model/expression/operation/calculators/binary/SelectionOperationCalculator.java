@@ -1,5 +1,6 @@
 package org.jtwig.model.expression.operation.calculators.binary;
 
+import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import org.jtwig.context.RenderContext;
 import org.jtwig.exceptions.CalculationException;
@@ -9,6 +10,7 @@ import org.jtwig.model.expression.FunctionExpression;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
 import org.jtwig.property.PropertyResolveRequest;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
 
@@ -19,7 +21,7 @@ import static org.jtwig.util.ErrorMessageFormatter.errorMessage;
 
 public class SelectionOperationCalculator implements BinaryOperationCalculator {
     @Override
-    public JtwigValue calculate(RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
+    public JtwigValue calculate(final RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
         JtwigValue value = leftOperand.calculate(context);
         String propertyName;
         Collection<FunctionArgument> functionArguments;
@@ -35,17 +37,23 @@ public class SelectionOperationCalculator implements BinaryOperationCalculator {
 
         return context.configuration().propertyResolver()
                 .resolve(new PropertyResolveRequest(position, value.asObject(), propertyName, functionArguments))
+                .transform(new Function<Value, JtwigValue>() {
+                    @Override
+                    public JtwigValue apply(Value input) {
+                        return JtwigValueFactory.value(input.getValue(), context.configuration().valueConfiguration());
+                    }
+                })
                 .or(throwUnresolvableException(context, position, propertyName, value.asObject()));
     }
 
-    private Supplier<? extends JtwigValue> throwUnresolvableException(final RenderContext context, final Position position, final String propertyName, final Object value) {
+    private Supplier<JtwigValue> throwUnresolvableException(final RenderContext context, final Position position, final String propertyName, final Object value) {
         return new Supplier<JtwigValue>() {
             @Override
             public JtwigValue get() {
                 if (context.configuration().strictMode()) {
                     throw new CalculationException(errorMessage(position, String.format("Impossible to access an attribute '%s' on '%s'", propertyName, value)));
                 } else {
-                    return JtwigValueFactory.empty();
+                    return JtwigValueFactory.undefined(context.configuration().valueConfiguration());
                 }
             }
         };

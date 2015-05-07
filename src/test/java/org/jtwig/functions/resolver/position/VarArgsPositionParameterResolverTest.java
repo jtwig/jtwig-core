@@ -45,7 +45,7 @@ public class VarArgsPositionParameterResolverTest {
         Optional<FunctionArgument> result = underTest.resolve(javaMethodArgument, position, context);
 
         assertThat(result.isPresent(), is(true));
-        assertThat(result.get().getValue().isNull(), is(true));
+        assertThat(result.get().getValue(), nullValue());
     }
 
     @Test

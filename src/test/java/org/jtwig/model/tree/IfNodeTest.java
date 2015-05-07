@@ -3,8 +3,8 @@ package org.jtwig.model.tree;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
-import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
+import org.jtwig.value.configuration.NamedValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +41,7 @@ public class IfNodeTest extends AbstractNodeTest {
         IfNode.IfConditionNode ifCondition = new IfNode.IfConditionNode(POSITION, condition, node);
         conditions.add(ifCondition);
 
-        when(condition.calculate(renderContext())).thenReturn(JtwigValueFactory.create(true));
+        when(condition.calculate(renderContext())).thenReturn(JtwigValueFactory.value(true, NamedValueConfiguration.COMPATIBLE_MODE));
         render(node, "test");
 
         Renderable result = underTest.render(renderContext());

@@ -6,6 +6,7 @@ import org.jtwig.context.impl.CoreRenderContext;
 import org.jtwig.context.model.*;
 import org.jtwig.context.values.SimpleValueContext;
 import org.jtwig.context.values.ValueContext;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.render.impl.OverrideRenderable;
 import org.jtwig.resource.Resource;
 import org.jtwig.value.JtwigValue;
@@ -26,7 +27,7 @@ public class RenderContextBuilder implements Builder<RenderContext> {
     private Resource resource;
     private Configuration configuration;
     private EscapeMode initialScapeMode = EscapeMode.NONE;
-    private ValueContext valueContext = new SimpleValueContext(new HashMap<String, JtwigValue>());
+    private ValueContext valueContext = new SimpleValueContext(new HashMap<String, Value>());
 
     public RenderContextBuilder withConfiguration(Configuration configuration) {
         this.configuration = configuration;

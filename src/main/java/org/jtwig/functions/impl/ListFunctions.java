@@ -2,19 +2,24 @@ package org.jtwig.functions.impl;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jtwig.context.RenderContextHolder;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.functions.annotations.JtwigFunction;
 import org.jtwig.functions.annotations.Parameter;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.compare.JtwigValueLooseComparator;
+import org.jtwig.value.configuration.ValueConfiguration;
 
 import java.util.*;
 
 public class ListFunctions {
+    protected ValueConfiguration getConfiguration() {
+        return RenderContextHolder.get().configuration().valueConfiguration();
+    }
+
     @JtwigFunction("batch")
     public List<List<Object>> batch (@Parameter Object input, @Parameter int groupSize) {
-        Iterator<Object> iterator = JtwigValueFactory.create(input).asCollection().iterator();
+        Iterator<Object> iterator = JtwigValueFactory.value(input, getConfiguration()).asCollection().iterator();
         List<List<Object>> result = new ArrayList<>();
         while (iterator.hasNext()) {
             List<Object> batch = new ArrayList<>();
@@ -29,7 +34,7 @@ public class ListFunctions {
 
     @JtwigFunction("batch")
     public List<List<Object>> batch (@Parameter Object input, @Parameter int groupSize, @Parameter Object padding) {
-        Iterator<Object> iterator = JtwigValueFactory.create(input).asCollection().iterator();
+        Iterator<Object> iterator = JtwigValueFactory.value(input, getConfiguration()).asCollection().iterator();
         List<List<Object>> result = new ArrayList<>();
         while (iterator.hasNext()) {
             List<Object> batch = new ArrayList<Object>();
@@ -58,7 +63,7 @@ public class ListFunctions {
     @JtwigFunction("join")
     public String join (@Parameter Object input, @Parameter String separator) {
         List<String> pieces = new ArrayList<>();
-        for (Object next : JtwigValueFactory.create(input).asCollection()) {
+        for (Object next : JtwigValueFactory.value(input, getConfiguration()).asCollection()) {
             if (next == null) pieces.add("");
             else pieces.add(next.toString());
         }
@@ -105,7 +110,7 @@ public class ListFunctions {
 
     @JtwigFunction("reverse")
     public List reverse (@Parameter Object input) {
-        Iterator<Object> iterator = JtwigValueFactory.create(input).asCollection().iterator();
+        Iterator<Object> iterator = JtwigValueFactory.value(input, getConfiguration()).asCollection().iterator();
         List<Object> result = new ArrayList<Object>();
         while (iterator.hasNext())
             result.add(iterator.next());
@@ -123,7 +128,7 @@ public class ListFunctions {
             return value.substring(begin, Math.min(value.length(), begin + length));
         }
 
-        Iterator<Object> iterator = JtwigValueFactory.create(input).asCollection().iterator();
+        Iterator<Object> iterator = JtwigValueFactory.value(input, getConfiguration()).asCollection().iterator();
         List list = new ArrayList();
         int i = 0;
         while (iterator.hasNext()) {
@@ -148,30 +153,28 @@ public class ListFunctions {
 
     @JtwigFunction("max")
     public Object max (@Parameter Object ... values) {
-        JtwigValue result = JtwigValueFactory.create(values[0]);
+        JtwigValue result = JtwigValueFactory.value(values[0], getConfiguration());
         values = ArrayUtils.remove(values, 0);
         for(Object value : values) {
-            JtwigValue jtwigValue = JtwigValueFactory.create(value);
-            int cmp = Objects.compare(result, jtwigValue, JtwigValueLooseComparator.instance());
-            if(cmp < 0) {
+            JtwigValue jtwigValue = JtwigValueFactory.value(value, getConfiguration());
+            if(result.isLowerThan(jtwigValue)) {
                 result = jtwigValue;
             }
         }
-        return result;
+        return result.asObject();
     }
 
     @JtwigFunction("min")
     public Object min (@Parameter Object ... values) {
-        JtwigValue result = JtwigValueFactory.create(values[0]);
+        JtwigValue result = JtwigValueFactory.value(values[0], getConfiguration());
         values = ArrayUtils.remove(values, 0);
         for(Object value : values) {
-            JtwigValue jtwigValue = JtwigValueFactory.create(value);
-            int cmp = Objects.compare(result, jtwigValue, JtwigValueLooseComparator.instance());
-            if(cmp > 0) {
+            JtwigValue jtwigValue = JtwigValueFactory.value(value, getConfiguration());
+            if(result.isGreaterThan(jtwigValue)) {
                 result = jtwigValue;
             }
         }
-        return result;
+        return result.asObject();
     }
 
     private Object mergeArray(Object first, Object... arguments) {

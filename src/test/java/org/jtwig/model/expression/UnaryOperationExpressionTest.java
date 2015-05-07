@@ -5,6 +5,7 @@ import org.jtwig.model.expression.operation.UnaryOperator;
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
+import org.jtwig.value.configuration.NamedValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,11 +27,12 @@ public class UnaryOperationExpressionTest {
     @Before
     public void setUp() throws Exception {
         when(context.configuration().mathContext()).thenReturn(MathContext.DECIMAL32);
+        when(context.configuration().valueConfiguration()).thenReturn(NamedValueConfiguration.COMPATIBLE_MODE);
     }
 
     @Test
     public void calculate() throws Exception {
-        when(operand.calculate(context)).thenReturn(JtwigValueFactory.create(1));
+        when(operand.calculate(context)).thenReturn(JtwigValueFactory.value(1, NamedValueConfiguration.COMPATIBLE_MODE));
 
         JtwigValue result = underTest.calculate(context);
 

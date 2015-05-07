@@ -3,6 +3,7 @@ package org.jtwig.property;
 import com.google.common.base.Optional;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.position.Position;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,10 +31,10 @@ public class FieldConfigurationParameterResolverTest {
         underTest = new FieldPropertyResolver(true);
         PropertyResolveRequest request = new PropertyResolveRequest(position, new TestExample("example"), "value", arguments);
 
-        Optional<JtwigValue> result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
         assertThat(result.isPresent(), is(true));
-        assertEquals("example", result.get().asObject());
+        assertEquals("example", result.get().getValue());
     }
 
     @Test
@@ -41,7 +42,7 @@ public class FieldConfigurationParameterResolverTest {
         underTest = new FieldPropertyResolver(true);
         PropertyResolveRequest request = new PropertyResolveRequest(position, new TestExample("example"), "value1", arguments);
 
-        Optional<JtwigValue> result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
         assertThat(result.isPresent(), is(false));
     }
@@ -51,7 +52,7 @@ public class FieldConfigurationParameterResolverTest {
         underTest = new FieldPropertyResolver(false);
         PropertyResolveRequest request = new PropertyResolveRequest(position, new TestExample("example"), "value", arguments);
 
-        Optional<JtwigValue> result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
         assertThat(result.isPresent(), is(false));
     }

@@ -3,24 +3,23 @@ package org.jtwig.property;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import org.jtwig.context.RenderContext;
-import org.jtwig.context.RenderContextHolder;
 import org.jtwig.context.RenderContextBuilder;
+import org.jtwig.context.RenderContextHolder;
 import org.jtwig.context.model.Macro;
 import org.jtwig.context.model.MacroContext;
 import org.jtwig.context.values.SimpleValueContext;
 import org.jtwig.context.values.ValueContext;
 import org.jtwig.functions.FunctionArgument;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.render.RenderResult;
 import org.jtwig.render.StringBuilderRenderResult;
-import org.jtwig.value.JtwigValue;
-import org.jtwig.value.JtwigValueFactory;
 
 import java.util.HashMap;
 import java.util.Iterator;
 
 public class MacroPropertyResolver implements PropertyResolver {
     @Override
-    public Optional<JtwigValue> resolve(PropertyResolveRequest request) {
+    public Optional<Value> resolve(PropertyResolveRequest request) {
         if (request.getEntity() instanceof MacroContext) {
             MacroContext macroContext = (MacroContext) request.getEntity();
             return macroContext
@@ -31,16 +30,16 @@ public class MacroPropertyResolver implements PropertyResolver {
         }
     }
 
-    private Function<? super Macro, JtwigValue> renderMacro(final PropertyResolveRequest request) {
-        return new Function<Macro, JtwigValue>() {
+    private Function<? super Macro, Value> renderMacro(final PropertyResolveRequest request) {
+        return new Function<Macro, Value>() {
             @Override
-            public JtwigValue apply(Macro macro) {
-                ValueContext valueContext = new SimpleValueContext(new HashMap<String, JtwigValue>());
+            public Value apply(Macro macro) {
+                ValueContext valueContext = new SimpleValueContext(new HashMap<String, Value>());
 
                 Iterator<FunctionArgument> valueIterator = request.getArguments().iterator();
                 for (String variableName : macro.getArgumentNames()) {
                     if (valueIterator.hasNext()) {
-                        valueContext.add(variableName, valueIterator.next().getValue().asObject());
+                        valueContext.add(variableName, valueIterator.next().getValue());
                     }
                 }
 
@@ -54,7 +53,7 @@ public class MacroPropertyResolver implements PropertyResolver {
                     .render(macro.getContent())
                     .appendTo(renderResult);
 
-                return JtwigValueFactory.create(renderResult.content());
+                return new Value(renderResult.content());
             }
         };
     }

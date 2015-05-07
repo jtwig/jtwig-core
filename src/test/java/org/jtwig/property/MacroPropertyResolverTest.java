@@ -13,6 +13,7 @@ import org.jtwig.context.values.ValueContext;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.Node;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.render.impl.StringRenderable;
 import org.jtwig.value.JtwigValue;
 import org.junit.Before;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -54,7 +56,7 @@ public class MacroPropertyResolverTest {
     public void resolveWhenNotMacroContext() throws Exception {
         PropertyResolveRequest request = new PropertyResolveRequest(position, new Object(), MACRO_NAME, arguments);
 
-        Optional<JtwigValue> result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
         assertThat(result.isPresent(), is(false));
     }
@@ -65,7 +67,7 @@ public class MacroPropertyResolverTest {
         MacroContext macroContext = new MacroContext(macros);
         PropertyResolveRequest request = new PropertyResolveRequest(position, macroContext, MACRO_NAME, arguments);
 
-        Optional<JtwigValue> result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
         assertThat(result.isPresent(), is(false));
     }
@@ -86,9 +88,9 @@ public class MacroPropertyResolverTest {
         when(nodeRenderer.render(content)).thenReturn(new StringRenderable("one", EscapeMode.NONE));
         PropertyResolveRequest request = new PropertyResolveRequest(position, macroContext, MACRO_NAME, arguments);
 
-        Optional<JtwigValue> result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
         assertThat(result.isPresent(), is(true));
-        assertThat(result.get().asString(), is("one"));
+        assertEquals(result.get().getValue(), "one");
     }
 }

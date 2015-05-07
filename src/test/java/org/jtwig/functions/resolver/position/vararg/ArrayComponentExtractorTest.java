@@ -3,6 +3,7 @@ package org.jtwig.functions.resolver.position.vararg;
 import com.google.common.base.Optional;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.value.JtwigValueFactory;
+import org.jtwig.value.configuration.NamedValueConfiguration;
 import org.junit.Test;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class ArrayComponentExtractorTest {
 
     @Test
     public void extractWhenAllNull() throws Exception {
-        List<FunctionArgument> input = asList(new FunctionArgument(Optional.<String>absent(), JtwigValueFactory.create(null)));
+        List<FunctionArgument> input = asList(new FunctionArgument(Optional.<String>absent(), null));
 
         Class result = underTest.extract(input);
 
@@ -26,7 +27,7 @@ public class ArrayComponentExtractorTest {
 
     @Test
     public void extractWhenAtLeastOneIsNonNull() throws Exception {
-        List<FunctionArgument> input = asList(new FunctionArgument(Optional.<String>absent(), JtwigValueFactory.create("")));
+        List<FunctionArgument> input = asList(new FunctionArgument(Optional.<String>absent(), ""));
 
         Class<?> result = underTest.extract(input);
 

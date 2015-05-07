@@ -5,6 +5,7 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
+import org.jtwig.value.configuration.NamedValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,12 +29,13 @@ public class DivideOperationCalculatorTest {
     @Before
     public void setUp() throws Exception {
         when(context.configuration().mathContext()).thenReturn(MathContext.DECIMAL32);
+        when(context.configuration().valueConfiguration()).thenReturn(NamedValueConfiguration.COMPATIBLE_MODE);
     }
 
     @Test
     public void divide() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.create("1.0"));
-        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.create("2.0"));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", NamedValueConfiguration.COMPATIBLE_MODE));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("2.0", NamedValueConfiguration.COMPATIBLE_MODE));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 
