@@ -9,10 +9,12 @@ import org.jtwig.exceptions.CalculationException;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.expression.function.Argument;
 import org.jtwig.model.position.Position;
+import org.jtwig.reflection.exceptions.InvokeException;
 import org.jtwig.util.ErrorMessageFormatter;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class FunctionExpression extends InjectableExpression {
@@ -41,7 +43,16 @@ public class FunctionExpression extends InjectableExpression {
                 .transform(new Function<Supplier, JtwigValue>() {
                     @Override
                     public JtwigValue apply(Supplier input) {
-                        return JtwigValueFactory.value(input.get(), context.configuration().valueConfiguration());
+                        try {
+                            return JtwigValueFactory.value(input.get(), context.configuration().valueConfiguration());
+                        } catch (InvokeException e) {
+                            if (e.getCause() instanceof InvocationTargetException) {
+                                if (e.getCause().getCause() instanceof CalculationException) {
+                                    throw new CalculationException(ErrorMessageFormatter.errorMessage(getPosition(), e.getCause().getCause().getMessage()));
+                                }
+                            }
+                            throw e;
+                        }
                     }
                 });
 

@@ -22,4 +22,8 @@ public class OverrideRenderable implements Renderable {
         override.or(defaultContent).appendTo(result);
         return result;
     }
+
+    public Renderable getDefault() {
+        return defaultContent;
+    }
 }
