@@ -1,5 +1,6 @@
 package org.jtwig.value;
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import org.jtwig.util.OptionalUtils;
 import org.jtwig.value.configuration.ValueConfiguration;
@@ -93,5 +94,9 @@ public class JtwigValue {
         return configuration.typeExtractor()
                 .extract(value)
                 .or(JtwigType.OBJECT);
+    }
+
+    public JtwigValue map(Function<JtwigValue, Object> map) {
+        return new JtwigValue(map.apply(this), configuration);
     }
 }

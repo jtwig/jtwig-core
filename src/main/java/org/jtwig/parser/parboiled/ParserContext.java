@@ -6,10 +6,14 @@ import org.jtwig.parser.parboiled.base.*;
 import org.jtwig.parser.parboiled.expression.*;
 import org.jtwig.parser.parboiled.expression.operator.BinaryOperatorParser;
 import org.jtwig.parser.parboiled.expression.operator.UnaryOperatorParser;
+import org.jtwig.parser.parboiled.expression.test.*;
 import org.jtwig.parser.parboiled.node.*;
 import org.parboiled.BaseParser;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.parboiled.Parboiled.createParser;
 
@@ -24,6 +28,12 @@ public class ParserContext {
         createParser(LimitsParser.class, context);
         createParser(CommentParser.class, context);
 
+        createParser(SameAsTestExpressionParser.class, context);
+        createParser(DivisibleByTestExpressionParser.class, context);
+        createParser(NullTestExpressionParser.class, context);
+        createParser(FunctionTestExpressionParser.class, context);
+        createParser(AnyTestExpressionParser.class, context);
+
         createParser(UnaryOperatorParser.class, context);
         createParser(BinaryOperatorParser.class, context);
 
@@ -37,6 +47,7 @@ public class ParserContext {
         createParser(ConstantExpressionParser.class, context);
         createParser(VariableExpressionParser.class, context);
         createParser(FunctionExpressionParser.class, context);
+        createParser(TestOperationExpressionParser.class, context);
         createParser(UnaryOperationExpressionParser.class, context);
         createParser(BinaryOperationExpressionParser.class, context);
         createParser(TernaryOperationExpressionParser.class, context);

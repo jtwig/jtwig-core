@@ -1,6 +1,7 @@
 package org.jtwig.parser.parboiled.expression;
 
 import org.jtwig.model.expression.Expression;
+import org.jtwig.model.expression.TestOperationExpression;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.parboiled.Rule;
 import org.parboiled.annotations.Label;
@@ -13,6 +14,7 @@ public class AnyExpressionParser extends ExpressionParser<Expression> {
     @Label("Any Expression")
     public Rule ExpressionRule() {
         return FirstOf(
+                parserContext().parser(TestOperationExpressionParser.class).ExpressionRule(),
                 parserContext().parser(TernaryOperationExpressionParser.class).ExpressionRule(),
                 parserContext().parser(BinaryOperationExpressionParser.class).ExpressionRule(),
                 parserContext().parser(PrimaryExpressionParser.class).ExpressionRule()
