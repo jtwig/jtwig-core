@@ -69,8 +69,4 @@ public class ResourceContext {
     public void endBlock() {
         this.currentBlock = Optional.absent();
     }
-
-    public ValueContext getValueContext() {
-        return valueContext;
-    }
 }

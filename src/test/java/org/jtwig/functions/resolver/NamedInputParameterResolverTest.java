@@ -58,4 +58,38 @@ public class NamedInputParameterResolverTest {
 
         assertThat(result.isPresent(), is(false));
     }
+
+    @Test
+    public void resolveWhenArgumentUsed() throws Exception {
+        Parameter parameter = mock(Parameter.class);
+        JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
+        InputParameterResolverContext<FunctionArgument> context = mock(InputParameterResolverContext.class);
+        FunctionArgument functionArgument = mock(FunctionArgument.class);
+        when(context.size()).thenReturn(1);
+        when(parameter.value()).thenReturn("hello");
+        when(context.value(0)).thenReturn(functionArgument);
+        when(context.isUsed(0)).thenReturn(true);
+        when(functionArgument.getName()).thenReturn(Optional.of("hello"));
+
+        Optional<FunctionArgument> result = underTest.resolve(parameter, javaMethodArgument, context);
+
+        assertThat(result.isPresent(), is(false));
+    }
+
+    @Test
+    public void resolveWhenArgumentNameNotPresent() throws Exception {
+        Parameter parameter = mock(Parameter.class);
+        JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
+        InputParameterResolverContext<FunctionArgument> context = mock(InputParameterResolverContext.class);
+        FunctionArgument functionArgument = mock(FunctionArgument.class);
+        when(context.size()).thenReturn(1);
+        when(parameter.value()).thenReturn("hello");
+        when(context.value(0)).thenReturn(functionArgument);
+        when(context.isUsed(0)).thenReturn(false);
+        when(functionArgument.getName()).thenReturn(Optional.<String>absent());
+
+        Optional<FunctionArgument> result = underTest.resolve(parameter, javaMethodArgument, context);
+
+        assertThat(result.isPresent(), is(false));
+    }
 }

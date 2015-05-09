@@ -1,6 +1,7 @@
 package org.jtwig.integration.expression;
 
 import org.jtwig.JtwigModel;
+import org.jtwig.exceptions.CalculationException;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
 import org.junit.Rule;
@@ -47,6 +48,15 @@ public class ListTest extends AbstractIntegrationTest {
         String result = defaultStringTemplate("{{ ['c'..'a'] }}").render(JtwigModel.newModel());
 
         assertThat(result, is("[c, b, a]"));
+    }
+
+
+    @Test
+    public void comprehensionListInvalid() throws Exception {
+        expectedException.expect(CalculationException.class);
+        expectedException.expectMessage(containsString("Unable to calculate a list from a comprehension list starting with 'a' and ending with '1'"));
+
+        defaultStringTemplate("{{ ['a'..1] }}").render(JtwigModel.newModel());
     }
 
     @Test

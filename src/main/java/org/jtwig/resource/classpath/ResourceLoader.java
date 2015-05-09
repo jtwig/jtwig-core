@@ -15,11 +15,7 @@ public class ResourceLoader {
     public boolean exists (String path) {
         try {
             URL resource = classLoader.getResource(preparePath(path));
-            if (resource != null) {
-                return new File(resource.toURI()).exists();
-            } else {
-                return false;
-            }
+            return resource != null && new File(resource.toURI()).exists();
         } catch (URISyntaxException e) {
             return false;
         }

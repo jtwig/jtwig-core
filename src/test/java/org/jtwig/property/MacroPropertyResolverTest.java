@@ -54,7 +54,8 @@ public class MacroPropertyResolverTest {
 
     @Test
     public void resolveWhenNotMacroContext() throws Exception {
-        PropertyResolveRequest request = new PropertyResolveRequest(position, new Object(), MACRO_NAME, arguments);
+        Value value = mock(Value.class);
+        PropertyResolveRequest request = new PropertyResolveRequest(position, value, MACRO_NAME, arguments);
 
         Optional<Value> result = underTest.resolve(request);
 
@@ -65,7 +66,8 @@ public class MacroPropertyResolverTest {
     public void resolveWhenEmptyMacroContext() throws Exception {
         HashMap<String, Macro> macros = new HashMap<>();
         MacroContext macroContext = new MacroContext(macros);
-        PropertyResolveRequest request = new PropertyResolveRequest(position, macroContext, MACRO_NAME, arguments);
+        Value value = new Value(macroContext);
+        PropertyResolveRequest request = new PropertyResolveRequest(position, value, MACRO_NAME, arguments);
 
         Optional<Value> result = underTest.resolve(request);
 
@@ -86,7 +88,7 @@ public class MacroPropertyResolverTest {
         macros.put(MACRO_NAME, new Macro(argumentNames, content));
         when(renderContext.nodeRenderer()).thenReturn(nodeRenderer);
         when(nodeRenderer.render(content)).thenReturn(new StringRenderable("one", EscapeMode.NONE));
-        PropertyResolveRequest request = new PropertyResolveRequest(position, macroContext, MACRO_NAME, arguments);
+        PropertyResolveRequest request = new PropertyResolveRequest(position, new Value(macroContext), MACRO_NAME, arguments);
 
         Optional<Value> result = underTest.resolve(request);
 

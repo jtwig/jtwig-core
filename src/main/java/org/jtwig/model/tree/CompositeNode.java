@@ -16,10 +16,6 @@ public class CompositeNode extends Node {
         this.nodes = nodes;
     }
 
-    public Collection<Node> getNodes() {
-        return nodes;
-    }
-
     @Override
     public Renderable render(RenderContext context) {
         Collection<Renderable> renderables = new ArrayList<>();

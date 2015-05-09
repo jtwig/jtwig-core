@@ -19,10 +19,6 @@ public class IncludeNode extends Node {
         this.configuration = configuration;
     }
 
-    public Expression getIncludeExpression() {
-        return configuration.getInclude();
-    }
-
     public Expression getMapExpression() {
         return configuration.getMap();
     }

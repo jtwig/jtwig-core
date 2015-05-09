@@ -19,6 +19,9 @@ import org.jtwig.parser.JtwigParserBuilder;
 import org.jtwig.parser.config.ParserConfigurationBuilder;
 import org.jtwig.parser.parboiled.node.AddonParser;
 import org.jtwig.property.*;
+import org.jtwig.property.method.CompositeMethodPropertyExtractor;
+import org.jtwig.property.method.MethodNameMethodPropertyExtractor;
+import org.jtwig.property.method.MethodPropertyExtractor;
 import org.jtwig.reflection.convert.Converter;
 import org.jtwig.reflection.resolver.argument.ArgumentResolver;
 import org.jtwig.resource.classpath.ResourceLoader;
@@ -31,10 +34,9 @@ import org.jtwig.value.configuration.NamedValueConfiguration;
 import org.jtwig.value.configuration.ValueConfiguration;
 
 import java.math.MathContext;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.Arrays.asList;
 
 public class ConfigurationBuilder implements Builder<Configuration> {
 
@@ -151,10 +153,12 @@ public class ConfigurationBuilder implements Builder<Configuration> {
         Collection<ResourceResolver> resourceResolvers = new ArrayList<>();
 
         propertyResolvers.add(new FieldPropertyResolver(true));
-        propertyResolvers.add(new MethodPropertyResolver(MethodPropertyResolver.exactlyEqual()));
-        propertyResolvers.add(new MethodPropertyResolver(MethodPropertyResolver.prefixedEqual("get")));
-        propertyResolvers.add(new MethodPropertyResolver(MethodPropertyResolver.prefixedEqual("is")));
-        propertyResolvers.add(new MethodPropertyResolver(MethodPropertyResolver.prefixedEqual("has")));
+        propertyResolvers.add(new MethodPropertyResolver(new CompositeMethodPropertyExtractor(Arrays.<MethodPropertyExtractor>asList(
+                new MethodNameMethodPropertyExtractor(MethodNameMethodPropertyExtractor.exactlyEqual()),
+                new MethodNameMethodPropertyExtractor(MethodNameMethodPropertyExtractor.prefixedEqual("get")),
+                new MethodNameMethodPropertyExtractor(MethodNameMethodPropertyExtractor.prefixedEqual("is")),
+                new MethodNameMethodPropertyExtractor(MethodNameMethodPropertyExtractor.prefixedEqual("has"))
+        ))));
         propertyResolvers.add(new MacroPropertyResolver());
 
         // Resource loaders

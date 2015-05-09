@@ -29,7 +29,7 @@ public class FieldConfigurationParameterResolverTest {
     @Test
     public void resolvePropertyWhenAccessPrivate() throws Exception {
         underTest = new FieldPropertyResolver(true);
-        PropertyResolveRequest request = new PropertyResolveRequest(position, new TestExample("example"), "value", arguments);
+        PropertyResolveRequest request = new PropertyResolveRequest(position, new Value(new TestExample("example")), "value", arguments);
 
         Optional<Value> result = underTest.resolve(request);
 
@@ -40,7 +40,7 @@ public class FieldConfigurationParameterResolverTest {
     @Test
     public void resolvePropertyWhenAccessPrivateNotExists() throws Exception {
         underTest = new FieldPropertyResolver(true);
-        PropertyResolveRequest request = new PropertyResolveRequest(position, new TestExample("example"), "value1", arguments);
+        PropertyResolveRequest request = new PropertyResolveRequest(position, new Value(new TestExample("example")), "value1", arguments);
 
         Optional<Value> result = underTest.resolve(request);
 
@@ -50,7 +50,7 @@ public class FieldConfigurationParameterResolverTest {
     @Test
     public void resolvePropertyWhenNoAccessPrivate() throws Exception {
         underTest = new FieldPropertyResolver(false);
-        PropertyResolveRequest request = new PropertyResolveRequest(position, new TestExample("example"), "value", arguments);
+        PropertyResolveRequest request = new PropertyResolveRequest(position, new Value(new TestExample("example")), "value", arguments);
 
         Optional<Value> result = underTest.resolve(request);
 

@@ -10,6 +10,7 @@ import org.jtwig.model.expression.FunctionExpression;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
 import org.jtwig.property.PropertyResolveRequest;
+import org.jtwig.property.PropertyResolveRequestFactory;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
@@ -36,7 +37,7 @@ public class SelectionOperationCalculator implements BinaryOperationCalculator {
         }
 
         return context.configuration().propertyResolver()
-                .resolve(new PropertyResolveRequest(position, value.asObject(), propertyName, functionArguments))
+                .resolve(PropertyResolveRequestFactory.create(position, value.asObject(), propertyName, functionArguments))
                 .transform(new Function<Value, JtwigValue>() {
                     @Override
                     public JtwigValue apply(Value input) {

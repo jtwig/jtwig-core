@@ -36,5 +36,87 @@ public class SelectionTest extends AbstractIntegrationTest {
                 .render(newModel().with("asd", 1));
     }
 
+    @Test
+    public void propertyResolutionMethodGet() throws Exception {
 
+        String result = defaultStringTemplate("{{ var.test }}")
+                .render(newModel().with("var", new TestClass("hello")));
+
+        assertThat(result, is("hello"));
+    }
+
+    @Test
+    public void propertyResolutionMethodIs() throws Exception {
+
+        String result = defaultStringTemplate("{{ var.test1 }}")
+                .render(newModel().with("var", new TestClass("hello")));
+
+        assertThat(result, is("hello"));
+    }
+
+    @Test
+    public void propertyResolutionMethodHas() throws Exception {
+
+        String result = defaultStringTemplate("{{ var.test2 }}")
+                .render(newModel().with("var", new TestClass("hello")));
+
+        assertThat(result, is("hello"));
+    }
+
+    @Test
+    public void propertyResolutionMethodFails() throws Exception {
+
+        String result = defaultStringTemplate("{{ var.test3 }}")
+                .render(newModel().with("var", new TestClass("hello")));
+
+        assertThat(result, is(""));
+    }
+
+    @Test
+    public void propertyResolutionMethodExactMethod() throws Exception {
+
+        String result = defaultStringTemplate("{{ var.getTest }}")
+                .render(newModel().with("var", new TestClass("hello")));
+
+        assertThat(result, is("hello"));
+    }
+
+    @Test
+    public void propertyResolutionPrivateField() throws Exception {
+
+        String result = defaultStringTemplate("{{ var.privateField }}")
+                .render(newModel().with("var", new TestClass("hello")));
+
+        assertThat(result, is("hello"));
+    }
+
+    @Test
+    public void propertyResolutionPublicField() throws Exception {
+
+        String result = defaultStringTemplate("{{ var.sum }}")
+                .render(newModel().with("var", new TestClass("hello")));
+
+        assertThat(result, is("0"));
+    }
+
+    public static class TestClass {
+        private final String privateField;
+        public final Integer sum = 0;
+
+        public TestClass(String privateField) {
+            this.privateField = privateField;
+        }
+
+        public String getTest () {
+            return privateField;
+        }
+
+        public String isTest1 () {
+            return privateField;
+        }
+
+        public String hasTest2 () {
+            return privateField;
+        }
+    }
 }

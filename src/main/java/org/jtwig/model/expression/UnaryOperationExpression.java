@@ -15,14 +15,6 @@ public class UnaryOperationExpression extends Expression {
         this.operand = operand;
     }
 
-    public UnaryOperator getOperator() {
-        return operator;
-    }
-
-    public Expression getOperand() {
-        return operand;
-    }
-
     @Override
     public JtwigValue calculate(RenderContext context) {
         return operator.calculator().calculate(context, getPosition(), operand);

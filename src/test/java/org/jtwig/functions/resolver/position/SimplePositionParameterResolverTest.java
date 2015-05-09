@@ -31,6 +31,22 @@ public class SimplePositionParameterResolverTest {
         int position = 0;
         JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
         InputParameterResolverContext<FunctionArgument> context = mock(InputParameterResolverContext.class);
+        when(context.size()).thenReturn(1);
+        when(javaMethodArgument.isVarArg()).thenReturn(false);
+        when(context.isUsed(position)).thenReturn(true);
+
+        Optional<FunctionArgument> result = underTest.resolve(javaMethodArgument, position, context);
+
+        assertThat(result.isPresent(), is(false));
+        verify(context, never()).markAsUsed(position);
+    }
+
+    @Test
+    public void resolveWhenArgumentBeUsed() throws Exception {
+        int position = 0;
+        JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
+        InputParameterResolverContext<FunctionArgument> context = mock(InputParameterResolverContext.class);
+        when(context.size()).thenReturn(0);
         when(javaMethodArgument.isVarArg()).thenReturn(false);
         when(context.isUsed(position)).thenReturn(true);
 

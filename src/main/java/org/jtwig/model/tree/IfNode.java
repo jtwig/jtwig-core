@@ -38,10 +38,6 @@ public class IfNode extends Node {
             this.condition = condition;
         }
 
-        public Expression getCondition() {
-            return condition;
-        }
-
         public boolean isTrue(RenderContext context) {
             return condition.calculate(context).asBoolean();
         }

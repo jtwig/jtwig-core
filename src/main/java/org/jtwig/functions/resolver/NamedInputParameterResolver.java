@@ -12,10 +12,12 @@ public class NamedInputParameterResolver implements AnnotatedInputParameterResol
         String name = parameter.value();
         for (int i = 0; i < context.size(); i++) {
             FunctionArgument functionArgument = context.value(i);
-            if (!context.isUsed(i) && functionArgument.getName().isPresent()) {
-                if (functionArgument.getName().get().equals(name)) {
-                    context.markAsUsed(i);
-                    return Optional.of(functionArgument);
+            if (!context.isUsed(i)) {
+                if (functionArgument.getName().isPresent()) {
+                    if (functionArgument.getName().get().equals(name)) {
+                        context.markAsUsed(i);
+                        return Optional.of(functionArgument);
+                    }
                 }
             }
         }

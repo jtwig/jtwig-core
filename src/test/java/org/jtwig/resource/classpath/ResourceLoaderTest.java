@@ -47,4 +47,11 @@ public class ResourceLoaderTest {
 
         assertThat(result, nullValue());
     }
+
+    @Test
+    public void existsWeirdUrl() throws Exception {
+
+        boolean result = underTest.exists("£213");
+
+    }
 }

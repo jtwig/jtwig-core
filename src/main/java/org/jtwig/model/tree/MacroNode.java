@@ -32,10 +32,6 @@ public class MacroNode extends Node {
         return macroName;
     }
 
-    public Node getContent() {
-        return content;
-    }
-
     public Collection<String> getMacroArgumentNames() {
         return macroArgumentNames;
     }

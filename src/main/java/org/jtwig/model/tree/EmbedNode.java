@@ -2,7 +2,6 @@ package org.jtwig.model.tree;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
-
 import org.jtwig.context.RenderContext;
 import org.jtwig.context.model.ResourceRenderResult;
 import org.jtwig.model.expression.Expression;
@@ -47,25 +46,27 @@ public class EmbedNode extends Node {
         Optional<Resource> resource = context.configuration()
                 .resourceResolver()
                 .resolve(context.currentResource().resource(), path);
-        if (includeConfiguration.isIgnoreMissing() && !resource.isPresent()) {
-            return EmptyRenderable.instance();
-        } else {
 
-            ResourceRenderResult renderResult = context.resourceRenderer()
-                    .inheritModel(includeConfiguration.isInheritModel())
-                    .define(includeConfiguration.getMap().calculate(context).asMap())
-                    .render(resource.or(throwException(path)));
-
-            // Get and merge blocks
-            context.currentResource()
-                    .merge(renderResult.context());
-
-            for (Node node : nodes) {
-                context.nodeRenderer().render(node);
+        if (includeConfiguration.isIgnoreMissing()) {
+            if (!resource.isPresent()) {
+                return EmptyRenderable.instance();
             }
-
-            return renderResult.renderable();
         }
+
+        ResourceRenderResult renderResult = context.resourceRenderer()
+                .inheritModel(includeConfiguration.isInheritModel())
+                .define(includeConfiguration.getMap().calculate(context).asMap())
+                .render(resource.or(throwException(path)));
+
+        // Get and merge blocks
+        context.currentResource()
+                .merge(renderResult.context());
+
+        for (Node node : nodes) {
+            context.nodeRenderer().render(node);
+        }
+
+        return renderResult.renderable();
     }
 
     private Supplier<Resource> throwException (final String path) {

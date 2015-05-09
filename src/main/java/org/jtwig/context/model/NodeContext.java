@@ -14,14 +14,6 @@ public class NodeContext {
         this.valueContext = valueContext;
     }
 
-    public Node getNode() {
-        return node;
-    }
-
-    public ValueContext getValueContext() {
-        return valueContext;
-    }
-
     public Optional<EscapeMode> mode() {
         return escapeMode;
     }

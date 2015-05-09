@@ -1,7 +1,9 @@
 package org.jtwig.property;
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import org.jtwig.reflection.model.Value;
+import org.jtwig.reflection.model.java.JavaField;
 import org.jtwig.util.ErrorMessageFormatter;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
@@ -19,26 +21,25 @@ public class FieldPropertyResolver implements PropertyResolver {
     }
 
     @Override
-    public Optional<Value> resolve(PropertyResolveRequest request) {
+    public Optional<Value> resolve(final PropertyResolveRequest request) {
         if (request.getArguments().isEmpty()) {
-            try {
-                Field declaredField = request.getEntity().getClass().getDeclaredField(request.getPropertyName());
-                return fieldValue(request, declaredField);
-            } catch (NoSuchFieldException e) {
-                return Optional.absent();
+            Optional<JavaField> field = request.getEntity()
+                    .type()
+                    .field(request.getPropertyName());
+
+            if (field.isPresent()) {
+                return value(request, field.get());
             }
+            return Optional.absent();
         }
         return Optional.absent();
     }
 
-    private Optional<Value> fieldValue(PropertyResolveRequest request, Field field) {
+    private Optional<Value> value(PropertyResolveRequest request, JavaField field) {
         try {
-            if (tryPrivateField) {
-                field.setAccessible(true);
-            }
-            return Optional.of(new Value(field.get(request.getEntity())));
+            return Optional.of(new Value(field.value(request.getEntity().getValue(), tryPrivateField)));
         } catch (IllegalAccessException e) {
-            logger.debug(ErrorMessageFormatter.errorMessage(request.getPosition(), String.format("Unable to get property '%s' value", field.getName())), e);
+            logger.debug(ErrorMessageFormatter.errorMessage(request.getPosition(), String.format("Unable to get property '%s' value", field.name())), e);
             return Optional.absent();
         }
     }

@@ -1,18 +1,18 @@
 package org.jtwig.property;
 
 import org.jtwig.functions.FunctionArgument;
-import org.jtwig.model.expression.function.Argument;
 import org.jtwig.model.position.Position;
+import org.jtwig.reflection.model.Value;
 
 import java.util.Collection;
 
 public class PropertyResolveRequest {
     private final Position position;
-    private final Object entity;
+    private final Value entity;
     private final String propertyName;
     private final Collection<FunctionArgument> arguments;
 
-    public PropertyResolveRequest(Position position, Object entity, String propertyName, Collection<FunctionArgument> arguments) {
+    public PropertyResolveRequest(Position position, Value entity, String propertyName, Collection<FunctionArgument> arguments) {
         this.position = position;
         this.entity = entity;
         this.propertyName = propertyName;
@@ -23,7 +23,7 @@ public class PropertyResolveRequest {
         return position;
     }
 
-    public Object getEntity() {
+    public Value getEntity() {
         return entity;
     }
 

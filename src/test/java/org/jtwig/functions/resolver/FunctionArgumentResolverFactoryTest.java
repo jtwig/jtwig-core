@@ -53,6 +53,23 @@ public class FunctionArgumentResolverFactoryTest {
     }
 
     @Test
+    public void createWhenInputNotSupportsNamesMissingParameterButArgumentsDo() throws Exception {
+        Parameter parameter = mock(Parameter.class);
+        JavaMethod javaMethod = mock(JavaMethod.class);
+        FunctionArgument functionArgument = mock(FunctionArgument.class);
+        List<FunctionArgument> functionArguments = asList(functionArgument);
+        JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
+        when(functionArgument.getName()).thenReturn(Optional.of("name"));
+        when(javaMethod.arguments()).thenReturn(asList(javaMethodArgument));
+        when(javaMethodArgument.annotation(Parameter.class)).thenReturn(Optional.<Parameter>absent());
+        when(parameter.value()).thenReturn("");
+
+        InputParameterResolver<FunctionArgument> result = underTest.create(javaMethod, functionArguments);
+
+        assertNotNull(result);
+    }
+
+    @Test
     public void createWhenInputSupportsNamesAndArguments() throws Exception {
         Parameter parameter = mock(Parameter.class);
         JavaMethod javaMethod = mock(JavaMethod.class);

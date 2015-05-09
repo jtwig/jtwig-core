@@ -17,10 +17,6 @@ public class SetNode extends Node {
         this.expression = expression;
     }
 
-    public Expression getExpression() {
-        return expression;
-    }
-
     @Override
     public Renderable render(RenderContext context) {
         Object value = expression.calculate(context).asObject();

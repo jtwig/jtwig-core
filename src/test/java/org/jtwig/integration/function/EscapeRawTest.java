@@ -28,4 +28,11 @@ public class EscapeRawTest extends AbstractIntegrationTest {
 
         assertThat(result, is("\\\""));
     }
+
+    @Test
+    public void latestApplyEscapeJavascriptVerbose() throws Exception {
+        String result = defaultStringTemplate("{{ '\"' | raw | escape('javascript') }}").render(JtwigModel.newModel());
+
+        assertThat(result, is("\\\""));
+    }
 }

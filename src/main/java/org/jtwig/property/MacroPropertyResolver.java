@@ -20,8 +20,8 @@ import java.util.Iterator;
 public class MacroPropertyResolver implements PropertyResolver {
     @Override
     public Optional<Value> resolve(PropertyResolveRequest request) {
-        if (request.getEntity() instanceof MacroContext) {
-            MacroContext macroContext = (MacroContext) request.getEntity();
+        if (request.getEntity().getValue() instanceof MacroContext) {
+            MacroContext macroContext = (MacroContext) request.getEntity().getValue();
             return macroContext
                     .resolve(request.getPropertyName())
                     .transform(renderMacro(request));

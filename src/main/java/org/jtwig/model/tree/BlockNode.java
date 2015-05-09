@@ -8,21 +8,15 @@ import org.jtwig.render.impl.FutureRenderable;
 
 public class BlockNode extends ContentNode {
     private final VariableExpression blockIdentifier;
-    private final Node content;
 
 
     public BlockNode(Position position, VariableExpression blockIdentifier, Node content) {
         super(position, content);
         this.blockIdentifier = blockIdentifier;
-        this.content = content;
     }
 
     public VariableExpression getBlockIdentifier() {
         return blockIdentifier;
-    }
-
-    public Node getContent() {
-        return content;
     }
 
     @Override

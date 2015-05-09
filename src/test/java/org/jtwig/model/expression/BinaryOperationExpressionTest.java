@@ -1,6 +1,7 @@
 package org.jtwig.model.expression;
 
 import org.jtwig.context.RenderContext;
+import org.jtwig.exceptions.CalculationException;
 import org.jtwig.model.expression.operation.BinaryOperator;
 import org.jtwig.model.expression.operation.calculators.binary.BinaryOperationCalculator;
 import org.jtwig.model.position.Position;
@@ -40,5 +41,10 @@ public class BinaryOperationExpressionTest {
         JtwigValue result = underTest.calculate(context);
 
         assertThat(result.asBoolean(), is(true));
+    }
+
+    @Test(expected = CalculationException.class)
+    public void injectWhenLeftNotInjectable() throws Exception {
+        underTest.inject(mock(Expression.class));
     }
 }
