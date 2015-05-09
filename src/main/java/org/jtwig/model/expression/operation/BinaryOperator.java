@@ -5,7 +5,8 @@ import org.jtwig.model.expression.operation.calculators.binary.*;
 public enum BinaryOperator {
     // Jtwig
     SELECTION(1, new SelectionOperationCalculator()),
-    COMPOSITION(200, new CompositionOperationCalculator()),
+    COMPOSITION(100, new CompositionOperationCalculator()),
+    IN(50, new InOperationCalculator()),
     CONCAT(2, new ConcatOperationCalculator()),
 
     // MATH

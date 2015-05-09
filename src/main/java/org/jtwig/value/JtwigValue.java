@@ -99,4 +99,13 @@ public class JtwigValue {
     public JtwigValue map(Function<JtwigValue, Object> map) {
         return new JtwigValue(map.apply(this), configuration);
     }
+
+    public boolean contains(JtwigValue value) {
+        for (Object item : asCollection()) {
+            if (value.isEqualTo(new JtwigValue(item, configuration))) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -37,6 +37,7 @@ public class BinaryOperatorParser extends BasicParser<BinaryOperator> {
 
             put(BinaryOperator.SELECTION, operator(BinaryOperator.SELECTION, Sequence(".", TestNot("."))));
             put(BinaryOperator.COMPOSITION, operator(BinaryOperator.COMPOSITION, "|"));
+            put(BinaryOperator.IN, operator(BinaryOperator.IN, "in"));
             put(BinaryOperator.CONCAT, operator(BinaryOperator.CONCAT, "~"));
         }};
     }
