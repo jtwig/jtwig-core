@@ -13,18 +13,20 @@ import org.jtwig.resource.Resource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EmbedNode extends Node {
-    private final Collection<Node> nodes;
+    private final Collection<OverrideBlockNode> nodes;
     private final IncludeConfiguration includeConfiguration;
 
-    public EmbedNode(Position position, Collection<Node> nodes, IncludeConfiguration includeConfiguration) {
+    public EmbedNode(Position position, Collection<OverrideBlockNode> nodes, IncludeConfiguration includeConfiguration) {
         super(position);
         this.nodes = nodes;
         this.includeConfiguration = includeConfiguration;
     }
 
-    public Collection<Node> getNodes() {
+    public Collection<OverrideBlockNode> getNodes() {
         return nodes;
     }
 
@@ -53,18 +55,17 @@ public class EmbedNode extends Node {
             }
         }
 
+        Map<String, Renderable> blocks = new HashMap<>();
+
+        for (OverrideBlockNode node : nodes) {
+            blocks.put(node.getIdentifier(), node.getContent().render(context));
+        }
+
         ResourceRenderResult renderResult = context.resourceRenderer()
                 .inheritModel(includeConfiguration.isInheritModel())
                 .define(includeConfiguration.getMap().calculate(context).asMap())
+                .blocks(blocks)
                 .render(resource.or(throwException(path)));
-
-        // Get and merge blocks
-        context.currentResource()
-                .merge(renderResult.context());
-
-        for (Node node : nodes) {
-            context.nodeRenderer().render(node);
-        }
 
         return renderResult.renderable();
     }

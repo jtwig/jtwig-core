@@ -59,6 +59,7 @@ public class ParserContext {
         createParser(FlushNodeParser.class, context);
         createParser(IncludeNodeParser.class, context);
         createParser(BlockNodeParser.class, context);
+        createParser(OverrideBlockNodeParser.class, context);
         createParser(IfNodeParser.class, context);
         createParser(ForLoopNodeParser.class, context);
         createParser(ImportNodeParser.class, context);

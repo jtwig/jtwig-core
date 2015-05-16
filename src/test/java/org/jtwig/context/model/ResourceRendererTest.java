@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,9 +26,10 @@ public class ResourceRendererTest {
     private final RenderContext renderContext = mock(RenderContext.class);
     private final Stack<ResourceContext> contextStack = new Stack<>();
     private final Stack<ValueContext> valueContextStack = new Stack<>();
+    private final Map<String, Renderable> blocks = new HashMap<>();
     private final JtwigModel firstModel = mock(JtwigModel.class);
     private final JtwigModel model = mock(JtwigModel.class);
-    private ResourceRenderer underTest = new ResourceRenderer(renderContext, contextStack, valueContextStack, model);
+    private ResourceRenderer underTest = new ResourceRenderer(renderContext, contextStack, valueContextStack, blocks, model);
 
     @Before
     public void setUp() throws Exception {

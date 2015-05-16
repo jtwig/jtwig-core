@@ -1,7 +1,6 @@
 package org.jtwig.context.model;
 
 import com.google.common.base.Optional;
-
 import org.jtwig.context.values.ValueContext;
 import org.jtwig.render.RenderResult;
 import org.jtwig.render.Renderable;
@@ -10,21 +9,18 @@ import org.jtwig.resource.Resource;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 
 public class ResourceContextTest {
     private final Resource resource = mock(Resource.class);
     private final HashMap<String, Macro> macros = new HashMap<>();
-    private final Map<String, OverrideRenderable> blocks = new HashMap<>();
+    private final Map<String, Renderable> blocks = new HashMap<>();
     private final RenderResult renderResult = mock(RenderResult.class);
     private ValueContext valueContext = mock(ValueContext.class);
     private ResourceContext underTest = new ResourceContext(resource, macros, blocks, valueContext);
@@ -45,34 +41,11 @@ public class ResourceContextTest {
     }
 
     @Test
-    public void registerRenderableWhenNoPreviouslyRegisteredWithSameKey() throws Exception {
-        Renderable renderable = mock(Renderable.class);
-
-        underTest.register("one", renderable);
-
-        assertThat(blocks.get("one"), instanceOf(OverrideRenderable.class));
-    }
-
-    @Test
-    public void registerRenderableWhenPreviouslyRegisteredWithSameKey() throws Exception {
-        Renderable renderable = mock(Renderable.class);
-        Renderable renderableSecond = mock(Renderable.class);
-
-        underTest.register("one", renderable);
-        underTest.register("one", renderableSecond);
-
-        blocks.get("one").appendTo(renderResult);
-
-        verify(renderableSecond).appendTo(renderResult);
-        verify(renderable, never()).appendTo(renderResult);
-    }
-
-    @Test
     public void merge() throws Exception {
-        final OverrideRenderable renderable = mock(OverrideRenderable.class);
+        final Renderable renderable = mock(Renderable.class);
         Resource resource = mock(Resource.class);
         HashMap<String, Macro> macros = new HashMap<>();
-        HashMap<String, OverrideRenderable> blocks = new HashMap<String, OverrideRenderable>() {{
+        HashMap<String, Renderable> blocks = new HashMap<String, Renderable>() {{
             put("one", renderable);
         }};
         ResourceContext input = new ResourceContext(resource, macros, blocks, valueContext);
@@ -84,7 +57,7 @@ public class ResourceContextTest {
 
     @Test
     public void currentBlockWhenNoBlock() throws Exception {
-        Optional<OverrideRenderable> result = underTest.currentBlock();
+        Optional<String> result = underTest.currentBlock();
 
         assertThat(result.isPresent(), is(false));
     }
@@ -92,26 +65,22 @@ public class ResourceContextTest {
     @Test
     public void currentBlockWhenNoOverrideBlock() throws Exception {
         Renderable renderable = mock(Renderable.class);
-        underTest.register("test", renderable);
+        underTest.startBlock("test");
 
-        Optional<OverrideRenderable> result = underTest.currentBlock();
+        Optional<String> result = underTest.currentBlock();
 
         assertThat(result.isPresent(), is(true));
-        result.get().appendTo(renderResult);
-        verify(renderable).appendTo(renderResult);
     }
 
     @Test
     public void currentBlockWhenOverrideBlock() throws Exception {
         blocks.put("test", new OverrideRenderable(mock(Renderable.class)));
         Renderable renderable = mock(Renderable.class);
-        underTest.register("test", renderable);
+        underTest.startBlock("test");
 
-        Optional<OverrideRenderable> result = underTest.currentBlock();
+        Optional<String> result = underTest.currentBlock();
 
         assertThat(result.isPresent(), is(true));
-        result.get().appendTo(renderResult);
-        verify(renderable).appendTo(renderResult);
     }
 
     @Test

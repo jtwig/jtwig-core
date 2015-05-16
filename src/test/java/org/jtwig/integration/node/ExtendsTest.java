@@ -1,10 +1,14 @@
 package org.jtwig.integration.node;
 
+import com.google.common.base.Optional;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
+import org.jtwig.resource.Resource;
+import org.jtwig.resource.StringResource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
+import org.jtwig.resource.resolver.ResourceResolver;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -12,10 +16,43 @@ import org.junit.rules.ExpectedException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.jtwig.configuration.ConfigurationBuilder.configuration;
 
 public class ExtendsTest extends AbstractIntegrationTest {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
+
+    @Test
+    public void extendsTest() throws Exception {
+        String result = defaultStringTemplate("{% extends 'a' %}{% block c %}a{% endblock %}", configuration()
+                .withResourceResolver(resolvePath("a", "{% block c %}d{% endblock %}"))
+                .build())
+                .render(JtwigModel.newModel());
+
+        assertThat(result, is("a"));
+    }
+
+    @Test
+    public void nestedExtendsTest() throws Exception {
+        String result = defaultStringTemplate("{% extends 'a' %}{% block c %}a{% endblock %}", configuration()
+                .withResourceResolver(resolvePath("a", "{% extends 'b' %}{% block c %}d{% endblock %}"))
+                .withResourceResolver(resolvePath("b", "{% block c %}e{% endblock %}"))
+                .build())
+                .render(JtwigModel.newModel());
+
+        assertThat(result, is("a"));
+    }
+
+    @Test
+    public void extendsWithSetTest() throws Exception {
+        String result = defaultStringTemplate("{% extends 'a' %}{% set var = 1 %}", configuration()
+                .withResourceResolver(resolvePath("a", "{% extends 'b' %}{% block c %}d{% endblock %}"))
+                .withResourceResolver(resolvePath("b", "{{ var }}"))
+                .build())
+                .render(JtwigModel.newModel());
+
+        assertThat(result, is("1"));
+    }
 
     @Test
     public void simpleExtends() throws Exception {
@@ -87,6 +124,18 @@ public class ExtendsTest extends AbstractIntegrationTest {
 
         defaultStringTemplate("{% extends 'asdasd' %}{% if (true) %}{% endif %}")
                 .render(JtwigModel.newModel());
+    }
+
+    private ResourceResolver resolvePath(final String path, final String content) {
+        return new ResourceResolver() {
+            @Override
+            public Optional<Resource> resolve(Resource resource, String relativePath) {
+                if (path.equals(relativePath)) {
+                    return Optional.<Resource>of(new StringResource(content));
+                }
+                return Optional.absent();
+            }
+        };
     }
 
 

@@ -3,6 +3,7 @@ package org.jtwig.model.tree;
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
+import org.jtwig.model.tree.visitor.NodeVisitor;
 import org.jtwig.render.Renderable;
 import org.jtwig.render.impl.EmptyRenderable;
 
@@ -43,4 +44,11 @@ public class IfNode extends Node {
         }
     }
 
+    @Override
+    public void visit(NodeVisitor visitor) {
+        super.visit(visitor);
+        for (IfConditionNode conditionNode : conditionNodes) {
+            conditionNode.visit(visitor);
+        }
+    }
 }

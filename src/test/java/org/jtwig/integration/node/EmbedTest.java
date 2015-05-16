@@ -1,10 +1,14 @@
 package org.jtwig.integration.node;
 
+import com.google.common.base.Optional;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
+import org.jtwig.resource.Resource;
+import org.jtwig.resource.StringResource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
+import org.jtwig.resource.resolver.ResourceResolver;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -12,6 +16,7 @@ import org.junit.rules.ExpectedException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.jtwig.configuration.ConfigurationBuilder.configuration;
 
 public class EmbedTest extends AbstractIntegrationTest {
     @Rule
@@ -19,7 +24,9 @@ public class EmbedTest extends AbstractIntegrationTest {
 
     @Test
     public void simpleEmbed() throws Exception {
-        JtwigTemplate template = defaultStringTemplate("{% embed 'classpath:/example/extends/extendable-template.twig' %}{% block one %}Ola{% endblock %}{% endembed %}");
+        JtwigTemplate template = defaultStringTemplate("{% embed 'a' %}{% block one %}Ola{% endblock %}{% endembed %}", configuration()
+                .withResourceResolver(resolvePath("a", "{% block one %}three{% endblock %}"))
+                .build());
         String result = template.render(JtwigModel.newModel());
         assertThat(result, is("Ola"));
     }
@@ -93,4 +100,15 @@ public class EmbedTest extends AbstractIntegrationTest {
                 .render(JtwigModel.newModel());
     }
 
+    private ResourceResolver resolvePath(final String path, final String content) {
+        return new ResourceResolver() {
+            @Override
+            public Optional<Resource> resolve(Resource resource, String relativePath) {
+                if (path.equals(relativePath)) {
+                    return Optional.<Resource>of(new StringResource(content));
+                }
+                return Optional.absent();
+            }
+        };
+    }
 }

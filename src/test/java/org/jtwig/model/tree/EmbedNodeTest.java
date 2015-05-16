@@ -25,9 +25,8 @@ import static org.mockito.Mockito.*;
 
 public class EmbedNodeTest extends AbstractNodeTest {
     private final Position position = mock(Position.class);
-    private final ArrayList<Node> nodes = new ArrayList<>();
+    private final ArrayList<OverrideBlockNode> nodes = new ArrayList<>();
     private final Expression includeExpression = mock(Expression.class);
-    private final Expression mapExpression = mock(Expression.class);
     private final IncludeConfiguration includeConfiguration = mock(IncludeConfiguration.class, RETURNS_DEEP_STUBS);
     private final ResourceRenderer resourceRenderer = renderContext().resourceRenderer();
     private final Resource resource = mock(Resource.class);

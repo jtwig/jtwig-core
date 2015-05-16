@@ -4,6 +4,7 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.context.values.ScopeType;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.position.Traceable;
+import org.jtwig.model.tree.visitor.NodeVisitor;
 import org.jtwig.render.Renderable;
 import org.jtwig.render.StringBuilderRenderResult;
 
@@ -25,4 +26,7 @@ public abstract class Node implements Traceable {
         return ScopeType.SHARE;
     }
 
+    public void visit(NodeVisitor visitor) {
+        visitor.visit(this);
+    }
 }

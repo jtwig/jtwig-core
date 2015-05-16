@@ -4,6 +4,7 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.MapExpression;
 import org.jtwig.model.tree.EmbedNode;
 import org.jtwig.model.tree.Node;
+import org.jtwig.model.tree.OverrideBlockNode;
 import org.jtwig.model.tree.include.IncludeConfiguration;
 import org.jtwig.parser.ParseException;
 import org.jtwig.parser.parboiled.ParserContext;
@@ -103,7 +104,7 @@ public class EmbedNodeParser extends NodeParser<EmbedNode> {
         );
     }
 
-    public static class DefinitionsParser extends BasicParser<Collection<Node>> {
+    public static class DefinitionsParser extends BasicParser<Collection<OverrideBlockNode>> {
         final Rule endEmbed;
 
         public DefinitionsParser(ParserContext context, Rule endEmbed) {
@@ -112,9 +113,9 @@ public class EmbedNodeParser extends NodeParser<EmbedNode> {
         }
 
         Rule Definitions() {
-            BlockNodeParser blockNodeParser = parserContext().parser(BlockNodeParser.class);
+            OverrideBlockNodeParser blockNodeParser = parserContext().parser(OverrideBlockNodeParser.class);
             return Sequence(
-                    push(new ArrayList<Node>()),
+                    push(new ArrayList<OverrideBlockNode>()),
 
                     ZeroOrMore(
                             FirstOf(

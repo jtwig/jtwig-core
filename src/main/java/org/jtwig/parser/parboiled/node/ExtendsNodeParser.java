@@ -56,7 +56,7 @@ public class ExtendsNodeParser extends NodeParser<ExtendsNode> {
         }
 
         Rule Definitions () {
-            BlockNodeParser blockNodeParser = parserContext().parser(BlockNodeParser.class);
+            OverrideBlockNodeParser blockNodeParser = parserContext().parser(OverrideBlockNodeParser.class);
             SetNodeParser setNodeParser = parserContext().parser(SetNodeParser.class);
             ImportNodeParser importNodeParser = parserContext().parser(ImportNodeParser.class);
             return Sequence(

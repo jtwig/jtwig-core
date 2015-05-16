@@ -1,10 +1,8 @@
 package org.jtwig.context.model;
 
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import org.jtwig.context.values.ValueContext;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.impl.OverrideRenderable;
 import org.jtwig.resource.Resource;
 
 import java.util.Map;
@@ -12,11 +10,12 @@ import java.util.Map;
 public class ResourceContext {
     private final Resource resource;
     private final Map<String, Macro> macros;
-    private final Map<String, OverrideRenderable> blocks;
+    private final Map<String, Renderable> blocks;
     private final ValueContext valueContext;
     private Optional<String> currentBlock = Optional.absent();
+    private Optional<Resource> parent = Optional.absent();
 
-    public ResourceContext(Resource resource, Map<String, Macro> macros, Map<String, OverrideRenderable> blocks, ValueContext valueContext) {
+    public ResourceContext(Resource resource, Map<String, Macro> macros, Map<String, Renderable> blocks, ValueContext valueContext) {
         this.resource = resource;
         this.macros = macros;
         this.blocks = blocks;
@@ -31,17 +30,15 @@ public class ResourceContext {
         return resource;
     }
 
-    public Renderable register(String name, Renderable renderable) {
+    public ResourceContext startBlock(String name) {
         this.currentBlock = Optional.of(name);
-        if (blocks.containsKey(name)) {
-            OverrideRenderable override = new OverrideRenderable(renderable);
-            blocks.get(name).overrideWith(override);
-            return override;
-        } else {
-            OverrideRenderable overrideRenderable = new OverrideRenderable(renderable);
-            blocks.put(name, overrideRenderable);
-            return overrideRenderable;
-        }
+        return this;
+    }
+
+    public ResourceContext endBlock(Renderable render) {
+        this.blocks.put(currentBlock.get(), render);
+        this.currentBlock = Optional.absent();
+        return this;
     }
 
     public ResourceContext merge(ResourceContext context) {
@@ -53,20 +50,24 @@ public class ResourceContext {
         return new MacroContext(macros);
     }
 
-    public Optional<OverrideRenderable> currentBlock() {
-        return currentBlock.transform(new Function<String, OverrideRenderable>() {
-            @Override
-            public OverrideRenderable apply(String input) {
-                return blocks.get(input);
-            }
-        });
+    public Optional<String> currentBlock() {
+        return currentBlock;
     }
 
     public Optional<Renderable> block(String blockName) {
-        return Optional.<Renderable>fromNullable(blocks.get(blockName));
+        return Optional.fromNullable(blocks.get(blockName));
     }
 
-    public void endBlock() {
-        this.currentBlock = Optional.absent();
+    public Map<String, Renderable> blocks() {
+        return blocks;
+    }
+
+    public ResourceContext parent(Resource resource) {
+        this.parent = Optional.fromNullable(resource);
+        return this;
+    }
+
+    public Optional<Resource> parent() {
+        return parent;
     }
 }

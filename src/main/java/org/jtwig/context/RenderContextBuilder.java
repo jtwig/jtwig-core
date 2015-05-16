@@ -7,9 +7,8 @@ import org.jtwig.context.model.*;
 import org.jtwig.context.values.SimpleValueContext;
 import org.jtwig.context.values.ValueContext;
 import org.jtwig.reflection.model.Value;
-import org.jtwig.render.impl.OverrideRenderable;
+import org.jtwig.render.Renderable;
 import org.jtwig.resource.Resource;
-import org.jtwig.value.JtwigValue;
 
 import java.util.HashMap;
 import java.util.Stack;
@@ -55,7 +54,7 @@ public class RenderContextBuilder implements Builder<RenderContext> {
         Stack<ResourceContext> resourceContextStack = new Stack<>();
         Stack<NodeContext> nodeContextStack = new Stack<>();
         valueContextStack.push(valueContext);
-        resourceContextStack.push(new ResourceContext(resource, new HashMap<String, Macro>(), new HashMap<String, OverrideRenderable>(), valueContext));
+        resourceContextStack.push(new ResourceContext(resource, new HashMap<String, Macro>(), new HashMap<String, Renderable>(), valueContext));
         Stack<EscapeMode> escapeContextStack = new Stack<>();
         escapeContextStack.push(initialScapeMode);
         EscapeModeContext escapeModeContext = new EscapeModeContext(escapeContextStack);

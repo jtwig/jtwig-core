@@ -6,8 +6,10 @@ import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.expression.function.Argument;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.base.BasicParser;
+import org.jtwig.parser.parboiled.base.LexicParser;
 import org.jtwig.parser.parboiled.base.PositionTrackerParser;
 import org.jtwig.parser.parboiled.base.SpacingParser;
+import org.jtwig.parser.parboiled.model.Keyword;
 import org.parboiled.Rule;
 
 import java.util.ArrayList;
@@ -19,24 +21,44 @@ public class FunctionExpressionParser extends ExpressionParser<FunctionExpressio
     public FunctionExpressionParser(ParserContext context) {
         super(FunctionExpressionParser.class, context);
         createParser(ArgumentsParser.class, context);
+        createParser(FunctionNameParser.class, context);
     }
 
     @Override
     public Rule ExpressionRule() {
         PositionTrackerParser positionTrackerParser = parserContext().parser(PositionTrackerParser.class);
         SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
-        VariableExpressionParser variableExpressionParser = parserContext().parser(VariableExpressionParser.class);
+        FunctionNameParser functionNameParser = parserContext().parser(FunctionNameParser.class);
         ArgumentsParser argumentsParser = parserContext().parser(ArgumentsParser.class);
         return Sequence(
                 positionTrackerParser.PushPosition(),
-                variableExpressionParser.ExpressionRule(), spacingParser.Spacing(),
+                functionNameParser.Name(), spacingParser.Spacing(),
                 argumentsParser.Arguments(), spacingParser.Spacing(),
                 push(new FunctionExpression(
                         positionTrackerParser.pop(2),
-                        variableExpressionParser.pop(1).getIdentifier(),
+                        functionNameParser.pop(1),
                         argumentsParser.pop()
                 ))
         );
+    }
+
+    public static class FunctionNameParser extends BasicParser<String> {
+        public FunctionNameParser(ParserContext context) {
+            super(FunctionNameParser.class, context);
+        }
+
+        public Rule Name () {
+            return FirstOf(
+                    Sequence(
+                            parserContext().parser(LexicParser.class).Keyword(Keyword.BLOCK),
+                            push("block")
+                    ),
+                    Sequence(
+                            parserContext().parser(LexicParser.class).Identifier(),
+                            push(match())
+                    )
+            );
+        }
     }
 
     public static class ArgumentsParser extends BasicParser<Collection<Argument>> {

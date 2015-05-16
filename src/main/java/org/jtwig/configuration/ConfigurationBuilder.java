@@ -185,6 +185,7 @@ public class ConfigurationBuilder implements Builder<Configuration> {
         functionResolverBuilder.include(new MathFunctions());
         functionResolverBuilder.include(new NumberFunctions());
         functionResolverBuilder.include(new ParentFunction());
+        functionResolverBuilder.include(new BlockFunction());
 
         // converters
         functionResolverBuilder.withConverter(new ObjectToIntegerConverter());
