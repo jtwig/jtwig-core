@@ -46,7 +46,7 @@ public class ForLoopNode extends ContentNode {
         Collection<Renderable> renderables = new ArrayList<>();
         if (keyVariableExpression.isPresent()) {
             Map<Object, Object> objects = expression.calculate(context).asMap();
-            Cursor cursor = new Cursor(new ArrayList<>(objects.entrySet()));
+            Cursor cursor = new Cursor(context.valueContext(), new ArrayList<>(objects.entrySet()));
             for (Map.Entry<Object, Object> entry : objects.entrySet()) {
                 context.valueContext().add(keyVariableExpression.get().getIdentifier(), entry.getKey());
                 context.valueContext().add(variableExpression.getIdentifier(), entry.getValue());
@@ -56,7 +56,7 @@ public class ForLoopNode extends ContentNode {
             }
         } else {
             Collection<Object> objects = expression.calculate(context).asCollection();
-            Cursor cursor = new Cursor(objects);
+            Cursor cursor = new Cursor(context.valueContext(), objects);
             for (Object value : objects) {
                 context.valueContext().add(variableExpression.getIdentifier(), value);
                 context.valueContext().add("loop", cursor);

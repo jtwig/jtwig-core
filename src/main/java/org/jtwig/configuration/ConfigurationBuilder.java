@@ -152,13 +152,13 @@ public class ConfigurationBuilder implements Builder<Configuration> {
         Collection<PropertyResolver> propertyResolvers = new ArrayList<>();
         Collection<ResourceResolver> resourceResolvers = new ArrayList<>();
 
-        propertyResolvers.add(new FieldPropertyResolver(true));
         propertyResolvers.add(new MethodPropertyResolver(new CompositeMethodPropertyExtractor(Arrays.<MethodPropertyExtractor>asList(
                 new MethodNameMethodPropertyExtractor(MethodNameMethodPropertyExtractor.exactlyEqual()),
                 new MethodNameMethodPropertyExtractor(MethodNameMethodPropertyExtractor.prefixedEqual("get")),
                 new MethodNameMethodPropertyExtractor(MethodNameMethodPropertyExtractor.prefixedEqual("is")),
                 new MethodNameMethodPropertyExtractor(MethodNameMethodPropertyExtractor.prefixedEqual("has"))
         ))));
+        propertyResolvers.add(new FieldPropertyResolver(true));
         propertyResolvers.add(new MacroPropertyResolver());
 
         // Resource loaders
