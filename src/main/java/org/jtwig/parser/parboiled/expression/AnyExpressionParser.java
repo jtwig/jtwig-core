@@ -14,11 +14,8 @@ public class AnyExpressionParser extends ExpressionParser<Expression> {
     @Label("Any Expression")
     public Rule ExpressionRule() {
         return FirstOf(
-                parserContext().parser(MapSelectionExpressionParser.class).ExpressionRule(),
                 parserContext().parser(TestOperationExpressionParser.class).ExpressionRule(),
-                parserContext().parser(TernaryOperationExpressionParser.class).ExpressionRule(),
-                parserContext().parser(BinaryOperationExpressionParser.class).ExpressionRule(),
-                parserContext().parser(PrimaryExpressionParser.class).ExpressionRule()
+                parserContext().parser(SimpleExpressionParser.class).ExpressionRule()
         );
     }
 }

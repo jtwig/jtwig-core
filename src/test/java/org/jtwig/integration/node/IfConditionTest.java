@@ -97,22 +97,6 @@ public class IfConditionTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void ifConditionWithoutStartingParentheses() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if true %}ko{% endif %}");
-        expectedException.expect(ParseException.class);
-        expectedException.expectMessage(containsString("If condition expression must start with parentheses"));
-        jtwigTemplate.render(newModel());
-    }
-
-    @Test
-    public void ifConditionWithoutEndingParentheses() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (true %}ko{% endif %}");
-        expectedException.expect(ParseException.class);
-        expectedException.expectMessage(containsString("If condition expression must end with parentheses"));
-        jtwigTemplate.render(newModel());
-    }
-
-    @Test
     public void ifConditionWithoutEndCode() throws Exception {
         JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (true) ko{% endif %}");
         expectedException.expect(ParseException.class);
@@ -138,18 +122,10 @@ public class IfConditionTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void elseIfConditionWithoutStartingParentheses() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (true) %}{% elseif true %}ko{% endif %}");
-        expectedException.expect(ParseException.class);
-        expectedException.expectMessage(containsString("If condition expression must start with parentheses"));
-        jtwigTemplate.render(newModel());
-    }
-
-    @Test
     public void elseIfConditionWithoutEndingParentheses() throws Exception {
         JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (true) %}{% elseif (true %}ko{% endif %}");
         expectedException.expect(ParseException.class);
-        expectedException.expectMessage(containsString("If condition expression must end with parentheses"));
+        expectedException.expectMessage(containsString("Expecting an expression together with the if construction"));
         jtwigTemplate.render(newModel());
     }
 

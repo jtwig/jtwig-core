@@ -19,7 +19,7 @@ public class TestOperationExpressionParser extends ExpressionParser<TestOperatio
     @Label("Test Operation")
     public Rule ExpressionRule() {
         SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
-        PrimaryExpressionParser anyExpressionParser = parserContext().parser(PrimaryExpressionParser.class);
+        SimpleExpressionParser anyExpressionParser = parserContext().parser(SimpleExpressionParser.class);
         AnyTestExpressionParser testExpressionParser = parserContext().parser(AnyTestExpressionParser.class);
         PositionTrackerParser positionTrackerParser = parserContext().parser(PositionTrackerParser.class);
         return Sequence(

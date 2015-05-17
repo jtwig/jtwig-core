@@ -19,7 +19,7 @@ public class NonExistingFunctionTest extends AbstractIntegrationTest {
         JtwigTemplate template = defaultStringTemplate("{{ callMeBaby(one = 'test', two = 1) }}");
 
         expectedException.expect(CalculationException.class);
-        expectedException.expectMessage(containsString("Unable to resolve function 'callMeBaby' with arguments [<test> (one), <1> (two)]"));
+        expectedException.expectMessage(containsString("Unable to resolve function 'callMeBaby' with arguments [<test> (type: java.lang.String, name: one), <1> (type: java.math.BigDecimal, name: two)]"));
 
         template.render(JtwigModel.newModel());
     }
@@ -29,7 +29,7 @@ public class NonExistingFunctionTest extends AbstractIntegrationTest {
         JtwigTemplate template = defaultStringTemplate("{{ callMeBaby('test', 1) }}");
 
         expectedException.expect(CalculationException.class);
-        expectedException.expectMessage(containsString("Unable to resolve function 'callMeBaby' with arguments [<test>, <1>]"));
+        expectedException.expectMessage(containsString("Unable to resolve function 'callMeBaby' with arguments [<test> (type: java.lang.String, name: undefined), <1> (type: java.math.BigDecimal, name: undefined)]"));
 
         template.render(JtwigModel.newModel());
     }

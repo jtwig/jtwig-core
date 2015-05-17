@@ -1,6 +1,7 @@
 package org.jtwig.functions;
 
 import com.google.common.base.Optional;
+import org.jtwig.value.Undefined;
 
 public class FunctionArgument {
     private final Optional<String> name;
@@ -21,8 +22,28 @@ public class FunctionArgument {
 
     @Override
     public String toString() {
-        if (name.isPresent()) {
-            return String.format("<%s> (%s)", value, name.get());
+        return String.format("%s (type: %s, name: %s)", printValue(value), printType(value), printName(name));
+    }
+
+    private String printName(Optional<String> name) {
+        return name.or("undefined");
+    }
+
+    private String printType(Object value) {
+        if (value == null) {
+            return "undefined";
+        } else if (value == Undefined.UNDEFINED) {
+            return "undefined";
+        } else {
+            return String.format("%s", value.getClass().getName());
+        }
+    }
+
+    private String printValue(Object value) {
+        if (value == null) {
+            return "null";
+        } else if (value == Undefined.UNDEFINED) {
+            return "undefined";
         } else {
             return String.format("<%s>", value);
         }

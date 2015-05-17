@@ -10,6 +10,8 @@ import org.jtwig.value.JtwigValueFactory;
 import org.jtwig.value.configuration.NamedValueConfiguration;
 import org.junit.Test;
 
+import java.nio.charset.Charset;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -25,6 +27,7 @@ public class OutputNodeTest extends AbstractNodeTest {
         NodeContext nodeContext = mock(NodeContext.class);
         when(renderContext().currentNode()).thenReturn(nodeContext);
         when(nodeContext.mode()).thenReturn(Optional.<EscapeMode>absent());
+        when(renderContext().configuration().outputCharset()).thenReturn(Charset.defaultCharset());
         when(expression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", NamedValueConfiguration.COMPATIBLE_MODE));
 
         Renderable result = underTest.render(renderContext());

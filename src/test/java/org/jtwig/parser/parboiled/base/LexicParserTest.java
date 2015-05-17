@@ -53,21 +53,6 @@ public class LexicParserTest {
         assertThat(result.matched, is(false));
     }
 
-    @Test
-    public void validString() throws Exception {
-        ParsingResult<String> result = parse(underTest.String(), "'one'");
-
-        assertThat(result.matched, is(true));
-        assertThat(result.valueStack.pop(), is("one"));
-    }
-
-    @Test
-    public void invalidString() throws Exception {
-        ParsingResult<String> result = parse(underTest.String(), "'o\\'");
-
-        assertThat(result.matched, is(false));
-    }
-
     private ParsingResult<String> parse(Rule rule, String input) {
         return new ReportingParseRunner<String>(rule).run(input);
     }
