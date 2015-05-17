@@ -9,11 +9,13 @@ import org.jtwig.render.RenderResult;
 import org.jtwig.render.StreamRenderResult;
 import org.jtwig.render.StringBuilderRenderResult;
 import org.jtwig.resource.ClasspathResource;
+import org.jtwig.resource.FileResource;
 import org.jtwig.resource.Resource;
 import org.jtwig.resource.StringResource;
 import org.jtwig.resource.resolver.ClasspathResourceResolver;
 import org.jtwig.util.OptionalUtils;
 
+import java.io.File;
 import java.io.OutputStream;
 
 import static org.jtwig.configuration.ConfigurationBuilder.configuration;
@@ -37,6 +39,23 @@ public class JtwigTemplate {
         }
         Optional<Resource> resource = configuration.resourceResolver().resolve(null, location);
         return new JtwigTemplate(resource.or(OptionalUtils.<Resource>throwException(String.format("Classpath resource '%s' not found", location))), configuration);
+    }
+
+    public static JtwigTemplate fileTemplate (File file, Configuration configuration) {
+        return new JtwigTemplate(new FileResource(file), configuration);
+    }
+
+
+    public static JtwigTemplate fileTemplate (File file) {
+        return new JtwigTemplate(new FileResource(file), configuration().build());
+    }
+
+    public static JtwigTemplate fileTemplate (String path, Configuration configuration) {
+        return new JtwigTemplate(new FileResource(new File(path)), configuration);
+    }
+
+    public static JtwigTemplate fileTemplate (String path) {
+        return new JtwigTemplate(new FileResource(new File(path)), configuration().build());
     }
 
     private final Resource template;

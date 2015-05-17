@@ -27,6 +27,7 @@ import org.jtwig.reflection.resolver.argument.ArgumentResolver;
 import org.jtwig.resource.classpath.ResourceLoader;
 import org.jtwig.resource.resolver.ClasspathResourceResolver;
 import org.jtwig.resource.resolver.CompositeResourceResolver;
+import org.jtwig.resource.resolver.FileResourceResolver;
 import org.jtwig.resource.resolver.ResourceResolver;
 import org.jtwig.resource.util.RelativePathResolver;
 import org.jtwig.util.ClasspathFinder;
@@ -175,6 +176,7 @@ public class ConfigurationBuilder implements Builder<Configuration> {
         propertyResolvers.add(new FieldPropertyResolver(true));
 
         // Resource loaders
+        resourceResolvers.add(new FileResourceResolver());
         resourceResolvers.add(new ClasspathResourceResolver(new ResourceLoader(getClass().getClassLoader()), new RelativePathResolver()));
 
         // enumeration
