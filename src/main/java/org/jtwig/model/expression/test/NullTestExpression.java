@@ -7,11 +7,15 @@ import org.jtwig.value.JtwigValue;
 
 public class NullTestExpression extends TestExpression {
     @Override
-    public JtwigValue test(RenderContext context, Expression argument) {
+    public JtwigValue test(final RenderContext context, Expression argument) {
         return argument.calculate(context).map(new Function<JtwigValue, Object>() {
             @Override
             public Object apply(JtwigValue input) {
-                return input.isNull();
+                if (context.configuration().strictMode()) {
+                    return input.isNull();
+                } else {
+                    return input.isNull() || input.isDefined();
+                }
             }
         });
     }

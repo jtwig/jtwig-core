@@ -5,6 +5,7 @@ import org.jtwig.value.extract.collection.CollectionExtractor;
 import org.jtwig.value.extract.map.MapExtractor;
 import org.jtwig.value.extract.map.selection.MapSelectionExtractor;
 import org.jtwig.value.extract.number.NumberExtractor;
+import org.jtwig.value.extract.string.StringExtractor;
 import org.jtwig.value.extract.type.TypeExtractor;
 import org.jtwig.value.relational.RelationalComparator;
 
@@ -19,8 +20,9 @@ public class ParameterizedValueConfiguration implements ValueConfiguration {
     private final RelationalComparator lowerComparator;
     private final RelationalComparator greaterComparator;
     private final MapSelectionExtractor mapSelectionExtractor;
+    private final StringExtractor stringExtractor;
 
-    public ParameterizedValueConfiguration(TypeExtractor typeExtractor, NumberExtractor numberExtractor, BooleanExtractor booleanExtractor, CollectionExtractor collectionExtractor, MapExtractor mapExtractor, RelationalComparator equalComparator, RelationalComparator identicalComparator, RelationalComparator lowerComparator, RelationalComparator greaterComparator, MapSelectionExtractor mapSelectionExtractor) {
+    public ParameterizedValueConfiguration(TypeExtractor typeExtractor, NumberExtractor numberExtractor, BooleanExtractor booleanExtractor, CollectionExtractor collectionExtractor, MapExtractor mapExtractor, RelationalComparator equalComparator, RelationalComparator identicalComparator, RelationalComparator lowerComparator, RelationalComparator greaterComparator, MapSelectionExtractor mapSelectionExtractor, StringExtractor stringExtractor) {
         this.typeExtractor = typeExtractor;
         this.numberExtractor = numberExtractor;
         this.booleanExtractor = booleanExtractor;
@@ -31,6 +33,7 @@ public class ParameterizedValueConfiguration implements ValueConfiguration {
         this.lowerComparator = lowerComparator;
         this.greaterComparator = greaterComparator;
         this.mapSelectionExtractor = mapSelectionExtractor;
+        this.stringExtractor = stringExtractor;
     }
 
     @Override
@@ -76,6 +79,11 @@ public class ParameterizedValueConfiguration implements ValueConfiguration {
     @Override
     public MapSelectionExtractor mapSelectionExtractor() {
         return mapSelectionExtractor;
+    }
+
+    @Override
+    public StringExtractor stringExtractor() {
+        return stringExtractor;
     }
 
     @Override

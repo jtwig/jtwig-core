@@ -28,13 +28,17 @@ public class JtwigValue {
     public boolean isNull () {
         return value == null;
     }
-    public boolean isUndefined() {
+    public boolean isDefined() {
         return value == Undefined.UNDEFINED;
     }
 
+    public boolean isUndefined() {
+        return value == Undefined.UNDEFINED;
+    }
     public String asString() {
-        if (value == null) return "";
-        else return value.toString();
+        return configuration.stringExtractor()
+                .extract(value)
+                .or("");
     }
     public Object asObject() {
         return value;
@@ -58,10 +62,10 @@ public class JtwigValue {
     public Character asChar() {
         return asString().charAt(0);
     }
+
     public BigDecimal mandatoryNumber () {
         return asNumber().or(OptionalUtils.<BigDecimal, IllegalArgumentException>throwException(new IllegalArgumentException(String.format("Unable to convert '%s' into a number", value))));
     }
-
     public boolean isEqualTo(JtwigValue other) {
         return configuration.equalComparator()
                 .apply(this, other)
@@ -80,6 +84,7 @@ public class JtwigValue {
     public boolean isGreaterThan(JtwigValue value) {
         return !isLowerThan(value) && !isEqualTo(value);
     }
+
     public boolean isStringNumber() {
         if (getType() == JtwigType.STRING) {
             return value.toString().matches(ObjectNumberExtractor.NUMBER_PATTERN);
