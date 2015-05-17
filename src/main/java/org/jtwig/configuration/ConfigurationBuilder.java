@@ -34,17 +34,19 @@ import org.jtwig.value.configuration.NamedValueConfiguration;
 import org.jtwig.value.configuration.ValueConfiguration;
 
 import java.math.MathContext;
+import java.nio.charset.Charset;
 import java.util.*;
 
-import static java.util.Arrays.asList;
-
 public class ConfigurationBuilder implements Builder<Configuration> {
+
 
 
     public static ConfigurationBuilder configuration() {
         return new ConfigurationBuilder();
     }
 
+    private Charset inputCharset = Charset.defaultCharset();
+    private Charset outputCharset = Charset.defaultCharset();
     private boolean strictMode = false;
     private SpaceRemover spaceRemover = new HtmlSpaceRemover();
     private MathContext mathContext = MathContext.DECIMAL128;
@@ -147,6 +149,16 @@ public class ConfigurationBuilder implements Builder<Configuration> {
         return this;
     }
 
+    public ConfigurationBuilder withInputCharset(Charset charset) {
+        this.inputCharset = charset;
+        return this;
+    }
+
+    public ConfigurationBuilder withOutputCharset(Charset charset) {
+        this.outputCharset = charset;
+        return this;
+    }
+
     @Override
     public Configuration build() {
         Collection<PropertyResolver> propertyResolvers = new ArrayList<>();
@@ -199,6 +211,7 @@ public class ConfigurationBuilder implements Builder<Configuration> {
                 JtwigParserBuilder.jtwigParser()
                         .withConfiguration(parserConfigurationBuilder.build())
                         .withAddOnParsers(addOnParsers)
+                        .withCharset(inputCharset)
                         .build(),
                 new CompositeResourceResolver(resourceResolvers),
                 functionResolverBuilder.build(),
@@ -212,7 +225,7 @@ public class ConfigurationBuilder implements Builder<Configuration> {
                 spaceRemover,
                 mathContext,
                 escapeMode,
-                valueConfiguration);
+                valueConfiguration,
+                outputCharset);
     }
-
 }

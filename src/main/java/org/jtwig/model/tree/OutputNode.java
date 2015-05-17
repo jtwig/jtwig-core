@@ -5,7 +5,7 @@ import org.jtwig.context.model.EscapeMode;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
-import org.jtwig.render.impl.JtwigValueRenderable;
+import org.jtwig.render.impl.StringRenderable;
 import org.jtwig.value.JtwigValue;
 
 public class OutputNode extends Node {
@@ -24,6 +24,6 @@ public class OutputNode extends Node {
     public Renderable render(RenderContext context) {
         JtwigValue jtwigValue = expression.calculate(context);
         EscapeMode mode = context.currentNode().mode().or(context.escapeContext().currentEscapeMode());
-        return new JtwigValueRenderable(jtwigValue, mode);
+        return new StringRenderable(jtwigValue.asString(context.configuration().outputCharset()), mode);
     }
 }

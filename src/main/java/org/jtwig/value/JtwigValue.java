@@ -8,6 +8,7 @@ import org.jtwig.value.configuration.ValueConfiguration;
 import org.jtwig.value.extract.number.ObjectNumberExtractor;
 
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,6 +40,11 @@ public class JtwigValue {
         return configuration.stringExtractor()
                 .extract(value)
                 .or("");
+    }
+    public String asString(Charset charset) {
+        return new String(configuration.stringExtractor()
+                .extract(value)
+                .or("").getBytes(), charset);
     }
     public Object asObject() {
         return value;

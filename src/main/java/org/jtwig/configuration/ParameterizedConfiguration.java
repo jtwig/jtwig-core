@@ -12,6 +12,7 @@ import org.jtwig.resource.resolver.ResourceResolver;
 import org.jtwig.value.configuration.ValueConfiguration;
 
 import java.math.MathContext;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 public class ParameterizedConfiguration implements Configuration {
@@ -27,8 +28,9 @@ public class ParameterizedConfiguration implements Configuration {
     private final MathContext mathContext;
     private final EscapeMode initialEscapeMode;
     private final ValueConfiguration valueConfiguration;
+    private final Charset charset;
 
-    public ParameterizedConfiguration(JtwigParser jtwigParser, ResourceResolver resourceResolver, FunctionResolver functionResolver, PropertyResolver propertyResolver, JsonMapperFactory jsonMapperFactory, EnumerationListStrategy enumerationListStrategy, Map<String, Object> parameters, boolean strictMode, SpaceRemover spaceRemover, MathContext mathContext, EscapeMode escapeMode, ValueConfiguration valueConfiguration) {
+    public ParameterizedConfiguration(JtwigParser jtwigParser, ResourceResolver resourceResolver, FunctionResolver functionResolver, PropertyResolver propertyResolver, JsonMapperFactory jsonMapperFactory, EnumerationListStrategy enumerationListStrategy, Map<String, Object> parameters, boolean strictMode, SpaceRemover spaceRemover, MathContext mathContext, EscapeMode escapeMode, ValueConfiguration valueConfiguration, Charset charset) {
         this.jtwigParser = jtwigParser;
         this.resourceResolver = resourceResolver;
         this.functionResolver = functionResolver;
@@ -41,6 +43,7 @@ public class ParameterizedConfiguration implements Configuration {
         this.mathContext = mathContext;
         this.initialEscapeMode = escapeMode;
         this.valueConfiguration = valueConfiguration;
+        this.charset = charset;
     }
 
     @Override
@@ -76,6 +79,11 @@ public class ParameterizedConfiguration implements Configuration {
     @Override
     public boolean strictMode() {
         return strictMode;
+    }
+
+    @Override
+    public Charset outputCharset() {
+        return charset;
     }
 
     @Override

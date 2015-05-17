@@ -17,27 +17,6 @@ public class LexicParserTest {
     private LexicParser underTest = createParser(LexicParser.class, context);
 
     @Test
-    public void validInteger() throws Exception {
-        ParsingResult<String> result = parse(underTest.Number(), "12345");
-
-        assertThat(result.matched, is(true));
-    }
-
-    @Test
-    public void validFloat() throws Exception {
-        ParsingResult<String> result = parse(underTest.Number(), "0.123");
-
-        assertThat(result.matched, is(true));
-    }
-
-    @Test
-    public void invalidNumber() throws Exception {
-        ParsingResult<String> result = parse(underTest.Number(), "1a23");
-
-        assertThat(result.matched, is(true));
-    }
-
-    @Test
     public void validIdentifier() throws Exception {
         ParsingResult<String> result = parse(underTest.Identifier(), "a123");
 

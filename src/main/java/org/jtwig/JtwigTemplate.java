@@ -8,12 +8,20 @@ import org.jtwig.render.RenderResult;
 import org.jtwig.render.StreamRenderResult;
 import org.jtwig.render.StringBuilderRenderResult;
 import org.jtwig.resource.Resource;
+import org.jtwig.resource.StringResource;
 
 import java.io.OutputStream;
 
+import static org.jtwig.configuration.ConfigurationBuilder.configuration;
 import static org.jtwig.context.RenderContextBuilder.renderContext;
 
 public class JtwigTemplate {
+    public static JtwigTemplate inlineTemplate (String template) {
+        return new JtwigTemplate(new StringResource(template), configuration().build());
+    }
+    public static JtwigTemplate inlineTemplate (String template, Configuration configuration) {
+        return new JtwigTemplate(new StringResource(template), configuration);
+    }
 
     private final Resource template;
     private final Configuration configuration;

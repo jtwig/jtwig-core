@@ -11,6 +11,7 @@ import org.jtwig.resource.resolver.ResourceResolver;
 import org.jtwig.value.configuration.ValueConfiguration;
 
 import java.math.MathContext;
+import java.nio.charset.Charset;
 
 public interface Configuration {
     JtwigParser parser();
@@ -21,9 +22,11 @@ public interface Configuration {
     EnumerationListStrategy enumerationStrategy();
     SpaceRemover spaceRemover();
     boolean strictMode ();
+    Charset outputCharset();
     MathContext mathContext ();
     EscapeMode initialEscapeMode ();
     ValueConfiguration valueConfiguration ();
 
     <T> T parameter(String name, T defaultValue);
+
 }

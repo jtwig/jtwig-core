@@ -17,6 +17,7 @@ import org.parboiled.errors.ParserRuntimeException;
 import org.parboiled.parserunners.BasicParseRunner;
 import org.parboiled.support.ParsingResult;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,9 +27,11 @@ import static org.parboiled.common.FileUtils.readAllText;
 public class JtwigParserBuilder implements Builder<JtwigParser> {
     public static JtwigParserBuilder jtwigParser() {
         return new JtwigParserBuilder();
+
     }
 
     private ParserConfiguration configuration;
+    private Charset charset = Charset.defaultCharset();
     private Collection<Class<? extends AddonParser>> addOnParsers = new ArrayList<Class<? extends AddonParser>>();
 
     private JtwigParserBuilder() {
@@ -48,20 +51,27 @@ public class JtwigParserBuilder implements Builder<JtwigParser> {
     @Override
     public JtwigParser build() {
         if (configuration == null) {
-            return new ParboiledJtwigParser(ParserConfigurationBuilder.parserConfiguration().build(), addOnParsers);
+            return new ParboiledJtwigParser(ParserConfigurationBuilder.parserConfiguration().build(), addOnParsers, charset);
         } else {
-            return new ParboiledJtwigParser(configuration, addOnParsers);
+            return new ParboiledJtwigParser(configuration, addOnParsers, charset);
         }
+    }
+
+    public JtwigParserBuilder withCharset(Charset charset) {
+        this.charset = charset;
+        return this;
     }
 
     public static class ParboiledJtwigParser implements JtwigParser {
         private final ParboiledExceptionMessageExtractor exceptionMessageExtractor = new ParboiledExceptionMessageExtractor();
         private final ParserConfiguration configuration;
         private final Collection<Class<? extends AddonParser>> addOnParsers;
+        private final Charset charset;
 
-        public ParboiledJtwigParser(ParserConfiguration configuration, Collection<Class<? extends AddonParser>> addOnParsers) {
+        public ParboiledJtwigParser(ParserConfiguration configuration, Collection<Class<? extends AddonParser>> addOnParsers, Charset charset) {
             this.configuration = configuration;
             this.addOnParsers = addOnParsers;
+            this.charset = charset;
         }
 
         @Override
@@ -73,7 +83,7 @@ public class JtwigParserBuilder implements Builder<JtwigParser> {
             );
 
             try {
-                ParsingResult<Node> result = runner.run(readAllText(resource.content()));
+                ParsingResult<Node> result = runner.run(readAllText(resource.content(), charset));
 
                 if (result.hasErrors()) {
                     throw new ParseException(toMessage(result.parseErrors));

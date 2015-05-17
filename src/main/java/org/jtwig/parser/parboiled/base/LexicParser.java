@@ -12,17 +12,6 @@ public class LexicParser extends BasicParser<String> {
         super(LexicParser.class, context);
     }
 
-    // [0-9]+(?:\.[0-9]+)?
-    public Rule Number() {
-        return Sequence(
-                OneOrMore(CharRange('0', '9')),
-                Optional(Sequence(
-                        Ch('.'),
-                        CharRange('0', '9')
-                ))
-        );
-    }
-
     public Rule Identifier() {
         Rule identifier = Sequence(
                 TestNot(Keyword()),
@@ -35,28 +24,6 @@ public class LexicParser extends BasicParser<String> {
                 identifier,
                 ZeroOrMore(LetterOrDigit())
         );
-    }
-
-    public Rule String() {
-        return FirstOf(
-                StringWith('\''),
-                StringWith('"')
-        );
-    }
-
-    Rule StringWith(char start) {
-        return Sequence(start,
-                ZeroOrMore(FirstOf(
-                        Escape(),
-                        Sequence(TestNot(AnyOf(new char[]{'\n', '\r', '\\', start})), ANY)
-                )),
-                push(match()),
-                start
-        );
-    }
-
-    Rule Escape() {
-        return Sequence('\\', ANY);
     }
 
     @Label("Keywork")
