@@ -50,11 +50,17 @@ public class StringExpressionParser extends ExpressionParser<ConstantExpression>
                     ZeroOrMore(
                             FirstOf(
                                     Escape(),
-                                    Sequence(TestNot(AnyOf(new char[]{'\n', '\r', '\\', start})), ANY
-                                    )
+                                    Others(start)
                             )
                     ),
                     String(start)
+            );
+        }
+
+        Rule Others(char start) {
+            return Sequence(
+                    Sequence(TestNot(AnyOf(new char[]{'\n', '\r', '\\', start})), ANY),
+                    run(peek().append(match()))
             );
         }
 

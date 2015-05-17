@@ -1,5 +1,6 @@
 package org.jtwig;
 
+import com.google.common.base.Optional;
 import org.jtwig.configuration.Configuration;
 import org.jtwig.context.RenderContext;
 import org.jtwig.context.RenderContextHolder;
@@ -7,8 +8,11 @@ import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderResult;
 import org.jtwig.render.StreamRenderResult;
 import org.jtwig.render.StringBuilderRenderResult;
+import org.jtwig.resource.ClasspathResource;
 import org.jtwig.resource.Resource;
 import org.jtwig.resource.StringResource;
+import org.jtwig.resource.resolver.ClasspathResourceResolver;
+import org.jtwig.util.OptionalUtils;
 
 import java.io.OutputStream;
 
@@ -17,10 +21,22 @@ import static org.jtwig.context.RenderContextBuilder.renderContext;
 
 public class JtwigTemplate {
     public static JtwigTemplate inlineTemplate (String template) {
-        return new JtwigTemplate(new StringResource(template), configuration().build());
+        return inlineTemplate(template, configuration().build());
     }
     public static JtwigTemplate inlineTemplate (String template, Configuration configuration) {
         return new JtwigTemplate(new StringResource(template), configuration);
+    }
+
+    public static JtwigTemplate classpathTemplate(String location) {
+        return classpathTemplate(location, configuration().build());
+    }
+
+    public static JtwigTemplate classpathTemplate(String location, Configuration configuration) {
+        if (!location.startsWith(ClasspathResourceResolver.PREFIX)) {
+            location = ClasspathResourceResolver.PREFIX + location;
+        }
+        Optional<Resource> resource = configuration.resourceResolver().resolve(null, location);
+        return new JtwigTemplate(resource.or(OptionalUtils.<Resource>throwException(String.format("Classpath resource '%s' not found", location))), configuration);
     }
 
     private final Resource template;
@@ -59,5 +75,4 @@ public class JtwigTemplate {
                 .render(compositeNode)
                 .appendTo(result);
     }
-
 }

@@ -24,7 +24,7 @@ public class FunctionArgument {
         if (name.isPresent()) {
             return String.format("<%s> (%s)", value, name.get());
         } else {
-            return String.format("<%s>", value.toString());
+            return String.format("<%s>", value);
         }
     }
 }
