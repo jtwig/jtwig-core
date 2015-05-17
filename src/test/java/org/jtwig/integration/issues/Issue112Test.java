@@ -3,6 +3,7 @@ package org.jtwig.integration.issues;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.exceptions.CalculationException;
+import org.jtwig.parser.ParseException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -253,5 +254,15 @@ public class Issue112Test {
                 .render(model);
 
         assertThat(result, is(equalTo("1")));
+    }
+
+    @Test
+    public void exceptionShouldDisplayFilename() throws Exception {
+        expectedException.expect(ParseException.class);
+        expectedException.expectMessage(containsString("(Classpath) /example/classpath-error.twig"));
+
+        JtwigTemplate.classpathTemplate("/example/classpath-error.twig")
+                .render(JtwigModel.newModel());
+
     }
 }

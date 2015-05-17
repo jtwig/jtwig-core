@@ -14,7 +14,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 public class ConstantExpressionParserTest extends AbstractParserTest {
-    private ParserContext context = ParserContext.instance();
     private ConstantExpressionParser underTest = context.parser(ConstantExpressionParser.class);
 
     @Test

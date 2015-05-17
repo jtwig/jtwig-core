@@ -77,7 +77,7 @@ public class JtwigParserBuilder implements Builder<JtwigParser> {
         @Override
         public Node parse(Resource resource) {
             BasicParseRunner<Node> runner = new BasicParseRunner<Node>(
-                    ParserContext.instance(configuration, addOnParsers)
+                    ParserContext.instance(resource, configuration, addOnParsers)
                             .parser(DocumentParser.class)
                             .NodeRule()
             );

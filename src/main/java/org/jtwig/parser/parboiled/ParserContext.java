@@ -8,6 +8,7 @@ import org.jtwig.parser.parboiled.expression.operator.BinaryOperatorParser;
 import org.jtwig.parser.parboiled.expression.operator.UnaryOperatorParser;
 import org.jtwig.parser.parboiled.expression.test.*;
 import org.jtwig.parser.parboiled.node.*;
+import org.jtwig.resource.Resource;
 import org.parboiled.BaseParser;
 
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ import java.util.Map;
 import static org.parboiled.Parboiled.createParser;
 
 public class ParserContext {
-    public static ParserContext instance (ParserConfiguration configuration, Collection<Class<? extends AddonParser>> addOnParsers) {
-        ParserContext context = new ParserContext(configuration, addOnParsers);
+    public static ParserContext instance (Resource resource, ParserConfiguration configuration, Collection<Class<? extends AddonParser>> addOnParsers) {
+        ParserContext context = new ParserContext(resource, configuration, addOnParsers);
 
         createParser(BooleanParser.class, context);
         createParser(PositionTrackerParser.class, context);
@@ -86,20 +87,23 @@ public class ParserContext {
         return context;
     }
 
-    public static ParserContext instance () {
-        return instance(ParserConfigurationBuilder.parserConfiguration().build(), new ArrayList<Class<? extends AddonParser>>());
+    public static ParserContext instance (Resource resource) {
+        return instance(resource, ParserConfigurationBuilder.parserConfiguration().build(), new ArrayList<Class<? extends AddonParser>>());
     }
 
+    private final Resource resource;
     private final ParserConfiguration parserConfiguration;
     private final Map<Class, BaseParser> parsers;
     private final Collection<Class<? extends AddonParser>> addOnParsers;
 
-    public ParserContext(ParserConfiguration parserConfiguration, Collection<Class<? extends AddonParser>> addOnParsers) {
+    public ParserContext(Resource resource, ParserConfiguration parserConfiguration, Collection<Class<? extends AddonParser>> addOnParsers) {
+        this.resource = resource;
         this.parserConfiguration = parserConfiguration;
         this.parsers = new HashMap<>();
         this.addOnParsers = addOnParsers;
     }
-    public ParserContext(ParserConfiguration parserConfiguration) {
+    public ParserContext(Resource resource, ParserConfiguration parserConfiguration) {
+        this.resource = resource;
         this.parserConfiguration = parserConfiguration;
         this.parsers = new HashMap<>();
         this.addOnParsers = new ArrayList<>();
@@ -124,5 +128,9 @@ public class ParserContext {
 
     public Collection<BaseParser> parsers() {
         return parsers.values();
+    }
+
+    public Resource resource() {
+        return resource;
     }
 }

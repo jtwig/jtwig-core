@@ -13,12 +13,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.parboiled.Parboiled.createParser;
 
 public class LimitsParserTest extends AbstractParserTest {
-    private final ParserContext parserContext = new ParserContext(parserConfiguration().build());
-    private LimitsParser underTest = createParser(LimitsParser.class, parserContext);
+    private LimitsParser underTest = context.parser(LimitsParser.class);
 
     @Test
     public void registered() throws Exception {
-        assertNotNull(parserContext.parser(LimitsParser.class));
+        assertNotNull(context.parser(LimitsParser.class));
     }
 
     @Test

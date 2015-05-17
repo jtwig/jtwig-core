@@ -1,6 +1,7 @@
 package org.jtwig.parser.parboiled.base;
 
 import org.jtwig.parser.config.ParserConfigurationBuilder;
+import org.jtwig.parser.parboiled.AbstractParserTest;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,8 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.parboiled.Parboiled.createParser;
 
-public class LexicParserTest {
-    private final ParserContext context = new ParserContext(ParserConfigurationBuilder.parserConfiguration().build());
+public class LexicParserTest extends AbstractParserTest {
     private LexicParser underTest = createParser(LexicParser.class, context);
 
     @Test
@@ -51,9 +51,5 @@ public class LexicParserTest {
         ParsingResult<String> result = parse(underTest.Identifier(), " _a");
 
         assertThat(result.matched, is(false));
-    }
-
-    private ParsingResult<String> parse(Rule rule, String input) {
-        return new ReportingParseRunner<String>(rule).run(input);
     }
 }

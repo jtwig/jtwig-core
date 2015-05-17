@@ -21,4 +21,9 @@ public class ClasspathResource implements Resource {
     public String getPath() {
         return path;
     }
+
+    @Override
+    public String toString() {
+        return String.format("(Classpath) %s", path);
+    }
 }
