@@ -85,9 +85,7 @@ public class IfNodeParser extends NodeParser<IfNode> {
 
         public Rule ifConditionExpression(LimitsParser limitsParser, SpacingParser spacingParser, AnyExpressionParser anyExpressionParser) {
             return Sequence(
-                spacingParser.Spacing(), Mandatory(String("("), "If condition expression must start with parentheses"),
                 spacingParser.Spacing(), Mandatory(anyExpressionParser.ExpressionRule(), "Expecting an expression together with the if construction"),
-                spacingParser.Spacing(), Mandatory(String(")"), "If condition expression must end with parentheses"),
                 spacingParser.Spacing(), Mandatory(limitsParser.endCode(), "If condition code island not closed")
             );
         }
