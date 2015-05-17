@@ -33,6 +33,7 @@ public class ParserContext {
         createParser(NullTestExpressionParser.class, context);
         createParser(FunctionTestExpressionParser.class, context);
         createParser(AnyTestExpressionParser.class, context);
+        createParser(MapSelectionExpressionParser.class, context);
 
         createParser(UnaryOperatorParser.class, context);
         createParser(BinaryOperatorParser.class, context);

@@ -5,6 +5,10 @@ import org.jtwig.value.JtwigValue;
 import org.jtwig.value.extract.bool.*;
 import org.jtwig.value.extract.collection.*;
 import org.jtwig.value.extract.map.*;
+import org.jtwig.value.extract.map.selection.ArrayMapSelectionExtractor;
+import org.jtwig.value.extract.map.selection.CompositeMapSelectionExtractor;
+import org.jtwig.value.extract.map.selection.MapSelectionExtractor;
+import org.jtwig.value.extract.map.selection.NativeMapSelectionExtractor;
 import org.jtwig.value.extract.number.*;
 import org.jtwig.value.extract.type.*;
 import org.jtwig.value.relational.CompositeRelationalComparator;
@@ -85,6 +89,11 @@ public enum NamedValueConfiguration implements ValueConfiguration {
         public MapExtractor mapExtractor() {
             return MAP_EXTRACTOR;
         }
+
+        @Override
+        public MapSelectionExtractor mapSelectionExtractor() {
+            return MAP_SELECTION_EXTRACTOR;
+        }
     },
     EFFICIENT_MODE {
         @Override
@@ -154,6 +163,11 @@ public enum NamedValueConfiguration implements ValueConfiguration {
         public MapExtractor mapExtractor() {
             return MAP_EXTRACTOR;
         }
+
+        @Override
+        public MapSelectionExtractor mapSelectionExtractor() {
+            return MAP_SELECTION_EXTRACTOR;
+        }
     }
     ;
     public static final CompositeNumberExtractor NUMBER_EXTRACTOR = new CompositeNumberExtractor(asList(
@@ -193,5 +207,10 @@ public enum NamedValueConfiguration implements ValueConfiguration {
             new BooleanTypeExtractor(),
             new StringTypeExtractor(),
             new NumberTypeExtractor()
+    ));
+
+    public static final CompositeMapSelectionExtractor MAP_SELECTION_EXTRACTOR = new CompositeMapSelectionExtractor(Arrays.<MapSelectionExtractor>asList(
+            new NativeMapSelectionExtractor(),
+            new ArrayMapSelectionExtractor()
     ));
 }

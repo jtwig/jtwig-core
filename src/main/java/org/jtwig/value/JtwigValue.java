@@ -2,6 +2,7 @@ package org.jtwig.value;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.util.OptionalUtils;
 import org.jtwig.value.configuration.ValueConfiguration;
 import org.jtwig.value.extract.number.ObjectNumberExtractor;
@@ -66,23 +67,19 @@ public class JtwigValue {
                 .apply(this, other)
                 .or(false);
     }
-
     public boolean isIdenticalTo (JtwigValue other) {
         return configuration.identicalComparator()
                 .apply(this, other)
                 .or(false);
     }
-
     public boolean isLowerThan (JtwigValue other) {
         return configuration.lowerComparator()
                 .apply(this, other)
                 .or(false);
     }
-
     public boolean isGreaterThan(JtwigValue value) {
         return !isLowerThan(value) && !isEqualTo(value);
     }
-
     public boolean isStringNumber() {
         if (getType() == JtwigType.STRING) {
             return value.toString().matches(ObjectNumberExtractor.NUMBER_PATTERN);
@@ -107,5 +104,11 @@ public class JtwigValue {
             }
         }
         return false;
+    }
+
+    public JtwigValue getMapValue(JtwigValue key) {
+        Object value = configuration.mapSelectionExtractor().extract(asMap(), key)
+                .or(new Value(Undefined.UNDEFINED)).getValue();
+        return new JtwigValue(value, configuration);
     }
 }

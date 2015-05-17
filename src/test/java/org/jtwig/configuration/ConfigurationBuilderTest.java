@@ -17,7 +17,7 @@ public class ConfigurationBuilderTest {
         CompositePropertyResolver propertyResolver = (CompositePropertyResolver) result.propertyResolver();
         CompositeResourceResolver resourceResolver = (CompositeResourceResolver) result.resourceResolver();
 
-        assertThat(propertyResolver.size(), is(3));
+        assertThat(propertyResolver.size(), is(4));
         assertThat(resourceResolver.size(), is(1));
     }
 }
