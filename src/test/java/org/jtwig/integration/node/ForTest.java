@@ -18,7 +18,7 @@ public class ForTest extends AbstractIntegrationTest {
 
     @Test
     public void simpleFor() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% for i in list %}{{i}}{% endfor %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for i in list %}{{i}}{% endfor %}");
         String result = jtwigTemplate.render(newModel().with("list", new Integer[]{1, 2}));
 
         assertThat(result, is("12"));
@@ -26,14 +26,14 @@ public class ForTest extends AbstractIntegrationTest {
 
     @Test
     public void forLoopVariable() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% for i in [1, 2] %}{% if (loop.first) %}f{% endif %}{{loop.index}}{{loop.index0}}{{loop.revindex}}{{loop.revindex0}}{% if (loop.last) %}l{% endif %}{% endfor %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for i in [1, 2] %}{% if (loop.first) %}f{% endif %}{{loop.index}}{{loop.index0}}{{loop.revindex}}{{loop.revindex0}}{% if (loop.last) %}l{% endif %}{% endfor %}");
         String result = jtwigTemplate.render(newModel());
         assertThat(result, is("f10212110l"));
     }
 
     @Test
     public void forWhiteSpaceControl() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate(" {%- for i in list -%} {{i}} {%- endfor -%} ");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate(" {%- for i in list -%} {{i}} {%- endfor -%} ");
         String result = jtwigTemplate.render(newModel().with("list", new Integer[]{1, 2}));
 
         assertThat(result, is("12"));
@@ -41,14 +41,14 @@ public class ForTest extends AbstractIntegrationTest {
 
     @Test
     public void forIsolatedContextOldVariable() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% set a = 2 %}{% for i in list %}{% set a = 1 %}{% endfor %}{{ a }}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% set a = 2 %}{% for i in list %}{% set a = 1 %}{% endfor %}{{ a }}");
         String result = jtwigTemplate.render(newModel().with("list", new Integer[]{1, 2}));
 
         assertThat(result, is("1"));
     }
     @Test
     public void forIsolatedContextNewVariable() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% for i in list %}{% set a = 1 %}{% endfor %}{{ a }}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for i in list %}{% set a = 1 %}{% endfor %}{{ a }}");
         String result = jtwigTemplate.render(newModel().with("list", new Integer[]{1, 2}));
 
         assertThat(result, is(""));
@@ -56,7 +56,7 @@ public class ForTest extends AbstractIntegrationTest {
 
     @Test
     public void simpleForMap() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% for k,v in list %}{{k}}={{v}} {% endfor %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for k,v in list %}{{k}}={{v}} {% endfor %}");
         String result = jtwigTemplate.render(newModel().with("list", new Integer[]{1,2}));
 
         assertThat(result, is("0=1 1=2 "));
@@ -64,7 +64,7 @@ public class ForTest extends AbstractIntegrationTest {
 
     @Test
     public void invalidForWithoutVariable() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% for in list %}{{k}}={{v}} {% endfor %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for in list %}{{k}}={{v}} {% endfor %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Expecting a variable name in for loop"));
 
@@ -73,7 +73,7 @@ public class ForTest extends AbstractIntegrationTest {
 
     @Test
     public void invalidForWithoutListVariable() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% for i in %}{{k}}={{v}} {% endfor %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for i in %}{{k}}={{v}} {% endfor %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Expecting an expression in for loop"));
 
@@ -82,7 +82,7 @@ public class ForTest extends AbstractIntegrationTest {
 
     @Test
     public void invalidForWithoutIn() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% for i list %}{{k}}={{v}} {% endfor %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for i list %}{{k}}={{v}} {% endfor %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Malformed for loop, missing 'in' keyword. For example: {% for i in list %}"));
 
@@ -91,7 +91,7 @@ public class ForTest extends AbstractIntegrationTest {
 
     @Test
     public void invalidForMissingEndCode() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% for i in list ");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for i in list ");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Malformed for loop start syntax, missing code island ending symbol"));
 
@@ -100,7 +100,7 @@ public class ForTest extends AbstractIntegrationTest {
 
     @Test
     public void invalidEndForMissingEndCode() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% for i in list %}{% endfor ");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for i in list %}{% endfor ");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Malformed for loop end syntax, missing code island ending symbol"));
 
@@ -109,7 +109,7 @@ public class ForTest extends AbstractIntegrationTest {
 
     @Test
     public void invalidForMissingSecondVariable() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% for k, in list %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for k, in list %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Expecting a second variable name in for loop. Example: {% for key, value in list %}"));
 
@@ -118,7 +118,7 @@ public class ForTest extends AbstractIntegrationTest {
 
     @Test
     public void invalidForMissingEndTag() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% for k in list %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for k in list %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Missing endfor tag"));
 

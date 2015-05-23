@@ -15,7 +15,7 @@ public class FlushNodeTest extends AbstractIntegrationTest {
     public void simpleFlush() throws Exception {
         OutputStream outputStream = mock(OutputStream.class);
 
-        JtwigTemplate result = defaultStringTemplate("{% flush %}");
+        JtwigTemplate result = JtwigTemplate.inlineTemplate("{% flush %}");
         result.render(JtwigModel.newModel(), outputStream);
 
         verify(outputStream).flush();

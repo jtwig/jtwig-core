@@ -51,9 +51,9 @@ public class IncludeNodeParser extends NodeParser<IncludeNode> {
                         Sequence(
                                 spacingParser.Spacing(),
                                 String("only"),
-                                booleanParser.push(true)
+                                booleanParser.push(false)
                         ),
-                        booleanParser.push(false)
+                        booleanParser.push(true)
                 ),
 
                 spacingParser.Spacing(),

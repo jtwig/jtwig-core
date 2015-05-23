@@ -9,7 +9,6 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.FunctionExpression;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
-import org.jtwig.property.PropertyResolveRequest;
 import org.jtwig.property.PropertyResolveRequestFactory;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
@@ -36,12 +35,12 @@ public class SelectionOperationCalculator implements BinaryOperationCalculator {
             throw new CalculationException(String.format("Expecting variable or function, but got %s", rightOperand.getClass().getSimpleName()));
         }
 
-        return context.configuration().propertyResolver()
+        return context.environment().propertyResolver()
                 .resolve(PropertyResolveRequestFactory.create(position, value.asObject(), propertyName, functionArguments))
                 .transform(new Function<Value, JtwigValue>() {
                     @Override
                     public JtwigValue apply(Value input) {
-                        return JtwigValueFactory.value(input.getValue(), context.configuration().valueConfiguration());
+                        return JtwigValueFactory.value(input.getValue(), context.environment().valueConfiguration());
                     }
                 })
                 .or(throwUnresolvableException(context, position, propertyName, value.asObject()));
@@ -51,10 +50,10 @@ public class SelectionOperationCalculator implements BinaryOperationCalculator {
         return new Supplier<JtwigValue>() {
             @Override
             public JtwigValue get() {
-                if (context.configuration().strictMode()) {
+                if (context.environment().renderConfiguration().strictMode()) {
                     throw new CalculationException(errorMessage(position, String.format("Impossible to access an attribute '%s' on '%s'", propertyName, value)));
                 } else {
-                    return JtwigValueFactory.undefined(context.configuration().valueConfiguration());
+                    return JtwigValueFactory.undefined(context.environment().valueConfiguration());
                 }
             }
         };

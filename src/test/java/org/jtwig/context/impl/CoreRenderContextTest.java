@@ -1,6 +1,6 @@
 package org.jtwig.context.impl;
 
-import org.jtwig.configuration.Configuration;
+import org.jtwig.environment.Environment;
 import org.jtwig.context.model.EscapeMode;
 import org.jtwig.context.model.EscapeModeContext;
 import org.jtwig.context.model.NodeContext;
@@ -17,12 +17,12 @@ import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 
 public class CoreRenderContextTest {
-    private final Configuration configuration = mock(Configuration.class, RETURNS_DEEP_STUBS);
+    private final Environment environment = mock(Environment.class, RETURNS_DEEP_STUBS);
     private final Stack<ValueContext> modelStack = new Stack<>();
     private final Stack<ResourceContext> resourceContextStack = new Stack<ResourceContext>();
     private final Stack<NodeContext> nodeContextStack = new Stack<>();
     private final Stack<EscapeMode> escapeContextStack = new Stack<>();
-    private CoreRenderContext underTest = new CoreRenderContext(configuration, modelStack, resourceContextStack, nodeContextStack, new EscapeModeContext(escapeContextStack));
+    private CoreRenderContext underTest = new CoreRenderContext(environment, modelStack, resourceContextStack, nodeContextStack, new EscapeModeContext(escapeContextStack));
 
     @Before
     public void setUp() throws Exception {
@@ -33,9 +33,9 @@ public class CoreRenderContextTest {
 
     @Test
     public void configuration() throws Exception {
-        Configuration result = underTest.configuration();
+        Environment result = underTest.environment();
 
-        assertThat(result, is(configuration));
+        assertThat(result, is(environment));
     }
 
     @Test

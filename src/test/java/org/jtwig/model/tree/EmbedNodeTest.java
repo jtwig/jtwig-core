@@ -9,7 +9,7 @@ import org.jtwig.render.Renderable;
 import org.jtwig.resource.Resource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,8 +40,8 @@ public class EmbedNodeTest extends AbstractNodeTest {
     @Test
     public void renderWithNonExistingResourceWhenIgnoreMissing() throws Exception {
         when(includeConfiguration.isIgnoreMissing()).thenReturn(true);
-        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", NamedValueConfiguration.COMPATIBLE_MODE));
-        when(renderContext().configuration().resourceResolver().resolve(any(Resource.class), anyString())).thenReturn(Optional.<Resource>absent());
+        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", new CompatibleModeValueConfiguration()));
+        when(renderContext().environment().resourceResolver().resolve(any(Resource.class), anyString())).thenReturn(Optional.<Resource>absent());
 
         Renderable result = underTest.render(renderContext());
 
@@ -50,10 +50,10 @@ public class EmbedNodeTest extends AbstractNodeTest {
 
     @Test(expected = ResourceNotFoundException.class)
     public void renderWithNonExistingResourceWhenNotIgnoringMissing() throws Exception {
-        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", NamedValueConfiguration.COMPATIBLE_MODE));
+        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", new CompatibleModeValueConfiguration()));
         when(includeConfiguration.getInclude()).thenReturn(includeExpression);
         when(includeConfiguration.isIgnoreMissing()).thenReturn(false);
-        when(renderContext().configuration().resourceResolver().resolve(any(Resource.class), anyString())).thenReturn(Optional.<Resource>absent());
+        when(renderContext().environment().resourceResolver().resolve(any(Resource.class), anyString())).thenReturn(Optional.<Resource>absent());
         when(resourceRenderer.inheritModel(anyBoolean())).thenReturn(resourceRenderer);
         when(resourceRenderer.define(anyMap())).thenReturn(resourceRenderer);
 
@@ -62,10 +62,10 @@ public class EmbedNodeTest extends AbstractNodeTest {
 
     @Test
     public void renderWithExistingResourceWhenIgnoreMissing() throws Exception {
-        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", NamedValueConfiguration.COMPATIBLE_MODE));
+        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", new CompatibleModeValueConfiguration()));
         when(includeConfiguration.getInclude()).thenReturn(includeExpression);
         when(includeConfiguration.isIgnoreMissing()).thenReturn(true);
-        when(renderContext().configuration().resourceResolver().resolve(any(Resource.class), anyString())).thenReturn(Optional.<Resource>absent());
+        when(renderContext().environment().resourceResolver().resolve(any(Resource.class), anyString())).thenReturn(Optional.<Resource>absent());
         when(resourceRenderer.inheritModel(anyBoolean())).thenReturn(resourceRenderer);
         when(resourceRenderer.define(anyMap())).thenReturn(resourceRenderer);
 
@@ -76,10 +76,10 @@ public class EmbedNodeTest extends AbstractNodeTest {
 
     @Test
     public void renderWithExistingResourceNotIgnoreMissing() throws Exception {
-        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", NamedValueConfiguration.COMPATIBLE_MODE));
+        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", new CompatibleModeValueConfiguration()));
         when(includeConfiguration.getInclude()).thenReturn(includeExpression);
         when(includeConfiguration.isIgnoreMissing()).thenReturn(false);
-        when(renderContext().configuration().resourceResolver().resolve(any(Resource.class), anyString())).thenReturn(Optional.of(resource));
+        when(renderContext().environment().resourceResolver().resolve(any(Resource.class), anyString())).thenReturn(Optional.of(resource));
         when(resourceRenderer.inheritModel(anyBoolean())).thenReturn(resourceRenderer);
         when(resourceRenderer.define(anyMap())).thenReturn(resourceRenderer);
 

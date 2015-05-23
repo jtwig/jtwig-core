@@ -16,10 +16,10 @@ import java.util.Collection;
 import static java.util.Arrays.asList;
 
 public class BeanMethodFunctionExtractor {
-    private final Supplier<MethodInvoker<FunctionArgument>> methodInvoker;
+    private final MethodInvoker<FunctionArgument> methodInvoker;
     private final FunctionNameExtractor functionNameExtractor;
 
-    public BeanMethodFunctionExtractor(Supplier<MethodInvoker<FunctionArgument>> methodInvoker,
+    public BeanMethodFunctionExtractor(MethodInvoker<FunctionArgument> methodInvoker,
                                        FunctionNameExtractor functionNameExtractor) {
         this.methodInvoker = methodInvoker;
         this.functionNameExtractor = functionNameExtractor;

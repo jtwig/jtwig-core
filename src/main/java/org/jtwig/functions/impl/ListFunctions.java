@@ -14,7 +14,7 @@ import java.util.*;
 
 public class ListFunctions {
     protected ValueConfiguration getConfiguration() {
-        return RenderContextHolder.get().configuration().valueConfiguration();
+        return RenderContextHolder.get().environment().valueConfiguration();
     }
 
     @JtwigFunction("batch")

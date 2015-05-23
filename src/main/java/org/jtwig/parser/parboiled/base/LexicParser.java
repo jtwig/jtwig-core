@@ -5,11 +5,15 @@ import org.jtwig.parser.parboiled.model.Keyword;
 import org.parboiled.Rule;
 import org.parboiled.annotations.Label;
 
+import java.util.Collection;
+
 public class LexicParser extends BasicParser<String> {
+    final Collection<String> extraKeywords;
     Rule[] keywordRules = null;
 
-    LexicParser(ParserContext context) {
+    LexicParser(ParserContext context, Collection<String> extraKeywords) {
         super(LexicParser.class, context);
+        this.extraKeywords = extraKeywords;
     }
 
     public Rule Identifier() {
@@ -36,6 +40,16 @@ public class LexicParser extends BasicParser<String> {
         );
     }
 
+    @Label("Keywork")
+    public Rule Keyword(String keyword) {
+        return Sequence(
+                String(keyword),
+                TestNot(
+                        LetterOrDigit()
+                )
+        );
+    }
+
     Rule Keyword() {
         return FirstOf(
                 keywordRules()
@@ -44,9 +58,13 @@ public class LexicParser extends BasicParser<String> {
 
     Rule[] keywordRules() {
         Keyword[] keywords = Keyword.values();
-        keywordRules = new Rule[keywords.length];
-        for (int i = 0; i < keywords.length; i++) {
+        keywordRules = new Rule[keywords.length + extraKeywords.size()];
+        int i = 0;
+        for (; i < keywords.length; i++) {
             keywordRules[i] = Keyword(keywords[i]);
+        }
+        for (String extraKeyword : extraKeywords) {
+            keywordRules[i++] = Keyword(extraKeyword);
         }
         return keywordRules;
     }

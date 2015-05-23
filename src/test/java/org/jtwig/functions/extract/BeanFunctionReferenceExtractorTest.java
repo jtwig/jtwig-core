@@ -33,7 +33,7 @@ public class BeanFunctionReferenceExtractorTest {
         FunctionReference functionReference = mock(FunctionReference.class);
         when(methodFunctionExtractor.extract(beanMethod)).thenReturn(asList(functionReference));
 
-        Collection<FunctionReference> result = underTest.extract(bean, methodInvoker);
+        Collection<FunctionReference> result = underTest.extract(bean);
 
         assertThat(result, hasItem(functionReference));
     }

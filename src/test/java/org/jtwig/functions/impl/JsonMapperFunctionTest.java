@@ -2,9 +2,9 @@ package org.jtwig.functions.impl;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import org.jtwig.configuration.Configuration;
+import org.jtwig.environment.Environment;
 import org.jtwig.context.RenderContext;
-import org.jtwig.content.json.JsonMapperFactory;
+import org.jtwig.content.json.JsonMapperProvider;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,8 +14,8 @@ import static org.mockito.Mockito.*;
 
 public class JsonMapperFunctionTest {
     private final RenderContext renderContext = mock(RenderContext.class);
-    private final Configuration configuration = mock(Configuration.class);
-    private final JsonMapperFactory jsonMapperFactory = mock(JsonMapperFactory.class);
+    private final Environment environment = mock(Environment.class);
+    private final JsonMapperProvider jsonMapperProvider = mock(JsonMapperProvider.class);
     private final Function function = mock(Function.class);
     private JsonMapperFunction underTest = new JsonMapperFunction() {
         @Override
@@ -26,13 +26,14 @@ public class JsonMapperFunctionTest {
 
     @Before
     public void setUp() throws Exception {
-        when(renderContext.configuration()).thenReturn(configuration);
-        when(configuration.jsonMapper()).thenReturn(jsonMapperFactory);
+        when(renderContext.environment()).thenReturn(environment);
+        when(environment.jsonMapper()).thenReturn(jsonMapperProvider);
     }
 
     @Test
     public void encodeReturnsValueOfFunctionExecution() throws Exception {
-        when(jsonMapperFactory.create()).thenReturn(Optional.<Function<Object,String>>of(function));
+        when(jsonMapperProvider.jsonMapper()).thenReturn(function);
+        when(jsonMapperProvider.isFound()).thenReturn(true);
         when(function.apply("blah")).thenReturn("hello");
 
         String result = underTest.encode("blah");
@@ -42,17 +43,19 @@ public class JsonMapperFunctionTest {
 
     @Test
     public void jsonEncodeFactoryCalledOnceWhenResolved() throws Exception {
-        when(jsonMapperFactory.create()).thenReturn(Optional.<Function<Object,String>>of(function));
+        when(jsonMapperProvider.jsonMapper()).thenReturn(function);
+        when(jsonMapperProvider.isFound()).thenReturn(true);
 
         underTest.encode("hello");
         underTest.encode("2");
 
-        verify(jsonMapperFactory).create();
+        verify(jsonMapperProvider).isFound();
+        verify(jsonMapperProvider).jsonMapper();
     }
 
     @Test
     public void jsonEncodeFactoryCalledEveryTimeWhenNotResolved() throws Exception {
-        when(jsonMapperFactory.create()).thenReturn(Optional.<Function<Object,String>>absent());
+        when(jsonMapperProvider.isFound()).thenReturn(false);
 
         try {
             underTest.encode("hello");
@@ -65,6 +68,6 @@ public class JsonMapperFunctionTest {
             // ignore
         }
 
-        verify(jsonMapperFactory, times(2)).create();
+        verify(jsonMapperProvider, times(2)).isFound();
     }
 }

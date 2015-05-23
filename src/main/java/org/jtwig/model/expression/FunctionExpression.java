@@ -38,13 +38,13 @@ public class FunctionExpression extends InjectableExpression {
     @Override
     public JtwigValue calculate(final RenderContext context) {
         List<FunctionArgument> calculatedArguments = arguments.calculate(context);
-        Optional<JtwigValue> value = context.configuration().functionResolver()
+        Optional<JtwigValue> value = context.environment().functionResolver()
                 .resolve(functionIdentifier, calculatedArguments)
                 .transform(new Function<Supplier, JtwigValue>() {
                     @Override
                     public JtwigValue apply(Supplier input) {
                         try {
-                            return JtwigValueFactory.value(input.get(), context.configuration().valueConfiguration());
+                            return JtwigValueFactory.value(input.get(), context.environment().valueConfiguration());
                         } catch (InvokeException e) {
                             if (e.getCause() instanceof InvocationTargetException) {
                                 if (e.getCause().getCause() instanceof CalculationException) {

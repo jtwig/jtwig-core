@@ -34,12 +34,12 @@ public class VariableExpression extends InjectableExpression {
     public JtwigValue calculate(RenderContext context) {
         Optional<Value> valueOptional = context.valueContext().value(identifier);
         if (valueOptional.isPresent()) {
-            return JtwigValueFactory.value(valueOptional.get().getValue(), context.configuration().valueConfiguration());
+            return JtwigValueFactory.value(valueOptional.get().getValue(), context.environment().valueConfiguration());
         } else {
-            if (context.configuration().strictMode()) {
+            if (context.environment().renderConfiguration().strictMode()) {
                 throw new CalculationException(errorMessage(getPosition(), String.format("Variable '%s' undefined", identifier)));
             } else {
-                return JtwigValueFactory.undefined(context.configuration().valueConfiguration());
+                return JtwigValueFactory.undefined(context.environment().valueConfiguration());
             }
         }
     }

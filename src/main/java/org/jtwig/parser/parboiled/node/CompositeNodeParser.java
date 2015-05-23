@@ -2,6 +2,7 @@ package org.jtwig.parser.parboiled.node;
 
 import org.jtwig.model.tree.CompositeNode;
 import org.jtwig.model.tree.Node;
+import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.base.BasicParser;
 import org.jtwig.parser.parboiled.base.PositionTrackerParser;
@@ -60,7 +61,15 @@ public class CompositeNodeParser extends NodeParser<CompositeNode> {
                     TextNodeParser.class
             ));
 
-            contentParsers.addAll(context.getAddOnParsers());
+            contentParsers.addAll(extractExtraParsers(context.getAddOnParsers()));
+        }
+
+        private Collection<? extends Class> extractExtraParsers(Collection<AddonParserProvider> addOnParsers) {
+            Collection<Class> result = new ArrayList<>();
+            for (AddonParserProvider provider : addOnParsers) {
+                result.add(provider.parser());
+            }
+            return result;
         }
 
         Rule List() {

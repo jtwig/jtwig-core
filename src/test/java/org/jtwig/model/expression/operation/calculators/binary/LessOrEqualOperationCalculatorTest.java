@@ -5,7 +5,7 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,13 +26,13 @@ public class LessOrEqualOperationCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(context.configuration().valueConfiguration()).thenReturn(NamedValueConfiguration.COMPATIBLE_MODE);
+        when(context.environment().valueConfiguration()).thenReturn(new CompatibleModeValueConfiguration());
     }
 
     @Test
     public void calculateWhenLeftGreaterThanRight() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("2.0", NamedValueConfiguration.COMPATIBLE_MODE));
-        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", NamedValueConfiguration.COMPATIBLE_MODE));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("2.0", new CompatibleModeValueConfiguration()));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", new CompatibleModeValueConfiguration()));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 
@@ -41,8 +41,8 @@ public class LessOrEqualOperationCalculatorTest {
 
     @Test
     public void calculateWhenLeftEqualToRight() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", NamedValueConfiguration.COMPATIBLE_MODE));
-        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", NamedValueConfiguration.COMPATIBLE_MODE));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", new CompatibleModeValueConfiguration()));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", new CompatibleModeValueConfiguration()));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 
@@ -51,8 +51,8 @@ public class LessOrEqualOperationCalculatorTest {
 
     @Test
     public void calculateWhenLeftLessThanRight() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", NamedValueConfiguration.COMPATIBLE_MODE));
-        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("2.0", NamedValueConfiguration.COMPATIBLE_MODE));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", new CompatibleModeValueConfiguration()));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("2.0", new CompatibleModeValueConfiguration()));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 

@@ -21,7 +21,7 @@ public class IncludeNodeParserTest extends AbstractParserTest {
         assertThat(result.matched, is(true));
         IncludeNode node = result.valueStack.pop();
         assertThat(node.isIgnoreMissing(), is(false));
-        assertThat(node.isInheritModel(), is(false));
+        assertThat(node.isInheritModel(), is(true));
         assertThat(node.getMapExpression(), instanceOf(MapExpression.class));
     }
 
@@ -32,7 +32,7 @@ public class IncludeNodeParserTest extends AbstractParserTest {
         assertThat(result.matched, is(true));
         IncludeNode node = result.valueStack.pop();
         assertThat(node.isIgnoreMissing(), is(true));
-        assertThat(node.isInheritModel(), is(false));
+        assertThat(node.isInheritModel(), is(true));
         assertThat(node.getMapExpression(), instanceOf(MapExpression.class));
     }
 
@@ -43,7 +43,7 @@ public class IncludeNodeParserTest extends AbstractParserTest {
         assertThat(result.matched, is(true));
         IncludeNode node = result.valueStack.pop();
         assertThat(node.isIgnoreMissing(), is(true));
-        assertThat(node.isInheritModel(), is(true));
+        assertThat(node.isInheritModel(), is(false));
         assertThat(node.getMapExpression(), instanceOf(MapExpression.class));
     }
 
@@ -54,7 +54,7 @@ public class IncludeNodeParserTest extends AbstractParserTest {
         assertThat(result.matched, is(true));
         IncludeNode node = result.valueStack.pop();
         assertThat(node.isIgnoreMissing(), is(true));
-        assertThat(node.isInheritModel(), is(true));
+        assertThat(node.isInheritModel(), is(false));
         assertThat(node.getMapExpression(), instanceOf(VariableExpression.class));
     }
 }

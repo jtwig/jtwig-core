@@ -1,11 +1,10 @@
 package org.jtwig.context.impl;
 
-import com.google.common.base.Optional;
 import org.jtwig.context.RenderContext;
 import org.jtwig.context.model.Macro;
 import org.jtwig.context.model.ResourceContext;
 import org.jtwig.context.model.ResourceRenderResult;
-import org.jtwig.context.values.ScopedValueContext;
+import org.jtwig.context.values.NewlyScopedValueContext;
 import org.jtwig.context.values.ValueContext;
 import org.jtwig.render.Renderable;
 import org.jtwig.resource.Resource;
@@ -56,7 +55,7 @@ public class ResourceRenderer {
         valueContextStack.push(valueContext);
         resourceContextStack.push(resourceContext);
 
-        Renderable render = renderContext.configuration()
+        Renderable render = renderContext.environment()
                 .parser()
                 .parse(resource)
                 .render(renderContext);
@@ -69,7 +68,7 @@ public class ResourceRenderer {
 
     private ValueContext valueContext(boolean shareParent) {
         if (shareParent) {
-            return new ScopedValueContext(valueContextStack.peek(), valueContext);
+            return new NewlyScopedValueContext(valueContextStack.peek(), valueContext);
         } else {
             return valueContext;
         }

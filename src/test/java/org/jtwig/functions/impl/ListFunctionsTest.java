@@ -1,6 +1,6 @@
 package org.jtwig.functions.impl;
 
-import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.jtwig.value.configuration.ValueConfiguration;
 import org.junit.Test;
 
@@ -11,13 +11,14 @@ import java.util.Map;
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class ListFunctionsTest {
     ListFunctions underTest = new ListFunctions() {
         @Override
         protected ValueConfiguration getConfiguration() {
-            return NamedValueConfiguration.COMPATIBLE_MODE;
+            return new CompatibleModeValueConfiguration();
         }
     };
 

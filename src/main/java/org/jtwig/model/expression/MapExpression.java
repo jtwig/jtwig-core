@@ -22,6 +22,6 @@ public class MapExpression extends Expression {
         for (Map.Entry<String, Expression> entry : expressions.entrySet()) {
             result.put(entry.getKey(), entry.getValue().calculate(context).asObject());
         }
-        return JtwigValueFactory.value(result, context.configuration().valueConfiguration());
+        return JtwigValueFactory.value(result, context.environment().valueConfiguration());
     }
 }

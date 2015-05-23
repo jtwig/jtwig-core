@@ -1,6 +1,7 @@
 package org.jtwig.integration.expression;
 
 import org.jtwig.JtwigModel;
+import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.junit.Test;
 
@@ -17,7 +18,7 @@ public class IsTest extends AbstractIntegrationTest {
     public void isOperatorEmptyFunction () throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate("{% if ([] is empty) %}Hi{% endif %}")
+        String result = JtwigTemplate.inlineTemplate("{% if ([] is empty) %}Hi{% endif %}")
                 .render(model);
 
         assertThat(result, is(equalTo("Hi")));
@@ -27,7 +28,7 @@ public class IsTest extends AbstractIntegrationTest {
     public void isOperatorConstantFunction () throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate("{% if ('one' is constant('org.jtwig.integration.expression.IsTest.HELLO')) %}Hi{% endif %}")
+        String result = JtwigTemplate.inlineTemplate("{% if ('one' is constant('org.jtwig.integration.expression.IsTest.HELLO')) %}Hi{% endif %}")
                 .render(model);
 
         assertThat(result, is(equalTo("Hi")));
@@ -37,7 +38,7 @@ public class IsTest extends AbstractIntegrationTest {
     public void isDefinedFunction () throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate("{% if (variable is not defined) %}Hi{% endif %}")
+        String result = JtwigTemplate.inlineTemplate("{% if (variable is not defined) %}Hi{% endif %}")
                 .render(model);
 
         assertThat(result, is(equalTo("Hi")));
@@ -46,7 +47,7 @@ public class IsTest extends AbstractIntegrationTest {
     public void isEvenFunction () throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate("{% if (1 is not even) %}Hi{% endif %}")
+        String result = JtwigTemplate.inlineTemplate("{% if (1 is not even) %}Hi{% endif %}")
                 .render(model);
 
         assertThat(result, is(equalTo("Hi")));
@@ -55,7 +56,7 @@ public class IsTest extends AbstractIntegrationTest {
     public void isNotOddFunction () throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate("{% if (1 is not odd) %}Hi{% endif %}")
+        String result = JtwigTemplate.inlineTemplate("{% if (1 is not odd) %}Hi{% endif %}")
                 .render(model);
 
         assertThat(result, is(equalTo("")));
@@ -64,7 +65,7 @@ public class IsTest extends AbstractIntegrationTest {
     public void isOddFunction () throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate("{% if (1 is odd) %}Hi{% endif %}")
+        String result = JtwigTemplate.inlineTemplate("{% if (1 is odd) %}Hi{% endif %}")
                 .render(model);
 
         assertThat(result, is(equalTo("Hi")));
@@ -73,7 +74,7 @@ public class IsTest extends AbstractIntegrationTest {
     public void isIterableFunction () throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate("{% if ([] is iterable) %}Hi{% endif %}")
+        String result = JtwigTemplate.inlineTemplate("{% if ([] is iterable) %}Hi{% endif %}")
                 .render(model);
 
         assertThat(result, is(equalTo("Hi")));
@@ -83,7 +84,7 @@ public class IsTest extends AbstractIntegrationTest {
         JtwigModel model = new JtwigModel();
         model.add("value", new Object[0]);
 
-        String result = defaultStringTemplate("{% if (value is iterable) %}Hi{% endif %}")
+        String result = JtwigTemplate.inlineTemplate("{% if (value is iterable) %}Hi{% endif %}")
                 .render(model);
 
         assertThat(result, is(equalTo("Hi")));
@@ -93,7 +94,7 @@ public class IsTest extends AbstractIntegrationTest {
         JtwigModel model = new JtwigModel();
         model.with("value", Collections.EMPTY_MAP);
 
-        String result = defaultStringTemplate("{% if (value is iterable) %}Hi{% endif %}")
+        String result = JtwigTemplate.inlineTemplate("{% if (value is iterable) %}Hi{% endif %}")
                 .render(model);
 
         assertThat(result, is(equalTo("Hi")));
@@ -104,7 +105,7 @@ public class IsTest extends AbstractIntegrationTest {
         JtwigModel model = new JtwigModel();
         model.with("value", null);
 
-        String result = defaultStringTemplate("{% if (value is null) %}Hi{% endif %}")
+        String result = JtwigTemplate.inlineTemplate("{% if (value is null) %}Hi{% endif %}")
                 .render(model);
 
         assertThat(result, is(equalTo("Hi")));
@@ -114,7 +115,7 @@ public class IsTest extends AbstractIntegrationTest {
     public void isDivisibleFunction () throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate("{% if (3 is divisible by 1) %}Hi{% else %}OH{% endif %}")
+        String result = JtwigTemplate.inlineTemplate("{% if (3 is divisible by 1) %}Hi{% else %}OH{% endif %}")
                 .render(model);
 
         assertThat(result, is(equalTo("Hi")));

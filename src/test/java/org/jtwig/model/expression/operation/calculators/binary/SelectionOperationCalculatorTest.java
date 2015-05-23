@@ -1,8 +1,8 @@
 package org.jtwig.model.expression.operation.calculators.binary;
 
 import com.google.common.base.Optional;
-import org.jtwig.configuration.Configuration;
 import org.jtwig.context.RenderContext;
+import org.jtwig.environment.Environment;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.model.expression.ConstantExpression;
 import org.jtwig.model.expression.Expression;
@@ -14,7 +14,7 @@ import org.jtwig.property.PropertyResolveRequest;
 import org.jtwig.property.PropertyResolver;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
-import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,18 +25,15 @@ import java.util.ArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class SelectionOperationCalculatorTest {
     private final RenderContext renderContext = mock(RenderContext.class, RETURNS_DEEP_STUBS);
     private final Position position = mock(Position.class);
     private final Expression leftOperand = mock(Expression.class);
-    private final Configuration configuration = mock(Configuration.class);
+    private final Environment environment = mock(Environment.class, RETURNS_DEEP_STUBS);
     private final PropertyResolver propertyResolver = mock(PropertyResolver.class);
     private SelectionOperationCalculator underTest = new SelectionOperationCalculator();
 
@@ -45,7 +42,7 @@ public class SelectionOperationCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(renderContext.configuration().valueConfiguration()).thenReturn(NamedValueConfiguration.COMPATIBLE_MODE);
+        when(renderContext.environment().valueConfiguration()).thenReturn(new CompatibleModeValueConfiguration());
     }
 
     @Test
@@ -61,8 +58,8 @@ public class SelectionOperationCalculatorTest {
         Value value = mock(Value.class);
         when(value.getValue()).thenReturn("");
         JtwigValue leftOperandValue = mock(JtwigValue.class);
-        when(renderContext.configuration()).thenReturn(configuration);
-        when(configuration.propertyResolver()).thenReturn(propertyResolver);
+        when(renderContext.environment()).thenReturn(environment);
+        when(environment.propertyResolver()).thenReturn(propertyResolver);
         when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.of(value));
         when(leftOperand.calculate(renderContext)).thenReturn(leftOperandValue);
         VariableExpression rightOperand = new VariableExpression(position, "test");
@@ -77,8 +74,8 @@ public class SelectionOperationCalculatorTest {
         Value jtwigValue = mock(Value.class);
         when(jtwigValue.getValue()).thenReturn("");
         JtwigValue leftOperandValue = mock(JtwigValue.class);
-        when(renderContext.configuration()).thenReturn(configuration);
-        when(configuration.propertyResolver()).thenReturn(propertyResolver);
+        when(renderContext.environment()).thenReturn(environment);
+        when(environment.propertyResolver()).thenReturn(propertyResolver);
         when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.of(jtwigValue));
         when(leftOperand.calculate(renderContext)).thenReturn(leftOperandValue);
         Expression rightOperand = new FunctionExpression(position, "test", new ArrayList<Argument>());
@@ -94,9 +91,9 @@ public class SelectionOperationCalculatorTest {
         expectedException.expectMessage(containsString("Impossible to access an attribute 'test' on 'null'"));
 
         JtwigValue leftOperandValue = mock(JtwigValue.class);
-        when(renderContext.configuration()).thenReturn(configuration);
-        when(configuration.propertyResolver()).thenReturn(propertyResolver);
-        when(configuration.strictMode()).thenReturn(true);
+        when(renderContext.environment()).thenReturn(environment);
+        when(environment.propertyResolver()).thenReturn(propertyResolver);
+        when(environment.renderConfiguration().strictMode()).thenReturn(true);
         when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.<Value>absent());
         when(leftOperand.calculate(renderContext)).thenReturn(leftOperandValue);
         Expression rightOperand = new FunctionExpression(position, "test", new ArrayList<Argument>());
@@ -107,9 +104,9 @@ public class SelectionOperationCalculatorTest {
     @Test
     public void calculateWhenItFailsToResolveWhenStrictModeDisabled() throws Exception {
         JtwigValue leftOperandValue = mock(JtwigValue.class);
-        when(renderContext.configuration()).thenReturn(configuration);
-        when(configuration.propertyResolver()).thenReturn(propertyResolver);
-        when(configuration.strictMode()).thenReturn(false);
+        when(renderContext.environment()).thenReturn(environment);
+        when(environment.propertyResolver()).thenReturn(propertyResolver);
+        when(environment.renderConfiguration().strictMode()).thenReturn(false);
         when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.<Value>absent());
         when(leftOperand.calculate(renderContext)).thenReturn(leftOperandValue);
         Expression rightOperand = new FunctionExpression(position, "test", new ArrayList<Argument>());

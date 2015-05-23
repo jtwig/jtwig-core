@@ -16,7 +16,7 @@ import org.junit.rules.ExpectedException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
-import static org.jtwig.configuration.ConfigurationBuilder.configuration;
+import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuration;
 
 public class EmbedTest extends AbstractIntegrationTest {
     @Rule
@@ -24,7 +24,7 @@ public class EmbedTest extends AbstractIntegrationTest {
 
     @Test
     public void simpleEmbed() throws Exception {
-        JtwigTemplate template = defaultStringTemplate("{% embed 'a' %}{% block one %}Ola{% endblock %}{% endembed %}", configuration()
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% embed 'a' %}{% block one %}Ola{% endblock %}{% endembed %}", configuration()
                 .withResourceResolver(resolvePath("a", "{% block one %}three{% endblock %}"))
                 .build());
         String result = template.render(JtwigModel.newModel());
@@ -36,13 +36,13 @@ public class EmbedTest extends AbstractIntegrationTest {
         expectedException.expect(ResourceNotFoundException.class);
         expectedException.expectMessage(containsString("Resource 'one' not found"));
 
-        defaultStringTemplate("{% embed 'one' %}{% endembed %}")
+        JtwigTemplate.inlineTemplate("{% embed 'one' %}{% endembed %}")
                 .render(JtwigModel.newModel());
     }
 
     @Test
     public void embedResourceNotFoundIgnoreMissing() throws Exception {
-        String result = defaultStringTemplate("{% embed 'one' ignore missing %}{% endembed %}")
+        String result = JtwigTemplate.inlineTemplate("{% embed 'one' ignore missing %}{% endembed %}")
                 .render(JtwigModel.newModel());
 
         assertThat(result, is(""));
@@ -50,7 +50,7 @@ public class EmbedTest extends AbstractIntegrationTest {
 
     @Test
     public void simpleEmbedWithComment() throws Exception {
-        JtwigTemplate template = defaultStringTemplate("{% embed 'classpath:/example/extends/extendable-template.twig' %}{# test #}{% block one %}Ola{% endblock %}{% endembed %}");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% embed 'classpath:/example/extends/extendable-template.twig' %}{# test #}{% block one %}Ola{% endblock %}{% endembed %}");
         String result = template.render(JtwigModel.newModel());
         assertThat(result, is("Ola"));
     }
@@ -60,7 +60,7 @@ public class EmbedTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Embed construct can only contain block elements"));
 
-        defaultStringTemplate("{% embed 'classpath:/example/extends/extendable-template.twig' %}{% if (true) %}{% endif %}{% endembed %}")
+        JtwigTemplate.inlineTemplate("{% embed 'classpath:/example/extends/extendable-template.twig' %}{% if (true) %}{% endif %}{% endembed %}")
                 .render(JtwigModel.newModel());
     }
 
@@ -69,7 +69,7 @@ public class EmbedTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Embed construct missing path expression"));
 
-        defaultStringTemplate("{% embed %}{% endembed %}")
+        JtwigTemplate.inlineTemplate("{% embed %}{% endembed %}")
                 .render(JtwigModel.newModel());
     }
 
@@ -78,7 +78,7 @@ public class EmbedTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Did you mean 'ignore missing'?"));
 
-        defaultStringTemplate("{% embed 'asdasd' ignore %}{% endembed %}")
+        JtwigTemplate.inlineTemplate("{% embed 'asdasd' ignore %}{% endembed %}")
                 .render(JtwigModel.newModel());
     }
 
@@ -87,7 +87,7 @@ public class EmbedTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Code island not closed"));
 
-        defaultStringTemplate("{% embed 'asdasd' {% endembed %}")
+        JtwigTemplate.inlineTemplate("{% embed 'asdasd' {% endembed %}")
                 .render(JtwigModel.newModel());
     }
 
@@ -96,7 +96,7 @@ public class EmbedTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Embed construct can only contain block elements. You might be missing the endembed tag."));
 
-        defaultStringTemplate("{% embed 'asdasd' %}")
+        JtwigTemplate.inlineTemplate("{% embed 'asdasd' %}")
                 .render(JtwigModel.newModel());
     }
 

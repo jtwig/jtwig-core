@@ -1,6 +1,7 @@
 package org.jtwig.integration.issues;
 
 import org.jtwig.JtwigModel;
+import org.jtwig.JtwigTemplate;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.junit.Rule;
@@ -11,7 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.StringContains.containsString;
-import static org.jtwig.configuration.ConfigurationBuilder.configuration;
+import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuration;
 
 public class Issue140Test extends AbstractIntegrationTest {
     @Rule
@@ -27,7 +28,7 @@ public class Issue140Test extends AbstractIntegrationTest {
         expectedException.expect(CalculationException.class);
         expectedException.expectMessage(containsString("Variable 'var' undefined"));
 
-        defaultStringTemplate("{{ var is null }}", configuration()
+        JtwigTemplate.inlineTemplate("{{ var is null }}", configuration()
                 .withStrictMode(true)
                 .build())
                 .render(JtwigModel.newModel());
@@ -40,7 +41,7 @@ public class Issue140Test extends AbstractIntegrationTest {
      */
     @Test
     public void outputNonexistentVarThrowsException() throws Exception {
-        String result = defaultStringTemplate("{{ var is null }}", configuration()
+        String result = JtwigTemplate.inlineTemplate("{{ var is null }}", configuration()
                 .withStrictMode(false)
                 .build())
                 .render(JtwigModel.newModel());

@@ -1,6 +1,6 @@
 package org.jtwig.context.impl;
 
-import org.jtwig.configuration.Configuration;
+import org.jtwig.environment.Environment;
 import org.jtwig.context.RenderContext;
 import org.jtwig.context.model.*;
 import org.jtwig.context.values.SimpleValueContext;
@@ -12,18 +12,18 @@ import java.util.HashMap;
 import java.util.Stack;
 
 public class CoreRenderContext implements RenderContext {
-    private final Configuration configuration;
+    private final Environment environment;
     private final Stack<ValueContext> valueContextStack;
     private final Stack<ResourceContext> resourceContextStack;
     private final Stack<NodeContext> nodeContextStack;
     private final EscapeModeContext escapeModeContext;
 
-    public CoreRenderContext(Configuration configuration,
+    public CoreRenderContext(Environment environment,
                              Stack<ValueContext> valueContextStack,
                              Stack<ResourceContext> resourceContextStack,
                              Stack<NodeContext> nodeContextStack,
                              EscapeModeContext escapeModeContext) {
-        this.configuration = configuration;
+        this.environment = environment;
         this.valueContextStack = valueContextStack;
         this.resourceContextStack = resourceContextStack;
         this.nodeContextStack = nodeContextStack;
@@ -31,8 +31,8 @@ public class CoreRenderContext implements RenderContext {
     }
 
     @Override
-    public Configuration configuration() {
-        return configuration;
+    public Environment environment() {
+        return environment;
     }
 
     @Override

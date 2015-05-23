@@ -4,7 +4,7 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class MapExpressionTest {
     @Before
     public void setUp() throws Exception {
         map.clear();
-        when(context.configuration().valueConfiguration()).thenReturn(NamedValueConfiguration.COMPATIBLE_MODE);
+        when(context.environment().valueConfiguration()).thenReturn(new CompatibleModeValueConfiguration());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class MapExpressionTest {
     public void calculateWhenNonEmpty() throws Exception {
         String key = "one";
         Expression value = mock(Expression.class);
-        when(value.calculate(context)).thenReturn(JtwigValueFactory.value("two", NamedValueConfiguration.COMPATIBLE_MODE));
+        when(value.calculate(context)).thenReturn(JtwigValueFactory.value("two", new CompatibleModeValueConfiguration()));
         map.put(key, value);
 
         JtwigValue result = underTest.calculate(context);

@@ -28,7 +28,7 @@ public class FunctionExpressionTest {
         Supplier executable = mock(Supplier.class);
 
         when(executable.get()).thenReturn(expectedResult);
-        when(context.configuration().functionResolver().resolve(eq(functionIdentifier), anyList())).thenReturn(Optional.of(executable));
+        when(context.environment().functionResolver().resolve(eq(functionIdentifier), anyList())).thenReturn(Optional.of(executable));
 
         JtwigValue jtwigValue = underTest.calculate(context);
 
@@ -38,7 +38,7 @@ public class FunctionExpressionTest {
     @Test(expected = CalculationException.class)
     public void calculateWhenFunctionDoesNotExist() throws Exception {
 
-        when(context.configuration().functionResolver().resolve(eq(functionIdentifier), anyList())).thenReturn(Optional.<Supplier>absent());
+        when(context.environment().functionResolver().resolve(eq(functionIdentifier), anyList())).thenReturn(Optional.<Supplier>absent());
 
         underTest.calculate(context);
     }

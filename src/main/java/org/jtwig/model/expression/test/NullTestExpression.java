@@ -11,7 +11,7 @@ public class NullTestExpression extends TestExpression {
         return argument.calculate(context).map(new Function<JtwigValue, Object>() {
             @Override
             public Object apply(JtwigValue input) {
-                if (context.configuration().strictMode()) {
+                if (context.environment().renderConfiguration().strictMode()) {
                     return input.isNull();
                 } else {
                     return input.isNull() || input.isDefined();

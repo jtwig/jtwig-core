@@ -19,7 +19,7 @@ public class SetTest extends AbstractIntegrationTest {
     @Test
     public void simpleSet() throws Exception {
 
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% set variable = 1 %}{{ variable }}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% set variable = 1 %}{{ variable }}");
 
         String result = jtwigTemplate.render(newModel());
 
@@ -28,7 +28,7 @@ public class SetTest extends AbstractIntegrationTest {
 
     @Test
     public void setWhiteSpaceControl() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate(" {%- set variable = 1 -%} {{ variable }}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate(" {%- set variable = 1 -%} {{ variable }}");
 
         String result = jtwigTemplate.render(newModel());
 
@@ -37,7 +37,7 @@ public class SetTest extends AbstractIntegrationTest {
 
     @Test
     public void setNotEnding() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate(" {%- set variable = 1 {{ variable }}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate(" {%- set variable = 1 {{ variable }}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Expecting end of set code island"));
 
@@ -46,7 +46,7 @@ public class SetTest extends AbstractIntegrationTest {
 
     @Test
     public void setNoAttribution() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate(" {%- set variable 1 %}{{ variable }}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate(" {%- set variable 1 %}{{ variable }}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Expecting attribution operation '='"));
 

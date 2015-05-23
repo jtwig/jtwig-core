@@ -11,7 +11,7 @@ import static org.hamcrest.core.Is.is;
 public class DoTest extends AbstractIntegrationTest {
     @Test
     public void simpleDo() throws Exception {
-        JtwigTemplate template = defaultStringTemplate("{% do 1 + 2 %}");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% do 1 + 2 %}");
         String result = template.render(JtwigModel.newModel());
         assertThat(result, is(""));
     }

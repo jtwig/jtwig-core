@@ -2,7 +2,7 @@ package org.jtwig.functions.resolver.position.vararg;
 
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -33,8 +33,8 @@ public class FunctionArgumentMergerTest {
     public void mergeWhenNonEmpty() throws Exception {
         FunctionArgument functionArgument1 = mock(FunctionArgument.class);
         FunctionArgument functionArgument2 = mock(FunctionArgument.class);
-        when(functionArgument1.getValue()).thenReturn(JtwigValueFactory.value(null, NamedValueConfiguration.COMPATIBLE_MODE));
-        when(functionArgument2.getValue()).thenReturn(JtwigValueFactory.value(null, NamedValueConfiguration.COMPATIBLE_MODE));
+        when(functionArgument1.getValue()).thenReturn(JtwigValueFactory.value(null, new CompatibleModeValueConfiguration()));
+        when(functionArgument2.getValue()).thenReturn(JtwigValueFactory.value(null, new CompatibleModeValueConfiguration()));
         List<FunctionArgument> input = asList(functionArgument1, functionArgument2);
         when(arrayComponentExtractor.extract(input)).thenReturn(Object.class);
 

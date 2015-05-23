@@ -18,7 +18,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void simpleIfCondition() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (true) %}ok{% else %}ko{% endif %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% if (true) %}ok{% else %}ko{% endif %}");
 
         String result = jtwigTemplate.render(newModel());
 
@@ -27,7 +27,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void ifConditionWhiteSpaceControlEndIf() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (true) -%} ok{% else %}ko{% endif %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% if (true) -%} ok{% else %}ko{% endif %}");
 
         String result = jtwigTemplate.render(newModel());
 
@@ -36,7 +36,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void ifConditionWhiteSpaceControlStartIf() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate(" {%- if (true) -%} ok{% else %}ko{% endif %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate(" {%- if (true) -%} ok{% else %}ko{% endif %}");
 
         String result = jtwigTemplate.render(newModel());
 
@@ -45,7 +45,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void ifConditionWhiteSpaceControlStartElse() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate(" {%- if (true) -%} ok {%- else %}ko{% endif %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate(" {%- if (true) -%} ok {%- else %}ko{% endif %}");
 
         String result = jtwigTemplate.render(newModel());
 
@@ -54,7 +54,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void ifConditionWhiteSpaceControl() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate(" {%- if (false) -%} ko {%- else -%} ok {%- endif -%} ");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate(" {%- if (false) -%} ko {%- else -%} ok {%- endif -%} ");
 
         String result = jtwigTemplate.render(newModel());
 
@@ -63,7 +63,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void simpleIfSharedContext() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% set a = 2 %}{% if (true) %}{% set a = 1 %}{% endif %}{{ a }}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% set a = 2 %}{% if (true) %}{% set a = 1 %}{% endif %}{{ a }}");
 
         String result = jtwigTemplate.render(newModel());
 
@@ -72,7 +72,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void simpleIfConditionWithVariable() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (isItTrue) %}ok{% else %}ko{% endif %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% if (isItTrue) %}ok{% else %}ko{% endif %}");
 
         String result = jtwigTemplate.render(newModel().with("isItTrue", true));
 
@@ -81,7 +81,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void ifConditionElse() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (false) %}ko{% else %}ok{% endif %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% if (false) %}ko{% else %}ok{% endif %}");
 
         String result = jtwigTemplate.render(newModel());
 
@@ -90,7 +90,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void ifConditionWithoutExpression() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if ()%}ko{% endif %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% if ()%}ko{% endif %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Expecting an expression together with the if construction"));
         jtwigTemplate.render(newModel());
@@ -98,7 +98,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void ifConditionWithoutEndCode() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (true) ko{% endif %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% if (true) ko{% endif %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("If condition code island not closed"));
         jtwigTemplate.render(newModel());
@@ -106,7 +106,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void ifConditionWithoutEndIfEndCode() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (true) %}ko{% endif");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% if (true) %}ko{% endif");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("If condition endif code island not closed"));
         jtwigTemplate.render(newModel());
@@ -115,7 +115,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void elseIfConditionWithoutExpression() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (true) %}{% elseif ()%}ko{% endif %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% if (true) %}{% elseif ()%}ko{% endif %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Expecting an expression together with the if construction"));
         jtwigTemplate.render(newModel());
@@ -123,7 +123,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void elseIfConditionWithoutEndingParentheses() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (true) %}{% elseif (true %}ko{% endif %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% if (true) %}{% elseif (true %}ko{% endif %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Expecting an expression together with the if construction"));
         jtwigTemplate.render(newModel());
@@ -131,7 +131,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
 
     @Test
     public void elseIfConditionWithoutEndCode() throws Exception {
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (true) %}{% elseif (true) ko{% endif %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% if (true) %}{% elseif (true) ko{% endif %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("If condition code island not closed"));
         jtwigTemplate.render(newModel());
@@ -140,7 +140,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
     @Test
     public void ifConditionIncorrectElseIf() throws Exception {
         // For the time being we will use this, but we might want to improve our messages and try to check the if syntax
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (false) %}ko{% else if (true) %}ok{% endif %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% if (false) %}ko{% else if (true) %}ok{% endif %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Expecting ending of else block"));
         jtwigTemplate.render(newModel());
@@ -149,7 +149,7 @@ public class IfConditionTest extends AbstractIntegrationTest {
     @Test
     public void ifConditionMissingEnd() throws Exception {
         // For the time being we will use this, but we might want to improve our messages and try to check the if syntax
-        JtwigTemplate jtwigTemplate = defaultStringTemplate("{% if (false) %}ko");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% if (false) %}ko");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Missing endif tag"));
         jtwigTemplate.render(newModel());

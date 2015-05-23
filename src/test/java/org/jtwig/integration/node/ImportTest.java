@@ -19,7 +19,7 @@ public class ImportTest extends AbstractIntegrationTest {
 
     @Test
     public void simpleImport() throws Exception {
-        JtwigTemplate template = defaultStringTemplate("{% import 'classpath:/example/macros/macro-example.twig' as inputs %}{{ inputs.text('hello') }}");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% import 'classpath:/example/macros/macro-example.twig' as inputs %}{{ inputs.text('hello') }}");
 
         String result = template.render(JtwigModel.newModel());
 
@@ -33,7 +33,7 @@ public class ImportTest extends AbstractIntegrationTest {
         expectedException.expect(ResourceNotFoundException.class);
         expectedException.expectMessage(containsString("Resource 'one' not found"));
 
-        defaultStringTemplate("{% import 'one' as blah %}")
+        JtwigTemplate.inlineTemplate("{% import 'one' as blah %}")
                 .render(JtwigModel.newModel());
     }
 
@@ -42,7 +42,7 @@ public class ImportTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Missing import path expression"));
 
-        defaultStringTemplate("{% import as inputs %}{{ inputs.text('hello') }}")
+        JtwigTemplate.inlineTemplate("{% import as inputs %}{{ inputs.text('hello') }}")
                 .render(JtwigModel.newModel());
 
     }
@@ -52,7 +52,7 @@ public class ImportTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Wrong syntax expecting token 'as'"));
 
-        defaultStringTemplate("{% import 'asd' inputs %}{{ inputs.text('hello') }}")
+        JtwigTemplate.inlineTemplate("{% import 'asd' inputs %}{{ inputs.text('hello') }}")
                 .render(JtwigModel.newModel());
 
     }
@@ -62,7 +62,7 @@ public class ImportTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Missing alias declaration"));
 
-        defaultStringTemplate("{% import 'asd' as %}{{ inputs.text('hello') }}")
+        JtwigTemplate.inlineTemplate("{% import 'asd' as %}{{ inputs.text('hello') }}")
                 .render(JtwigModel.newModel());
 
     }
@@ -72,7 +72,7 @@ public class ImportTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Code island not closed"));
 
-        defaultStringTemplate("{% import 'asd' as inputs{{ inputs.text('hello') }}")
+        JtwigTemplate.inlineTemplate("{% import 'asd' as inputs{{ inputs.text('hello') }}")
                 .render(JtwigModel.newModel());
     }
 }

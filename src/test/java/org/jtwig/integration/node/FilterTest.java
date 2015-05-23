@@ -1,18 +1,19 @@
 package org.jtwig.integration.node;
 
 import org.jtwig.JtwigModel;
+import org.jtwig.JtwigTemplate;
 import org.jtwig.functions.SimpleFunction;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.jtwig.configuration.ConfigurationBuilder.configuration;
+import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuration;
 
 public class FilterTest extends AbstractIntegrationTest {
     @Test
     public void filterWithVariable() throws Exception {
-        String result = defaultStringTemplate("{% filter var1 %}1{% endfilter %}", configuration()
+        String result = JtwigTemplate.inlineTemplate("{% filter var1 %}1{% endfilter %}", configuration()
                 .include(var1Function())
                 .build()).render(JtwigModel.newModel());
 
@@ -21,7 +22,7 @@ public class FilterTest extends AbstractIntegrationTest {
 
     @Test
     public void filterWithFunction() throws Exception {
-        String result = defaultStringTemplate("{% filter var2(2) %}1{% endfilter %}", configuration()
+        String result = JtwigTemplate.inlineTemplate("{% filter var2(2) %}1{% endfilter %}", configuration()
                 .include(var2Function())
                 .build()).render(JtwigModel.newModel());
 
@@ -30,7 +31,7 @@ public class FilterTest extends AbstractIntegrationTest {
 
     @Test
     public void filterWithComposition() throws Exception {
-        String result = defaultStringTemplate("{% filter var1 | var3 %}1{% endfilter %}", configuration()
+        String result = JtwigTemplate.inlineTemplate("{% filter var1 | var3 %}1{% endfilter %}", configuration()
                 .include(var1Function())
                 .include(var3Function())
                 .build()).render(JtwigModel.newModel());

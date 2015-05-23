@@ -1,25 +1,22 @@
 package org.jtwig.functions.extract;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
-import org.jtwig.reflection.MethodInvoker;
-import org.jtwig.reflection.model.bean.BeanMethod;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.functions.annotations.JtwigFunction;
 import org.jtwig.functions.reference.FunctionReference;
+import org.jtwig.reflection.MethodInvoker;
+import org.jtwig.reflection.model.bean.BeanMethod;
 import org.junit.Test;
 
 import java.util.Collection;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class BeanMethodFunctionExtractorTest {
     private final FunctionNameExtractor functionNameExtractor = mock(FunctionNameExtractor.class);
-    private final Supplier<MethodInvoker<FunctionArgument>> methodInvoker = mock(Supplier.class);
+    private final MethodInvoker<FunctionArgument> methodInvoker = mock(MethodInvoker.class);
     private BeanMethodFunctionExtractor underTest = new BeanMethodFunctionExtractor(methodInvoker, functionNameExtractor);
 
     @Test

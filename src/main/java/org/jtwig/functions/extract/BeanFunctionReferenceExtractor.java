@@ -22,7 +22,7 @@ public class BeanFunctionReferenceExtractor {
         this.functionExtractor = functionExtractor;
     }
 
-    public Collection<FunctionReference> extract(Object bean, Supplier<MethodInvoker<FunctionArgument>> methodInvoker) {
+    public Collection<FunctionReference> extract(Object bean) {
         Collection<FunctionReference> result = new ArrayList<>();
         Collection<BeanMethod> beanMethods = extractor.extract(bean, new Predicate<JavaMethod>() {
             @Override

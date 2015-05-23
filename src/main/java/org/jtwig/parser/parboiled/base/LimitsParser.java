@@ -16,7 +16,7 @@ public class LimitsParser extends BasicParser<LimitProperties> {
 
     public Rule startComment () {
         return Sequence(
-                parserContext().parserConfiguration().syntaxConfiguration().startComment(),
+                parserContext().syntaxConfiguration().startComment(),
                 LimitProperty(),
                 markWhiteSpace(pop().isWhiteSpaceControl())
         );
@@ -25,14 +25,14 @@ public class LimitsParser extends BasicParser<LimitProperties> {
     public Rule endComment () {
         return Sequence(
                 LimitProperty(),
-                parserContext().parserConfiguration().syntaxConfiguration().endComment(),
+                parserContext().syntaxConfiguration().endComment(),
                 markWhiteSpace(pop().isWhiteSpaceControl())
         );
     }
 
     public Rule startOutput () {
         return Sequence(
-                parserContext().parserConfiguration().syntaxConfiguration().startOutput(),
+                parserContext().syntaxConfiguration().startOutput(),
                 LimitProperty(),
                 markWhiteSpace(pop().isWhiteSpaceControl())
         );
@@ -41,7 +41,7 @@ public class LimitsParser extends BasicParser<LimitProperties> {
     public Rule endOutput () {
         return Sequence(
                 LimitProperty(),
-                parserContext().parserConfiguration().syntaxConfiguration().endOutput(),
+                parserContext().syntaxConfiguration().endOutput(),
                 markWhiteSpace(pop().isWhiteSpaceControl())
         );
     }
@@ -49,7 +49,7 @@ public class LimitsParser extends BasicParser<LimitProperties> {
     @Label("Start Code Island")
     public Rule startCode () {
         return Sequence(
-                parserContext().parserConfiguration().syntaxConfiguration().startCode(),
+                parserContext().syntaxConfiguration().startCode(),
                 LimitProperty(),
                 markWhiteSpace(pop().isWhiteSpaceControl())
         );
@@ -59,7 +59,7 @@ public class LimitsParser extends BasicParser<LimitProperties> {
     public Rule endCode () {
         return Sequence(
                 LimitProperty(),
-                parserContext().parserConfiguration().syntaxConfiguration().endCode(),
+                parserContext().syntaxConfiguration().endCode(),
                 markWhiteSpace(pop().isWhiteSpaceControl())
         );
     }
@@ -87,9 +87,9 @@ public class LimitsParser extends BasicParser<LimitProperties> {
 
     public Rule anyEnd() {
         return FirstOf(
-                parserContext().parserConfiguration().syntaxConfiguration().startComment(),
-                parserContext().parserConfiguration().syntaxConfiguration().startCode(),
-                parserContext().parserConfiguration().syntaxConfiguration().startOutput()
+                parserContext().syntaxConfiguration().startComment(),
+                parserContext().syntaxConfiguration().startCode(),
+                parserContext().syntaxConfiguration().startOutput()
         );
     }
 

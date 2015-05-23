@@ -27,11 +27,11 @@ public class ComprehensionListExpression extends Expression {
     public JtwigValue calculate(final RenderContext context) {
         final JtwigValue startValue = start.calculate(context);
         final JtwigValue endValue = end.calculate(context);
-        return context.configuration().enumerationStrategy().enumerate(startValue, endValue)
+        return context.environment().enumerationStrategy().enumerate(startValue, endValue)
                 .transform(new Function<Collection<Object>, JtwigValue>() {
                     @Override
                     public JtwigValue apply(Collection<Object> input) {
-                        return JtwigValueFactory.value(input, context.configuration().valueConfiguration());
+                        return JtwigValueFactory.value(input, context.environment().valueConfiguration());
                     }
                 })
                 .or(new Supplier<JtwigValue>() {

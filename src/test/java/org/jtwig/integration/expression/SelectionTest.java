@@ -1,5 +1,6 @@
 package org.jtwig.integration.expression;
 
+import org.jtwig.JtwigTemplate;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.junit.Rule;
@@ -10,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.jtwig.JtwigModel.newModel;
-import static org.jtwig.configuration.ConfigurationBuilder.configuration;
+import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuration;
 
 public class SelectionTest extends AbstractIntegrationTest {
     @Rule
@@ -18,7 +19,7 @@ public class SelectionTest extends AbstractIntegrationTest {
 
     @Test
     public void selectionWithNonExistingPropertyAndStrictModeInactive() throws Exception {
-        String result = defaultStringTemplate("{{ asd.test }}", configuration()
+        String result = JtwigTemplate.inlineTemplate("{{ asd.test }}", configuration()
                 .withStrictMode(false)
                 .build())
                 .render(newModel().with("asd", 1));
@@ -30,7 +31,7 @@ public class SelectionTest extends AbstractIntegrationTest {
         expectedException.expect(CalculationException.class);
         expectedException.expectMessage(containsString("Impossible to access an attribute 'test' on '1'"));
 
-        defaultStringTemplate("{{ asd.test }}", configuration()
+        JtwigTemplate.inlineTemplate("{{ asd.test }}", configuration()
                 .withStrictMode(true)
                 .build())
                 .render(newModel().with("asd", 1));
@@ -39,7 +40,7 @@ public class SelectionTest extends AbstractIntegrationTest {
     @Test
     public void propertyResolutionMethodGet() throws Exception {
 
-        String result = defaultStringTemplate("{{ var.test }}")
+        String result = JtwigTemplate.inlineTemplate("{{ var.test }}")
                 .render(newModel().with("var", new TestClass("hello")));
 
         assertThat(result, is("hello"));
@@ -48,7 +49,7 @@ public class SelectionTest extends AbstractIntegrationTest {
     @Test
     public void propertyResolutionMethodIs() throws Exception {
 
-        String result = defaultStringTemplate("{{ var.test1 }}")
+        String result = JtwigTemplate.inlineTemplate("{{ var.test1 }}")
                 .render(newModel().with("var", new TestClass("hello")));
 
         assertThat(result, is("hello"));
@@ -57,7 +58,7 @@ public class SelectionTest extends AbstractIntegrationTest {
     @Test
     public void propertyResolutionMethodHas() throws Exception {
 
-        String result = defaultStringTemplate("{{ var.test2 }}")
+        String result = JtwigTemplate.inlineTemplate("{{ var.test2 }}")
                 .render(newModel().with("var", new TestClass("hello")));
 
         assertThat(result, is("hello"));
@@ -66,7 +67,7 @@ public class SelectionTest extends AbstractIntegrationTest {
     @Test
     public void propertyResolutionMethodFails() throws Exception {
 
-        String result = defaultStringTemplate("{{ var.test3 }}")
+        String result = JtwigTemplate.inlineTemplate("{{ var.test3 }}")
                 .render(newModel().with("var", new TestClass("hello")));
 
         assertThat(result, is(""));
@@ -75,7 +76,7 @@ public class SelectionTest extends AbstractIntegrationTest {
     @Test
     public void propertyResolutionMethodExactMethod() throws Exception {
 
-        String result = defaultStringTemplate("{{ var.getTest }}")
+        String result = JtwigTemplate.inlineTemplate("{{ var.getTest }}")
                 .render(newModel().with("var", new TestClass("hello")));
 
         assertThat(result, is("hello"));
@@ -84,7 +85,7 @@ public class SelectionTest extends AbstractIntegrationTest {
     @Test
     public void propertyResolutionPrivateField() throws Exception {
 
-        String result = defaultStringTemplate("{{ var.privateField }}")
+        String result = JtwigTemplate.inlineTemplate("{{ var.privateField }}")
                 .render(newModel().with("var", new TestClass("hello")));
 
         assertThat(result, is("hello"));
@@ -93,7 +94,7 @@ public class SelectionTest extends AbstractIntegrationTest {
     @Test
     public void propertyResolutionPublicField() throws Exception {
 
-        String result = defaultStringTemplate("{{ var.sum }}")
+        String result = JtwigTemplate.inlineTemplate("{{ var.sum }}")
                 .render(newModel().with("var", new TestClass("hello")));
 
         assertThat(result, is("0"));

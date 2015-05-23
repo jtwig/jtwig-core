@@ -1,6 +1,7 @@
 package org.jtwig.integration.expression;
 
 import org.jtwig.JtwigModel;
+import org.jtwig.JtwigTemplate;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
@@ -19,7 +20,7 @@ public class ListTest extends AbstractIntegrationTest {
     @Test
     public void enumeratedList() throws Exception {
 
-        String result = defaultStringTemplate("{{ [1, 10] }}").render(JtwigModel.newModel());
+        String result = JtwigTemplate.inlineTemplate("{{ [1, 10] }}").render(JtwigModel.newModel());
 
         assertThat(result, is("[1, 10]"));
 
@@ -28,7 +29,7 @@ public class ListTest extends AbstractIntegrationTest {
     @Test
     public void comprehensionListAscendingIntegers() throws Exception {
 
-        String result = defaultStringTemplate("{{ [1..3] }}").render(JtwigModel.newModel());
+        String result = JtwigTemplate.inlineTemplate("{{ [1..3] }}").render(JtwigModel.newModel());
 
         assertThat(result, is("[1, 2, 3]"));
 
@@ -37,7 +38,7 @@ public class ListTest extends AbstractIntegrationTest {
     @Test
     public void comprehensionListDescendingIntegers() throws Exception {
 
-        String result = defaultStringTemplate("{{ [3..1] }}").render(JtwigModel.newModel());
+        String result = JtwigTemplate.inlineTemplate("{{ [3..1] }}").render(JtwigModel.newModel());
 
         assertThat(result, is("[3, 2, 1]"));
     }
@@ -45,7 +46,7 @@ public class ListTest extends AbstractIntegrationTest {
     @Test
     public void comprehensionListDescendingChars() throws Exception {
 
-        String result = defaultStringTemplate("{{ ['c'..'a'] }}").render(JtwigModel.newModel());
+        String result = JtwigTemplate.inlineTemplate("{{ ['c'..'a'] }}").render(JtwigModel.newModel());
 
         assertThat(result, is("[c, b, a]"));
     }
@@ -56,12 +57,12 @@ public class ListTest extends AbstractIntegrationTest {
         expectedException.expect(CalculationException.class);
         expectedException.expectMessage(containsString("Unable to calculate a list from a comprehension list starting with 'a' and ending with '1'"));
 
-        defaultStringTemplate("{{ ['a'..1] }}").render(JtwigModel.newModel());
+        JtwigTemplate.inlineTemplate("{{ ['a'..1] }}").render(JtwigModel.newModel());
     }
 
     @Test
     public void comprehensionListAscendingChars() throws Exception {
-        String result = defaultStringTemplate("{{ ['a'..'c'] }}").render(JtwigModel.newModel());
+        String result = JtwigTemplate.inlineTemplate("{{ ['a'..'c'] }}").render(JtwigModel.newModel());
 
         assertThat(result, is("[a, b, c]"));
     }
@@ -71,7 +72,7 @@ public class ListTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Expecting end bracket"));
 
-        defaultStringTemplate("{{ ['a'..'c' }}").render(JtwigModel.newModel());
+        JtwigTemplate.inlineTemplate("{{ ['a'..'c' }}").render(JtwigModel.newModel());
     }
 
     @Test
@@ -79,6 +80,6 @@ public class ListTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Expecting end bracket"));
 
-        defaultStringTemplate("{{ ['a', 'c' }}").render(JtwigModel.newModel());
+        JtwigTemplate.inlineTemplate("{{ ['a', 'c' }}").render(JtwigModel.newModel());
     }
 }

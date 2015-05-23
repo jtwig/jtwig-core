@@ -18,21 +18,21 @@ public class BlockTest extends AbstractIntegrationTest {
 
     @Test
     public void simpleBlock() throws Exception {
-        JtwigTemplate template = defaultStringTemplate("{% block name %}hello{% endblock %}");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% block name %}hello{% endblock %}");
         String result = template.render(newModel());
         assertThat(result, is("hello"));
     }
 
     @Test
     public void blockWhiteSpaceControl() throws Exception {
-        JtwigTemplate template = defaultStringTemplate(" {%- block name -%} hello {%- endblock -%} ");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate(" {%- block name -%} hello {%- endblock -%} ");
         String result = template.render(newModel());
         assertThat(result, is("hello"));
     }
 
     @Test
     public void blockWithoutName() throws Exception {
-        JtwigTemplate template = defaultStringTemplate("{% block %}hello{% endblock name %}");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% block %}hello{% endblock name %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Block identifier not specified"));
 
@@ -41,7 +41,7 @@ public class BlockTest extends AbstractIntegrationTest {
 
     @Test
     public void blockStartMissingEndCode() throws Exception {
-        JtwigTemplate template = defaultStringTemplate("{% block name hello{% endblock name %}");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% block name hello{% endblock name %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Missing end of code island"));
 
@@ -51,7 +51,7 @@ public class BlockTest extends AbstractIntegrationTest {
 
     @Test
     public void blockEndMissingEndCode() throws Exception {
-        JtwigTemplate template = defaultStringTemplate("{% block name %}hello{% endblock name");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% block name %}hello{% endblock name");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Missing end of code island"));
 
@@ -60,7 +60,7 @@ public class BlockTest extends AbstractIntegrationTest {
 
     @Test
     public void blockDifferentNames() throws Exception {
-        JtwigTemplate template = defaultStringTemplate("{% block one %}hello{% endblock name %}");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% block one %}hello{% endblock name %}");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Expecting block 'one' to end with the same identifier but found 'name' instead"));
 
@@ -68,7 +68,7 @@ public class BlockTest extends AbstractIntegrationTest {
     }
     @Test
     public void blockMissingEndTag() throws Exception {
-        JtwigTemplate template = defaultStringTemplate("{% block one %}hello");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% block one %}hello");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Missing endblock tag"));
 

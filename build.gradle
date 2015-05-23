@@ -16,7 +16,8 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.1'
     compile 'org.parboiled:parboiled-java:1.1.7'
     compile 'org.slf4j:slf4j-api:1.7.12'
-    compile 'org.jtwig:jtwig-reflection:1.0.0'
+    compile 'org.jtwig:jtwig-reflection:' + version
+    compile 'org.jtwig:jtwig-i18n:' + version
 
     testCompile 'commons-io:commons-io:2.4'
     testCompile 'org.mockito:mockito-core:1.10.19'

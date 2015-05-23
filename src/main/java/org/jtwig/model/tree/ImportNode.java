@@ -35,7 +35,7 @@ public class ImportNode extends Node {
     public Renderable render(RenderContext context) {
         String path = importExpression.calculate(context).asString();
         Optional<Resource> resource = context
-                .configuration().resourceResolver()
+                .environment().resourceResolver()
                 .resolve(context.currentResource().resource(), path);
         ResourceRenderResult resourceRenderResult = context
                 .resourceRenderer()

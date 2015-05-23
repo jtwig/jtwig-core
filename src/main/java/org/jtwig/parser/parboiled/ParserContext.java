@@ -1,7 +1,8 @@
 package org.jtwig.parser.parboiled;
 
-import org.jtwig.parser.config.ParserConfiguration;
-import org.jtwig.parser.config.ParserConfigurationBuilder;
+import org.jtwig.parser.addon.AddonParserProvider;
+import org.jtwig.parser.config.SyntaxConfiguration;
+import org.jtwig.parser.config.SyntaxConfigurationBuilder;
 import org.jtwig.parser.parboiled.base.*;
 import org.jtwig.parser.parboiled.expression.*;
 import org.jtwig.parser.parboiled.expression.operator.BinaryOperatorParser;
@@ -19,13 +20,13 @@ import java.util.Map;
 import static org.parboiled.Parboiled.createParser;
 
 public class ParserContext {
-    public static ParserContext instance (Resource resource, ParserConfiguration configuration, Collection<Class<? extends AddonParser>> addOnParsers) {
+    public static ParserContext instance (Resource resource, SyntaxConfiguration configuration, Collection<AddonParserProvider> addOnParsers) {
         ParserContext context = new ParserContext(resource, configuration, addOnParsers);
 
         createParser(BooleanParser.class, context);
         createParser(PositionTrackerParser.class, context);
         createParser(SpacingParser.class, context);
-        createParser(LexicParser.class, context);
+        createParser(LexicParser.class, context, extraKeywords(addOnParsers));
         createParser(LimitsParser.class, context);
         createParser(CommentParser.class, context);
 
@@ -76,8 +77,8 @@ public class ParserContext {
         createParser(SpacelessNodeParser.class, context);
         createParser(FilterNodeParser.class, context);
 
-        for (Class<? extends AddonParser> addOnParser : addOnParsers) {
-            createParser((Class) addOnParser, context);
+        for (AddonParserProvider provider : addOnParsers) {
+            createParser((Class) provider.parser(), context);
         }
         createParser(CompositeNodeParser.class, context);
 
@@ -87,24 +88,32 @@ public class ParserContext {
         return context;
     }
 
+    private static Collection<String> extraKeywords(Collection<AddonParserProvider> addOnParsers) {
+        Collection<String> result = new ArrayList<>();
+        for (AddonParserProvider provider : addOnParsers) {
+            result.addAll(provider.keywords());
+        }
+        return result;
+    }
+
     public static ParserContext instance (Resource resource) {
-        return instance(resource, ParserConfigurationBuilder.parserConfiguration().build(), new ArrayList<Class<? extends AddonParser>>());
+        return instance(resource, SyntaxConfigurationBuilder.syntaxConfiguration().build(), new ArrayList<AddonParserProvider>());
     }
 
     private final Resource resource;
-    private final ParserConfiguration parserConfiguration;
+    private final SyntaxConfiguration syntaxConfiguration;
     private final Map<Class, BaseParser> parsers;
-    private final Collection<Class<? extends AddonParser>> addOnParsers;
+    private final Collection<AddonParserProvider> addOnParsers;
 
-    public ParserContext(Resource resource, ParserConfiguration parserConfiguration, Collection<Class<? extends AddonParser>> addOnParsers) {
+    public ParserContext(Resource resource, SyntaxConfiguration syntaxConfiguration, Collection<AddonParserProvider> addOnParsers) {
         this.resource = resource;
-        this.parserConfiguration = parserConfiguration;
+        this.syntaxConfiguration = syntaxConfiguration;
         this.parsers = new HashMap<>();
         this.addOnParsers = addOnParsers;
     }
-    public ParserContext(Resource resource, ParserConfiguration parserConfiguration) {
+    public ParserContext(Resource resource, SyntaxConfiguration syntaxConfiguration) {
         this.resource = resource;
-        this.parserConfiguration = parserConfiguration;
+        this.syntaxConfiguration = syntaxConfiguration;
         this.parsers = new HashMap<>();
         this.addOnParsers = new ArrayList<>();
     }
@@ -114,7 +123,7 @@ public class ParserContext {
         return this;
     }
 
-    public Collection<Class<? extends AddonParser>> getAddOnParsers() {
+    public Collection<AddonParserProvider> getAddOnParsers() {
         return addOnParsers;
     }
 
@@ -122,8 +131,8 @@ public class ParserContext {
         return (T) parsers.get(type);
     }
 
-    public ParserConfiguration parserConfiguration() {
-        return parserConfiguration;
+    public SyntaxConfiguration syntaxConfiguration() {
+        return syntaxConfiguration;
     }
 
     public Collection<BaseParser> parsers() {

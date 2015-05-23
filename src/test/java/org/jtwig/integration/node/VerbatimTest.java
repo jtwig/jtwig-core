@@ -11,7 +11,7 @@ import static org.hamcrest.core.Is.is;
 public class VerbatimTest extends AbstractIntegrationTest {
     @Test
     public void simpleVerbatim() throws Exception {
-        JtwigTemplate template = defaultStringTemplate("{% verbatim %}{% if (hello) %}{% endverbatim %}");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% verbatim %}{% if (hello) %}{% endverbatim %}");
         String result = template.render(JtwigModel.newModel());
         assertThat(result, is("{% if (hello) %}"));
     }

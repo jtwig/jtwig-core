@@ -3,7 +3,7 @@ package org.jtwig.property;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import org.jtwig.context.RenderContext;
-import org.jtwig.context.RenderContextBuilder;
+import org.jtwig.context.RenderContextFactory;
 import org.jtwig.context.RenderContextHolder;
 import org.jtwig.context.model.Macro;
 import org.jtwig.context.model.MacroContext;
@@ -45,22 +45,18 @@ public class MacroPropertyResolver implements PropertyResolver {
 
                 RenderResult renderResult = new StringBuilderRenderResult();
 
-                renderContextBuilder()
-                    .withConfiguration(getRenderContext().configuration())
-                    .withValueContext(valueContext)
-                    .build()
-                    .nodeRenderer()
-                    .render(macro.getContent())
-                    .appendTo(renderResult);
+                createRenderContext(valueContext)
+                        .nodeRenderer()
+                        .render(macro.getContent())
+                        .appendTo(renderResult);
 
                 return new Value(renderResult.content());
             }
         };
     }
 
-    // Test purposes
-    protected RenderContextBuilder renderContextBuilder() {
-        return RenderContextBuilder.renderContext();
+    protected RenderContext createRenderContext(ValueContext valueContext) {
+        return new RenderContextFactory().create(valueContext, null, getRenderContext().environment());
     }
 
     // Test purposes

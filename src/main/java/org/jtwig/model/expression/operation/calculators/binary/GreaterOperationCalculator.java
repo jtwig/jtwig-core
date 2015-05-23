@@ -11,6 +11,6 @@ public class GreaterOperationCalculator implements BinaryOperationCalculator {
     public JtwigValue calculate(RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
         JtwigValue left = leftOperand.calculate(context);
         JtwigValue right = rightOperand.calculate(context);
-        return JtwigValueFactory.value(left.isGreaterThan(right), context.configuration().valueConfiguration());
+        return JtwigValueFactory.value(left.isGreaterThan(right), context.environment().valueConfiguration());
     }
 }

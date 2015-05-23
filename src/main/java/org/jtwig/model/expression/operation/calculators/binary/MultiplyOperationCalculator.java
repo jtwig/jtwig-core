@@ -11,6 +11,6 @@ public class MultiplyOperationCalculator implements BinaryOperationCalculator {
     public JtwigValue calculate(RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
         JtwigValue leftValue = leftOperand.calculate(context);
         JtwigValue rightValue = rightOperand.calculate(context);
-        return JtwigValueFactory.value(leftValue.mandatoryNumber().multiply(rightValue.mandatoryNumber(), context.configuration().mathContext()), context.configuration().valueConfiguration());
+        return JtwigValueFactory.value(leftValue.mandatoryNumber().multiply(rightValue.mandatoryNumber(), context.environment().renderConfiguration().mathContext()), context.environment().valueConfiguration());
     }
 }

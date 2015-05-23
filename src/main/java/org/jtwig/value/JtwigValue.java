@@ -37,12 +37,12 @@ public class JtwigValue {
         return value == Undefined.UNDEFINED;
     }
     public String asString() {
-        return configuration.stringExtractor()
+        return configuration.getStringExtractor()
                 .extract(value)
                 .or("");
     }
     public String asString(Charset charset) {
-        return new String(configuration.stringExtractor()
+        return new String(configuration.getStringExtractor()
                 .extract(value)
                 .or("").getBytes(), charset);
     }
@@ -50,19 +50,19 @@ public class JtwigValue {
         return value;
     }
     public Optional<BigDecimal> asNumber() {
-        return configuration.numberExtractor().extract(value);
+        return configuration.getNumberExtractor().extract(value);
     }
     public Boolean asBoolean () {
-        return configuration.booleanExtractor()
+        return configuration.getBooleanExtractor()
                 .extract(value)
                 .or(false);
     }
     public Collection<Object> asCollection() {
-        return configuration.collectionExtractor().extract(value)
+        return configuration.getCollectionExtractor().extract(value)
                 .or(Collections.singletonList(value));
     }
     public Map<Object, Object> asMap() {
-        return configuration.mapExtractor().extract(value)
+        return configuration.getMapExtractor().extract(value)
                 .or(new HashMap(){{ put(0, value); }});
     }
     public Character asChar() {
@@ -73,17 +73,17 @@ public class JtwigValue {
         return asNumber().or(OptionalUtils.<BigDecimal, IllegalArgumentException>throwException(new IllegalArgumentException(String.format("Unable to convert '%s' into a number", value))));
     }
     public boolean isEqualTo(JtwigValue other) {
-        return configuration.equalComparator()
+        return configuration.getEqualComparator()
                 .apply(this, other)
                 .or(false);
     }
     public boolean isIdenticalTo (JtwigValue other) {
-        return configuration.identicalComparator()
+        return configuration.getIdenticalComparator()
                 .apply(this, other)
                 .or(false);
     }
     public boolean isLowerThan (JtwigValue other) {
-        return configuration.lowerComparator()
+        return configuration.getLowerComparator()
                 .apply(this, other)
                 .or(false);
     }
@@ -99,7 +99,7 @@ public class JtwigValue {
     }
 
     public JtwigType getType () {
-        return configuration.typeExtractor()
+        return configuration.getTypeExtractor()
                 .extract(value)
                 .or(JtwigType.OBJECT);
     }
@@ -118,7 +118,7 @@ public class JtwigValue {
     }
 
     public JtwigValue getMapValue(JtwigValue key) {
-        Object value = configuration.mapSelectionExtractor().extract(asMap(), key)
+        Object value = configuration.getMapSelectionExtractor().extract(asMap(), key)
                 .or(new Value(Undefined.UNDEFINED)).getValue();
         return new JtwigValue(value, configuration);
     }

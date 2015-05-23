@@ -1,6 +1,7 @@
 package org.jtwig.integration.function;
 
 import org.jtwig.JtwigModel;
+import org.jtwig.JtwigTemplate;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.junit.Rule;
@@ -17,7 +18,7 @@ public class ParentFunctionTest extends AbstractIntegrationTest {
 
     @Test
     public void parentFunction() throws Exception {
-        String result = defaultStringTemplate("{% extends 'classpath:/example/extends/extendable-template.twig' %}" +
+        String result = JtwigTemplate.inlineTemplate("{% extends 'classpath:/example/extends/extendable-template.twig' %}" +
                 "{% block one %}One {{ parent() }}{% endblock %}").render(JtwigModel.newModel());
 
         assertThat(result, is("One Two"));
@@ -28,6 +29,6 @@ public class ParentFunctionTest extends AbstractIntegrationTest {
         expectedException.expect(CalculationException.class);
         expectedException.expectMessage(containsString("Parent function can only be called inside a block element"));
 
-        defaultStringTemplate("{{ parent() }}").render(JtwigModel.newModel());
+        JtwigTemplate.inlineTemplate("{{ parent() }}").render(JtwigModel.newModel());
     }
 }

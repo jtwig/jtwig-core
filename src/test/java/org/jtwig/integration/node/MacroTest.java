@@ -18,7 +18,7 @@ public class MacroTest extends AbstractIntegrationTest {
 
     @Test
     public void simpleMacro() throws Exception {
-        JtwigTemplate template = defaultStringTemplate("{% macro name () %}{% endmacro %}");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% macro name () %}{% endmacro %}");
         String result = template.render(JtwigModel.newModel());
         assertThat(result, is(""));
     }
@@ -28,7 +28,7 @@ public class MacroTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Missing macro name"));
 
-        defaultStringTemplate("{% macro () %}{% endmacro %}")
+        JtwigTemplate.inlineTemplate("{% macro () %}{% endmacro %}")
                 .render(JtwigModel.newModel());
     }
 
@@ -37,7 +37,7 @@ public class MacroTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Missing macro arguments"));
 
-        defaultStringTemplate("{% macro name %}{% endmacro %}")
+        JtwigTemplate.inlineTemplate("{% macro name %}{% endmacro %}")
                 .render(JtwigModel.newModel());
     }
 
@@ -46,7 +46,7 @@ public class MacroTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Code island not closed"));
 
-        defaultStringTemplate("{% macro name () {% endmacro %}")
+        JtwigTemplate.inlineTemplate("{% macro name () {% endmacro %}")
                 .render(JtwigModel.newModel());
     }
 
@@ -55,7 +55,7 @@ public class MacroTest extends AbstractIntegrationTest {
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Missing macroend tag"));
 
-        defaultStringTemplate("{% macro name () %}")
+        JtwigTemplate.inlineTemplate("{% macro name () %}")
                 .render(JtwigModel.newModel());
     }
 }

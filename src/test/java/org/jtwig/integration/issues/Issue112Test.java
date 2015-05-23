@@ -12,7 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.StringContains.containsString;
-import static org.jtwig.configuration.ConfigurationBuilder.configuration;
+import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuration;
 
 public class Issue112Test {
 

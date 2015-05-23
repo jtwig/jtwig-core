@@ -6,11 +6,11 @@ import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -23,7 +23,7 @@ public class ArgumentTest {
     @Test
     public void calculate() throws Exception {
         Object value = "";
-        JtwigValue jtwigValue = JtwigValueFactory.value(value, NamedValueConfiguration.COMPATIBLE_MODE);
+        JtwigValue jtwigValue = JtwigValueFactory.value(value, new CompatibleModeValueConfiguration());
         when(expression.calculate(context)).thenReturn(jtwigValue);
         FunctionArgument result = underTest.calculate(context);
 

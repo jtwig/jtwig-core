@@ -1,6 +1,7 @@
 package org.jtwig.integration;
 
 import org.jtwig.JtwigModel;
+import org.jtwig.JtwigTemplate;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -12,7 +13,7 @@ public class WhiteSpaceControlTest extends AbstractIntegrationTest {
     public void ifSpaceControl() throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate(" {%- if true -%} A {%- endif -%} \n\t")
+        String result = JtwigTemplate.inlineTemplate(" {%- if true -%} A {%- endif -%} \n\t")
                 .render(model);
 
         assertThat(result, is(equalTo("A")));
@@ -22,7 +23,7 @@ public class WhiteSpaceControlTest extends AbstractIntegrationTest {
     public void elseSpaceControl() throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate(" {%- if false -%}{% else -%} A {% endif -%} \n\t")
+        String result = JtwigTemplate.inlineTemplate(" {%- if false -%}{% else -%} A {% endif -%} \n\t")
                 .render(model);
 
         assertThat(result, is(equalTo("A ")));
@@ -32,7 +33,7 @@ public class WhiteSpaceControlTest extends AbstractIntegrationTest {
     public void elseIfSpaceControl() throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate(" {%- if false -%}{% elseif true -%} A {% endif -%} \n\t")
+        String result = JtwigTemplate.inlineTemplate(" {%- if false -%}{% elseif true -%} A {% endif -%} \n\t")
                 .render(model);
 
         assertThat(result, is(equalTo("A ")));
@@ -42,7 +43,7 @@ public class WhiteSpaceControlTest extends AbstractIntegrationTest {
     public void setTest() throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate(" {%- set a = 1 %}")
+        String result = JtwigTemplate.inlineTemplate(" {%- set a = 1 %}")
                 .render(model);
 
         assertThat(result, is(equalTo("")));
@@ -52,7 +53,7 @@ public class WhiteSpaceControlTest extends AbstractIntegrationTest {
     public void testOutput() throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate(" {{- 'hello' -}} ")
+        String result = JtwigTemplate.inlineTemplate(" {{- 'hello' -}} ")
                 .render(model);
 
         assertThat(result, is(equalTo("hello")));
@@ -62,7 +63,7 @@ public class WhiteSpaceControlTest extends AbstractIntegrationTest {
     public void testComment() throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate(" {#- 'hello' -#} ")
+        String result = JtwigTemplate.inlineTemplate(" {#- 'hello' -#} ")
                 .render(model);
 
         assertThat(result, is(equalTo("")));
@@ -72,7 +73,7 @@ public class WhiteSpaceControlTest extends AbstractIntegrationTest {
     public void testCommentEmpty() throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate(" {#--#} ")
+        String result = JtwigTemplate.inlineTemplate(" {#--#} ")
                 .render(model);
 
         assertThat(result, is(equalTo("")));
@@ -82,7 +83,7 @@ public class WhiteSpaceControlTest extends AbstractIntegrationTest {
     public void testCommentRight() throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate(" {# Hola -#} ")
+        String result = JtwigTemplate.inlineTemplate(" {# Hola -#} ")
                 .render(model);
 
         assertThat(result, is(equalTo(" ")));
@@ -92,7 +93,7 @@ public class WhiteSpaceControlTest extends AbstractIntegrationTest {
     public void testCommentLeft() throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate(" {#- Hola #} ")
+        String result = JtwigTemplate.inlineTemplate(" {#- Hola #} ")
                 .render(model);
 
         assertThat(result, is(equalTo(" ")));

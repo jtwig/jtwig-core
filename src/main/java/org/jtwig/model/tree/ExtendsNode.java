@@ -35,7 +35,7 @@ public class ExtendsNode extends Node {
     public Renderable render(RenderContext context) {
         String path = extendsExpression.calculate(context).asString();
         Optional<Resource> extendResource = context
-                .configuration().resourceResolver()
+                .environment().resourceResolver()
                 .resolve(context.currentResource().resource(), path);
 
         Resource resource = extendResource.or(throwException(path));

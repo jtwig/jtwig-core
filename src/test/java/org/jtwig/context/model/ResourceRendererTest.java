@@ -1,7 +1,7 @@
 package org.jtwig.context.model;
 
 import org.jtwig.JtwigModel;
-import org.jtwig.configuration.Configuration;
+import org.jtwig.environment.Environment;
 import org.jtwig.context.RenderContext;
 import org.jtwig.context.impl.ResourceRenderer;
 import org.jtwig.context.values.ValueContext;
@@ -66,10 +66,10 @@ public class ResourceRendererTest {
         Node node = mock(Node.class);
         Resource resource = mock(Resource.class);
         Renderable renderable = mock(Renderable.class);
-        Configuration configuration = mock(Configuration.class);
-        when(renderContext.configuration()).thenReturn(configuration);
+        Environment environment = mock(Environment.class);
+        when(renderContext.environment()).thenReturn(environment);
         JtwigParser jtwigParser = mock(JtwigParser.class);
-        when(configuration.parser()).thenReturn(jtwigParser);
+        when(environment.parser()).thenReturn(jtwigParser);
         when(jtwigParser.parse(resource)).thenReturn(node);
         when(node.render(renderContext)).thenReturn(renderable);
 
@@ -85,10 +85,10 @@ public class ResourceRendererTest {
         Node node = mock(Node.class);
         Resource resource = mock(Resource.class);
         Renderable renderable = mock(Renderable.class);
-        Configuration configuration = mock(Configuration.class);
-        when(renderContext.configuration()).thenReturn(configuration);
+        Environment environment = mock(Environment.class);
+        when(renderContext.environment()).thenReturn(environment);
         JtwigParser jtwigParser = mock(JtwigParser.class);
-        when(configuration.parser()).thenReturn(jtwigParser);
+        when(environment.parser()).thenReturn(jtwigParser);
         when(jtwigParser.parse(resource)).thenReturn(node);
         when(node.render(renderContext)).thenReturn(renderable);
 

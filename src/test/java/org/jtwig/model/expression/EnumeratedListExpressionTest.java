@@ -4,7 +4,7 @@ import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ public class EnumeratedListExpressionTest {
     @Before
     public void setUp() throws Exception {
         expressions.clear();
-        when(context.configuration().valueConfiguration()).thenReturn(NamedValueConfiguration.COMPATIBLE_MODE);
+        when(context.environment().valueConfiguration()).thenReturn(new CompatibleModeValueConfiguration());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class EnumeratedListExpressionTest {
     @Test
     public void calculateWhenNonEmpty() throws Exception {
         Expression expression = mock(Expression.class);
-        when(expression.calculate(context)).thenReturn(JtwigValueFactory.value("asd", NamedValueConfiguration.COMPATIBLE_MODE));
+        when(expression.calculate(context)).thenReturn(JtwigValueFactory.value("asd", new CompatibleModeValueConfiguration()));
         expressions.add(expression);
 
         JtwigValue result = underTest.calculate(context);

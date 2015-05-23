@@ -6,7 +6,7 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.junit.Test;
 
 import java.util.LinkedHashMap;
@@ -28,7 +28,7 @@ public class ForLoopNodeTest {
         JtwigModel jtwigModel = mock(JtwigModel.class);
         LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
         map.put("hello", "one");
-        when(expression.calculate(renderContext)).thenReturn(JtwigValueFactory.value(map, NamedValueConfiguration.COMPATIBLE_MODE));
+        when(expression.calculate(renderContext)).thenReturn(JtwigValueFactory.value(map, new CompatibleModeValueConfiguration()));
         when(renderContext.valueContext()).thenReturn(jtwigModel);
         when(keyVariableExpression.getIdentifier()).thenReturn("key");
         when(variableExpression.getIdentifier()).thenReturn("value");
@@ -45,7 +45,7 @@ public class ForLoopNodeTest {
     public void renderWhenMapArrayIteration() throws Exception {
         JtwigModel jtwigModel = mock(JtwigModel.class);
         List<String> list = asList("hello", "test");
-        when(expression.calculate(renderContext)).thenReturn(JtwigValueFactory.value(list, NamedValueConfiguration.COMPATIBLE_MODE));
+        when(expression.calculate(renderContext)).thenReturn(JtwigValueFactory.value(list, new CompatibleModeValueConfiguration()));
         when(renderContext.valueContext()).thenReturn(jtwigModel);
         when(keyVariableExpression.getIdentifier()).thenReturn("key");
         when(variableExpression.getIdentifier()).thenReturn("value");
@@ -64,7 +64,7 @@ public class ForLoopNodeTest {
     public void renderWhenArrayIteration() throws Exception {
         JtwigModel jtwigModel = mock(JtwigModel.class);
         List<String> list = asList("hello", "test");
-        when(expression.calculate(renderContext)).thenReturn(JtwigValueFactory.value(list, NamedValueConfiguration.COMPATIBLE_MODE));
+        when(expression.calculate(renderContext)).thenReturn(JtwigValueFactory.value(list, new CompatibleModeValueConfiguration()));
         when(renderContext.valueContext()).thenReturn(jtwigModel);
         when(variableExpression.getIdentifier()).thenReturn("value");
 

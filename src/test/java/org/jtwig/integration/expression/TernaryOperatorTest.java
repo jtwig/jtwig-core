@@ -1,6 +1,7 @@
 package org.jtwig.integration.expression;
 
 import org.jtwig.JtwigModel;
+import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ public class TernaryOperatorTest extends AbstractIntegrationTest {
     public void testTrue() throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate("{{ true ? 1 : 2 }}")
+        String result = JtwigTemplate.inlineTemplate("{{ true ? 1 : 2 }}")
                 .render(model);
 
         assertThat(result, is(equalTo("1")));
@@ -24,7 +25,7 @@ public class TernaryOperatorTest extends AbstractIntegrationTest {
         JtwigModel model = new JtwigModel();
         model.with("value", true);
 
-        String result = defaultStringTemplate("{{ value ? '1' : '2' }}")
+        String result = JtwigTemplate.inlineTemplate("{{ value ? '1' : '2' }}")
                 .render(model);
 
         assertThat(result, is(equalTo("1")));
@@ -34,7 +35,7 @@ public class TernaryOperatorTest extends AbstractIntegrationTest {
     public void testFalse() throws Exception {
         JtwigModel model = new JtwigModel();
 
-        String result = defaultStringTemplate("{{ false ? 1 : 2 }}")
+        String result = JtwigTemplate.inlineTemplate("{{ false ? 1 : 2 }}")
                 .render(model);
 
         assertThat(result, is(equalTo("2")));

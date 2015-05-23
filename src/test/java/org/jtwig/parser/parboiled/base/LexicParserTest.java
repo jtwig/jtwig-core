@@ -9,12 +9,14 @@ import org.parboiled.Rule;
 import org.parboiled.parserunners.ReportingParseRunner;
 import org.parboiled.support.ParsingResult;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.parboiled.Parboiled.createParser;
 
 public class LexicParserTest extends AbstractParserTest {
-    private LexicParser underTest = createParser(LexicParser.class, context);
+    private LexicParser underTest = createParser(LexicParser.class, context, emptyList());
 
     @Test
     public void validIdentifier() throws Exception {
@@ -25,9 +27,9 @@ public class LexicParserTest extends AbstractParserTest {
 
     @Test
     public void invalidIdentifierWithKeywork() throws Exception {
-        underTest = createParser(LexicParser.class, context);
+        underTest = createParser(LexicParser.class, context, asList("one"));
 
-        ParsingResult<String> result = parse(underTest.Identifier(), "if");
+        ParsingResult<String> result = parse(underTest.Identifier(), "one");
 
         assertThat(result.matched, is(false));
     }

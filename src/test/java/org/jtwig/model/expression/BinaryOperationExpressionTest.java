@@ -7,7 +7,7 @@ import org.jtwig.model.expression.operation.calculators.binary.BinaryOperationCa
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,14 +28,14 @@ public class BinaryOperationExpressionTest {
 
     @Before
     public void setUp() throws Exception {
-        when(context.configuration().valueConfiguration()).thenReturn(NamedValueConfiguration.COMPATIBLE_MODE);
+        when(context.environment().valueConfiguration()).thenReturn(new CompatibleModeValueConfiguration());
     }
 
     @Test
     public void calculate() throws Exception {
         JtwigValue value = mock(JtwigValue.class);
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value(true, NamedValueConfiguration.COMPATIBLE_MODE));
-        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value(true, NamedValueConfiguration.COMPATIBLE_MODE));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value(true, new CompatibleModeValueConfiguration()));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value(true, new CompatibleModeValueConfiguration()));
         when(binaryOperationCalculator.calculate(context, position, leftOperand, rightOperand)).thenReturn(value);
 
         JtwigValue result = underTest.calculate(context);

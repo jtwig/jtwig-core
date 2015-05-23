@@ -24,7 +24,7 @@ public class ParentFunction {
                 .or(OptionalUtils.<Resource, CalculationException>throwException(new CalculationException("Currently there is no parent context")));
 
         FindBlockVisitor findBlockVisitor = new FindBlockVisitor(blockName);
-        renderContext.configuration().parser().parse(resource).visit(findBlockVisitor);
+        renderContext.environment().parser().parse(resource).visit(findBlockVisitor);
 
         Node content = findBlockVisitor.getContent().or(OptionalUtils.<Node, CalculationException>throwException(new CalculationException(String.format("No block %s found in parent", blockName))));
 

@@ -16,7 +16,7 @@ public class SpacelessNode extends ContentNode {
     public Renderable render(RenderContext context) {
         StringBuilderRenderResult result = new StringBuilderRenderResult();
         String content = super.render(context).appendTo(result).content();
-        String contentWithoutSpaces = context.configuration().spaceRemover().apply(content);
+        String contentWithoutSpaces = context.environment().renderConfiguration().spaceRemover().apply(content);
         return new StringRenderable(contentWithoutSpaces, EscapeMode.NONE);
     }
 }

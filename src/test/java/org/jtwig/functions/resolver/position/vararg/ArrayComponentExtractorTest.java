@@ -2,8 +2,6 @@ package org.jtwig.functions.resolver.position.vararg;
 
 import com.google.common.base.Optional;
 import org.jtwig.functions.FunctionArgument;
-import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.NamedValueConfiguration;
 import org.junit.Test;
 
 import java.util.List;

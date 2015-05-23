@@ -18,7 +18,7 @@ public class OutputTest extends AbstractIntegrationTest {
 
     @Test
     public void output() throws Exception {
-        JtwigTemplate template = defaultStringTemplate(" {{ variable }} ");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate(" {{ variable }} ");
 
         String result = template.render(newModel().with("variable", "hello"));
 
@@ -27,7 +27,7 @@ public class OutputTest extends AbstractIntegrationTest {
 
     @Test
     public void outputWithStripLeftWhiteSpace() throws Exception {
-        JtwigTemplate template = defaultStringTemplate(" {{- variable }} ");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate(" {{- variable }} ");
 
         String result = template.render(newModel().with("variable", "hello"));
 
@@ -36,7 +36,7 @@ public class OutputTest extends AbstractIntegrationTest {
 
     @Test
     public void outputWithStripRightWhiteSpace() throws Exception {
-        JtwigTemplate template = defaultStringTemplate(" {{ variable -}} ");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate(" {{ variable -}} ");
 
         String result = template.render(newModel().with("variable", "hello"));
 
@@ -45,7 +45,7 @@ public class OutputTest extends AbstractIntegrationTest {
 
     @Test
     public void outputWithStripBothWhiteSpace() throws Exception {
-        JtwigTemplate template = defaultStringTemplate(" {{- variable -}} ");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate(" {{- variable -}} ");
 
         String result = template.render(newModel().with("variable", "hello"));
 
@@ -54,7 +54,7 @@ public class OutputTest extends AbstractIntegrationTest {
 
     @Test
     public void outputWithoutEndCodeIsland() throws Exception {
-        JtwigTemplate template = defaultStringTemplate(" {{- variable } ");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate(" {{- variable } ");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Expecting end of output code island"));
 
@@ -63,7 +63,7 @@ public class OutputTest extends AbstractIntegrationTest {
 
     @Test
     public void outputWithoutExpression() throws Exception {
-        JtwigTemplate template = defaultStringTemplate(" {{-  }} ");
+        JtwigTemplate template = JtwigTemplate.inlineTemplate(" {{-  }} ");
         expectedException.expect(ParseException.class);
         expectedException.expectMessage(containsString("Missing or invalid output expression"));
 

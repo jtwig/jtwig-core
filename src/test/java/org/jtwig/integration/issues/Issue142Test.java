@@ -1,6 +1,7 @@
 package org.jtwig.integration.issues;
 
 import org.jtwig.JtwigModel;
+import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.junit.Test;
 
@@ -14,7 +15,7 @@ public class Issue142Test extends AbstractIntegrationTest {
         JtwigModel model = new JtwigModel();
         model.with("var", 5L);
 
-        String result = defaultStringTemplate("{{ var == 5 }}")
+        String result = JtwigTemplate.inlineTemplate("{{ var == 5 }}")
                 .render(model);
 
         assertThat(result, is(equalTo("1")));
@@ -25,7 +26,7 @@ public class Issue142Test extends AbstractIntegrationTest {
         JtwigModel model = new JtwigModel();
         model.with("var", 5L);
 
-        String result = defaultStringTemplate("{{ 5 == var }}")
+        String result = JtwigTemplate.inlineTemplate("{{ 5 == var }}")
                 .render(model);
 
         assertThat(result, is(equalTo("1")));

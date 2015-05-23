@@ -5,15 +5,13 @@ import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.NamedValueConfiguration;
+import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class SetNodeTest extends AbstractNodeTest {
     private final Position position = mock(Position.class);
@@ -25,7 +23,7 @@ public class SetNodeTest extends AbstractNodeTest {
     public void render() throws Exception {
         Object value = new Object();
         when(variableExpression.getIdentifier()).thenReturn("one");
-        when(expression.calculate(renderContext())).thenReturn(JtwigValueFactory.value(value, NamedValueConfiguration.COMPATIBLE_MODE));
+        when(expression.calculate(renderContext())).thenReturn(JtwigValueFactory.value(value, new CompatibleModeValueConfiguration()));
 
         Renderable result = underTest.render(renderContext());
 

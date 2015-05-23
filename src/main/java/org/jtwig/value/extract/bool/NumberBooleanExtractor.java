@@ -2,14 +2,14 @@ package org.jtwig.value.extract.bool;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import org.jtwig.value.extract.number.NumberExtractor;
+import org.jtwig.value.extract.Extractor;
 
 import java.math.BigDecimal;
 
-public class NumberBooleanExtractor implements BooleanExtractor {
-    private final NumberExtractor numberExtractor;
+public class NumberBooleanExtractor implements Extractor<Boolean> {
+    private final Extractor<BigDecimal> numberExtractor;
 
-    public NumberBooleanExtractor(NumberExtractor numberExtractor) {
+    public NumberBooleanExtractor(Extractor<BigDecimal> numberExtractor) {
         this.numberExtractor = numberExtractor;
     }
 

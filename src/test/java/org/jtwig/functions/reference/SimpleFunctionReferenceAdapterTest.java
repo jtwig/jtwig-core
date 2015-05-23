@@ -5,7 +5,6 @@ import com.google.common.base.Supplier;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.functions.SimpleFunction;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.NamedValueConfiguration;
 import org.junit.Test;
 
 import java.util.List;

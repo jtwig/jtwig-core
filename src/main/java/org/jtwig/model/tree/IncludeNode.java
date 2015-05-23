@@ -34,7 +34,7 @@ public class IncludeNode extends Node {
     @Override
     public Renderable render(RenderContext context) {
         String path = configuration.getInclude().calculate(context).asString();
-        Optional<Resource> resource = context.configuration()
+        Optional<Resource> resource = context.environment()
                 .resourceResolver()
                 .resolve(context.currentResource().resource(), path);
         if (configuration.isIgnoreMissing() && !resource.isPresent()) {

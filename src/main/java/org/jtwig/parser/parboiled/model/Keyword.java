@@ -36,7 +36,9 @@ public enum Keyword {
     END_FILTER("endfilter"),
     NULL("null"),
     IS("is"),
-    NOT("not");
+    NOT("not"),
+    WITH("with")
+    ;
 
     private final String symbol;
 

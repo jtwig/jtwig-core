@@ -1,6 +1,6 @@
 package org.jtwig.context;
 
-import org.jtwig.configuration.Configuration;
+import org.jtwig.environment.Environment;
 import org.jtwig.context.impl.NodeRenderer;
 import org.jtwig.context.impl.ResourceRenderer;
 import org.jtwig.context.model.EscapeModeContext;
@@ -9,7 +9,7 @@ import org.jtwig.context.model.ResourceContext;
 import org.jtwig.context.values.ValueContext;
 
 public interface RenderContext {
-    Configuration configuration();
+    Environment environment();
     ResourceRenderer resourceRenderer();
     NodeRenderer nodeRenderer();
     ResourceContext currentResource();

@@ -1,11 +1,12 @@
 package org.jtwig.value.extract.map;
 
 import com.google.common.base.Optional;
+import org.jtwig.value.extract.Extractor;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class IterableMapExtractor implements MapExtractor {
+public class IterableMapExtractor implements Extractor<Map> {
     @Override
     public Optional<Map> extract(Object value) {
         if (value instanceof Iterable) {
