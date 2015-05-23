@@ -3,6 +3,7 @@ package org.jtwig.context;
 import com.google.common.base.Supplier;
 import org.jtwig.content.spaces.SpaceRemover;
 import org.jtwig.context.model.EscapeMode;
+import org.jtwig.i18n.locale.LocaleResolver;
 
 import java.math.MathContext;
 import java.nio.charset.Charset;
@@ -15,14 +16,16 @@ public class RenderConfiguration {
     private final MathContext mathContext;
     private final EscapeMode initialEscapeMode;
     private final Supplier<Locale> currentLocaleSupplier;
+    private final LocaleResolver localeResolver;
 
-    public RenderConfiguration(SpaceRemover spaceRemover, boolean strictMode, Charset outputCharset, MathContext mathContext, EscapeMode initialEscapeMode, Supplier<Locale> currentLocaleSupplier) {
+    public RenderConfiguration(SpaceRemover spaceRemover, boolean strictMode, Charset outputCharset, MathContext mathContext, EscapeMode initialEscapeMode, Supplier<Locale> currentLocaleSupplier, LocaleResolver localeResolver) {
         this.spaceRemover = spaceRemover;
         this.strictMode = strictMode;
         this.outputCharset = outputCharset;
         this.mathContext = mathContext;
         this.initialEscapeMode = initialEscapeMode;
         this.currentLocaleSupplier = currentLocaleSupplier;
+        this.localeResolver = localeResolver;
     }
 
     public SpaceRemover spaceRemover() {
@@ -47,5 +50,9 @@ public class RenderConfiguration {
 
     public Supplier<Locale> currentLocaleSupplier() {
         return currentLocaleSupplier;
+    }
+
+    public LocaleResolver localeResolver() {
+        return localeResolver;
     }
 }

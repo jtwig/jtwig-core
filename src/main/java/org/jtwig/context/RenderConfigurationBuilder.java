@@ -4,6 +4,7 @@ import com.google.common.base.Supplier;
 import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.content.spaces.SpaceRemover;
 import org.jtwig.context.model.EscapeMode;
+import org.jtwig.i18n.locale.LocaleResolver;
 
 import java.math.MathContext;
 import java.nio.charset.Charset;
@@ -16,6 +17,7 @@ public class RenderConfigurationBuilder implements Builder<RenderConfiguration> 
     private MathContext mathContext;
     private EscapeMode initialEscapeMode;
     private Supplier<Locale> localeSupplier;
+    private LocaleResolver localeResolver;
 
     public RenderConfigurationBuilder () {}
     public RenderConfigurationBuilder (RenderConfiguration prototype) {
@@ -24,7 +26,10 @@ public class RenderConfigurationBuilder implements Builder<RenderConfiguration> 
                 .withMathContext(prototype.mathContext())
                 .withOutputCharset(prototype.outputCharset())
                 .withSpaceRemover(prototype.spaceRemover())
-                .withStrictMode(prototype.strictMode());
+                .withStrictMode(prototype.strictMode())
+                .withLocaleSupplier(prototype.currentLocaleSupplier())
+                .withLocaleResolver(prototype.localeResolver())
+        ;
     }
 
     public RenderConfigurationBuilder withSpaceRemover(SpaceRemover spaceRemover) {
@@ -57,8 +62,13 @@ public class RenderConfigurationBuilder implements Builder<RenderConfiguration> 
         return this;
     }
 
+    public RenderConfigurationBuilder withLocaleResolver(LocaleResolver localeResolver) {
+        this.localeResolver = localeResolver;
+        return this;
+    }
+
     @Override
     public RenderConfiguration build() {
-        return new RenderConfiguration(spaceRemover, strictMode, outputCharset, mathContext, initialEscapeMode, localeSupplier);
+        return new RenderConfiguration(spaceRemover, strictMode, outputCharset, mathContext, initialEscapeMode, localeSupplier, localeResolver);
     }
 }

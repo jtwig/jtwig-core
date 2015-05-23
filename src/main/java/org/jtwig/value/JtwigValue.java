@@ -9,10 +9,7 @@ import org.jtwig.value.extract.number.ObjectNumberExtractor;
 
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class JtwigValue {
     private final Object value;
@@ -121,5 +118,13 @@ public class JtwigValue {
         Object value = configuration.getMapSelectionExtractor().extract(asMap(), key)
                 .or(new Value(Undefined.UNDEFINED)).getValue();
         return new JtwigValue(value, configuration);
+    }
+
+    public boolean isInstanceOf(Class type) {
+        return !isNull() && type.isAssignableFrom(value.getClass());
+    }
+
+    public <T> T as(Class<T> type) {
+        return type.cast(value);
     }
 }

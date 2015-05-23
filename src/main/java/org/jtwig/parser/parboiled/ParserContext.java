@@ -76,6 +76,7 @@ public class ParserContext {
         createParser(VerbatimNodeParser.class, context);
         createParser(SpacelessNodeParser.class, context);
         createParser(FilterNodeParser.class, context);
+        createParser(TranslateNodeParser.class, context);
 
         for (AddonParserProvider provider : addOnParsers) {
             createParser((Class) provider.parser(), context);
