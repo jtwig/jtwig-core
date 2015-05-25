@@ -19,8 +19,8 @@ public class Issue210Test {
 
         String result = JtwigTemplate
                 .inlineTemplate("{{ text }}", configuration()
-                        .withInputCharset(Charset.forName("UTF-8"))
-                        .withOutputCharset(Charset.forName("ISO-8859-1"))
+                        .parser().withInputCharset(Charset.forName("UTF-8")).and()
+                        .render().withOutputCharset(Charset.forName("ISO-8859-1")).and()
                         .build())
                 .render(model);
 
@@ -34,8 +34,8 @@ public class Issue210Test {
 
         String result = JtwigTemplate
                 .inlineTemplate("{{ text }}", configuration()
-                        .withInputCharset(Charset.forName("UTF-8"))
-                        .withOutputCharset(Charset.forName("UTF-8"))
+                        .parser().withInputCharset(Charset.forName("UTF-8")).and()
+                        .render().withOutputCharset(Charset.forName("UTF-8")).and()
                         .build())
                 .render(model);
 

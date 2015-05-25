@@ -1,25 +1,19 @@
 package org.jtwig.environment;
 
-import com.google.common.base.Supplier;
 import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.content.json.JsonMapperProviderConfigurationBuilder;
 import org.jtwig.context.RenderConfigurationBuilder;
-import org.jtwig.functions.SimpleFunction;
+import org.jtwig.environment.and.*;
 import org.jtwig.functions.resolver.FunctionResolverConfigurationBuilder;
 import org.jtwig.i18n.MessageResolverConfigurationBuilder;
-import org.jtwig.i18n.source.LocalizedMessageSource;
-import org.jtwig.i18n.source.message.MessageSource;
 import org.jtwig.model.expression.lists.EnumerationListStrategyConfigurationBuilder;
-import org.jtwig.parser.JtwigParserConfigurationBuilder;
-import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.property.PropertyResolverConfigurationBuilder;
-import org.jtwig.resource.resolver.ResourceResolver;
 import org.jtwig.resource.resolver.ResourceResolverConfigurationBuilder;
 import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.jtwig.value.configuration.ValueConfiguration;
 
-import java.nio.charset.Charset;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfiguration> {
     public static EnvironmentConfigurationBuilder configuration () {
@@ -27,37 +21,37 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     }
 
     private Map<String, Object> parameters = new HashMap<>();
-    private final ValueConfiguration valueConfiguration;
-    private final FunctionResolverConfigurationBuilder functionResolverConfiguration;
-    private final RenderConfigurationBuilder renderConfiguration;
-    private final JtwigParserConfigurationBuilder jtwigParserConfigurationBuilder;
-    private final ResourceResolverConfigurationBuilder resourceResolverConfigurationBuilder;
-    private final PropertyResolverConfigurationBuilder propertyResolverConfigurationBuilder;
-    private final JsonMapperProviderConfigurationBuilder jsonMapperProviderConfigurationBuilder;
-    private final EnumerationListStrategyConfigurationBuilder enumerationListStrategyConfigurationBuilder;
-    private final MessageResolverConfigurationBuilder messageResolverConfigurationBuilder;
+    private ValueConfiguration valueConfiguration;
+    private final AndFunctionResolverConfigurationBuilder functionResolverConfiguration;
+    private final AndRenderConfigurationBuilder renderConfiguration;
+    private final AndJtwigParserConfigurationBuilder jtwigParserConfigurationBuilder;
+    private final AndResourceResolverConfigurationBuilder resourceResolverConfigurationBuilder;
+    private final AndPropertyResolverConfigurationBuilder propertyResolverConfigurationBuilder;
+    private final AndJsonMapperProviderConfigurationBuilder jsonMapperProviderConfigurationBuilder;
+    private final AndEnumerationListStrategyConfigurationBuilder enumerationListStrategyConfigurationBuilder;
+    private final AndMessageResolverConfigurationBuilder messageResolverConfigurationBuilder;
 
     public EnvironmentConfigurationBuilder () {
         valueConfiguration = new CompatibleModeValueConfiguration();
-        functionResolverConfiguration  = new FunctionResolverConfigurationBuilder();
-        renderConfiguration = new RenderConfigurationBuilder();
-        jtwigParserConfigurationBuilder = new JtwigParserConfigurationBuilder();
-        resourceResolverConfigurationBuilder = new ResourceResolverConfigurationBuilder();
-        propertyResolverConfigurationBuilder = new PropertyResolverConfigurationBuilder();
-        jsonMapperProviderConfigurationBuilder = new JsonMapperProviderConfigurationBuilder();
-        enumerationListStrategyConfigurationBuilder = new EnumerationListStrategyConfigurationBuilder();
-        messageResolverConfigurationBuilder = new MessageResolverConfigurationBuilder();
+        functionResolverConfiguration  = new AndFunctionResolverConfigurationBuilder(this);
+        renderConfiguration = new AndRenderConfigurationBuilder(this);
+        jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(this);
+        resourceResolverConfigurationBuilder = new AndResourceResolverConfigurationBuilder(this);
+        propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(this);
+        jsonMapperProviderConfigurationBuilder = new AndJsonMapperProviderConfigurationBuilder(this);
+        enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(this);
+        messageResolverConfigurationBuilder = new AndMessageResolverConfigurationBuilder(this);
     }
     public EnvironmentConfigurationBuilder (EnvironmentConfiguration prototype) {
-        functionResolverConfiguration  = new FunctionResolverConfigurationBuilder(prototype.getFunctionResolverConfiguration());
-        renderConfiguration = new RenderConfigurationBuilder(prototype.getRenderConfiguration());
-        jtwigParserConfigurationBuilder = new JtwigParserConfigurationBuilder(prototype.getJtwigParserConfiguration());
-        resourceResolverConfigurationBuilder = new ResourceResolverConfigurationBuilder(prototype.getResourceResolverConfiguration());
+        functionResolverConfiguration  = new AndFunctionResolverConfigurationBuilder(prototype.getFunctionResolverConfiguration(), this);
+        renderConfiguration = new AndRenderConfigurationBuilder(prototype.getRenderConfiguration(), this);
+        jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(prototype.getJtwigParserConfiguration(), this);
+        resourceResolverConfigurationBuilder = new AndResourceResolverConfigurationBuilder(prototype.getResourceResolverConfiguration(), this);
         valueConfiguration = prototype.getValueConfiguration();
-        propertyResolverConfigurationBuilder = new PropertyResolverConfigurationBuilder(prototype.getPropertyResolverConfiguration());
-        jsonMapperProviderConfigurationBuilder = new JsonMapperProviderConfigurationBuilder(prototype.getJsonMapperProviderConfiguration());
-        enumerationListStrategyConfigurationBuilder = new EnumerationListStrategyConfigurationBuilder(prototype.getEnumerationListConfiguration());
-        messageResolverConfigurationBuilder = new MessageResolverConfigurationBuilder(prototype.getMessageResolverConfiguration());
+        propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(prototype.getPropertyResolverConfiguration(), this);
+        jsonMapperProviderConfigurationBuilder = new AndJsonMapperProviderConfigurationBuilder(prototype.getJsonMapperProviderConfiguration(), this);
+        enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(prototype.getEnumerationListConfiguration(), this);
+        messageResolverConfigurationBuilder = new AndMessageResolverConfigurationBuilder(prototype.getMessageResolverConfiguration(), this);
     }
 
     @Override
@@ -76,49 +70,45 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         );
     }
 
-    public EnvironmentConfigurationBuilder include(SimpleFunction simpleFunction) {
-        functionResolverConfiguration.withSimpleFunctions(Collections.singletonList(simpleFunction));
+    public AndJtwigParserConfigurationBuilder parser () {
+        return jtwigParserConfigurationBuilder;
+    }
+
+    public AndFunctionResolverConfigurationBuilder functions () {
+        return functionResolverConfiguration;
+    }
+
+    public AndRenderConfigurationBuilder render () {
+        return renderConfiguration;
+    }
+
+    public AndResourceResolverConfigurationBuilder resources() {
+        return resourceResolverConfigurationBuilder;
+    }
+
+    public AndPropertyResolverConfigurationBuilder propertyResolver() {
+        return propertyResolverConfigurationBuilder;
+    }
+
+    public AndJsonMapperProviderConfigurationBuilder jsonMapper() {
+        return jsonMapperProviderConfigurationBuilder;
+    }
+
+    public AndEnumerationListStrategyConfigurationBuilder listEnumeration() {
+        return enumerationListStrategyConfigurationBuilder;
+    }
+
+    public AndMessageResolverConfigurationBuilder messages() {
+        return messageResolverConfigurationBuilder;
+    }
+
+    public EnvironmentConfigurationBuilder withValueConfiguration (ValueConfiguration configuration) {
+        this.valueConfiguration = configuration;
         return this;
     }
 
-    public EnvironmentConfigurationBuilder withStrictMode(boolean strictMode) {
-        renderConfiguration.withStrictMode(strictMode);
-        return this;
-    }
-
-    public EnvironmentConfigurationBuilder withInputCharset(Charset charset) {
-        jtwigParserConfigurationBuilder.withInputCharset(charset);
-        return this;
-    }
-
-    public EnvironmentConfigurationBuilder withOutputCharset(Charset charset) {
-        renderConfiguration.withOutputCharset(charset);
-        return this;
-    }
-
-    public EnvironmentConfigurationBuilder withResourceResolver(ResourceResolver resourceResolver) {
-        resourceResolverConfigurationBuilder.withResourceResolvers(Collections.singletonList(resourceResolver));
-        return this;
-    }
-
-    public EnvironmentConfigurationBuilder withAddOnParser(AddonParserProvider provider) {
-        jtwigParserConfigurationBuilder.withAddonParserProviders(Collections.singletonList(provider));
-        return this;
-    }
-
-
-    public EnvironmentConfigurationBuilder withMessageSource(LocalizedMessageSource messageSource) {
-        this.messageResolverConfigurationBuilder.withMessageSource(messageSource);
-        return this;
-    }
-
-    public EnvironmentConfigurationBuilder withMessageSource(Locale locale, MessageSource messageSource) {
-        this.messageResolverConfigurationBuilder.withMessageSource(locale, messageSource);
-        return this;
-    }
-
-    public EnvironmentConfigurationBuilder withLocaleSupplier(Supplier<Locale> localeSupplier) {
-        this.renderConfiguration.withLocaleSupplier(localeSupplier);
+    public <T> EnvironmentConfigurationBuilder withParameter (String name, T value) {
+        this.parameters.put(name, value);
         return this;
     }
 }

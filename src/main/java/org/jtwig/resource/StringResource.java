@@ -14,4 +14,20 @@ public class StringResource implements Resource {
     public InputStream content() {
         return new ByteArrayInputStream(content.getBytes());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StringResource that = (StringResource) o;
+
+        return content.equals(that.content);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return content.hashCode();
+    }
 }

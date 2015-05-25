@@ -29,7 +29,7 @@ public class Issue140Test extends AbstractIntegrationTest {
         expectedException.expectMessage(containsString("Variable 'var' undefined"));
 
         JtwigTemplate.inlineTemplate("{{ var is null }}", configuration()
-                .withStrictMode(true)
+                .render().withStrictMode(true).and()
                 .build())
                 .render(JtwigModel.newModel());
     }
@@ -42,7 +42,7 @@ public class Issue140Test extends AbstractIntegrationTest {
     @Test
     public void outputNonexistentVarThrowsException() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ var is null }}", configuration()
-                .withStrictMode(false)
+                .render().withStrictMode(false).and()
                 .build())
                 .render(JtwigModel.newModel());
 

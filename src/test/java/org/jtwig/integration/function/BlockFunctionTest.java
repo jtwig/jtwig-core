@@ -25,7 +25,7 @@ public class BlockFunctionTest extends AbstractIntegrationTest {
     @Test
     public void blockWithExtends() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% extends 'a' %}{% block one %}a{% endblock %}", configuration()
-                .withResourceResolver(new ResourceResolver() {
+                .resources().withResourceResolver(new ResourceResolver() {
                     @Override
                     public Optional<Resource> resolve(Resource resource, String relativePath) {
                         if (relativePath.equals("a")) {
@@ -33,7 +33,7 @@ public class BlockFunctionTest extends AbstractIntegrationTest {
                         }
                         return Optional.absent();
                     }
-                })
+                }).and()
                 .build())
                 .render(JtwigModel.newModel());
 

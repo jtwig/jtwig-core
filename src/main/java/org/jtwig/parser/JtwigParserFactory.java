@@ -23,11 +23,11 @@ import static org.parboiled.common.FileUtils.readAllText;
 
 public class JtwigParserFactory {
     public JtwigParser create (JtwigParserConfiguration configuration) {
-        return new ParboiledJtwigParser(
+        return new CachedJtwigParser(configuration.getCacheProvider().cache(), new ParboiledJtwigParser(
                 configuration.getSyntaxConfiguration(),
                 configuration.getAddonParserProviders(),
                 configuration.getInputCharset()
-        );
+        ));
     }
 
     public static class ParboiledJtwigParser implements JtwigParser {

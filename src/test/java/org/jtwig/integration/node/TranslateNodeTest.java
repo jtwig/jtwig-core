@@ -25,8 +25,8 @@ public class TranslateNodeTest {
     @Test
     public void simpleTranslateWithTranslation() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% trans %}Hi{% endtrans %}", configuration()
-                .withMessageSource(Locale.ITALY, singleMessageResource("Hi", "Ciao"))
-                .withLocaleSupplier(new StaticLocaleSupplier(Locale.ITALY))
+                .messages().withMessageSource(Locale.ITALY, singleMessageResource("Hi", "Ciao")).and()
+                .render().withLocaleSupplier(new StaticLocaleSupplier(Locale.ITALY)).and()
                 .build())
                 .render(JtwigModel.newModel());
 
@@ -36,8 +36,8 @@ public class TranslateNodeTest {
     @Test
     public void simpleTranslateWithTranslationInto() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% trans into 'it-IT' %}Hi{% endtrans %}", configuration()
-                .withMessageSource(Locale.ITALY, singleMessageResource("Hi", "Ciao"))
-                .withLocaleSupplier(new StaticLocaleSupplier(Locale.ENGLISH))
+                .messages().withMessageSource(Locale.ITALY, singleMessageResource("Hi", "Ciao")).and()
+                .render().withLocaleSupplier(new StaticLocaleSupplier(Locale.ENGLISH)).and()
                 .build())
                 .render(JtwigModel.newModel());
 
@@ -47,8 +47,8 @@ public class TranslateNodeTest {
     @Test
     public void simpleTranslateWithTranslationWithParameter() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% trans with { '%name%': 'Joao' } %}Hi %name%{% endtrans %}", configuration()
-                .withMessageSource(Locale.ITALY, singleMessageResource("Hi %name%", "Ciao %name%"))
-                .withLocaleSupplier(new StaticLocaleSupplier(Locale.ITALY))
+                .messages().withMessageSource(Locale.ITALY, singleMessageResource("Hi %name%", "Ciao %name%")).and()
+                .render().withLocaleSupplier(new StaticLocaleSupplier(Locale.ITALY)).and()
                 .build())
                 .render(JtwigModel.newModel());
 
@@ -58,8 +58,8 @@ public class TranslateNodeTest {
     @Test
     public void translateWithTranslationWithContextVariable() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% trans %}Hi %name%{% endtrans %}", configuration()
-                .withMessageSource(Locale.ITALY, singleMessageResource("Hi %name%", "Ciao %name%"))
-                .withLocaleSupplier(new StaticLocaleSupplier(Locale.ITALY))
+                .messages().withMessageSource(Locale.ITALY, singleMessageResource("Hi %name%", "Ciao %name%")).and()
+                .render().withLocaleSupplier(new StaticLocaleSupplier(Locale.ITALY)).and()
                 .build())
                 .render(JtwigModel.newModel().with("name", "World"));
 

@@ -20,7 +20,7 @@ public class CompositionTest extends AbstractIntegrationTest {
     @Test
     public void compose() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ [1..10] | sum }}", configuration()
-                .include(sumFunction()).build())
+                .functions().include(sumFunction()).and().build())
                 .render(JtwigModel.newModel());
 
         assertThat(result, is("55"));
@@ -29,7 +29,7 @@ public class CompositionTest extends AbstractIntegrationTest {
     @Test
     public void composeWithFunctionWithParenthesis() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ [1..10] | sum() }}", configuration()
-                .include(sumFunction()).build())
+                .functions().include(sumFunction()).and().build())
                 .render(JtwigModel.newModel());
 
         assertThat(result, is("55"));
@@ -38,7 +38,7 @@ public class CompositionTest extends AbstractIntegrationTest {
     @Test
     public void composeWithFunction() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ 1 | plus(1) }}", configuration()
-                .include(plusFunction()).build())
+                .functions().include(plusFunction()).and().build())
                 .render(JtwigModel.newModel());
 
         assertThat(result, is("2"));

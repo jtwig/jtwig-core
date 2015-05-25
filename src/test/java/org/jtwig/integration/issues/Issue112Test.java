@@ -26,7 +26,7 @@ public class Issue112Test {
 
         String result = JtwigTemplate
                 .inlineTemplate("{{ nonexistent }}", configuration()
-                        .withStrictMode(false)
+                        .render().withStrictMode(false).and()
                         .build())
                 .render(model);
 
@@ -42,7 +42,7 @@ public class Issue112Test {
 
         JtwigTemplate
                 .inlineTemplate("{{ nonexistent }}", configuration()
-                        .withStrictMode(true)
+                        .render().withStrictMode(true).and()
                         .build())
                 .render(model);
 
@@ -55,7 +55,7 @@ public class Issue112Test {
 
         String result = JtwigTemplate
                 .inlineTemplate("{{ undefinedVar.length }}", configuration()
-                        .withStrictMode(false)
+                        .render().withStrictMode(false).and()
                         .build())
                 .render(model);
 
@@ -69,7 +69,7 @@ public class Issue112Test {
 
         String result = JtwigTemplate
                 .inlineTemplate("{{ undefinedVar.length.another }}", configuration()
-                        .withStrictMode(false)
+                        .render().withStrictMode(false).and()
                         .build())
                 .render(model);
 
@@ -86,7 +86,7 @@ public class Issue112Test {
 
         JtwigTemplate
                 .inlineTemplate("{{ undefinedVar.length }}", configuration()
-                        .withStrictMode(true)
+                        .render().withStrictMode(true).and()
                         .build())
                 .render(model);
     }
@@ -97,7 +97,7 @@ public class Issue112Test {
 
         String result = JtwigTemplate
                 .inlineTemplate("{{ undefinedVar + 3 }}", configuration()
-                        .withStrictMode(false)
+                        .render().withStrictMode(false).and()
                         .build())
                 .render(model);
 
@@ -114,7 +114,7 @@ public class Issue112Test {
 
         JtwigTemplate
                 .inlineTemplate("{{ undefinedVar + 3 }}", configuration()
-                        .withStrictMode(true)
+                        .render().withStrictMode(true).and()
                         .build())
                 .render(model);
     }
@@ -129,7 +129,7 @@ public class Issue112Test {
 
         JtwigTemplate
                 .inlineTemplate("{% set a = 5 %}{{ a - b  }}", configuration()
-                        .withStrictMode(true)
+                        .render().withStrictMode(true).and()
                         .build())
                 .render(model);
     }
@@ -140,7 +140,7 @@ public class Issue112Test {
 
         String result = JtwigTemplate
                 .inlineTemplate("{% set a = 5 %}{% set b = null %}{{ a - b }}", configuration()
-                        .withStrictMode(true)
+                        .render().withStrictMode(true).and()
                         .build())
                 .render(model);
 
@@ -154,7 +154,7 @@ public class Issue112Test {
 
         String result = JtwigTemplate
                 .inlineTemplate("{% set a = 5 %}{% set b = null %}{{ a - b }}", configuration()
-                        .withStrictMode(false)
+                        .render().withStrictMode(false).and()
                         .build())
                 .render(model);
 
@@ -171,7 +171,7 @@ public class Issue112Test {
 
         JtwigTemplate
                 .inlineTemplate("{% set a = 5 %}{% set b = null %}{{ a / b }}", configuration()
-                        .withStrictMode(true)
+                        .render().withStrictMode(true).and()
                         .build())
                 .render(model);
     }
@@ -186,7 +186,7 @@ public class Issue112Test {
 
         JtwigTemplate
                 .inlineTemplate("{% set a = 5 %}{% set b = null %}{{ a / b }}", configuration()
-                        .withStrictMode(false)
+                        .render().withStrictMode(false).and()
                         .build())
                 .render(model);
     }
@@ -198,7 +198,7 @@ public class Issue112Test {
 
         String result = JtwigTemplate
                 .inlineTemplate("{% set nothing = null %}{{ nothing }}", configuration()
-                        .withStrictMode(false)
+                        .render().withStrictMode(false).and()
                         .build())
                 .render(model);
 
@@ -211,7 +211,7 @@ public class Issue112Test {
 
         String result = JtwigTemplate
                 .inlineTemplate("{% set nothing = null %}{{ nothing }}", configuration()
-                        .withStrictMode(true)
+                        .render().withStrictMode(true).and()
                         .build())
                 .render(model);
 
@@ -224,7 +224,7 @@ public class Issue112Test {
 
         String result = JtwigTemplate
                 .inlineTemplate("{{ true }}", configuration()
-                        .withStrictMode(false)
+                        .render().withStrictMode(false).and()
                         .build())
                 .render(model);
 
@@ -236,7 +236,7 @@ public class Issue112Test {
 
         String result = JtwigTemplate
                 .inlineTemplate("{{ nothing == 0 }}", configuration()
-                        .withStrictMode(false)
+                        .render().withStrictMode(false).and()
                         .build())
                 .render(model);
 
@@ -249,7 +249,7 @@ public class Issue112Test {
 
         String result = JtwigTemplate
                 .inlineTemplate("{{ nothing == null }}", configuration()
-                        .withStrictMode(false)
+                        .render().withStrictMode(false).and()
                         .build())
                 .render(model);
 

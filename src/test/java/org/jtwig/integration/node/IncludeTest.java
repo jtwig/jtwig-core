@@ -35,7 +35,7 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeShouldExportModel() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' %}", configuration()
-                .withResourceResolver(new ResourceResolver() {
+                .resources().withResourceResolver(new ResourceResolver() {
                     @Override
                     public Optional<Resource> resolve(Resource resource, String relativePath) {
                         if ("a".equals(relativePath)) {
@@ -43,7 +43,7 @@ public class IncludeTest extends AbstractIntegrationTest {
                         }
                         return Optional.absent();
                     }
-                })
+                }).and()
                 .build());
 
         String result = template.render(newModel().with("name", "Hello"));
@@ -54,7 +54,7 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeShouldRedefineModelVariable() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' %}{{ name }}", configuration()
-                .withResourceResolver(new ResourceResolver() {
+                .resources().withResourceResolver(new ResourceResolver() {
                     @Override
                     public Optional<Resource> resolve(Resource resource, String relativePath) {
                         if ("a".equals(relativePath)) {
@@ -62,7 +62,7 @@ public class IncludeTest extends AbstractIntegrationTest {
                         }
                         return Optional.absent();
                     }
-                })
+                }).and()
                 .build());
 
         String result = template.render(newModel().with("name", "Hello"));
@@ -73,7 +73,7 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeShouldNotExposeNewModelVariable() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' %}{{ var }}", configuration()
-                .withResourceResolver(new ResourceResolver() {
+                .resources().withResourceResolver(new ResourceResolver() {
                     @Override
                     public Optional<Resource> resolve(Resource resource, String relativePath) {
                         if ("a".equals(relativePath)) {
@@ -81,7 +81,7 @@ public class IncludeTest extends AbstractIntegrationTest {
                         }
                         return Optional.absent();
                     }
-                })
+                }).and()
                 .build());
 
         String result = template.render(newModel());

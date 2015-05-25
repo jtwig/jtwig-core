@@ -21,13 +21,13 @@ public class StrictModeTest extends AbstractIntegrationTest {
         expectedException.expect(CalculationException.class);
 
         JtwigTemplate.inlineTemplate("{{ undefined }}", configuration()
-                .withStrictMode(true)
+                .render().withStrictMode(true).and()
                 .build()).render(newModel());
     }
     @Test
     public void strictModeInactive() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ undefined }}", configuration()
-                .withStrictMode(false)
+                .render().withStrictMode(false).and()
                 .build()).render(newModel());
 
         assertThat(result, is(""));

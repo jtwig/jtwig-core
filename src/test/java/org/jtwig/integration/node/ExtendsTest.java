@@ -25,7 +25,7 @@ public class ExtendsTest extends AbstractIntegrationTest {
     @Test
     public void extendsTest() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% extends 'a' %}{% block c %}a{% endblock %}", configuration()
-                .withResourceResolver(resolvePath("a", "{% block c %}d{% endblock %}"))
+                .resources().withResourceResolver(resolvePath("a", "{% block c %}d{% endblock %}")).and()
                 .build())
                 .render(JtwigModel.newModel());
 
@@ -35,8 +35,8 @@ public class ExtendsTest extends AbstractIntegrationTest {
     @Test
     public void nestedExtendsTest() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% extends 'a' %}{% block c %}a{% endblock %}", configuration()
-                .withResourceResolver(resolvePath("a", "{% extends 'b' %}{% block c %}d{% endblock %}"))
-                .withResourceResolver(resolvePath("b", "{% block c %}e{% endblock %}"))
+                .resources().withResourceResolver(resolvePath("a", "{% extends 'b' %}{% block c %}d{% endblock %}"))
+                .withResourceResolver(resolvePath("b", "{% block c %}e{% endblock %}")).and()
                 .build())
                 .render(JtwigModel.newModel());
 
@@ -46,8 +46,8 @@ public class ExtendsTest extends AbstractIntegrationTest {
     @Test
     public void extendsWithSetTest() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% extends 'a' %}{% set var = 1 %}", configuration()
-                .withResourceResolver(resolvePath("a", "{% extends 'b' %}{% block c %}d{% endblock %}"))
-                .withResourceResolver(resolvePath("b", "{{ var }}"))
+                .resources().withResourceResolver(resolvePath("a", "{% extends 'b' %}{% block c %}d{% endblock %}"))
+                .withResourceResolver(resolvePath("b", "{{ var }}")).and()
                 .build())
                 .render(JtwigModel.newModel());
 

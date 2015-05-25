@@ -26,4 +26,20 @@ public class FileResource implements Resource {
             throw new ResourceNotFoundException(e);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FileResource that = (FileResource) o;
+
+        return file.equals(that.file);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return file.hashCode();
+    }
 }

@@ -43,7 +43,7 @@ public class Issue076Test {
 
         JtwigTemplate
                 .inlineTemplate("{{ nonExistingVariable.size }}", configuration()
-                        .withStrictMode(true)
+                        .render().withStrictMode(true).and()
                         .build())
                 .render(new JtwigModel());
     }

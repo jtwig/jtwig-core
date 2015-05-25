@@ -14,7 +14,7 @@ public class FilterTest extends AbstractIntegrationTest {
     @Test
     public void filterWithVariable() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% filter var1 %}1{% endfilter %}", configuration()
-                .include(var1Function())
+                .functions().include(var1Function()).and()
                 .build()).render(JtwigModel.newModel());
 
         assertThat(result, is("12"));
@@ -23,7 +23,7 @@ public class FilterTest extends AbstractIntegrationTest {
     @Test
     public void filterWithFunction() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% filter var2(2) %}1{% endfilter %}", configuration()
-                .include(var2Function())
+                .functions().include(var2Function()).and()
                 .build()).render(JtwigModel.newModel());
 
         assertThat(result, is("123"));
@@ -32,8 +32,10 @@ public class FilterTest extends AbstractIntegrationTest {
     @Test
     public void filterWithComposition() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% filter var1 | var3 %}1{% endfilter %}", configuration()
+                .functions()
                 .include(var1Function())
                 .include(var3Function())
+                .and()
                 .build()).render(JtwigModel.newModel());
 
         assertThat(result, is("123"));

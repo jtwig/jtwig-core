@@ -10,7 +10,7 @@ import java.math.MathContext;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-public class RenderConfigurationBuilder implements Builder<RenderConfiguration> {
+public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> implements Builder<RenderConfiguration> {
     private SpaceRemover spaceRemover;
     private boolean strictMode;
     private Charset outputCharset;
@@ -32,39 +32,43 @@ public class RenderConfigurationBuilder implements Builder<RenderConfiguration> 
         ;
     }
 
-    public RenderConfigurationBuilder withSpaceRemover(SpaceRemover spaceRemover) {
+    public B withSpaceRemover(SpaceRemover spaceRemover) {
         this.spaceRemover = spaceRemover;
-        return this;
+        return self();
     }
 
-    public RenderConfigurationBuilder withStrictMode(boolean strictMode) {
+    public B withStrictMode(boolean strictMode) {
         this.strictMode = strictMode;
-        return this;
+        return self();
     }
 
-    public RenderConfigurationBuilder withOutputCharset(Charset outputCharset) {
+    public B withOutputCharset(Charset outputCharset) {
         this.outputCharset = outputCharset;
-        return this;
+        return self();
     }
 
-    public RenderConfigurationBuilder withMathContext(MathContext mathContext) {
+    public B withMathContext(MathContext mathContext) {
         this.mathContext = mathContext;
-        return this;
+        return self();
     }
 
-    public RenderConfigurationBuilder withInitialEscapeMode(EscapeMode initialEscapeMode) {
+    public B withInitialEscapeMode(EscapeMode initialEscapeMode) {
         this.initialEscapeMode = initialEscapeMode;
-        return this;
+        return self();
     }
 
-    public RenderConfigurationBuilder withLocaleSupplier(Supplier<Locale> localeSupplier) {
+    public B withLocaleSupplier(Supplier<Locale> localeSupplier) {
         this.localeSupplier = localeSupplier;
-        return this;
+        return self();
     }
 
-    public RenderConfigurationBuilder withLocaleResolver(LocaleResolver localeResolver) {
+    public B withLocaleResolver(LocaleResolver localeResolver) {
         this.localeResolver = localeResolver;
-        return this;
+        return self();
+    }
+
+    protected B self () {
+        return (B) this;
     }
 
     @Override

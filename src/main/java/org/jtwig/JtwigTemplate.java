@@ -81,11 +81,11 @@ public class JtwigTemplate {
     }
 
     private void render(JtwigModel model, RenderResult result) {
-        Node compositeNode = environment.parser().parse(template);
+        Node node = environment.parser().parse(template);
 
         RenderContextHolder.set(renderContextFactory.create(model, template, environment))
                 .nodeRenderer()
-                .render(compositeNode)
+                .render(node)
                 .appendTo(result);
     }
 }

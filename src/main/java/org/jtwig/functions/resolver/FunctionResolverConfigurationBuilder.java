@@ -9,7 +9,7 @@ import org.jtwig.reflection.resolver.argument.ArgumentResolver;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class FunctionResolverConfigurationBuilder implements Builder<FunctionResolverConfiguration> {
+public class FunctionResolverConfigurationBuilder<B extends FunctionResolverConfigurationBuilder> implements Builder<FunctionResolverConfiguration> {
     private final Collection<Object> beans = new ArrayList<>();
     private final Collection<Converter> converters = new ArrayList<>();
     private final Collection<FunctionReference> functionReferences = new ArrayList<>();
@@ -27,27 +27,36 @@ public class FunctionResolverConfigurationBuilder implements Builder<FunctionRes
 
     public FunctionResolverConfigurationBuilder withBeans(Collection<Object> beans) {
         this.beans.addAll(beans);
-        return this;
+        return self();
     }
 
     public FunctionResolverConfigurationBuilder withConverters(Collection<Converter> converters) {
         this.converters.addAll(converters);
-        return this;
+        return self();
     }
 
     public FunctionResolverConfigurationBuilder withFunctionReferences(Collection<FunctionReference> functionReferences) {
         this.functionReferences.addAll(functionReferences);
-        return this;
+        return self();
     }
 
     public FunctionResolverConfigurationBuilder withSimpleFunctions(Collection<SimpleFunction> simpleFunctions) {
         this.simpleFunctions.addAll(simpleFunctions);
-        return this;
+        return self();
     }
 
     public FunctionResolverConfigurationBuilder withArgumentResolvers(Collection<ArgumentResolver> argumentResolvers) {
         this.argumentResolvers.addAll(argumentResolvers);
-        return this;
+        return self();
+    }
+
+    public B include(SimpleFunction simpleFunction) {
+        this.simpleFunctions.add(simpleFunction);
+        return self();
+    }
+
+    protected B self () {
+        return (B) this;
     }
 
     @Override

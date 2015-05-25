@@ -29,7 +29,7 @@ public class AddOnParserTest extends AbstractIntegrationTest {
     @Test
     public void addOn() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% hello %}", configuration()
-                .withAddOnParser(new AddonParserProvider() {
+                .parser().withAddOnParser(new AddonParserProvider() {
                     @Override
                     public Class<? extends AddonParser> parser() {
                         return SimpleAddOnParser.class;
@@ -39,7 +39,7 @@ public class AddOnParserTest extends AbstractIntegrationTest {
                     public Collection<String> keywords() {
                         return Collections.emptyList();
                     }
-                })
+                }).and()
                 .build()).render(JtwigModel.newModel());
 
         assertThat(result, is("Hello World!"));

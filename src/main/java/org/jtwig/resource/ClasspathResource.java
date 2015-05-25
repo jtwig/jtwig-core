@@ -26,4 +26,20 @@ public class ClasspathResource implements Resource {
     public String toString() {
         return String.format("(Classpath) %s", path);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ClasspathResource that = (ClasspathResource) o;
+
+        return path.equals(that.path);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return path.hashCode();
+    }
 }

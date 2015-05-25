@@ -31,14 +31,14 @@ public class VariableTest extends AbstractIntegrationTest {
         expectedException.expectMessage(containsString("Variable 'asd' undefined"));
 
         JtwigTemplate.inlineTemplate("{{ asd }}", configuration()
-                .withStrictMode(true)
+                .render().withStrictMode(true).and()
                 .build()).render(JtwigModel.newModel());
     }
 
     @Test
     public void nonExistingVariableAndStrictModeInactive() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ asd }}", configuration()
-                .withStrictMode(false)
+                .render().withStrictMode(false).and()
                 .build()).render(JtwigModel.newModel());
 
         assertThat(result, is(""));

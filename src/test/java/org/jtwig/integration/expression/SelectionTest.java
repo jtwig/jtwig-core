@@ -20,7 +20,7 @@ public class SelectionTest extends AbstractIntegrationTest {
     @Test
     public void selectionWithNonExistingPropertyAndStrictModeInactive() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ asd.test }}", configuration()
-                .withStrictMode(false)
+                .render().withStrictMode(false).and()
                 .build())
                 .render(newModel().with("asd", 1));
 
@@ -32,7 +32,7 @@ public class SelectionTest extends AbstractIntegrationTest {
         expectedException.expectMessage(containsString("Impossible to access an attribute 'test' on '1'"));
 
         JtwigTemplate.inlineTemplate("{{ asd.test }}", configuration()
-                .withStrictMode(true)
+                .render().withStrictMode(true).and()
                 .build())
                 .render(newModel().with("asd", 1));
     }
