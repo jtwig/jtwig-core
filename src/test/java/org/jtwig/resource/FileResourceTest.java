@@ -34,4 +34,13 @@ public class FileResourceTest {
 
         assertThat(content, is(CONTENT));
     }
+
+    @Test
+    public void hashCodeOfRelative() throws Exception {
+        File file = new File("two");
+        FileResource fileResource = new FileResource(file);
+        FileResource anotherResource = new FileResource(new File(file, "../two"));
+
+        assertThat(fileResource.hashCode(), is(anotherResource.hashCode()));
+    }
 }

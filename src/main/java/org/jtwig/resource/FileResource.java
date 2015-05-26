@@ -2,10 +2,7 @@ package org.jtwig.resource;
 
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 
 public class FileResource implements Resource {
     private final File file;
@@ -34,12 +31,19 @@ public class FileResource implements Resource {
 
         FileResource that = (FileResource) o;
 
-        return file.equals(that.file);
-
+        try {
+            return file.getCanonicalPath().equals(that.file.getCanonicalPath());
+        } catch (IOException e) {
+            return file.equals(that.file);
+        }
     }
 
     @Override
     public int hashCode() {
-        return file.hashCode();
+        try {
+            return file.getCanonicalPath().hashCode();
+        } catch (IOException e) {
+            return file.hashCode();
+        }
     }
 }
