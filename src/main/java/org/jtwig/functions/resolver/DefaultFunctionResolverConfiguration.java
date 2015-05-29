@@ -3,7 +3,6 @@ package org.jtwig.functions.resolver;
 import org.jtwig.functions.SimpleFunction;
 import org.jtwig.functions.convert.ObjectToBigDecimalConverter;
 import org.jtwig.functions.convert.ObjectToIntegerConverter;
-import org.jtwig.functions.convert.StringToLocaleConverter;
 import org.jtwig.functions.impl.*;
 import org.jtwig.functions.reference.FunctionReference;
 import org.jtwig.reflection.resolver.argument.ArgumentResolver;
@@ -25,13 +24,11 @@ public class DefaultFunctionResolverConfiguration extends FunctionResolverConfig
                         new MathFunctions(),
                         new NumberFunctions(),
                         new ParentFunction(),
-                        new BlockFunction(),
-                        new TranslateFunction()
+                        new BlockFunction()
                 ),
                 asList(
                         new ObjectToIntegerConverter(),
-                        new ObjectToBigDecimalConverter(),
-                        new StringToLocaleConverter()
+                        new ObjectToBigDecimalConverter()
                 ),
                 Collections.<FunctionReference>emptyList(),
                 Collections.<SimpleFunction>emptyList(),

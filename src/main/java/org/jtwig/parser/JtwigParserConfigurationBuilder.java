@@ -8,7 +8,6 @@ import org.jtwig.parser.config.SyntaxConfiguration;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 
 public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationBuilder> implements Builder<JtwigParserConfiguration> {
@@ -49,6 +48,11 @@ public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationB
 
     public B withCacheProvider(CacheProvider cacheProvider) {
         this.cacheProvider = cacheProvider;
+        return self();
+    }
+
+    public B withAddonParserProvider(AddonParserProvider parser) {
+        this.addonParserProviders.add(parser);
         return self();
     }
 

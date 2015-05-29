@@ -1,14 +1,8 @@
 package org.jtwig.environment;
 
 import org.apache.commons.lang3.builder.Builder;
-import org.jtwig.content.json.JsonMapperProviderConfigurationBuilder;
-import org.jtwig.context.RenderConfigurationBuilder;
+import org.jtwig.addon.AddonProvider;
 import org.jtwig.environment.and.*;
-import org.jtwig.functions.resolver.FunctionResolverConfigurationBuilder;
-import org.jtwig.i18n.MessageResolverConfigurationBuilder;
-import org.jtwig.model.expression.lists.EnumerationListStrategyConfigurationBuilder;
-import org.jtwig.property.PropertyResolverConfigurationBuilder;
-import org.jtwig.resource.resolver.ResourceResolverConfigurationBuilder;
 import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.jtwig.value.configuration.ValueConfiguration;
 
@@ -29,7 +23,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     private final AndPropertyResolverConfigurationBuilder propertyResolverConfigurationBuilder;
     private final AndJsonMapperProviderConfigurationBuilder jsonMapperProviderConfigurationBuilder;
     private final AndEnumerationListStrategyConfigurationBuilder enumerationListStrategyConfigurationBuilder;
-    private final AndMessageResolverConfigurationBuilder messageResolverConfigurationBuilder;
 
     public EnvironmentConfigurationBuilder () {
         valueConfiguration = new CompatibleModeValueConfiguration();
@@ -40,7 +33,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(this);
         jsonMapperProviderConfigurationBuilder = new AndJsonMapperProviderConfigurationBuilder(this);
         enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(this);
-        messageResolverConfigurationBuilder = new AndMessageResolverConfigurationBuilder(this);
     }
     public EnvironmentConfigurationBuilder (EnvironmentConfiguration prototype) {
         functionResolverConfiguration  = new AndFunctionResolverConfigurationBuilder(prototype.getFunctionResolverConfiguration(), this);
@@ -51,7 +43,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(prototype.getPropertyResolverConfiguration(), this);
         jsonMapperProviderConfigurationBuilder = new AndJsonMapperProviderConfigurationBuilder(prototype.getJsonMapperProviderConfiguration(), this);
         enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(prototype.getEnumerationListConfiguration(), this);
-        messageResolverConfigurationBuilder = new AndMessageResolverConfigurationBuilder(prototype.getMessageResolverConfiguration(), this);
     }
 
     @Override
@@ -61,7 +52,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
                 resourceResolverConfigurationBuilder.build(),
                 functionResolverConfiguration.build(),
                 propertyResolverConfigurationBuilder.build(),
-                messageResolverConfigurationBuilder.build(),
                 jsonMapperProviderConfigurationBuilder.build(),
                 enumerationListStrategyConfigurationBuilder.build(),
                 jtwigParserConfigurationBuilder.build(),
@@ -98,10 +88,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         return enumerationListStrategyConfigurationBuilder;
     }
 
-    public AndMessageResolverConfigurationBuilder messages() {
-        return messageResolverConfigurationBuilder;
-    }
-
     public EnvironmentConfigurationBuilder withValueConfiguration (ValueConfiguration configuration) {
         this.valueConfiguration = configuration;
         return this;
@@ -109,6 +95,11 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
 
     public <T> EnvironmentConfigurationBuilder withParameter (String name, T value) {
         this.parameters.put(name, value);
+        return this;
+    }
+
+    public <T extends AddonProvider> EnvironmentConfigurationBuilder withAddon (T addonProvider) {
+        addonProvider.configure(this);
         return this;
     }
 }

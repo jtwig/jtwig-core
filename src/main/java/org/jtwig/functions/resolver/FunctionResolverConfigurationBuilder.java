@@ -25,27 +25,27 @@ public class FunctionResolverConfigurationBuilder<B extends FunctionResolverConf
         argumentResolvers.addAll(prototype.getArgumentResolvers());
     }
 
-    public FunctionResolverConfigurationBuilder withBeans(Collection<Object> beans) {
+    public B withBeans(Collection<Object> beans) {
         this.beans.addAll(beans);
         return self();
     }
 
-    public FunctionResolverConfigurationBuilder withConverters(Collection<Converter> converters) {
+    public B withConverters(Collection<Converter> converters) {
         this.converters.addAll(converters);
         return self();
     }
 
-    public FunctionResolverConfigurationBuilder withFunctionReferences(Collection<FunctionReference> functionReferences) {
+    public B withFunctionReferences(Collection<FunctionReference> functionReferences) {
         this.functionReferences.addAll(functionReferences);
         return self();
     }
 
-    public FunctionResolverConfigurationBuilder withSimpleFunctions(Collection<SimpleFunction> simpleFunctions) {
+    public B withSimpleFunctions(Collection<SimpleFunction> simpleFunctions) {
         this.simpleFunctions.addAll(simpleFunctions);
         return self();
     }
 
-    public FunctionResolverConfigurationBuilder withArgumentResolvers(Collection<ArgumentResolver> argumentResolvers) {
+    public B withArgumentResolvers(Collection<ArgumentResolver> argumentResolvers) {
         this.argumentResolvers.addAll(argumentResolvers);
         return self();
     }

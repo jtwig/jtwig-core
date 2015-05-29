@@ -1,10 +1,8 @@
 package org.jtwig.environment;
 
 import org.jtwig.content.json.JsonMapperProviderConfiguration;
-import org.jtwig.content.spaces.SpaceRemover;
 import org.jtwig.context.RenderConfiguration;
 import org.jtwig.functions.resolver.FunctionResolverConfiguration;
-import org.jtwig.i18n.MessageResolverConfiguration;
 import org.jtwig.model.expression.lists.EnumerationListStrategyConfiguration;
 import org.jtwig.parser.JtwigParserConfiguration;
 import org.jtwig.property.PropertyResolverConfiguration;
@@ -19,19 +17,17 @@ public class EnvironmentConfiguration {
     private final ResourceResolverConfiguration resourceResolverConfiguration;
     private final FunctionResolverConfiguration functionResolverConfiguration;
     private final PropertyResolverConfiguration propertyResolverConfiguration;
-    private final MessageResolverConfiguration messageResolverConfiguration;
     private final JsonMapperProviderConfiguration jsonMapperProviderConfiguration;
     private final EnumerationListStrategyConfiguration enumerationListConfiguration;
     private final JtwigParserConfiguration jtwigParserConfiguration;
     private final RenderConfiguration renderConfiguration;
     private final Map<String, Object> parameters = new HashMap<>();
 
-    public EnvironmentConfiguration(ValueConfiguration valueConfiguration, ResourceResolverConfiguration resourceResolverConfiguration, FunctionResolverConfiguration functionResolverConfiguration, PropertyResolverConfiguration propertyResolverConfiguration, MessageResolverConfiguration messageResolverConfiguration, JsonMapperProviderConfiguration jsonMapperProviderConfiguration, EnumerationListStrategyConfiguration enumerationListConfiguration, JtwigParserConfiguration jtwigParserConfiguration, RenderConfiguration renderConfiguration, Map<String, Object> parameters) {
+    public EnvironmentConfiguration(ValueConfiguration valueConfiguration, ResourceResolverConfiguration resourceResolverConfiguration, FunctionResolverConfiguration functionResolverConfiguration, PropertyResolverConfiguration propertyResolverConfiguration, JsonMapperProviderConfiguration jsonMapperProviderConfiguration, EnumerationListStrategyConfiguration enumerationListConfiguration, JtwigParserConfiguration jtwigParserConfiguration, RenderConfiguration renderConfiguration, Map<String, Object> parameters) {
         this.valueConfiguration = valueConfiguration;
         this.resourceResolverConfiguration = resourceResolverConfiguration;
         this.functionResolverConfiguration = functionResolverConfiguration;
         this.propertyResolverConfiguration = propertyResolverConfiguration;
-        this.messageResolverConfiguration = messageResolverConfiguration;
         this.jsonMapperProviderConfiguration = jsonMapperProviderConfiguration;
         this.enumerationListConfiguration = enumerationListConfiguration;
         this.jtwigParserConfiguration = jtwigParserConfiguration;
@@ -45,10 +41,6 @@ public class EnvironmentConfiguration {
 
     public ResourceResolverConfiguration getResourceResolverConfiguration() {
         return resourceResolverConfiguration;
-    }
-
-    public MessageResolverConfiguration getMessageResolverConfiguration() {
-        return messageResolverConfiguration;
     }
 
     public Map<String, Object> getParameters() {

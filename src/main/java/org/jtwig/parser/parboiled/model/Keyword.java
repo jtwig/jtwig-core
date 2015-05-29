@@ -37,10 +37,7 @@ public enum Keyword {
     NULL("null"),
     IS("is"),
     NOT("not"),
-    WITH("with"),
-    TRANSLATE("trans"),
-    INTO("into"),
-    END_TRANSLATE("endtrans")
+    WITH("with")
     ;
 
     private final String symbol;

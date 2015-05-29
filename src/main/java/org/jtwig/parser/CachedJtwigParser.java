@@ -21,7 +21,10 @@ public class CachedJtwigParser implements JtwigParser {
         try {
             return cache.get(resource, valueLoader(resource));
         } catch (ExecutionException e) {
-            throw new ParseException(String.format("Operation halted while parsing resource '%s'", resource), e);
+            if (e.getCause() instanceof RuntimeException) {
+                throw (RuntimeException) e.getCause();
+            }
+            throw new ParseException(e);
         }
     }
 

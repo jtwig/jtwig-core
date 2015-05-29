@@ -38,7 +38,6 @@ public class EnvironmentFactory {
                 resourceResolverFactory.create(environmentConfiguration.getResourceResolverConfiguration()),
                 functionResolverFactory.create(environmentConfiguration.getFunctionResolverConfiguration()),
                 propertyResolverFactory.create(environmentConfiguration.getPropertyResolverConfiguration()),
-                messageResolverFactory.create(environmentConfiguration.getMessageResolverConfiguration()),
                 environmentConfiguration.getRenderConfiguration(),
                 environmentConfiguration.getValueConfiguration(),
                 jsonMapperProviderFactory.create(environmentConfiguration.getJsonMapperProviderConfiguration()),
