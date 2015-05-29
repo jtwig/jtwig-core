@@ -1,10 +1,8 @@
 package org.jtwig.environment;
 
 import com.google.common.base.Optional;
-import org.jtwig.content.json.JsonMapperProvider;
 import org.jtwig.context.RenderConfiguration;
 import org.jtwig.functions.resolver.FunctionResolver;
-import org.jtwig.i18n.MessageResolver;
 import org.jtwig.model.expression.lists.EnumerationListStrategy;
 import org.jtwig.parser.JtwigParser;
 import org.jtwig.property.PropertyResolver;
@@ -22,10 +20,9 @@ public class Environment {
     private final PropertyResolver propertyResolver;
     private final RenderConfiguration renderConfiguration;
     private final ValueConfiguration valueConfiguration;
-    private final JsonMapperProvider jsonMapper;
     private final EnumerationListStrategy enumerationStrategy;
 
-    public Environment(JtwigParser parser, Map<String, Object> parameters, ResourceResolver resourceResolver, FunctionResolver functionResolver, PropertyResolver propertyResolver, RenderConfiguration renderConfiguration, ValueConfiguration valueConfiguration, JsonMapperProvider jsonMapper, EnumerationListStrategy enumerationStrategy) {
+    public Environment(JtwigParser parser, Map<String, Object> parameters, ResourceResolver resourceResolver, FunctionResolver functionResolver, PropertyResolver propertyResolver, RenderConfiguration renderConfiguration, ValueConfiguration valueConfiguration, EnumerationListStrategy enumerationStrategy) {
         this.parser = parser;
         this.parameters = parameters;
         this.resourceResolver = resourceResolver;
@@ -33,7 +30,6 @@ public class Environment {
         this.propertyResolver = propertyResolver;
         this.renderConfiguration = renderConfiguration;
         this.valueConfiguration = valueConfiguration;
-        this.jsonMapper = jsonMapper;
         this.enumerationStrategy = enumerationStrategy;
     }
 
@@ -68,10 +64,6 @@ public class Environment {
     public <T> T parameter (String name) {
         return (T) Optional.fromNullable(parameters.get(name))
                 .or(OptionalUtils.<T>throwException(String.format("No property found with name '%s'", name)));
-    }
-
-    public JsonMapperProvider jsonMapper() {
-        return jsonMapper;
     }
 
     public EnumerationListStrategy enumerationStrategy() {

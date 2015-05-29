@@ -15,7 +15,6 @@ import static java.util.Arrays.asList;
 public class DefaultFunctionResolverConfiguration extends FunctionResolverConfiguration {
     public DefaultFunctionResolverConfiguration() {
         super(asList(
-                        new JsonMapperFunction(),
                         new EscapeRawFunction(),
                         new BooleanFunctions(),
                         new ConstantFunction(new ClasspathFinder(DefaultFunctionResolverConfiguration.class.getClassLoader())),

@@ -1,6 +1,5 @@
 package org.jtwig.environment;
 
-import org.jtwig.content.json.JsonMapperProviderFactory;
 import org.jtwig.functions.resolver.FunctionResolverFactory;
 import org.jtwig.i18n.MessageResolverFactory;
 import org.jtwig.model.expression.lists.EnumerationListStrategyFactory;
@@ -13,22 +12,18 @@ public class EnvironmentFactory {
     private final ResourceResolverFactory resourceResolverFactory;
     private final FunctionResolverFactory functionResolverFactory;
     private final PropertyResolverFactory propertyResolverFactory;
-    private final JsonMapperProviderFactory jsonMapperProviderFactory;
     private final EnumerationListStrategyFactory enumerationListStrategyFactory;
-    private final MessageResolverFactory messageResolverFactory;
 
     public EnvironmentFactory () {
-        this(new JtwigParserFactory(), new ResourceResolverFactory(), new FunctionResolverFactory(), new PropertyResolverFactory(), new JsonMapperProviderFactory(), new EnumerationListStrategyFactory(), new MessageResolverFactory());
+        this(new JtwigParserFactory(), new ResourceResolverFactory(), new FunctionResolverFactory(), new PropertyResolverFactory(), new EnumerationListStrategyFactory(), new MessageResolverFactory());
     }
 
-    public EnvironmentFactory(JtwigParserFactory jtwigParserFactory, ResourceResolverFactory resourceResolverFactory, FunctionResolverFactory functionResolverFactory, PropertyResolverFactory propertyResolverFactory, JsonMapperProviderFactory jsonMapperProviderFactory, EnumerationListStrategyFactory enumerationListStrategyFactory, MessageResolverFactory messageResolverFactory) {
+    public EnvironmentFactory(JtwigParserFactory jtwigParserFactory, ResourceResolverFactory resourceResolverFactory, FunctionResolverFactory functionResolverFactory, PropertyResolverFactory propertyResolverFactory, EnumerationListStrategyFactory enumerationListStrategyFactory, MessageResolverFactory messageResolverFactory) {
         this.jtwigParserFactory = jtwigParserFactory;
         this.resourceResolverFactory = resourceResolverFactory;
         this.functionResolverFactory = functionResolverFactory;
         this.propertyResolverFactory = propertyResolverFactory;
-        this.jsonMapperProviderFactory = jsonMapperProviderFactory;
         this.enumerationListStrategyFactory = enumerationListStrategyFactory;
-        this.messageResolverFactory = messageResolverFactory;
     }
 
     public Environment create(EnvironmentConfiguration environmentConfiguration) {
@@ -40,7 +35,6 @@ public class EnvironmentFactory {
                 propertyResolverFactory.create(environmentConfiguration.getPropertyResolverConfiguration()),
                 environmentConfiguration.getRenderConfiguration(),
                 environmentConfiguration.getValueConfiguration(),
-                jsonMapperProviderFactory.create(environmentConfiguration.getJsonMapperProviderConfiguration()),
                 enumerationListStrategyFactory.create(environmentConfiguration.getEnumerationListConfiguration())
         );
     }

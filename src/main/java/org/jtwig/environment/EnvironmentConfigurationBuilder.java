@@ -21,7 +21,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     private final AndJtwigParserConfigurationBuilder jtwigParserConfigurationBuilder;
     private final AndResourceResolverConfigurationBuilder resourceResolverConfigurationBuilder;
     private final AndPropertyResolverConfigurationBuilder propertyResolverConfigurationBuilder;
-    private final AndJsonMapperProviderConfigurationBuilder jsonMapperProviderConfigurationBuilder;
     private final AndEnumerationListStrategyConfigurationBuilder enumerationListStrategyConfigurationBuilder;
 
     public EnvironmentConfigurationBuilder () {
@@ -31,7 +30,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(this);
         resourceResolverConfigurationBuilder = new AndResourceResolverConfigurationBuilder(this);
         propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(this);
-        jsonMapperProviderConfigurationBuilder = new AndJsonMapperProviderConfigurationBuilder(this);
         enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(this);
     }
     public EnvironmentConfigurationBuilder (EnvironmentConfiguration prototype) {
@@ -41,7 +39,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         resourceResolverConfigurationBuilder = new AndResourceResolverConfigurationBuilder(prototype.getResourceResolverConfiguration(), this);
         valueConfiguration = prototype.getValueConfiguration();
         propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(prototype.getPropertyResolverConfiguration(), this);
-        jsonMapperProviderConfigurationBuilder = new AndJsonMapperProviderConfigurationBuilder(prototype.getJsonMapperProviderConfiguration(), this);
         enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(prototype.getEnumerationListConfiguration(), this);
     }
 
@@ -52,7 +49,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
                 resourceResolverConfigurationBuilder.build(),
                 functionResolverConfiguration.build(),
                 propertyResolverConfigurationBuilder.build(),
-                jsonMapperProviderConfigurationBuilder.build(),
                 enumerationListStrategyConfigurationBuilder.build(),
                 jtwigParserConfigurationBuilder.build(),
                 renderConfiguration.build(),
@@ -78,10 +74,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
 
     public AndPropertyResolverConfigurationBuilder propertyResolver() {
         return propertyResolverConfigurationBuilder;
-    }
-
-    public AndJsonMapperProviderConfigurationBuilder jsonMapper() {
-        return jsonMapperProviderConfigurationBuilder;
     }
 
     public AndEnumerationListStrategyConfigurationBuilder listEnumeration() {

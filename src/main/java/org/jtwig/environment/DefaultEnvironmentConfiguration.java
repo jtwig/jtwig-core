@@ -1,6 +1,5 @@
 package org.jtwig.environment;
 
-import org.jtwig.content.json.DefaultJsonMapperProviderConfiguration;
 import org.jtwig.context.DefaultRenderConfiguration;
 import org.jtwig.functions.resolver.DefaultFunctionResolverConfiguration;
 import org.jtwig.model.expression.lists.DefaultEnumerationListStrategyConfiguration;
@@ -18,7 +17,6 @@ public class DefaultEnvironmentConfiguration extends EnvironmentConfiguration {
                 new DefaultResourceResolverConfiguration(),
                 new DefaultFunctionResolverConfiguration(),
                 new DefaultPropertyResolverConfiguration(),
-                new DefaultJsonMapperProviderConfiguration(),
                 new DefaultEnumerationListStrategyConfiguration(),
                 new DefaultJtwigParserConfiguration(),
                 new DefaultRenderConfiguration(),
