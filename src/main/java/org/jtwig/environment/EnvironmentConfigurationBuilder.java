@@ -1,8 +1,8 @@
 package org.jtwig.environment;
 
 import org.apache.commons.lang3.builder.Builder;
-import org.jtwig.addon.AddonProvider;
 import org.jtwig.environment.and.*;
+import org.jtwig.extension.Extension;
 import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
 import org.jtwig.value.configuration.ValueConfiguration;
 
@@ -90,8 +90,8 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         return this;
     }
 
-    public <T extends AddonProvider> EnvironmentConfigurationBuilder withAddon (T addonProvider) {
-        addonProvider.configure(this);
+    public <T extends Extension> EnvironmentConfigurationBuilder withExtension(T extension) {
+        extension.configure(this);
         return this;
     }
 }

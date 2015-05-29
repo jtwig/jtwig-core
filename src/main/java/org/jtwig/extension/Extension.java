@@ -1,7 +1,7 @@
-package org.jtwig.addon;
+package org.jtwig.extension;
 
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
 
-public interface AddonProvider {
+public interface Extension {
     void configure (EnvironmentConfigurationBuilder configurationBuilder);
 }
