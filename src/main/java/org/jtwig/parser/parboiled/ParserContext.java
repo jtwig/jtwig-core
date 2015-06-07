@@ -1,8 +1,9 @@
 package org.jtwig.parser.parboiled;
 
+import org.jtwig.model.expression.operation.binary.BinaryOperator;
+import org.jtwig.model.expression.operation.unary.UnaryOperator;
 import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.config.SyntaxConfiguration;
-import org.jtwig.parser.config.SyntaxConfigurationBuilder;
 import org.jtwig.parser.parboiled.base.*;
 import org.jtwig.parser.parboiled.expression.*;
 import org.jtwig.parser.parboiled.expression.operator.BinaryOperatorParser;
@@ -20,7 +21,11 @@ import java.util.Map;
 import static org.parboiled.Parboiled.createParser;
 
 public class ParserContext {
-    public static ParserContext instance (Resource resource, SyntaxConfiguration configuration, Collection<AddonParserProvider> addOnParsers) {
+
+    public static ParserContext instance (Resource resource, SyntaxConfiguration configuration,
+                                          Collection<AddonParserProvider> addOnParsers,
+                                          Collection<UnaryOperator> unaryOperators,
+                                          Collection<BinaryOperator> binaryOperators) {
         ParserContext context = new ParserContext(resource, configuration, addOnParsers);
 
         createParser(BooleanParser.class, context);
@@ -37,7 +42,7 @@ public class ParserContext {
         createParser(AnyTestExpressionParser.class, context);
         createParser(MapSelectionExpressionParser.class, context);
 
-        createParser(UnaryOperatorParser.class, context);
+        createParser(UnaryOperatorParser.class, context, unaryOperators);
         createParser(BinaryOperatorParser.class, context);
 
         createParser(EnumerationListExpressionParser.class, context);
@@ -52,7 +57,7 @@ public class ParserContext {
         createParser(FunctionExpressionParser.class, context);
         createParser(TestOperationExpressionParser.class, context);
         createParser(UnaryOperationExpressionParser.class, context);
-        createParser(BinaryOperationExpressionParser.class, context);
+        createParser(BinaryOperationExpressionParser.class, context, binaryOperators);
         createParser(TernaryOperationExpressionParser.class, context);
         createParser(PrimaryExpressionParser.class, context);
         createParser(SimpleExpressionParser.class, context);
@@ -79,6 +84,7 @@ public class ParserContext {
         for (AddonParserProvider provider : addOnParsers) {
             createParser((Class) provider.parser(), context);
         }
+
         createParser(CompositeNodeParser.class, context);
 
 
@@ -95,10 +101,6 @@ public class ParserContext {
         return result;
     }
 
-    public static ParserContext instance (Resource resource) {
-        return instance(resource, SyntaxConfigurationBuilder.syntaxConfiguration().build(), new ArrayList<AddonParserProvider>());
-    }
-
     private final Resource resource;
     private final SyntaxConfiguration syntaxConfiguration;
     private final Map<Class, BaseParser> parsers;
@@ -109,12 +111,6 @@ public class ParserContext {
         this.syntaxConfiguration = syntaxConfiguration;
         this.parsers = new HashMap<>();
         this.addOnParsers = addOnParsers;
-    }
-    public ParserContext(Resource resource, SyntaxConfiguration syntaxConfiguration) {
-        this.resource = resource;
-        this.syntaxConfiguration = syntaxConfiguration;
-        this.parsers = new HashMap<>();
-        this.addOnParsers = new ArrayList<>();
     }
 
     public <T extends BaseParser> ParserContext register (Class type, T parser) {
@@ -132,10 +128,6 @@ public class ParserContext {
 
     public SyntaxConfiguration syntaxConfiguration() {
         return syntaxConfiguration;
-    }
-
-    public Collection<BaseParser> parsers() {
-        return parsers.values();
     }
 
     public Resource resource() {

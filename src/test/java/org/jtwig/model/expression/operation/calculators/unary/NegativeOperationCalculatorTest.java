@@ -2,6 +2,7 @@ package org.jtwig.model.expression.operation.calculators.unary;
 
 import org.jtwig.context.RenderContext;
 import org.jtwig.model.expression.Expression;
+import org.jtwig.model.expression.operation.unary.calculators.NegativeOperationCalculator;
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;

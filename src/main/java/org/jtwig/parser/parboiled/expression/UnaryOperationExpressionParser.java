@@ -1,7 +1,6 @@
 package org.jtwig.parser.parboiled.expression;
 
 import org.jtwig.model.expression.UnaryOperationExpression;
-import org.jtwig.model.expression.operation.UnaryOperator;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.base.PositionTrackerParser;
 import org.jtwig.parser.parboiled.base.SpacingParser;
@@ -15,14 +14,18 @@ public class UnaryOperationExpressionParser extends ExpressionParser<UnaryOperat
 
     @Override
     public Rule ExpressionRule() {
+        PositionTrackerParser positionTrackerParser = parserContext().parser(PositionTrackerParser.class);
+        UnaryOperatorParser unaryOperatorParser = parserContext().parser(UnaryOperatorParser.class);
+        SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
+        PrimaryExpressionParser primaryExpressionParser = parserContext().parser(PrimaryExpressionParser.class);
         return Sequence(
-                parserContext().parser(PositionTrackerParser.class).PushPosition(),
-                parserContext().parser(UnaryOperatorParser.class).UnaryOperator(UnaryOperator.values()),
-                parserContext().parser(SpacingParser.class).Spacing(),
-                parserContext().parser(PrimaryExpressionParser.class).ExpressionRule(),
+                positionTrackerParser.PushPosition(),
+                unaryOperatorParser.UnaryOperator(),
+                spacingParser.Spacing(),
+                primaryExpressionParser.ExpressionRule(),
                 push(new UnaryOperationExpression(
-                        parserContext().parser(PositionTrackerParser.class).pop(2),
-                        parserContext().parser(UnaryOperatorParser.class).pop(1),
+                        positionTrackerParser.pop(2),
+                        unaryOperatorParser.pop(1),
                         pop()
                 ))
         );

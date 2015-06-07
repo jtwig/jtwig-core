@@ -3,10 +3,10 @@ package org.jtwig.model.expression.operation.calculators.binary;
 import org.jtwig.context.RenderContext;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.model.expression.Expression;
+import org.jtwig.model.expression.operation.binary.calculators.CompositionOperationCalculator;
 import org.jtwig.model.position.Position;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class CompositionOperationCalculatorTest {

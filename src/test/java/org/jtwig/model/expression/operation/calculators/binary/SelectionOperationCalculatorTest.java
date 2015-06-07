@@ -9,6 +9,7 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.FunctionExpression;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.expression.function.Argument;
+import org.jtwig.model.expression.operation.binary.calculators.SelectionOperationCalculator;
 import org.jtwig.model.position.Position;
 import org.jtwig.property.PropertyResolveRequest;
 import org.jtwig.property.PropertyResolver;

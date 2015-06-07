@@ -1,11 +1,10 @@
 package org.jtwig.parser.parboiled.expression;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimaps;
 import org.jtwig.model.expression.BinaryOperationExpression;
-import org.jtwig.model.expression.operation.BinaryOperator;
+import org.jtwig.model.expression.operation.binary.BinaryOperator;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.base.PositionTrackerParser;
 import org.jtwig.parser.parboiled.base.SpacingParser;
@@ -13,36 +12,41 @@ import org.jtwig.parser.parboiled.expression.operator.BinaryOperatorParser;
 import org.parboiled.Rule;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static java.util.Arrays.asList;
-
 public class BinaryOperationExpressionParser extends ExpressionParser<BinaryOperationExpression> {
-    public BinaryOperationExpressionParser(ParserContext context) {
+    final Collection<BinaryOperator> operators;
+
+    public BinaryOperationExpressionParser(ParserContext context, Collection<BinaryOperator> operators) {
         super(BinaryOperationExpressionParser.class, context);
+        this.operators = operators;
     }
 
     @Override
     public Rule ExpressionRule() {
         Rule initialExpression = parserContext().parser(PrimaryExpressionParser.class).ExpressionRule();
-        ImmutableListMultimap<Integer, BinaryOperator> index = Multimaps.index(asList(BinaryOperator.values()), new Function<BinaryOperator, Integer>() {
-            @Override
-            public Integer apply(BinaryOperator input) {
-                return input.precedence();
-            }
-        });
+        ImmutableListMultimap<Integer, BinaryOperator> index = Multimaps.index(operators, precedence());
 
-        List<Integer> integers = new ArrayList<Integer>(index.keySet());
+        List<Integer> integers = new ArrayList<>(index.keySet());
         Collections.sort(integers);
         for (Integer integer : integers) {
-            ImmutableList<BinaryOperator> binaryOperators = index.get(integer);
-            initialExpression = BinaryOperation(initialExpression, binaryOperators.toArray(new BinaryOperator[binaryOperators.size()]));
+            initialExpression = BinaryOperation(initialExpression, index.get(integer));
         }
         return initialExpression;
     }
 
-    Rule BinaryOperation(Rule expressionRule, BinaryOperator[] operator) {
+    Function<BinaryOperator, Integer> precedence() {
+        return new Function<BinaryOperator, Integer>() {
+            @Override
+            public Integer apply(BinaryOperator input) {
+                return input.precedence();
+            }
+        };
+    }
+
+    Rule BinaryOperation(Rule expressionRule, List<BinaryOperator> operator) {
         return Sequence(
                 expressionRule,
                 parserContext().parser(SpacingParser.class).Spacing(),

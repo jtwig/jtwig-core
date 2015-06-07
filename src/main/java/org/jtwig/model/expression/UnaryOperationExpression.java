@@ -1,22 +1,22 @@
 package org.jtwig.model.expression;
 
 import org.jtwig.context.RenderContext;
-import org.jtwig.model.expression.operation.UnaryOperator;
+import org.jtwig.model.expression.operation.unary.calculators.UnaryOperationCalculator;
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 
 public class UnaryOperationExpression extends Expression {
-    private final UnaryOperator operator;
+    private final UnaryOperationCalculator calculator;
     private final Expression operand;
 
-    public UnaryOperationExpression(Position position, UnaryOperator operator, Expression operand) {
+    public UnaryOperationExpression(Position position, UnaryOperationCalculator calculator, Expression operand) {
         super(position);
-        this.operator = operator;
+        this.calculator = calculator;
         this.operand = operand;
     }
 
     @Override
     public JtwigValue calculate(RenderContext context) {
-        return operator.calculator().calculate(context, getPosition(), operand);
+        return calculator.calculate(context, getPosition(), operand);
     }
 }
