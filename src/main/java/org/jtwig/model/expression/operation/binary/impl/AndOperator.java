@@ -14,7 +14,7 @@ public class AndOperator implements BinaryOperator {
 
     @Override
     public int precedence() {
-        return 10;
+        return 25;
     }
 
     @Override

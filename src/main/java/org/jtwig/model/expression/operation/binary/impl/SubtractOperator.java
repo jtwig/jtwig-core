@@ -14,7 +14,7 @@ public class SubtractOperator implements BinaryOperator {
 
     @Override
     public int precedence() {
-        return 20;
+        return 10;
     }
 
     @Override

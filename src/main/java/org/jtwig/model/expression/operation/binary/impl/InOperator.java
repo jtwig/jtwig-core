@@ -14,7 +14,7 @@ public class InOperator implements BinaryOperator {
 
     @Override
     public int precedence() {
-        return 50;
+        return 15;
     }
 
     @Override

@@ -14,7 +14,7 @@ public class MultiplyOperator implements BinaryOperator {
 
     @Override
     public int precedence() {
-        return 30;
+        return 5;
     }
 
     @Override

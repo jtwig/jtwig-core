@@ -14,7 +14,7 @@ public class GreaterOperator implements BinaryOperator {
 
     @Override
     public int precedence() {
-        return 10;
+        return 15;
     }
 
     @Override

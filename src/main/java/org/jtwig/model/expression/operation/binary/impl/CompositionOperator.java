@@ -14,7 +14,7 @@ public class CompositionOperator implements BinaryOperator {
 
     @Override
     public int precedence() {
-        return 100;
+        return 30;
     }
 
     @Override

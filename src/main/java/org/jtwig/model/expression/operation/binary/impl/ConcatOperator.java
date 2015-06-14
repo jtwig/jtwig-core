@@ -14,7 +14,7 @@ public class ConcatOperator implements BinaryOperator {
 
     @Override
     public int precedence() {
-        return 2;
+        return 10;
     }
 
     @Override

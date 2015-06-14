@@ -14,7 +14,7 @@ public class NegativeUnaryOperator implements UnaryOperator {
 
     @Override
     public int precedence() {
-        return 0;
+        return 5;
     }
 
     @Override

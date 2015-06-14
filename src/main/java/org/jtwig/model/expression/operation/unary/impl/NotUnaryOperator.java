@@ -14,7 +14,7 @@ public class NotUnaryOperator implements UnaryOperator {
 
     @Override
     public int precedence() {
-        return 0;
+        return 10;
     }
 
     @Override
