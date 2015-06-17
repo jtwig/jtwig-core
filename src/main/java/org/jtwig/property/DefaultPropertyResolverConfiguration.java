@@ -19,7 +19,8 @@ public class DefaultPropertyResolverConfiguration extends PropertyResolverConfig
                         new MethodNameMethodPropertyExtractor(MethodNameMethodPropertyExtractor.prefixedEqual("is")),
                         new MethodNameMethodPropertyExtractor(MethodNameMethodPropertyExtractor.prefixedEqual("has"))
                 ))),
-                new FieldPropertyResolver(true)
+                new FieldPropertyResolver(true),
+                new MapPropertyResolver()
         ));
     }
 }

@@ -7,6 +7,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.HashMap;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
@@ -96,6 +98,14 @@ public class SelectionTest extends AbstractIntegrationTest {
 
         String result = JtwigTemplate.inlineTemplate("{{ var.sum }}")
                 .render(newModel().with("var", new TestClass("hello")));
+
+        assertThat(result, is("0"));
+    }
+
+    @Test
+    public void propertySelectionFromMap() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{{ var.sum }}")
+                .render(newModel().with("var", new HashMap() {{ put("sum", 0); }}));
 
         assertThat(result, is("0"));
     }

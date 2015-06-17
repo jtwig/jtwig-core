@@ -12,15 +12,7 @@ public class BooleanFunctions {
     public boolean isDefined(@Parameter Object value) {
         return value != Undefined.UNDEFINED;
     }
-//
-//    @JtwigFunction("divisable by")
-//    public boolean isDivisableBy(@Parameter Number value, @Parameter Number dividend) {
-//        double value1 = value.doubleValue();
-//        double value2 = dividend.doubleValue();
-//
-//        return value1 % value2 == 0;
-//    }
-//
+
     @JtwigFunction("null")
     public boolean isNull(@Parameter Object input) {
         return input == null;
