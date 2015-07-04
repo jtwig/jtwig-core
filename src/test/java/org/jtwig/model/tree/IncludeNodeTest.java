@@ -9,7 +9,7 @@ import org.jtwig.render.Renderable;
 import org.jtwig.resource.Resource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -30,7 +30,7 @@ public class IncludeNodeTest extends AbstractNodeTest {
     @Test
     public void renderWhenResourceNotExistsAndIgnoreMissing() throws Exception {
         String path = "path";
-        when(configuration.getInclude().calculate(renderContext())).thenReturn(JtwigValueFactory.value(path, new CompatibleModeValueConfiguration()));
+        when(configuration.getInclude().calculate(renderContext())).thenReturn(JtwigValueFactory.value(path, new DefaultValueConfiguration()));
         when(configuration.isIgnoreMissing()).thenReturn(true);
         when(renderContext().environment().resourceResolver().resolve(any(Resource.class), eq(path))).thenReturn(Optional.<Resource>absent());
 
@@ -42,7 +42,7 @@ public class IncludeNodeTest extends AbstractNodeTest {
     @Test(expected = ResourceNotFoundException.class)
     public void renderWhenResourceNotExistsAndNotIgnoreMissing() throws Exception {
         String path = "path";
-        when(configuration.getInclude().calculate(renderContext())).thenReturn(JtwigValueFactory.value(path, new CompatibleModeValueConfiguration()));
+        when(configuration.getInclude().calculate(renderContext())).thenReturn(JtwigValueFactory.value(path, new DefaultValueConfiguration()));
         when(configuration.isIgnoreMissing()).thenReturn(false);
         when(renderContext().environment().resourceResolver().resolve(any(Resource.class), eq(path))).thenReturn(Optional.<Resource>absent());
 
@@ -55,7 +55,7 @@ public class IncludeNodeTest extends AbstractNodeTest {
         String path = "path";
         Resource resource = mock(Resource.class);
         ResourceRenderResult renderResult = mock(ResourceRenderResult.class, RETURNS_DEEP_STUBS);
-        when(configuration.getInclude().calculate(renderContext())).thenReturn(JtwigValueFactory.value(path, new CompatibleModeValueConfiguration()));
+        when(configuration.getInclude().calculate(renderContext())).thenReturn(JtwigValueFactory.value(path, new DefaultValueConfiguration()));
         when(configuration.isIgnoreMissing()).thenReturn(true);
         when(renderContext().environment().resourceResolver().resolve(any(Resource.class), eq(path))).thenReturn(Optional.of(resource));
         when(resourceRenderer.inheritModel(anyBoolean())).thenReturn(resourceRenderer);

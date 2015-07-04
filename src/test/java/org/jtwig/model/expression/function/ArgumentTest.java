@@ -6,7 +6,7 @@ import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -23,7 +23,7 @@ public class ArgumentTest {
     @Test
     public void calculate() throws Exception {
         Object value = "";
-        JtwigValue jtwigValue = JtwigValueFactory.value(value, new CompatibleModeValueConfiguration());
+        JtwigValue jtwigValue = JtwigValueFactory.value(value, new DefaultValueConfiguration());
         when(expression.calculate(context)).thenReturn(jtwigValue);
         FunctionArgument result = underTest.calculate(context);
 

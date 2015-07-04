@@ -6,7 +6,7 @@ import org.jtwig.functions.SimpleFunction;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -78,6 +78,6 @@ public class CompositionTest extends AbstractIntegrationTest {
     }
 
     private JtwigValue value(Object argument) {
-        return JtwigValueFactory.value(argument, new CompatibleModeValueConfiguration());
+        return JtwigValueFactory.value(argument, new DefaultValueConfiguration());
     }
 }

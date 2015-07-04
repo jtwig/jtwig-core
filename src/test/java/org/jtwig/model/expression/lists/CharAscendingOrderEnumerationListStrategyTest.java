@@ -3,7 +3,7 @@ package org.jtwig.model.expression.lists;
 import com.google.common.base.Optional;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -16,8 +16,8 @@ public class CharAscendingOrderEnumerationListStrategyTest {
 
     @Test
     public void enumerateWhenDifferentTypes() throws Exception {
-        JtwigValue left = JtwigValueFactory.value(1, new CompatibleModeValueConfiguration());
-        JtwigValue right = JtwigValueFactory.value('a', new CompatibleModeValueConfiguration());
+        JtwigValue left = JtwigValueFactory.value(1, new DefaultValueConfiguration());
+        JtwigValue right = JtwigValueFactory.value('a', new DefaultValueConfiguration());
 
         Optional<Collection<Object>> result = underTest.enumerate(left, right);
 
@@ -26,8 +26,8 @@ public class CharAscendingOrderEnumerationListStrategyTest {
 
     @Test
     public void enumerateWhenNotChar() throws Exception {
-        JtwigValue left = JtwigValueFactory.value(1, new CompatibleModeValueConfiguration());
-        JtwigValue right = JtwigValueFactory.value(2, new CompatibleModeValueConfiguration());
+        JtwigValue left = JtwigValueFactory.value(1, new DefaultValueConfiguration());
+        JtwigValue right = JtwigValueFactory.value(2, new DefaultValueConfiguration());
 
         Optional<Collection<Object>> result = underTest.enumerate(left, right);
 
@@ -36,8 +36,8 @@ public class CharAscendingOrderEnumerationListStrategyTest {
 
     @Test
     public void enumerateWhenLeftLowerThanRight() throws Exception {
-        JtwigValue left = JtwigValueFactory.value('a', new CompatibleModeValueConfiguration());
-        JtwigValue right = JtwigValueFactory.value('c', new CompatibleModeValueConfiguration());
+        JtwigValue left = JtwigValueFactory.value('a', new DefaultValueConfiguration());
+        JtwigValue right = JtwigValueFactory.value('c', new DefaultValueConfiguration());
 
         Optional<Collection<Object>> result = underTest.enumerate(left, right);
 
@@ -46,8 +46,8 @@ public class CharAscendingOrderEnumerationListStrategyTest {
 
     @Test
     public void enumerateWhenLeftGreaterThanRight() throws Exception {
-        JtwigValue left = JtwigValueFactory.value('c', new CompatibleModeValueConfiguration());
-        JtwigValue right = JtwigValueFactory.value('a', new CompatibleModeValueConfiguration());
+        JtwigValue left = JtwigValueFactory.value('c', new DefaultValueConfiguration());
+        JtwigValue right = JtwigValueFactory.value('a', new DefaultValueConfiguration());
 
         Optional<Collection<Object>> result = underTest.enumerate(left, right);
 

@@ -6,14 +6,14 @@ import org.jtwig.model.expression.lists.DefaultEnumerationListStrategyConfigurat
 import org.jtwig.parser.DefaultJtwigParserConfiguration;
 import org.jtwig.property.DefaultPropertyResolverConfiguration;
 import org.jtwig.resource.resolver.DefaultResourceResolverConfiguration;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 
 import java.util.Collections;
 
 public class DefaultEnvironmentConfiguration extends EnvironmentConfiguration {
     public DefaultEnvironmentConfiguration() {
         super(
-                new CompatibleModeValueConfiguration(),
+                new DefaultValueConfiguration(),
                 new DefaultResourceResolverConfiguration(),
                 new DefaultFunctionResolverConfiguration(),
                 new DefaultPropertyResolverConfiguration(),

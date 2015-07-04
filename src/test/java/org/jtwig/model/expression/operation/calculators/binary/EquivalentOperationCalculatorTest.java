@@ -6,7 +6,7 @@ import org.jtwig.model.expression.operation.binary.calculators.EquivalentOperati
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,14 +27,14 @@ public class EquivalentOperationCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(context.environment().valueConfiguration()).thenReturn(new CompatibleModeValueConfiguration());
+        when(context.environment().valueConfiguration()).thenReturn(new DefaultValueConfiguration());
     }
 
 
     @Test
     public void calculateWhenEqual() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("", new CompatibleModeValueConfiguration()));
-        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("", new CompatibleModeValueConfiguration()));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("", new DefaultValueConfiguration()));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("", new DefaultValueConfiguration()));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 
@@ -43,8 +43,8 @@ public class EquivalentOperationCalculatorTest {
 
     @Test
     public void calculateWhenNotEqual() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("a", new CompatibleModeValueConfiguration()));
-        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("", new CompatibleModeValueConfiguration()));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("a", new DefaultValueConfiguration()));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("", new DefaultValueConfiguration()));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 

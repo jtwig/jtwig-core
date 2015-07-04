@@ -3,7 +3,7 @@ package org.jtwig.environment;
 import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.environment.and.*;
 import org.jtwig.extension.Extension;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.jtwig.value.configuration.ValueConfiguration;
 
 import java.util.HashMap;
@@ -24,7 +24,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     private final AndEnumerationListStrategyConfigurationBuilder enumerationListStrategyConfigurationBuilder;
 
     public EnvironmentConfigurationBuilder () {
-        valueConfiguration = new CompatibleModeValueConfiguration();
+        valueConfiguration = new DefaultValueConfiguration();
         functionResolverConfiguration  = new AndFunctionResolverConfigurationBuilder(this);
         renderConfiguration = new AndRenderConfigurationBuilder(this);
         jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(this);

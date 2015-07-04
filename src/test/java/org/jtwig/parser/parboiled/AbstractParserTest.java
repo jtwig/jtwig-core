@@ -4,6 +4,8 @@ import org.jtwig.parser.DefaultJtwigParserConfiguration;
 import org.jtwig.parser.JtwigParserConfiguration;
 import org.jtwig.resource.StringResource;
 import org.parboiled.Rule;
+import org.parboiled.parserunners.BasicParseRunner;
+import org.parboiled.parserunners.ParseRunner;
 import org.parboiled.parserunners.TracingParseRunner;
 import org.parboiled.support.ParsingResult;
 
@@ -15,8 +17,8 @@ public abstract class AbstractParserTest {
             parserConfiguration.getUnaryOperators(),
             parserConfiguration.getBinaryOperators());
 
-    protected  <T> ParsingResult<T> parse(Rule rule, String input) {
-        TracingParseRunner<T> handler = new TracingParseRunner<T>(rule);
+    protected <T> ParsingResult<T> parse(Rule rule, String input) {
+        ParseRunner<T> handler = new BasicParseRunner<T>(rule);
         return handler.run(input);
     }
 }

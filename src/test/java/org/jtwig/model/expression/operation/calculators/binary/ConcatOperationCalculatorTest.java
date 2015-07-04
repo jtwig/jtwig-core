@@ -6,7 +6,7 @@ import org.jtwig.model.expression.operation.binary.calculators.ConcatOperationCa
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,13 +25,13 @@ public class ConcatOperationCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(context.environment().valueConfiguration()).thenReturn(new CompatibleModeValueConfiguration());
+        when(context.environment().valueConfiguration()).thenReturn(new DefaultValueConfiguration());
     }
 
     @Test
     public void calculate() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("Hello ", new CompatibleModeValueConfiguration()));
-        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("World", new CompatibleModeValueConfiguration()));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("Hello ", new DefaultValueConfiguration()));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("World", new DefaultValueConfiguration()));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 

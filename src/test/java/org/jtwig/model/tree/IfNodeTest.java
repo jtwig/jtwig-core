@@ -4,7 +4,7 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +41,7 @@ public class IfNodeTest extends AbstractNodeTest {
         IfNode.IfConditionNode ifCondition = new IfNode.IfConditionNode(POSITION, condition, node);
         conditions.add(ifCondition);
 
-        when(condition.calculate(renderContext())).thenReturn(JtwigValueFactory.value(true, new CompatibleModeValueConfiguration()));
+        when(condition.calculate(renderContext())).thenReturn(JtwigValueFactory.value(true, new DefaultValueConfiguration()));
         render(node, "test");
 
         Renderable result = underTest.render(renderContext());

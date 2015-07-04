@@ -50,6 +50,6 @@ public class UnaryOperatorParser extends BasicParser<UnaryOperationCalculator> {
     }
 
     boolean endsWithNonSymbol(String symbol) {
-        return symbol.matches("[a-zA-Z0-9_\\$]$");
+        return symbol.matches(".*[a-zA-Z0-9_\\$]$");
     }
 }

@@ -6,7 +6,7 @@ import org.jtwig.model.expression.operation.unary.calculators.NotOperationCalcul
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,13 +24,13 @@ public class NotOperationCalculatorTest {
     @Before
     public void setUp() throws Exception {
         when(renderContext.environment().renderConfiguration().mathContext()).thenReturn(MathContext.DECIMAL32);
-        when(renderContext.environment().valueConfiguration()).thenReturn(new CompatibleModeValueConfiguration());
+        when(renderContext.environment().valueConfiguration()).thenReturn(new DefaultValueConfiguration());
     }
 
     @Test
     public void notWhenTrue() throws Exception {
         Expression operand = mock(Expression.class);
-        when(operand.calculate(renderContext)).thenReturn(JtwigValueFactory.value(false, new CompatibleModeValueConfiguration()));
+        when(operand.calculate(renderContext)).thenReturn(JtwigValueFactory.value(false, new DefaultValueConfiguration()));
 
         JtwigValue result = underTest.calculate(renderContext, position, operand);
 
@@ -40,7 +40,7 @@ public class NotOperationCalculatorTest {
     @Test
     public void notWhenFalse() throws Exception {
         Expression operand = mock(Expression.class);
-        when(operand.calculate(renderContext)).thenReturn(JtwigValueFactory.value(true, new CompatibleModeValueConfiguration()));
+        when(operand.calculate(renderContext)).thenReturn(JtwigValueFactory.value(true, new DefaultValueConfiguration()));
 
         JtwigValue result = underTest.calculate(renderContext, position, operand);
 

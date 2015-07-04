@@ -1,6 +1,6 @@
 package org.jtwig.functions.impl;
 
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.jtwig.value.configuration.ValueConfiguration;
 import org.junit.Test;
 
@@ -18,7 +18,7 @@ public class ListFunctionsTest {
     ListFunctions underTest = new ListFunctions() {
         @Override
         protected ValueConfiguration getConfiguration() {
-            return new CompatibleModeValueConfiguration();
+            return new DefaultValueConfiguration();
         }
     };
 

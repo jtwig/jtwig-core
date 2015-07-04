@@ -40,6 +40,6 @@ public class BinaryOperatorParser extends BasicParser<BinaryOperationCalculator>
 
 
     boolean endsWithNonSymbol(String symbol) {
-        return symbol.matches("[a-zA-Z_]$");
+        return symbol.matches(".*[a-zA-Z0-9_\\$]$");
     }
 }

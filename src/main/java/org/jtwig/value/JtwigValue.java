@@ -2,7 +2,11 @@ package org.jtwig.value;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import org.jtwig.functions.FunctionArgument;
+import org.jtwig.reflection.MethodInvoker;
+import org.jtwig.reflection.convert.Converter;
 import org.jtwig.reflection.model.Value;
+import org.jtwig.reflection.model.bean.BeanMethod;
 import org.jtwig.util.OptionalUtils;
 import org.jtwig.value.configuration.ValueConfiguration;
 import org.jtwig.value.extract.number.ObjectNumberExtractor;
@@ -13,10 +17,12 @@ import java.util.*;
 
 public class JtwigValue {
     private final Object value;
+    private final Converter converter;
     private final ValueConfiguration configuration;
 
-    public JtwigValue(Object value, ValueConfiguration configuration) {
+    public JtwigValue(Object value, Converter converter, ValueConfiguration configuration) {
         this.value = value;
+        this.converter = converter;
         this.configuration = configuration;
     }
 
@@ -34,33 +40,32 @@ public class JtwigValue {
         return value == Undefined.UNDEFINED;
     }
     public String asString() {
-        return configuration.getStringExtractor()
-                .extract(value)
+        return as(String.class)
                 .or("");
     }
     public String asString(Charset charset) {
-        return new String(configuration.getStringExtractor()
-                .extract(value)
+        return new String(as(String.class)
                 .or("").getBytes(), charset);
     }
     public Object asObject() {
         return value;
     }
     public Optional<BigDecimal> asNumber() {
-        return configuration.getNumberExtractor().extract(value);
+        return as(BigDecimal.class);
     }
     public Boolean asBoolean () {
-        return configuration.getBooleanExtractor()
-                .extract(value)
+        return as(Boolean.class)
                 .or(false);
     }
     public Collection<Object> asCollection() {
-        return configuration.getCollectionExtractor().extract(value)
+        return as(Collection.class)
                 .or(Collections.singletonList(value));
     }
     public Map<Object, Object> asMap() {
-        return configuration.getMapExtractor().extract(value)
-                .or(new HashMap(){{ put(0, value); }});
+        return as(Map.class)
+                .or(new HashMap() {{
+                    put(0, value);
+                }});
     }
     public Character asChar() {
         return asString().charAt(0);
@@ -102,12 +107,12 @@ public class JtwigValue {
     }
 
     public JtwigValue map(Function<JtwigValue, Object> map) {
-        return new JtwigValue(map.apply(this), configuration);
+        return new JtwigValue(map.apply(this), converter, configuration);
     }
 
     public boolean contains(JtwigValue value) {
         for (Object item : asCollection()) {
-            if (value.isEqualTo(new JtwigValue(item, configuration))) {
+            if (value.isEqualTo(new JtwigValue(item, converter, configuration))) {
                 return true;
             }
         }
@@ -117,14 +122,21 @@ public class JtwigValue {
     public JtwigValue getMapValue(JtwigValue key) {
         Object value = configuration.getMapSelectionExtractor().extract(asMap(), key)
                 .or(new Value(Undefined.UNDEFINED)).getValue();
-        return new JtwigValue(value, configuration);
+        return new JtwigValue(value, converter, configuration);
     }
 
-    public boolean isInstanceOf(Class type) {
-        return !isNull() && type.isAssignableFrom(value.getClass());
+    public Converter converter () {
+        return converter;
     }
 
-    public <T> T as(Class<T> type) {
-        return type.cast(value);
+    public <T> Optional<T> as(Class<T> type) {
+        return converter
+                .convert(value, type)
+                .transform(new Function<Value, T>() {
+                    @Override
+                    public T apply(Value input) {
+                        return (T) input.getValue();
+                    }
+                });
     }
 }

@@ -6,7 +6,7 @@ import org.jtwig.model.expression.operation.binary.calculators.AndOperationCalcu
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,13 +24,13 @@ public class AndOperationCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(context.environment().valueConfiguration()).thenReturn(new CompatibleModeValueConfiguration());
+        when(context.environment().valueConfiguration()).thenReturn(new DefaultValueConfiguration());
     }
 
     @Test
     public void calculateWhenBothTrue() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value(true, new CompatibleModeValueConfiguration()));
-        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value(true, new CompatibleModeValueConfiguration()));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value(true, new DefaultValueConfiguration()));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value(true, new DefaultValueConfiguration()));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 
@@ -39,7 +39,7 @@ public class AndOperationCalculatorTest {
 
     @Test
     public void calculateWhenFirstFalse() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value(false, new CompatibleModeValueConfiguration()));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value(false, new DefaultValueConfiguration()));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 
@@ -49,8 +49,8 @@ public class AndOperationCalculatorTest {
 
     @Test
     public void calculateWhenFirstTrueSecondFalse() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value(true, new CompatibleModeValueConfiguration()));
-        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value(false, new CompatibleModeValueConfiguration()));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value(true, new DefaultValueConfiguration()));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value(false, new DefaultValueConfiguration()));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 

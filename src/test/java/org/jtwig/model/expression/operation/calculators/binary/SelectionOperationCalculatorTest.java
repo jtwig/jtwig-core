@@ -15,7 +15,7 @@ import org.jtwig.property.PropertyResolveRequest;
 import org.jtwig.property.PropertyResolver;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,7 +43,7 @@ public class SelectionOperationCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(renderContext.environment().valueConfiguration()).thenReturn(new CompatibleModeValueConfiguration());
+        when(renderContext.environment().valueConfiguration()).thenReturn(new DefaultValueConfiguration());
     }
 
     @Test

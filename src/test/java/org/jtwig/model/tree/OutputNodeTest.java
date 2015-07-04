@@ -7,7 +7,7 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Test;
 
 import java.nio.charset.Charset;
@@ -28,7 +28,7 @@ public class OutputNodeTest extends AbstractNodeTest {
         when(renderContext().currentNode()).thenReturn(nodeContext);
         when(nodeContext.mode()).thenReturn(Optional.<EscapeMode>absent());
         when(renderContext().environment().renderConfiguration().outputCharset()).thenReturn(Charset.defaultCharset());
-        when(expression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", new CompatibleModeValueConfiguration()));
+        when(expression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", new DefaultValueConfiguration()));
 
         Renderable result = underTest.render(renderContext());
 

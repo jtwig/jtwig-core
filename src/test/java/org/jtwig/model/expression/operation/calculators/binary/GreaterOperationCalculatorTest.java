@@ -6,7 +6,7 @@ import org.jtwig.model.expression.operation.binary.calculators.GreaterOperationC
 import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.CompatibleModeValueConfiguration;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,14 +24,14 @@ public class GreaterOperationCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(context.environment().valueConfiguration()).thenReturn(new CompatibleModeValueConfiguration());
+        when(context.environment().valueConfiguration()).thenReturn(new DefaultValueConfiguration());
     }
 
 
     @Test
     public void calculateWhenLeftGreaterThanRight() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("2.0", new CompatibleModeValueConfiguration()));
-        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", new CompatibleModeValueConfiguration()));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("2.0", new DefaultValueConfiguration()));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", new DefaultValueConfiguration()));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 
@@ -40,8 +40,8 @@ public class GreaterOperationCalculatorTest {
 
     @Test
     public void calculateWhenLeftEqualToRight() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", new CompatibleModeValueConfiguration()));
-        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", new CompatibleModeValueConfiguration()));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", new DefaultValueConfiguration()));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", new DefaultValueConfiguration()));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 
@@ -50,8 +50,8 @@ public class GreaterOperationCalculatorTest {
 
     @Test
     public void calculateWhenLeftLessThanRight() throws Exception {
-        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", new CompatibleModeValueConfiguration()));
-        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("2.0", new CompatibleModeValueConfiguration()));
+        when(leftOperand.calculate(context)).thenReturn(JtwigValueFactory.value("1.0", new DefaultValueConfiguration()));
+        when(rightOperand.calculate(context)).thenReturn(JtwigValueFactory.value("2.0", new DefaultValueConfiguration()));
 
         JtwigValue result = underTest.calculate(context, position, leftOperand, rightOperand);
 
