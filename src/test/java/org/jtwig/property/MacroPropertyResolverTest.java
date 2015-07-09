@@ -10,8 +10,10 @@ import org.jtwig.context.values.ValueContext;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.Node;
+import org.jtwig.reflection.MethodInvoker;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.render.impl.StringRenderable;
+import org.jtwig.value.converter.Converter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,6 +43,7 @@ public class MacroPropertyResolverTest {
         }
     };
     private final ArrayList<FunctionArgument> arguments = new ArrayList<>();
+    private Converter converter = mock(Converter.class);
 
     @Before
     public void setUp() throws Exception {
@@ -50,7 +53,7 @@ public class MacroPropertyResolverTest {
     @Test
     public void resolveWhenNotMacroContext() throws Exception {
         Value value = mock(Value.class);
-        PropertyResolveRequest request = new PropertyResolveRequest(position, value, MACRO_NAME, arguments);
+        PropertyResolveRequest request = new PropertyResolveRequest(position, value, MACRO_NAME, arguments, converter);
 
         Optional<Value> result = underTest.resolve(request);
 
@@ -62,7 +65,7 @@ public class MacroPropertyResolverTest {
         HashMap<String, Macro> macros = new HashMap<>();
         MacroContext macroContext = new MacroContext(macros);
         Value value = new Value(macroContext);
-        PropertyResolveRequest request = new PropertyResolveRequest(position, value, MACRO_NAME, arguments);
+        PropertyResolveRequest request = new PropertyResolveRequest(position, value, MACRO_NAME, arguments, converter);
 
         Optional<Value> result = underTest.resolve(request);
 
@@ -80,7 +83,7 @@ public class MacroPropertyResolverTest {
         macros.put(MACRO_NAME, new Macro(argumentNames, content));
         when(renderContext.nodeRenderer()).thenReturn(nodeRenderer);
         when(nodeRenderer.render(content)).thenReturn(new StringRenderable("one", EscapeMode.NONE));
-        PropertyResolveRequest request = new PropertyResolveRequest(position, new Value(macroContext), MACRO_NAME, arguments);
+        PropertyResolveRequest request = new PropertyResolveRequest(position, new Value(macroContext), MACRO_NAME, arguments, converter);
 
         Optional<Value> result = underTest.resolve(request);
 

@@ -2,10 +2,12 @@ package org.jtwig.environment;
 
 import com.google.common.base.Optional;
 import org.jtwig.context.RenderConfiguration;
+import org.jtwig.functions.FunctionArgument;
 import org.jtwig.functions.resolver.FunctionResolver;
 import org.jtwig.model.expression.lists.EnumerationListStrategy;
 import org.jtwig.parser.JtwigParser;
 import org.jtwig.property.PropertyResolver;
+import org.jtwig.reflection.MethodInvoker;
 import org.jtwig.resource.resolver.ResourceResolver;
 import org.jtwig.util.OptionalUtils;
 import org.jtwig.value.configuration.ValueConfiguration;

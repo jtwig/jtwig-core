@@ -6,6 +6,7 @@ import org.jtwig.functions.FunctionArgument;
 import org.jtwig.functions.resolver.position.vararg.FromPositionExtractor;
 import org.jtwig.functions.resolver.position.vararg.FunctionArgumentMerger;
 import org.jtwig.reflection.input.InputParameterResolverContext;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.reflection.model.java.JavaMethodArgument;
 
 import java.util.List;
@@ -20,21 +21,22 @@ public class VarArgsPositionParameterResolver implements PositionParameterResolv
     }
 
     @Override
-    public Optional<FunctionArgument> resolve(JavaMethodArgument javaMethodArgument, int position, InputParameterResolverContext<FunctionArgument> context) {
+    public Optional<Value> resolve(JavaMethodArgument javaMethodArgument, int position, InputParameterResolverContext<FunctionArgument> context, Class to) {
         if (javaMethodArgument.isVarArg()) {
-            if (context.size() <= position) return Optional.of(new FunctionArgument(Optional.<String>absent(), null));
+            if (context.size() <= position) return Optional.of(new Value(null));
             return fromPositionExtractor
                     .extract(position, context)
-                    .transform(getFunction());
+                    .transform(getFunction())
+                    .or(Optional.<Value>absent());
         } else {
             return Optional.absent();
         }
     }
 
-    private Function<List<FunctionArgument>, FunctionArgument> getFunction() {
-        return new Function<List<FunctionArgument>, FunctionArgument>() {
+    private Function<List<FunctionArgument>, Optional<Value>> getFunction() {
+        return new Function<List<FunctionArgument>, Optional<Value>>() {
             @Override
-            public FunctionArgument apply(List<FunctionArgument> input) {
+            public Optional<Value> apply(List<FunctionArgument> input) {
                 return functionArgumentMerger.merge(input);
             }
         };

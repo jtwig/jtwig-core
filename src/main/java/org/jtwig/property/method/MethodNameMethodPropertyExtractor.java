@@ -1,8 +1,6 @@
 package org.jtwig.property.method;
 
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.google.common.collect.Collections2;
 import org.apache.commons.lang3.StringUtils;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.property.PropertyResolveRequest;
@@ -14,10 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class MethodNameMethodPropertyExtractor implements MethodPropertyExtractor {
     private static Logger logger = LoggerFactory.getLogger(MethodNameMethodPropertyExtractor.class);
@@ -51,10 +46,10 @@ public class MethodNameMethodPropertyExtractor implements MethodPropertyExtracto
         if (methodNameComparator.compare(method.name(), request.getPropertyName()) == 0) {
             List<JavaMethodArgument> methodArguments = method.arguments();
             if (request.getArguments().size() == methodArguments.size()) {
-                Collection<Object> arguments = extractValues(request.getArguments());
-                if (argumentsAreAssignable(arguments, methodArguments)) {
+                Optional<List<Object>> arguments = retrieveArguments(request.getArguments(), methodArguments);
+                if (arguments.isPresent()) {
                     try {
-                        return Optional.of(new Value(method.invoke(request.getEntity().getValue(), arguments.toArray())));
+                        return Optional.of(new Value(method.invoke(request.getEntity().getValue(), arguments.get().toArray())));
                     } catch (InvocationTargetException | IllegalAccessException e) {
                         logger.debug(ErrorMessageFormatter.errorMessage(request.getPosition(), String.format("Unable to execute method '%s' on '%s'", request.getPropertyName(), request.getEntity())), e);
                     }
@@ -64,29 +59,25 @@ public class MethodNameMethodPropertyExtractor implements MethodPropertyExtracto
         return Optional.absent();
     }
 
-
-    private Collection<Object> extractValues(Collection<FunctionArgument> arguments) {
-        return Collections2.transform(arguments, new Function<FunctionArgument, Object>() {
-            @Override
-            public Object apply(FunctionArgument input) {
-                return input.getValue();
-            }
-        });
-    }
-
-    private boolean argumentsAreAssignable(Collection<Object> arguments, List<JavaMethodArgument> classes) {
-        Iterator<Object> argumentsIterator = arguments.iterator();
+    private Optional<List<Object>> retrieveArguments(List<FunctionArgument> arguments, List<JavaMethodArgument> classes) {
+        Iterator<FunctionArgument> argumentsIterator = arguments.iterator();
         Iterator<JavaMethodArgument> methodArgumentIterator = classes.iterator();
+        List<Object> result = new ArrayList<>();
 
         while (argumentsIterator.hasNext()) {
-            Object next = argumentsIterator.next();
+            FunctionArgument next = argumentsIterator.next();
             JavaMethodArgument argument = methodArgumentIterator.next();
 
-            if ((next != null) && !argument.type().isAssignableFrom(next.getClass())) {
-                return false;
+            if ((next != null)) {
+                Optional<Value> valueOptional = next.getValue().as(argument.type());
+                if (valueOptional.isPresent()) {
+                    result.add(valueOptional.get().getValue());
+                } else {
+                    return Optional.absent();
+                }
             }
         }
 
-        return true;
+        return Optional.of(result);
     }
 }

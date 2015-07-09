@@ -12,14 +12,13 @@ import org.jtwig.reflection.MethodInvokerBuilder;
 import org.jtwig.reflection.extractor.BeanMethodExtractor;
 
 public class FunctionResolverFactory {
-    public FunctionResolver create (FunctionResolverConfiguration configuration) {
-        MethodInvoker<FunctionArgument> methodInvoker = new MethodInvokerBuilder<FunctionArgument>()
+    public FunctionResolver create(FunctionResolverConfiguration configuration) {
+        MethodInvoker<FunctionArgument> argumentMethodInvoker = new MethodInvokerBuilder<FunctionArgument>()
                 .withInputParameterResolverFactory(new FunctionArgumentResolverFactory())
                 .withInputParameterValueResolver(new FunctionArgumentValueResolver())
                 .withArgumentResolvers(configuration.getArgumentResolvers())
-                .withConverters(configuration.getConverters())
                 .build();
-        BeanFunctionReferenceExtractor beanFunctionReferenceExtractor = new BeanFunctionReferenceExtractor(new BeanMethodExtractor(), new BeanMethodFunctionExtractor(methodInvoker, new FunctionNameExtractor()));
+        BeanFunctionReferenceExtractor beanFunctionReferenceExtractor = new BeanFunctionReferenceExtractor(new BeanMethodExtractor(), new BeanMethodFunctionExtractor(argumentMethodInvoker, new FunctionNameExtractor()));
         FunctionResolverBuilder functionResolverBuilder = new FunctionResolverBuilder();
         for (Object bean : configuration.getBeans()) {
             functionResolverBuilder.with(beanFunctionReferenceExtractor.extract(bean));

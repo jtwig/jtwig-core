@@ -1,13 +1,14 @@
 package org.jtwig.functions;
 
 import com.google.common.base.Optional;
+import org.jtwig.value.JtwigValue;
 import org.jtwig.value.Undefined;
 
 public class FunctionArgument {
     private final Optional<String> name;
-    private final Object value;
+    private final JtwigValue value;
 
-    public FunctionArgument(Optional<String> name, Object value) {
+    public FunctionArgument(Optional<String> name, JtwigValue value) {
         this.name = name;
         this.value = value;
     }
@@ -16,7 +17,7 @@ public class FunctionArgument {
         return name;
     }
 
-    public Object getValue() {
+    public JtwigValue getValue() {
         return value;
     }
 
@@ -29,23 +30,23 @@ public class FunctionArgument {
         return name.or("undefined");
     }
 
-    private String printType(Object value) {
-        if (value == null) {
+    private String printType(JtwigValue value) {
+        if (value.isNull()) {
             return "undefined";
-        } else if (value == Undefined.UNDEFINED) {
+        } else if (!value.isDefined()) {
             return "undefined";
         } else {
-            return String.format("%s", value.getClass().getName());
+            return String.format("%s", value.asObject().getClass().getName());
         }
     }
 
-    private String printValue(Object value) {
-        if (value == null) {
+    private String printValue(JtwigValue value) {
+        if (value.isNull()) {
             return "null";
-        } else if (value == Undefined.UNDEFINED) {
+        } else if (!value.isDefined()) {
             return "undefined";
         } else {
-            return String.format("<%s>", value);
+            return String.format("<%s>", value.asObject());
         }
     }
 }

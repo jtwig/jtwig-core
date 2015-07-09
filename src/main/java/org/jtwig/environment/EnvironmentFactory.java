@@ -1,7 +1,6 @@
 package org.jtwig.environment;
 
 import org.jtwig.functions.resolver.FunctionResolverFactory;
-import org.jtwig.i18n.MessageResolverFactory;
 import org.jtwig.model.expression.lists.EnumerationListStrategyFactory;
 import org.jtwig.parser.JtwigParserFactory;
 import org.jtwig.property.PropertyResolverFactory;
@@ -15,10 +14,10 @@ public class EnvironmentFactory {
     private final EnumerationListStrategyFactory enumerationListStrategyFactory;
 
     public EnvironmentFactory () {
-        this(new JtwigParserFactory(), new ResourceResolverFactory(), new FunctionResolverFactory(), new PropertyResolverFactory(), new EnumerationListStrategyFactory(), new MessageResolverFactory());
+        this(new JtwigParserFactory(), new ResourceResolverFactory(), new FunctionResolverFactory(), new PropertyResolverFactory(), new EnumerationListStrategyFactory());
     }
 
-    public EnvironmentFactory(JtwigParserFactory jtwigParserFactory, ResourceResolverFactory resourceResolverFactory, FunctionResolverFactory functionResolverFactory, PropertyResolverFactory propertyResolverFactory, EnumerationListStrategyFactory enumerationListStrategyFactory, MessageResolverFactory messageResolverFactory) {
+    public EnvironmentFactory(JtwigParserFactory jtwigParserFactory, ResourceResolverFactory resourceResolverFactory, FunctionResolverFactory functionResolverFactory, PropertyResolverFactory propertyResolverFactory, EnumerationListStrategyFactory enumerationListStrategyFactory) {
         this.jtwigParserFactory = jtwigParserFactory;
         this.resourceResolverFactory = resourceResolverFactory;
         this.functionResolverFactory = functionResolverFactory;

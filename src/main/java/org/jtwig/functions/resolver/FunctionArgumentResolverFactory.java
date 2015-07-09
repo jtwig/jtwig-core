@@ -1,10 +1,6 @@
 package org.jtwig.functions.resolver;
 
 import com.google.common.base.Optional;
-import org.jtwig.reflection.input.InputParameterResolver;
-import org.jtwig.reflection.input.InputParameterResolverFactory;
-import org.jtwig.reflection.model.java.JavaMethod;
-import org.jtwig.reflection.model.java.JavaMethodArgument;
 import org.apache.commons.lang3.StringUtils;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.functions.annotations.Parameter;
@@ -14,6 +10,10 @@ import org.jtwig.functions.resolver.position.VarArgsPositionParameterResolver;
 import org.jtwig.functions.resolver.position.vararg.ArrayComponentExtractor;
 import org.jtwig.functions.resolver.position.vararg.FromPositionExtractor;
 import org.jtwig.functions.resolver.position.vararg.FunctionArgumentMerger;
+import org.jtwig.reflection.input.InputParameterResolver;
+import org.jtwig.reflection.input.InputParameterResolverFactory;
+import org.jtwig.reflection.model.java.JavaMethod;
+import org.jtwig.reflection.model.java.JavaMethodArgument;
 
 import java.util.List;
 

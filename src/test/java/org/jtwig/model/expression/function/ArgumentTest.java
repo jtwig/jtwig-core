@@ -28,6 +28,6 @@ public class ArgumentTest {
         FunctionArgument result = underTest.calculate(context);
 
         assertThat(result.getName(), is(name));
-        assertThat(result.getValue(), is(value));
+        assertThat(result.getValue().asObject(), is(value));
     }
 }

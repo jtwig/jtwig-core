@@ -1,9 +1,10 @@
 package org.jtwig.functions.resolver.position;
 
 import com.google.common.base.Optional;
-import org.jtwig.reflection.input.InputParameterResolverContext;
-import org.jtwig.reflection.model.java.JavaMethodArgument;
 import org.jtwig.functions.FunctionArgument;
+import org.jtwig.reflection.input.InputParameterResolverContext;
+import org.jtwig.reflection.model.Value;
+import org.jtwig.reflection.model.java.JavaMethodArgument;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,7 +31,7 @@ public class CompositePositionParameterResolverTest {
         JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
         InputParameterResolverContext<FunctionArgument> context = mock(InputParameterResolverContext.class);
 
-        Optional<FunctionArgument> result = underTest.resolve(javaMethodArgument, position, context);
+        Optional<Value> result = underTest.resolve(javaMethodArgument, position, context, String.class);
 
         assertThat(result.isPresent(), is(false));
     }
@@ -40,15 +41,15 @@ public class CompositePositionParameterResolverTest {
         PositionParameterResolver parameterResolver = mock(PositionParameterResolver.class);
         resolvers.add(parameterResolver);
         int position = 0;
-        FunctionArgument functionArgument = mock(FunctionArgument.class);
         JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
         InputParameterResolverContext<FunctionArgument> context = mock(InputParameterResolverContext.class);
-        when(parameterResolver.resolve(javaMethodArgument, position, context)).thenReturn(Optional.of(functionArgument));
+        Value reference = new Value(null);
+        when(parameterResolver.resolve(javaMethodArgument, position, context, String.class)).thenReturn(Optional.of(reference));
 
-        Optional<FunctionArgument> result = underTest.resolve(javaMethodArgument, position, context);
+        Optional<Value> result = underTest.resolve(javaMethodArgument, position, context, String.class);
 
         assertThat(result.isPresent(), is(true));
-        assertThat(result.get(), is(functionArgument));
+        assertThat(result.get(), is(reference));
     }
 
     @Test
@@ -56,12 +57,11 @@ public class CompositePositionParameterResolverTest {
         PositionParameterResolver parameterResolver = mock(PositionParameterResolver.class);
         resolvers.add(parameterResolver);
         int position = 0;
-        FunctionArgument functionArgument = mock(FunctionArgument.class);
         JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
         InputParameterResolverContext<FunctionArgument> context = mock(InputParameterResolverContext.class);
-        when(parameterResolver.resolve(javaMethodArgument, position, context)).thenReturn(Optional.<FunctionArgument>absent());
+        when(parameterResolver.resolve(javaMethodArgument, position, context, String.class)).thenReturn(Optional.<Value>absent());
 
-        Optional<FunctionArgument> result = underTest.resolve(javaMethodArgument, position, context);
+        Optional<Value> result = underTest.resolve(javaMethodArgument, position, context, String.class);
 
         assertThat(result.isPresent(), is(false));
     }

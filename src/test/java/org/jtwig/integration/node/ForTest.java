@@ -32,6 +32,18 @@ public class ForTest extends AbstractIntegrationTest {
     }
 
     @Test
+    public void nestedForLoopsAndLoopVariable() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{% for i in [1] %}" +
+                "{% for j in [1, 2, 3] %}" +
+                "a{{ loop.index }}" +
+                "{% endfor %}" +
+                "b{{ loop.index }}" +
+                "{% endfor %}").render(newModel());
+
+        assertThat(result, is("a1a2a3b1"));
+    }
+
+    @Test
     public void forWhiteSpaceControl() throws Exception {
         JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate(" {%- for i in list -%} {{i}} {%- endfor -%} ");
         String result = jtwigTemplate.render(newModel().with("list", new Integer[]{1, 2}));

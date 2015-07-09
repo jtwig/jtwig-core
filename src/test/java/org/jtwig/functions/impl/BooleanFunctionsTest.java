@@ -3,6 +3,7 @@ package org.jtwig.functions.impl;
 import org.jtwig.value.Undefined;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,20 +16,20 @@ public class BooleanFunctionsTest {
 
     @Test
     public void even() throws Exception {
-        assertTrue(underTest.even(2));
+        assertTrue(underTest.even(new BigDecimal(2)));
     }
     @Test
     public void evenFalse() throws Exception {
-        assertFalse(underTest.even(3));
+        assertFalse(underTest.even(new BigDecimal(3)));
     }
 
     @Test
     public void odd() throws Exception {
-        assertTrue(underTest.odd(3));
+        assertTrue(underTest.odd(new BigDecimal(3)));
     }
     @Test
     public void oddFalse() throws Exception {
-        assertFalse(underTest.odd(2));
+        assertFalse(underTest.odd(new BigDecimal(2)));
     }
 
 

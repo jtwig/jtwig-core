@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 public class BooleanFunctions {
+
+    public static final BigDecimal TWO = new BigDecimal(2);
+
     @JtwigFunction("defined")
     public boolean isDefined(@Parameter Object value) {
         return value != Undefined.UNDEFINED;
@@ -19,13 +22,13 @@ public class BooleanFunctions {
     }
 
     @JtwigFunction("even")
-    public boolean even(@Parameter int number) {
-        return number % 2 == 0;
+    public boolean even(@Parameter BigDecimal number) {
+        return BigDecimal.ZERO.equals(number.remainder(TWO));
     }
 
     @JtwigFunction("odd")
-    public boolean odd(@Parameter int number) {
-        return number % 2 == 1;
+    public boolean odd(@Parameter BigDecimal number) {
+        return BigDecimal.ONE.equals(number.remainder(TWO));
     }
 
     @JtwigFunction("iterable")

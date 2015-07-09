@@ -1,6 +1,6 @@
 package org.jtwig.value.configuration;
 
-import org.jtwig.reflection.convert.Converter;
+import org.jtwig.value.converter.Converter;
 import org.jtwig.value.JtwigType;
 import org.jtwig.value.extract.Extractor;
 import org.jtwig.value.extract.map.selection.MapSelectionExtractor;

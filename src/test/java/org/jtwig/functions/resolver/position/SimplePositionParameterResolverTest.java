@@ -1,11 +1,15 @@
 package org.jtwig.functions.resolver.position;
 
 import com.google.common.base.Optional;
-import org.jtwig.reflection.input.InputParameterResolverContext;
-import org.jtwig.reflection.model.java.JavaMethodArgument;
 import org.jtwig.functions.FunctionArgument;
+import org.jtwig.reflection.input.InputParameterResolverContext;
+import org.jtwig.reflection.model.Value;
+import org.jtwig.reflection.model.java.JavaMethodArgument;
+import org.jtwig.value.JtwigValue;
 import org.junit.Test;
 
+import static junit.framework.Assert.assertSame;
+import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
@@ -20,7 +24,7 @@ public class SimplePositionParameterResolverTest {
         InputParameterResolverContext<FunctionArgument> context = mock(InputParameterResolverContext.class);
         when(javaMethodArgument.isVarArg()).thenReturn(true);
 
-        Optional<FunctionArgument> result = underTest.resolve(javaMethodArgument, position, context);
+        Optional<Value> result = underTest.resolve(javaMethodArgument, position, context, String.class);
 
         assertThat(result.isPresent(), is(false));
         verify(context, never()).markAsUsed(position);
@@ -35,7 +39,7 @@ public class SimplePositionParameterResolverTest {
         when(javaMethodArgument.isVarArg()).thenReturn(false);
         when(context.isUsed(position)).thenReturn(true);
 
-        Optional<FunctionArgument> result = underTest.resolve(javaMethodArgument, position, context);
+        Optional<Value> result = underTest.resolve(javaMethodArgument, position, context, String.class);
 
         assertThat(result.isPresent(), is(false));
         verify(context, never()).markAsUsed(position);
@@ -50,7 +54,7 @@ public class SimplePositionParameterResolverTest {
         when(javaMethodArgument.isVarArg()).thenReturn(false);
         when(context.isUsed(position)).thenReturn(true);
 
-        Optional<FunctionArgument> result = underTest.resolve(javaMethodArgument, position, context);
+        Optional<Value> result = underTest.resolve(javaMethodArgument, position, context, String.class);
 
         assertThat(result.isPresent(), is(false));
         verify(context, never()).markAsUsed(position);
@@ -66,11 +70,14 @@ public class SimplePositionParameterResolverTest {
         when(context.size()).thenReturn(1);
         when(context.isUsed(position)).thenReturn(false);
         when(context.value(position)).thenReturn(functionArgument);
+        JtwigValue value = mock(JtwigValue.class);
+        when(functionArgument.getValue()).thenReturn(value);
+        Optional<Value> expected = Optional.<Value>absent();
+        when(value.as(String.class)).thenReturn(expected);
 
-        Optional<FunctionArgument> result = underTest.resolve(javaMethodArgument, position, context);
+        Optional<Value> result = underTest.resolve(javaMethodArgument, position, context, String.class);
 
-        assertThat(result.isPresent(), is(true));
-        assertThat(result.get(), is(functionArgument));
+        assertSame(expected, result);
         verify(context).markAsUsed(position);
     }
 }

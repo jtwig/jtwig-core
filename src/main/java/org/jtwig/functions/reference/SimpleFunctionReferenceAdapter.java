@@ -28,7 +28,7 @@ public class SimpleFunctionReferenceAdapter implements FunctionReference {
         Object[] argumentsArray = Collections2.transform(arguments, new Function<FunctionArgument, Object>() {
             @Override
             public Object apply(FunctionArgument input) {
-                return input.getValue();
+                return input.getValue().asObject();
             }
         }).toArray();
 

@@ -19,6 +19,6 @@ public class Argument {
     }
 
     public FunctionArgument calculate (RenderContext context) {
-        return new FunctionArgument(name, expression.calculate(context).asObject());
+        return new FunctionArgument(name, expression.calculate(context));
     }
 }

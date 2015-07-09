@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FromPositionExtractor {
-    public Optional<List<FunctionArgument>> extract (int position, InputParameterResolverContext<FunctionArgument> context) {
+    public Optional<List<FunctionArgument>> extract(int position, InputParameterResolverContext<FunctionArgument> context) {
         List<FunctionArgument> result = new ArrayList<>();
         for (int i = position; i < context.size(); i++) {
             if (context.isUsed(i)) {

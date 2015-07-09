@@ -1,11 +1,12 @@
 package org.jtwig.functions.resolver.position;
 
 import com.google.common.base.Optional;
-import org.jtwig.reflection.input.InputParameterResolverContext;
-import org.jtwig.reflection.model.java.JavaMethodArgument;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.functions.resolver.position.vararg.FromPositionExtractor;
 import org.jtwig.functions.resolver.position.vararg.FunctionArgumentMerger;
+import org.jtwig.reflection.input.InputParameterResolverContext;
+import org.jtwig.reflection.model.Value;
+import org.jtwig.reflection.model.java.JavaMethodArgument;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,7 +30,7 @@ public class VarArgsPositionParameterResolverTest {
         JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
         when(javaMethodArgument.isVarArg()).thenReturn(false);
 
-        Optional<FunctionArgument> result = underTest.resolve(javaMethodArgument, position, context);
+        Optional<Value> result = underTest.resolve(javaMethodArgument, position, context, String.class);
 
         assertThat(result.isPresent(), is(false));
     }
@@ -42,7 +43,7 @@ public class VarArgsPositionParameterResolverTest {
         when(javaMethodArgument.isVarArg()).thenReturn(true);
         when(context.size()).thenReturn(position);
 
-        Optional<FunctionArgument> result = underTest.resolve(javaMethodArgument, position, context);
+        Optional<Value> result = underTest.resolve(javaMethodArgument, position, context, String.class);
 
         assertThat(result.isPresent(), is(true));
         assertThat(result.get().getValue(), nullValue());
@@ -57,7 +58,7 @@ public class VarArgsPositionParameterResolverTest {
         when(context.size()).thenReturn(position+1);
         when(fromPositionExtractor.extract(position, context)).thenReturn(Optional.<List<FunctionArgument>>absent());
 
-        Optional<FunctionArgument> result = underTest.resolve(javaMethodArgument, position, context);
+        Optional<Value> result = underTest.resolve(javaMethodArgument, position, context, String.class);
 
         assertThat(result.isPresent(), is(false));
     }
@@ -72,12 +73,13 @@ public class VarArgsPositionParameterResolverTest {
         when(context.size()).thenReturn(position+1);
         List<FunctionArgument> functionArguments = new ArrayList<>();
         when(fromPositionExtractor.extract(position, context)).thenReturn(Optional.of(functionArguments));
-        when(functionArgumentMerger.merge(functionArguments)).thenReturn(functionArgument);
+        Value value = new Value("");
+        when(functionArgumentMerger.merge(functionArguments)).thenReturn(Optional.of(value));
 
 
-        Optional<FunctionArgument> result = underTest.resolve(javaMethodArgument, position, context);
+        Optional<Value> result = underTest.resolve(javaMethodArgument, position, context, String.class);
 
         assertThat(result.isPresent(), is(true));
-        assertThat(result.get(), is(functionArgument));
+        assertThat(result.get(), is(value));
     }
 }

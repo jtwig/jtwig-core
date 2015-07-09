@@ -3,9 +3,11 @@ package org.jtwig.property.method;
 import com.google.common.base.Optional;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.property.PropertyResolveRequest;
+import org.jtwig.reflection.MethodInvoker;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.reflection.model.java.JavaMethod;
 import org.jtwig.reflection.model.java.JavaMethodArgument;
+import org.jtwig.value.JtwigValue;
 import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,6 +23,7 @@ public class MethodNameMethodPropertyExtractorTest {
     private final Comparator methodNameComparator = mock(Comparator.class);
     private final JavaMethod javaMethod = mock(JavaMethod.class);
     private final PropertyResolveRequest propertyResolveRequest = mock(PropertyResolveRequest.class, RETURNS_DEEP_STUBS);
+    private final MethodInvoker<FunctionArgument> methodInvoker = mock(MethodInvoker.class);
     private final MethodNameMethodPropertyExtractor underTest = new MethodNameMethodPropertyExtractor(methodNameComparator);
 
     @Test
@@ -65,7 +68,9 @@ public class MethodNameMethodPropertyExtractorTest {
         when(propertyResolveRequest.getArguments()).thenReturn(Collections.singletonList(givenArgument));
         when(javaMethod.arguments()).thenReturn(Collections.singletonList(javaMethodArgument));
 
-        when(givenArgument.getValue()).thenReturn("");
+        JtwigValue jtwigValue = mock(JtwigValue.class);
+        when(jtwigValue.as(Integer.class)).thenReturn(Optional.<Value>absent());
+        when(givenArgument.getValue()).thenReturn(jtwigValue);
         when(javaMethodArgument.type()).thenReturn(Integer.class);
 
         Optional<Value> result = underTest.extract(propertyResolveRequest, javaMethod);
@@ -86,7 +91,9 @@ public class MethodNameMethodPropertyExtractorTest {
         when(propertyResolveRequest.getArguments()).thenReturn(Collections.singletonList(givenArgument));
         when(javaMethod.arguments()).thenReturn(Collections.singletonList(javaMethodArgument));
 
-        when(givenArgument.getValue()).thenReturn("");
+        JtwigValue jtwigValue = mock(JtwigValue.class);
+        when(givenArgument.getValue()).thenReturn(jtwigValue);
+        when(jtwigValue.as(String.class)).thenReturn(Optional.of(new Value("")));
         when(javaMethodArgument.type()).thenReturn(String.class);
 
         Object context = new Object();
@@ -111,7 +118,9 @@ public class MethodNameMethodPropertyExtractorTest {
         when(propertyResolveRequest.getArguments()).thenReturn(Collections.singletonList(givenArgument));
         when(javaMethod.arguments()).thenReturn(Collections.singletonList(javaMethodArgument));
 
-        when(givenArgument.getValue()).thenReturn("");
+        JtwigValue jtwigValue = mock(JtwigValue.class);
+        when(givenArgument.getValue()).thenReturn(jtwigValue);
+        when(jtwigValue.as(String.class)).thenReturn(Optional.of(new Value("")));
         when(javaMethodArgument.type()).thenReturn(String.class);
 
         Object context = new Object();
@@ -136,7 +145,9 @@ public class MethodNameMethodPropertyExtractorTest {
         when(propertyResolveRequest.getArguments()).thenReturn(Collections.singletonList(givenArgument));
         when(javaMethod.arguments()).thenReturn(Collections.singletonList(javaMethodArgument));
 
-        when(givenArgument.getValue()).thenReturn("");
+        JtwigValue jtwigValue = mock(JtwigValue.class);
+        when(jtwigValue.as(String.class)).thenReturn(Optional.of(new Value("")));
+        when(givenArgument.getValue()).thenReturn(jtwigValue);
         when(javaMethodArgument.type()).thenReturn(String.class);
 
         Object context = new Object();
@@ -163,7 +174,9 @@ public class MethodNameMethodPropertyExtractorTest {
         when(propertyResolveRequest.getArguments()).thenReturn(Collections.singletonList(givenArgument));
         when(javaMethod.arguments()).thenReturn(Collections.singletonList(javaMethodArgument));
 
-        when(givenArgument.getValue()).thenReturn(null);
+        JtwigValue jtwigValue = mock(JtwigValue.class);
+        when(givenArgument.getValue()).thenReturn(jtwigValue);
+        when(jtwigValue.as(String.class)).thenReturn(Optional.of(new Value(null)));
         when(javaMethodArgument.type()).thenReturn(String.class);
 
         Object context = new Object();

@@ -4,7 +4,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.functions.SimpleFunction;
-import org.jtwig.value.JtwigValueFactory;
+import org.jtwig.value.JtwigValue;
 import org.junit.Test;
 
 import java.util.List;
@@ -20,7 +20,9 @@ public class SimpleFunctionReferenceAdapterTest {
 
     @Test
     public void calculate() throws Exception {
-        List<FunctionArgument> functionArguments = asList(new FunctionArgument(Optional.<String>absent(), "test"));
+        JtwigValue value = mock(JtwigValue.class);
+        when(value.asObject()).thenReturn("test");
+        List<FunctionArgument> functionArguments = asList(new FunctionArgument(Optional.<String>absent(), value));
         when(function.execute("test")).thenReturn("hello");
 
         Optional<Supplier> result = underTest.calculate(functionArguments);

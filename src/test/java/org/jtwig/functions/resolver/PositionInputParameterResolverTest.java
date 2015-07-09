@@ -1,17 +1,18 @@
 package org.jtwig.functions.resolver;
 
 import com.google.common.base.Optional;
-import org.jtwig.reflection.input.InputParameterResolverContext;
-import org.jtwig.reflection.model.java.JavaMethod;
-import org.jtwig.reflection.model.java.JavaMethodArgument;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.functions.annotations.Parameter;
 import org.jtwig.functions.resolver.position.PositionParameterResolver;
+import org.jtwig.reflection.input.InputParameterResolverContext;
+import org.jtwig.reflection.model.Value;
+import org.jtwig.reflection.model.java.JavaMethod;
+import org.jtwig.reflection.model.java.JavaMethodArgument;
 import org.junit.Test;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -36,11 +37,12 @@ public class PositionInputParameterResolverTest {
         when(javaMethodArgument.annotation(Parameter.class)).thenReturn(Optional.of(parameter));
         when(javaMethodArgument2.annotation(Parameter.class)).thenReturn(Optional.of(parameter2));
         when(staticArgument.annotation(Parameter.class)).thenReturn(Optional.<Parameter>absent());
-        when(positionParameterResolver.resolve(javaMethodArgument, position, context)).thenReturn(Optional.of(functionArgument));
+        Value reference = new Value("");
+        when(positionParameterResolver.resolve(javaMethodArgument, position, context, String.class)).thenReturn(Optional.of(reference));
 
-        Optional<FunctionArgument> result = underTest.resolve(parameter, javaMethodArgument, context);
+        Optional<Value> result = underTest.resolve(parameter, javaMethodArgument, context, String.class);
 
         assertThat(result.isPresent(), is(true));
-        assertThat(result.get(), is(functionArgument));
+        assertThat(result.get(), is(reference));
     }
 }

@@ -1,6 +1,8 @@
 package org.jtwig.functions.resolver.position.vararg;
 
+import com.google.common.base.Optional;
 import org.jtwig.functions.FunctionArgument;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValueFactory;
 import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Test;
@@ -12,7 +14,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -24,9 +26,10 @@ public class FunctionArgumentMergerTest {
     public void mergeWhenEmpty() throws Exception {
         List<FunctionArgument> input = Collections.emptyList();
 
-        FunctionArgument result = underTest.merge(input);
+        Optional<Value> result = underTest.merge(input);
 
-        assertThat(result.getValue(), nullValue());
+        assertThat(result.isPresent(), is(true));
+        assertThat(result.get().getValue(), nullValue());
     }
 
     @Test
@@ -38,8 +41,9 @@ public class FunctionArgumentMergerTest {
         List<FunctionArgument> input = asList(functionArgument1, functionArgument2);
         when(arrayComponentExtractor.extract(input)).thenReturn(Object.class);
 
-        FunctionArgument result = underTest.merge(input);
+        Optional<Value> result = underTest.merge(input);
 
-        assertThat(result.getValue(), notNullValue());
+        assertThat(result.isPresent(), is(true));
+        assertThat(result.get().getValue(), notNullValue());
     }
 }

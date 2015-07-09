@@ -2,14 +2,11 @@ package org.jtwig.value;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import org.jtwig.functions.FunctionArgument;
-import org.jtwig.reflection.MethodInvoker;
-import org.jtwig.reflection.convert.Converter;
 import org.jtwig.reflection.model.Value;
-import org.jtwig.reflection.model.bean.BeanMethod;
 import org.jtwig.util.OptionalUtils;
 import org.jtwig.value.configuration.ValueConfiguration;
-import org.jtwig.value.extract.number.ObjectNumberExtractor;
+import org.jtwig.value.converter.Converter;
+import org.jtwig.value.converter.number.ObjectNumberConverter;
 
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
@@ -33,7 +30,7 @@ public class JtwigValue {
         return value == null;
     }
     public boolean isDefined() {
-        return value == Undefined.UNDEFINED;
+        return value != Undefined.UNDEFINED;
     }
 
     public boolean isUndefined() {
@@ -41,31 +38,50 @@ public class JtwigValue {
     }
     public String asString() {
         return as(String.class)
-                .or("");
+                .or(new Value(""))
+                .as(String.class);
     }
     public String asString(Charset charset) {
-        return new String(as(String.class)
-                .or("").getBytes(), charset);
+        String value = as(String.class)
+                .or(new Value("")).as(String.class);
+        return new String(value.getBytes(), charset);
     }
     public Object asObject() {
         return value;
     }
     public Optional<BigDecimal> asNumber() {
-        return as(BigDecimal.class);
+        Optional<Value> optional = as(BigDecimal.class);
+        if (optional.isPresent()) {
+            if (optional.get().getValue() == null) {
+                return Optional.absent();
+            }
+        }
+        return optional.transform(new Function<Value, BigDecimal>() {
+            @Override
+            public BigDecimal apply(Value input) {
+                return input.as(BigDecimal.class);
+            }
+        });
     }
     public Boolean asBoolean () {
         return as(Boolean.class)
-                .or(false);
+                .or(new Value(false))
+                .as(Boolean.class);
     }
     public Collection<Object> asCollection() {
-        return as(Collection.class)
-                .or(Collections.singletonList(value));
+        List<Object> defaultValue = Collections.singletonList(this.value);
+        Value value = as(Collection.class).or(new Value(defaultValue));
+        if (value.getValue() == null) {
+            return defaultValue;
+        }
+        return value.as(Collection.class);
     }
     public Map<Object, Object> asMap() {
         return as(Map.class)
-                .or(new HashMap() {{
+                .or(new Value(new HashMap() {{
                     put(0, value);
-                }});
+                }}))
+                .as(Map.class);
     }
     public Character asChar() {
         return asString().charAt(0);
@@ -95,7 +111,7 @@ public class JtwigValue {
 
     public boolean isStringNumber() {
         if (getType() == JtwigType.STRING) {
-            return value.toString().matches(ObjectNumberExtractor.NUMBER_PATTERN);
+            return value.toString().matches(ObjectNumberConverter.NUMBER_PATTERN);
         }
         return false;
     }
@@ -129,14 +145,12 @@ public class JtwigValue {
         return converter;
     }
 
-    public <T> Optional<T> as(Class<T> type) {
-        return converter
-                .convert(value, type)
-                .transform(new Function<Value, T>() {
-                    @Override
-                    public T apply(Value input) {
-                        return (T) input.getValue();
-                    }
-                });
+    public Optional<Value> as(Class type) {
+        return converter.convert(value, type);
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
     }
 }

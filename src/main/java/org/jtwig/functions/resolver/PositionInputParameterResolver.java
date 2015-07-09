@@ -2,13 +2,13 @@ package org.jtwig.functions.resolver;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import org.jtwig.reflection.input.InputParameterResolver;
-import org.jtwig.reflection.input.InputParameterResolverContext;
-import org.jtwig.reflection.model.java.JavaMethodArgument;
-import org.jtwig.reflection.util.Lists2;
 import org.jtwig.functions.FunctionArgument;
 import org.jtwig.functions.annotations.Parameter;
 import org.jtwig.functions.resolver.position.PositionParameterResolver;
+import org.jtwig.reflection.input.InputParameterResolverContext;
+import org.jtwig.reflection.model.Value;
+import org.jtwig.reflection.model.java.JavaMethodArgument;
+import org.jtwig.reflection.util.Lists2;
 
 import java.util.List;
 
@@ -20,10 +20,10 @@ public class PositionInputParameterResolver implements AnnotatedInputParameterRe
     }
 
     @Override
-    public Optional<FunctionArgument> resolve(Parameter parameter, JavaMethodArgument javaMethodArgument, InputParameterResolverContext<FunctionArgument> context) {
+    public Optional<Value> resolve(Parameter parameter, JavaMethodArgument javaMethodArgument, InputParameterResolverContext<FunctionArgument> context, Class to) {
         List<JavaMethodArgument> arguments = onlyArguments(javaMethodArgument);
         int position = position(javaMethodArgument, arguments);
-        return positionParameterResolver.resolve(javaMethodArgument, position, context);
+        return positionParameterResolver.resolve(javaMethodArgument, position, context, to);
     }
 
     private int position(final JavaMethodArgument javaMethodArgument, List<JavaMethodArgument> arguments) {

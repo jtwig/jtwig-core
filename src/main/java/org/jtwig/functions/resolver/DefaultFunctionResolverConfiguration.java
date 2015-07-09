@@ -1,8 +1,6 @@
 package org.jtwig.functions.resolver;
 
 import org.jtwig.functions.SimpleFunction;
-import org.jtwig.functions.convert.ObjectToBigDecimalConverter;
-import org.jtwig.functions.convert.ObjectToIntegerConverter;
 import org.jtwig.functions.impl.*;
 import org.jtwig.functions.reference.FunctionReference;
 import org.jtwig.reflection.resolver.argument.ArgumentResolver;
@@ -24,10 +22,6 @@ public class DefaultFunctionResolverConfiguration extends FunctionResolverConfig
                         new NumberFunctions(),
                         new ParentFunction(),
                         new BlockFunction()
-                ),
-                asList(
-                        new ObjectToIntegerConverter(),
-                        new ObjectToBigDecimalConverter()
                 ),
                 Collections.<FunctionReference>emptyList(),
                 Collections.<SimpleFunction>emptyList(),

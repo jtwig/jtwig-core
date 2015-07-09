@@ -1,6 +1,7 @@
 package org.jtwig.functions.resolver;
 
 import org.jtwig.functions.FunctionArgument;
+import org.jtwig.value.JtwigValue;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -13,7 +14,7 @@ public class FunctionArgumentValueResolverTest {
 
     @Test
     public void resolve() throws Exception {
-        Object value = new Object();
+        JtwigValue value = mock(JtwigValue.class);
         FunctionArgument functionArgument = mock(FunctionArgument.class, RETURNS_DEEP_STUBS);
         when(functionArgument.getValue()).thenReturn(value);
 

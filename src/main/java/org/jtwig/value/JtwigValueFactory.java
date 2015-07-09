@@ -1,6 +1,6 @@
 package org.jtwig.value;
 
-import org.jtwig.reflection.convert.CompositeConverter;
+import org.jtwig.value.converter.CompositeConverter;
 import org.jtwig.value.configuration.ValueConfiguration;
 
 public class JtwigValueFactory {

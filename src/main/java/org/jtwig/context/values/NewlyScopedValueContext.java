@@ -2,6 +2,7 @@ package org.jtwig.context.values;
 
 import com.google.common.base.Optional;
 import org.jtwig.reflection.model.Value;
+import org.jtwig.util.Cursor;
 
 public class NewlyScopedValueContext implements ValueContext {
     private final ValueContext parent;
@@ -25,6 +26,11 @@ public class NewlyScopedValueContext implements ValueContext {
         } else {
             local.add(key, value);
         }
+        return this;
+    }
+
+    public NewlyScopedValueContext addLocal(String key, Object value) {
+        local.add(key, value);
         return this;
     }
 }

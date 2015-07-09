@@ -14,7 +14,7 @@ public class NullTestExpression extends TestExpression {
                 if (context.environment().renderConfiguration().strictMode()) {
                     return input.isNull();
                 } else {
-                    return input.isNull() || input.isDefined();
+                    return input.isNull() || !input.isDefined();
                 }
             }
         });

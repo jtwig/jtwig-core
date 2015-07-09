@@ -14,8 +14,8 @@ import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import static org.jtwig.util.ErrorMessageFormatter.errorMessage;
 
@@ -24,7 +24,7 @@ public class SelectionOperationCalculator implements BinaryOperationCalculator {
     public JtwigValue calculate(final RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
         JtwigValue value = leftOperand.calculate(context);
         String propertyName;
-        Collection<FunctionArgument> functionArguments;
+        List<FunctionArgument> functionArguments;
         if (rightOperand instanceof VariableExpression) {
             propertyName = ((VariableExpression) rightOperand).getIdentifier();
             functionArguments = Collections.emptyList();
@@ -36,7 +36,7 @@ public class SelectionOperationCalculator implements BinaryOperationCalculator {
         }
 
         return context.environment().propertyResolver()
-                .resolve(PropertyResolveRequestFactory.create(position, value.asObject(), propertyName, functionArguments))
+                .resolve(PropertyResolveRequestFactory.create(position, value.asObject(), propertyName, functionArguments, value.converter()))
                 .transform(new Function<Value, JtwigValue>() {
                     @Override
                     public JtwigValue apply(Value input) {

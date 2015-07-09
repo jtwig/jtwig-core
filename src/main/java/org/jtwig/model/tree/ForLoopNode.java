@@ -3,7 +3,9 @@ package org.jtwig.model.tree;
 import com.google.common.base.Optional;
 
 import org.jtwig.context.RenderContext;
+import org.jtwig.context.values.NewlyScopedValueContext;
 import org.jtwig.context.values.ScopeType;
+import org.jtwig.context.values.ValueContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
@@ -44,22 +46,23 @@ public class ForLoopNode extends ContentNode {
     @Override
     public CompositeRenderable render(RenderContext context) {
         Collection<Renderable> renderables = new ArrayList<>();
+        NewlyScopedValueContext valueContext = (NewlyScopedValueContext) context.valueContext();
         if (keyVariableExpression.isPresent()) {
             Map<Object, Object> objects = expression.calculate(context).asMap();
-            Cursor cursor = new Cursor(context.valueContext(), new ArrayList<>(objects.entrySet()));
+            Cursor cursor = new Cursor(valueContext, new ArrayList<>(objects.entrySet()));
             for (Map.Entry<Object, Object> entry : objects.entrySet()) {
-                context.valueContext().add(keyVariableExpression.get().getIdentifier(), entry.getKey());
-                context.valueContext().add(variableExpression.getIdentifier(), entry.getValue());
-                context.valueContext().add("loop", cursor);
+                valueContext.add(keyVariableExpression.get().getIdentifier(), entry.getKey());
+                valueContext.add(variableExpression.getIdentifier(), entry.getValue());
+                valueContext.addLocal("loop", cursor);
                 renderables.add(super.render(context));
                 cursor.step();
             }
         } else {
             Collection<Object> objects = expression.calculate(context).asCollection();
-            Cursor cursor = new Cursor(context.valueContext(), objects);
+            Cursor cursor = new Cursor(valueContext, objects);
             for (Object value : objects) {
-                context.valueContext().add(variableExpression.getIdentifier(), value);
-                context.valueContext().add("loop", cursor);
+                valueContext.add(variableExpression.getIdentifier(), value);
+                valueContext.addLocal("loop", cursor);
                 renderables.add(super.render(context));
                 cursor.step();
             }
