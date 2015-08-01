@@ -2,9 +2,9 @@ package org.jtwig.integration.configuration;
 
 import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.EnvironmentConfiguration;
-import org.jtwig.parser.cache.LimitedCacheProvider;
-import org.jtwig.parser.cache.NoCacheProvider;
-import org.jtwig.parser.cache.PersistentCacheProvider;
+import org.jtwig.parser.cache.LimitedTemplateCacheProvider;
+import org.jtwig.parser.cache.NoTemplateCacheProvider;
+import org.jtwig.parser.cache.PersistentTemplateCacheProvider;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,7 +18,7 @@ public class CacheConfigurationTest {
         String template = "{{ 'Hello' }}";
 
         EnvironmentConfiguration configuration = configuration()
-                .parser().withCacheProvider(new NoCacheProvider())
+                .parser().withCacheProvider(new NoTemplateCacheProvider())
                 .and().build();
 
         String result1 = JtwigTemplate.inlineTemplate(template, configuration)
@@ -36,7 +36,7 @@ public class CacheConfigurationTest {
         String template = "{{ 'Hello' }}";
 
         EnvironmentConfiguration configuration = configuration()
-                .parser().withCacheProvider(new PersistentCacheProvider())
+                .parser().withCacheProvider(new PersistentTemplateCacheProvider())
                 .and().build();
 
         String result1 = JtwigTemplate.inlineTemplate(template, configuration)
@@ -54,7 +54,7 @@ public class CacheConfigurationTest {
         String template = "{{ 'Hello' }}";
 
         EnvironmentConfiguration configuration = configuration()
-                .parser().withCacheProvider(new LimitedCacheProvider(1))
+                .parser().withCacheProvider(new LimitedTemplateCacheProvider(1))
                 .and().build();
 
         String result1 = JtwigTemplate.inlineTemplate(template, configuration)

@@ -19,7 +19,7 @@ import static org.parboiled.common.FileUtils.readAllText;
 
 public class JtwigParserFactory {
     public JtwigParser create (JtwigParserConfiguration configuration) {
-        return new CachedJtwigParser(configuration.getCacheProvider().cache(), new ParboiledJtwigParser(configuration));
+        return new CachedJtwigParser(configuration.getTemplateCacheProvider().cache(), new ParboiledJtwigParser(configuration));
     }
 
     public static class ParboiledJtwigParser implements JtwigParser {

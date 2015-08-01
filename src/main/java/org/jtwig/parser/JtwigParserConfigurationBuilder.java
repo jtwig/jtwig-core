@@ -4,8 +4,8 @@ import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.model.expression.operation.binary.BinaryOperator;
 import org.jtwig.model.expression.operation.unary.UnaryOperator;
 import org.jtwig.parser.addon.AddonParserProvider;
-import org.jtwig.parser.cache.CacheProvider;
-import org.jtwig.parser.cache.NoCacheProvider;
+import org.jtwig.parser.cache.TemplateCacheProvider;
+import org.jtwig.parser.cache.NoTemplateCacheProvider;
 import org.jtwig.parser.config.SyntaxConfiguration;
 
 import java.nio.charset.Charset;
@@ -18,7 +18,7 @@ public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationB
     private Collection<AddonParserProvider> addonParserProviders = new ArrayList<>();
     private Collection<UnaryOperator> unaryOperators = new ArrayList<>();
     private Collection<BinaryOperator> binaryOperators = new ArrayList<>();
-    private CacheProvider cacheProvider = new NoCacheProvider();
+    private TemplateCacheProvider templateCacheProvider = new NoTemplateCacheProvider();
 
     public JtwigParserConfigurationBuilder () {}
     public JtwigParserConfigurationBuilder (JtwigParserConfiguration prototype) {
@@ -26,7 +26,7 @@ public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationB
                 .withAddonParserProviders(prototype.getAddonParserProviders())
                 .withInputCharset(prototype.getInputCharset())
                 .withSyntaxConfiguration(prototype.getSyntaxConfiguration())
-                .withCacheProvider(prototype.getCacheProvider())
+                .withCacheProvider(prototype.getTemplateCacheProvider())
                 .withBinaryOperators(prototype.getBinaryOperators())
                 .withUnaryOperators(prototype.getUnaryOperators())
         ;
@@ -52,8 +52,8 @@ public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationB
         return self();
     }
 
-    public B withCacheProvider(CacheProvider cacheProvider) {
-        this.cacheProvider = cacheProvider;
+    public B withCacheProvider(TemplateCacheProvider templateCacheProvider) {
+        this.templateCacheProvider = templateCacheProvider;
         return self();
     }
 
@@ -88,6 +88,6 @@ public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationB
 
     @Override
     public JtwigParserConfiguration build() {
-        return new JtwigParserConfiguration(syntaxConfiguration, addonParserProviders, unaryOperators, binaryOperators, inputCharset, cacheProvider);
+        return new JtwigParserConfiguration(syntaxConfiguration, addonParserProviders, unaryOperators, binaryOperators, inputCharset, templateCacheProvider);
     }
 }

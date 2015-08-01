@@ -3,7 +3,7 @@ package org.jtwig.parser;
 import org.jtwig.model.expression.operation.binary.BinaryOperator;
 import org.jtwig.model.expression.operation.unary.UnaryOperator;
 import org.jtwig.parser.addon.AddonParserProvider;
-import org.jtwig.parser.cache.CacheProvider;
+import org.jtwig.parser.cache.TemplateCacheProvider;
 import org.jtwig.parser.config.SyntaxConfiguration;
 
 import java.nio.charset.Charset;
@@ -15,15 +15,15 @@ public class JtwigParserConfiguration {
     private final Collection<UnaryOperator> unaryOperators;
     private final Collection<BinaryOperator> binaryOperators;
     private final Charset inputCharset;
-    private final CacheProvider cacheProvider;
+    private final TemplateCacheProvider templateCacheProvider;
 
-    public JtwigParserConfiguration(SyntaxConfiguration syntaxConfiguration, Collection<AddonParserProvider> addonParserProviders, Collection<UnaryOperator> unaryOperators, Collection<BinaryOperator> binaryOperators, Charset inputCharset, CacheProvider cacheProvider) {
+    public JtwigParserConfiguration(SyntaxConfiguration syntaxConfiguration, Collection<AddonParserProvider> addonParserProviders, Collection<UnaryOperator> unaryOperators, Collection<BinaryOperator> binaryOperators, Charset inputCharset, TemplateCacheProvider templateCacheProvider) {
         this.syntaxConfiguration = syntaxConfiguration;
         this.addonParserProviders = addonParserProviders;
         this.unaryOperators = unaryOperators;
         this.binaryOperators = binaryOperators;
         this.inputCharset = inputCharset;
-        this.cacheProvider = cacheProvider;
+        this.templateCacheProvider = templateCacheProvider;
     }
 
     public SyntaxConfiguration getSyntaxConfiguration() {
@@ -38,8 +38,8 @@ public class JtwigParserConfiguration {
         return inputCharset;
     }
 
-    public CacheProvider getCacheProvider() {
-        return cacheProvider;
+    public TemplateCacheProvider getTemplateCacheProvider() {
+        return templateCacheProvider;
     }
 
     public Collection<UnaryOperator> getUnaryOperators() {

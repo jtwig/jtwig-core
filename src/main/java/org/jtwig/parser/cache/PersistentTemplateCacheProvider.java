@@ -6,28 +6,34 @@ import com.google.common.collect.ImmutableMap;
 import org.jtwig.model.tree.Node;
 import org.jtwig.resource.Resource;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 
-public class NoCacheProvider implements CacheProvider {
+public class PersistentTemplateCacheProvider implements TemplateCacheProvider {
     @Override
     public Cache<Resource, Node> cache() {
-        return new NoCache();
+        return new MemoryCache();
     }
 
-    public static class NoCache implements Cache<Resource, Node> {
+    public static class MemoryCache implements Cache<Resource, Node> {
+        private final Map<Resource, Node> map = new HashMap<>();
 
         @Override
         public Node getIfPresent(Object key) {
-            return null;
+            return map.get(key);
         }
 
         @Override
         public Node get(Resource key, Callable<? extends Node> valueLoader) throws ExecutionException {
             try {
-                return valueLoader.call();
+                if (!map.containsKey(key)) {
+                    map.put(key, valueLoader.call());
+                }
+                return map.get(key);
             } catch (Exception e) {
                 throw new ExecutionException(e);
             }
@@ -35,37 +41,45 @@ public class NoCacheProvider implements CacheProvider {
 
         @Override
         public ImmutableMap<Resource, Node> getAllPresent(Iterable<?> keys) {
-            return ImmutableMap.of();
+            ImmutableMap.Builder<Resource, Node> builder = ImmutableMap.builder();
+            for (Object key : keys) {
+                if (map.containsKey(key)) {
+                    builder.put((Resource)key, map.get(key));
+                }
+            }
+            return builder.build();
         }
 
         @Override
         public void put(Resource key, Node value) {
-
+            map.put(key, value);
         }
 
         @Override
         public void putAll(Map<? extends Resource, ? extends Node> m) {
-
+            map.putAll(m);
         }
 
         @Override
         public void invalidate(Object key) {
-
+            map.remove(key);
         }
 
         @Override
         public void invalidateAll(Iterable<?> keys) {
-
+            for (Object key : keys) {
+                map.remove(key);
+            }
         }
 
         @Override
         public void invalidateAll() {
-
+            map.clear();
         }
 
         @Override
         public long size() {
-            return 0;
+            return map.size();
         }
 
         @Override
@@ -75,12 +89,12 @@ public class NoCacheProvider implements CacheProvider {
 
         @Override
         public ConcurrentMap<Resource, Node> asMap() {
-            return null;
+            return new ConcurrentHashMap<>(map);
         }
 
         @Override
         public void cleanUp() {
-
+            map.clear();
         }
     }
 }

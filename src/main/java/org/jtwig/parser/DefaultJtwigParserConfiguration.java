@@ -4,7 +4,7 @@ import org.jtwig.model.expression.operation.binary.impl.*;
 import org.jtwig.model.expression.operation.unary.impl.NegativeUnaryOperator;
 import org.jtwig.model.expression.operation.unary.impl.NotUnaryOperator;
 import org.jtwig.parser.addon.AddonParserProvider;
-import org.jtwig.parser.cache.NoCacheProvider;
+import org.jtwig.parser.cache.NoTemplateCacheProvider;
 import org.jtwig.parser.config.SyntaxConfigurationBuilder;
 
 import java.nio.charset.Charset;
@@ -46,6 +46,6 @@ public class DefaultJtwigParserConfiguration extends JtwigParserConfiguration {
                         new DifferentOperator()
                 ),
                 Charset.defaultCharset(),
-                new NoCacheProvider());
+                new NoTemplateCacheProvider());
     }
 }

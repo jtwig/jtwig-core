@@ -21,6 +21,15 @@ public class FilterTest extends AbstractIntegrationTest {
     }
 
     @Test
+    public void filter() throws Exception {
+
+        String result = JtwigTemplate.inlineTemplate("{% filter lower | capitalize %}HELLO WORLD{% endfilter %}", configuration()
+                .build()).render(JtwigModel.newModel());
+
+        assertThat(result, is("Hello world"));
+    }
+
+    @Test
     public void filterWithFunction() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% filter var2(2) %}1{% endfilter %}", configuration()
                 .functions().include(var2Function()).and()

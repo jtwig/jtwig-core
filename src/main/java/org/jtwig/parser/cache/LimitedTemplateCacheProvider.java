@@ -5,10 +5,10 @@ import com.google.common.cache.CacheBuilder;
 import org.jtwig.model.tree.Node;
 import org.jtwig.resource.Resource;
 
-public class LimitedCacheProvider implements CacheProvider {
+public class LimitedTemplateCacheProvider implements TemplateCacheProvider {
     private final long cacheSize;
 
-    public LimitedCacheProvider(long cacheSize) {
+    public LimitedTemplateCacheProvider(long cacheSize) {
         this.cacheSize = cacheSize;
     }
 
