@@ -14,6 +14,9 @@ import org.jtwig.value.configuration.ValueConfiguration;
 
 import java.util.Map;
 
+/**
+ * A representation of all Jtwig configured behaviour.
+ */
 public class Environment {
     private final JtwigParser parser;
     private final Map<String, Object> parameters;

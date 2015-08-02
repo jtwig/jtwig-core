@@ -61,11 +61,11 @@ public class JtwigTemplate {
     }
 
     private final RenderContextFactory renderContextFactory = new RenderContextFactory();
-    private final Resource template;
+    private final Resource resource;
     private final Environment environment;
 
-    public JtwigTemplate(Resource template, Environment environment) {
-        this.template = template;
+    public JtwigTemplate(Resource resource, Environment environment) {
+        this.resource = resource;
         this.environment = environment;
     }
 
@@ -81,9 +81,9 @@ public class JtwigTemplate {
     }
 
     private void render(JtwigModel model, RenderResult result) {
-        Node node = environment.parser().parse(template);
+        Node node = environment.parser().parse(resource);
 
-        RenderContextHolder.set(renderContextFactory.create(model, template, environment))
+        RenderContextHolder.set(renderContextFactory.create(model, resource, environment))
                 .nodeRenderer()
                 .render(node)
                 .appendTo(result);

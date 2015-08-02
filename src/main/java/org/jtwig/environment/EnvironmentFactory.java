@@ -1,11 +1,15 @@
 package org.jtwig.environment;
 
+import com.google.common.collect.ImmutableMap;
 import org.jtwig.functions.resolver.FunctionResolverFactory;
 import org.jtwig.model.expression.lists.EnumerationListStrategyFactory;
 import org.jtwig.parser.JtwigParserFactory;
 import org.jtwig.property.PropertyResolverFactory;
 import org.jtwig.resource.resolver.ResourceResolverFactory;
 
+/**
+ * Stateless and thread-safe implementation of a Environment factory.
+ */
 public class EnvironmentFactory {
     private final JtwigParserFactory jtwigParserFactory;
     private final ResourceResolverFactory resourceResolverFactory;
@@ -28,7 +32,7 @@ public class EnvironmentFactory {
     public Environment create(EnvironmentConfiguration environmentConfiguration) {
         return new Environment(
                 jtwigParserFactory.create(environmentConfiguration.getJtwigParserConfiguration()),
-                environmentConfiguration.getParameters(),
+                ImmutableMap.copyOf(environmentConfiguration.getParameters()),
                 resourceResolverFactory.create(environmentConfiguration.getResourceResolverConfiguration()),
                 functionResolverFactory.create(environmentConfiguration.getFunctionResolverConfiguration()),
                 propertyResolverFactory.create(environmentConfiguration.getPropertyResolverConfiguration()),
