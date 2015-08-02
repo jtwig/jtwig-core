@@ -5,14 +5,15 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class ResourceLoader {
+public class DefaultClasspathResourceLoader implements ClasspathResourceLoader {
     private final ClassLoader classLoader;
 
-    public ResourceLoader(ClassLoader classLoader) {
+    public DefaultClasspathResourceLoader(ClassLoader classLoader) {
         this.classLoader = classLoader;
     }
 
-    public boolean exists (String path) {
+    @Override
+    public boolean exists(String path) {
         try {
             URL resource = classLoader.getResource(preparePath(path));
             return resource != null && new File(resource.toURI()).exists();
@@ -29,7 +30,8 @@ public class ResourceLoader {
         }
     }
 
-    public InputStream load (String location) {
+    @Override
+    public InputStream load(String location) {
         return classLoader.getResourceAsStream(preparePath(location));
     }
 }

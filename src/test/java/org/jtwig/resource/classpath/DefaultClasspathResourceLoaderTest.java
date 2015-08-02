@@ -9,8 +9,8 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class ResourceLoaderTest {
-    private ResourceLoader underTest = new ResourceLoader(ResourceLoaderTest.class.getClassLoader());
+public class DefaultClasspathResourceLoaderTest {
+    private DefaultClasspathResourceLoader underTest = new DefaultClasspathResourceLoader(DefaultClasspathResourceLoaderTest.class.getClassLoader());
 
     @Test
     public void existsWhenResourceExists() throws Exception {

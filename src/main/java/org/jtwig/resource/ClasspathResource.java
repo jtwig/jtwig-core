@@ -1,21 +1,21 @@
 package org.jtwig.resource;
 
-import org.jtwig.resource.classpath.ResourceLoader;
+import org.jtwig.resource.classpath.ClasspathResourceLoader;
 
 import java.io.InputStream;
 
 public class ClasspathResource implements Resource {
     private final String path;
-    private final ResourceLoader resourceLoader;
+    private final ClasspathResourceLoader defaultClasspathResourceLoader;
 
-    public ClasspathResource(String path, ResourceLoader resourceLoader) {
+    public ClasspathResource(String path, ClasspathResourceLoader defaultClasspathResourceLoader) {
         this.path = path;
-        this.resourceLoader = resourceLoader;
+        this.defaultClasspathResourceLoader = defaultClasspathResourceLoader;
     }
 
     @Override
     public InputStream content() {
-        return resourceLoader.load(path);
+        return defaultClasspathResourceLoader.load(path);
     }
 
     public String getPath() {
