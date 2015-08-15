@@ -22,6 +22,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     private final AndResourceResolverConfigurationBuilder resourceResolverConfigurationBuilder;
     private final AndPropertyResolverConfigurationBuilder propertyResolverConfigurationBuilder;
     private final AndEnumerationListStrategyConfigurationBuilder enumerationListStrategyConfigurationBuilder;
+    private final AndValueConfigurationBuilder valueConfigurationBuilder;
 
     public EnvironmentConfigurationBuilder () {
         valueConfiguration = new DefaultValueConfiguration();
@@ -31,6 +32,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         resourceResolverConfigurationBuilder = new AndResourceResolverConfigurationBuilder(this);
         propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(this);
         enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(this);
+        valueConfigurationBuilder = new AndValueConfigurationBuilder(this);
     }
     public EnvironmentConfigurationBuilder (EnvironmentConfiguration prototype) {
         functionResolverConfiguration  = new AndFunctionResolverConfigurationBuilder(prototype.getFunctionResolverConfiguration(), this);
@@ -40,6 +42,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         valueConfiguration = prototype.getValueConfiguration();
         propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(prototype.getPropertyResolverConfiguration(), this);
         enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(prototype.getEnumerationListConfiguration(), this);
+        valueConfigurationBuilder = new AndValueConfigurationBuilder(prototype.getValueConfiguration(), this);
     }
 
     @Override
@@ -78,6 +81,10 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
 
     public AndEnumerationListStrategyConfigurationBuilder listEnumeration() {
         return enumerationListStrategyConfigurationBuilder;
+    }
+
+    public AndValueConfigurationBuilder value () {
+        return valueConfigurationBuilder;
     }
 
     public EnvironmentConfigurationBuilder withValueConfiguration (ValueConfiguration configuration) {
