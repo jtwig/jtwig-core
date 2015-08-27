@@ -1,0 +1,14 @@
+apply plugin: 'maven'
+
+version = "5.0.0"
+group = "org.jtwig"
+
+configurations {
+    provided
+}
+
+sourceSets {
+    main.compileClasspath += configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
+}

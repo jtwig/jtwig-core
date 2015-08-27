@@ -1,0 +1,28 @@
+apply plugin: 'java'
+apply from: 'gradle/version-release.gradle'
+apply from: 'gradle/coverage-support.gradle'
+apply from: 'gradle/ide-support.gradle'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    compile 'com.google.guava:guava:18.0'
+    compile 'org.apache.commons:commons-lang3:3.1'
+    compile 'org.parboiled:parboiled-java:1.1.7'
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    compile 'org.jtwig:jtwig-reflection:' + version
+    compile 'org.jtwig:jtwig-i18n:' + version
+    compile 'org.jtwig:jtwig-pluralization:' + version
+
+    testCompile 'commons-io:commons-io:2.4'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'org.hamcrest:hamcrest-all:1.3'
+    testCompile 'org.hamcrest:hamcrest-core:1.3'
+    testCompile 'junit:junit:4.12'
+}
