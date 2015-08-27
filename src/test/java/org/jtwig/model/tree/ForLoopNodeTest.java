@@ -2,6 +2,8 @@ package org.jtwig.model.tree;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.context.RenderContext;
+import org.jtwig.context.values.NewlyScopedValueContext;
+import org.jtwig.context.values.ValueContext;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
@@ -25,7 +27,7 @@ public class ForLoopNodeTest {
 
     @Test
     public void renderWhenMapIteration() throws Exception {
-        JtwigModel jtwigModel = mock(JtwigModel.class);
+        NewlyScopedValueContext jtwigModel = mock(NewlyScopedValueContext.class);
         LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
         map.put("hello", "one");
         when(expression.calculate(renderContext)).thenReturn(JtwigValueFactory.value(map, new DefaultValueConfiguration()));
@@ -38,12 +40,12 @@ public class ForLoopNodeTest {
 
         verify(jtwigModel).add("key", "hello");
         verify(jtwigModel).add("value", "one");
-        verify(jtwigModel).add(eq("loop"), any());
+        verify(jtwigModel).addLocal(eq("loop"), any());
     }
 
     @Test
     public void renderWhenMapArrayIteration() throws Exception {
-        JtwigModel jtwigModel = mock(JtwigModel.class);
+        NewlyScopedValueContext jtwigModel = mock(NewlyScopedValueContext.class);
         List<String> list = asList("hello", "test");
         when(expression.calculate(renderContext)).thenReturn(JtwigValueFactory.value(list, new DefaultValueConfiguration()));
         when(renderContext.valueContext()).thenReturn(jtwigModel);
@@ -57,12 +59,12 @@ public class ForLoopNodeTest {
         verify(jtwigModel).add("key", 1);
         verify(jtwigModel).add("value", "hello");
         verify(jtwigModel).add("value", "test");
-        verify(jtwigModel, times(2)).add(eq("loop"), any());
+        verify(jtwigModel, times(2)).addLocal(eq("loop"), any());
     }
 
     @Test
     public void renderWhenArrayIteration() throws Exception {
-        JtwigModel jtwigModel = mock(JtwigModel.class);
+        NewlyScopedValueContext jtwigModel = mock(NewlyScopedValueContext.class);
         List<String> list = asList("hello", "test");
         when(expression.calculate(renderContext)).thenReturn(JtwigValueFactory.value(list, new DefaultValueConfiguration()));
         when(renderContext.valueContext()).thenReturn(jtwigModel);
@@ -73,6 +75,6 @@ public class ForLoopNodeTest {
 
         verify(jtwigModel).add("value", "hello");
         verify(jtwigModel).add("value", "test");
-        verify(jtwigModel, times(2)).add(eq("loop"), any());
+        verify(jtwigModel, times(2)).addLocal(eq("loop"), any());
     }
 }
