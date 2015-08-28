@@ -29,11 +29,12 @@ buildscript {
 }
 
 dependencies {
+    compile 'org.jtwig:jtwig-reflection:1.+'
+
     compile 'com.google.guava:guava:18.0'
     compile 'org.apache.commons:commons-lang3:3.1'
     compile 'org.parboiled:parboiled-java:1.1.7'
     compile 'org.slf4j:slf4j-api:1.7.12'
-    compile 'org.jtwig:jtwig-reflection:1.0.8'
 
     testCompile 'commons-io:commons-io:2.4'
     testCompile 'org.mockito:mockito-core:1.10.19'
