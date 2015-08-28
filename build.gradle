@@ -9,6 +9,22 @@ targetCompatibility = 1.7
 repositories {
     mavenCentral()
     mavenLocal()
+    jcenter()
+    maven {
+        url "http://dl.bintray.com/jtwig/maven"
+    }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.3.1'
+    }
 }
 
 dependencies {
@@ -16,9 +32,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.1'
     compile 'org.parboiled:parboiled-java:1.1.7'
     compile 'org.slf4j:slf4j-api:1.7.12'
-    compile 'org.jtwig:jtwig-reflection:' + version
-    compile 'org.jtwig:jtwig-i18n:' + version
-    compile 'org.jtwig:jtwig-pluralization:' + version
+    compile 'org.jtwig:jtwig-reflection:1.0.8'
 
     testCompile 'commons-io:commons-io:2.4'
     testCompile 'org.mockito:mockito-core:1.10.19'
