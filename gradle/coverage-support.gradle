@@ -13,4 +13,10 @@ jacocoTestReport {
             fileTree(dir: it, exclude: 'org/jtwig/parser/**')
         })
     }
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
 }
+
+apply plugin: 'com.github.kt3k.coveralls'
