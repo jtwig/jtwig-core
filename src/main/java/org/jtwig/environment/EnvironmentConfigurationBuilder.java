@@ -15,7 +15,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     }
 
     private Map<String, Object> parameters = new HashMap<>();
-    private ValueConfiguration valueConfiguration;
     private final AndFunctionResolverConfigurationBuilder functionResolverConfiguration;
     private final AndRenderConfigurationBuilder renderConfiguration;
     private final AndJtwigParserConfigurationBuilder jtwigParserConfigurationBuilder;
@@ -25,7 +24,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     private final AndValueConfigurationBuilder valueConfigurationBuilder;
 
     public EnvironmentConfigurationBuilder () {
-        valueConfiguration = new DefaultValueConfiguration();
         functionResolverConfiguration  = new AndFunctionResolverConfigurationBuilder(this);
         renderConfiguration = new AndRenderConfigurationBuilder(this);
         jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(this);
@@ -39,7 +37,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         renderConfiguration = new AndRenderConfigurationBuilder(prototype.getRenderConfiguration(), this);
         jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(prototype.getJtwigParserConfiguration(), this);
         resourceResolverConfigurationBuilder = new AndResourceResolverConfigurationBuilder(prototype.getResourceResolverConfiguration(), this);
-        valueConfiguration = prototype.getValueConfiguration();
         propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(prototype.getPropertyResolverConfiguration(), this);
         enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(prototype.getEnumerationListConfiguration(), this);
         valueConfigurationBuilder = new AndValueConfigurationBuilder(prototype.getValueConfiguration(), this);
@@ -48,7 +45,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     @Override
     public EnvironmentConfiguration build() {
         return new EnvironmentConfiguration(
-                valueConfiguration,
+                valueConfigurationBuilder.build(),
                 resourceResolverConfigurationBuilder.build(),
                 functionResolverConfiguration.build(),
                 propertyResolverConfigurationBuilder.build(),
@@ -85,11 +82,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
 
     public AndValueConfigurationBuilder value () {
         return valueConfigurationBuilder;
-    }
-
-    public EnvironmentConfigurationBuilder withValueConfiguration (ValueConfiguration configuration) {
-        this.valueConfiguration = configuration;
-        return this;
     }
 
     public <T> EnvironmentConfigurationBuilder withParameter (String name, T value) {
