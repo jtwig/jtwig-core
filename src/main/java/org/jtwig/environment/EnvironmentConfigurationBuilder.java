@@ -3,9 +3,9 @@ package org.jtwig.environment;
 import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.environment.and.*;
 import org.jtwig.extension.Extension;
-import org.jtwig.value.configuration.DefaultValueConfiguration;
-import org.jtwig.value.configuration.ValueConfiguration;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +15,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     }
 
     private Map<String, Object> parameters = new HashMap<>();
+    private final Collection<Extension> extensions;
     private final AndFunctionResolverConfigurationBuilder functionResolverConfiguration;
     private final AndRenderConfigurationBuilder renderConfiguration;
     private final AndJtwigParserConfigurationBuilder jtwigParserConfigurationBuilder;
@@ -31,6 +32,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(this);
         enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(this);
         valueConfigurationBuilder = new AndValueConfigurationBuilder(this);
+        extensions = new ArrayList<>();
     }
     public EnvironmentConfigurationBuilder (EnvironmentConfiguration prototype) {
         functionResolverConfiguration  = new AndFunctionResolverConfigurationBuilder(prototype.getFunctionResolverConfiguration(), this);
@@ -40,6 +42,8 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(prototype.getPropertyResolverConfiguration(), this);
         enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(prototype.getEnumerationListConfiguration(), this);
         valueConfigurationBuilder = new AndValueConfigurationBuilder(prototype.getValueConfiguration(), this);
+        extensions = new ArrayList<>();
+        extensions.addAll(prototype.getExtensions());
     }
 
     @Override
@@ -52,8 +56,8 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
                 enumerationListStrategyConfigurationBuilder.build(),
                 jtwigParserConfigurationBuilder.build(),
                 renderConfiguration.build(),
-                parameters
-        );
+                parameters,
+                extensions);
     }
 
     public AndJtwigParserConfigurationBuilder parser () {
@@ -90,7 +94,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     }
 
     public <T extends Extension> EnvironmentConfigurationBuilder withExtension(T extension) {
-        extension.configure(this);
+        extensions.add(extension);
         return this;
     }
 }
