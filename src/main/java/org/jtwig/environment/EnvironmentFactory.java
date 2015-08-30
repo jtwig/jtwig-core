@@ -1,6 +1,7 @@
 package org.jtwig.environment;
 
 import com.google.common.collect.ImmutableMap;
+import org.jtwig.extension.Extension;
 import org.jtwig.functions.resolver.FunctionResolverFactory;
 import org.jtwig.model.expression.lists.EnumerationListStrategyFactory;
 import org.jtwig.parser.JtwigParserFactory;
@@ -29,7 +30,15 @@ public class EnvironmentFactory {
         this.enumerationListStrategyFactory = enumerationListStrategyFactory;
     }
 
-    public Environment create(EnvironmentConfiguration environmentConfiguration) {
+    public Environment create(EnvironmentConfiguration configuration) {
+        EnvironmentConfigurationBuilder builder = new EnvironmentConfigurationBuilder(configuration);
+
+        for (Extension extension : configuration.getExtensions()) {
+            extension.configure(builder);
+        }
+
+        EnvironmentConfiguration environmentConfiguration = builder.build();
+
         return new Environment(
                 jtwigParserFactory.create(environmentConfiguration.getJtwigParserConfiguration()),
                 ImmutableMap.copyOf(environmentConfiguration.getParameters()),

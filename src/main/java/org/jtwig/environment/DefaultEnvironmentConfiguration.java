@@ -1,6 +1,7 @@
 package org.jtwig.environment;
 
 import org.jtwig.context.DefaultRenderConfiguration;
+import org.jtwig.extension.Extension;
 import org.jtwig.functions.resolver.DefaultFunctionResolverConfiguration;
 import org.jtwig.model.expression.lists.DefaultEnumerationListStrategyConfiguration;
 import org.jtwig.parser.DefaultJtwigParserConfiguration;
@@ -20,7 +21,7 @@ public class DefaultEnvironmentConfiguration extends EnvironmentConfiguration {
                 new DefaultEnumerationListStrategyConfiguration(),
                 new DefaultJtwigParserConfiguration(),
                 new DefaultRenderConfiguration(),
-                Collections.<String, Object>emptyMap()
-        );
+                Collections.<String, Object>emptyMap(),
+                Collections.<Extension>emptyList());
     }
 }
