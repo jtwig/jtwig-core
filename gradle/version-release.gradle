@@ -4,12 +4,29 @@ apply plugin: 'maven'
 version = releaseVersion()
 group = "org.jtwig"
 
-def releaseVersion () {
-    def buildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
-    if (buildNumber == null || buildNumber.isEmpty()) {
-        buildNumber = "SNAPSHOT"
+import org.jtwig.version.GetVersion;
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url "http://dl.bintray.com/jtwig/maven"
+        }
     }
-    return "5." + buildNumber
+
+    dependencies {
+        classpath 'org.jtwig:jtwig-versioning:1.+'
+    }
+}
+
+def releaseVersion () {
+    def isCi = System.getenv("CI")
+    if ("true".equals(isCi) && "false".equals(System.getenv("TRAVIS_PULL_REQUEST")) && "master".equals(System.getenv("TRAVIS_BRANCH"))) {
+        return GetVersion.version(System.getenv('BINTRAY_USER'), System.getenv('BINTRAY_KEY'),  rootProject.name)
+    } else {
+        return "SNAPSHOT"
+    }
 }
 
 configurations {
