@@ -17,7 +17,7 @@ public class Issue076Test {
     @Test
     public void shouldGiveNiceExplanationForNonExistingFunctionsWithParams() throws Exception {
         expectedException.expect(CalculationException.class);
-        expectedException.expectMessage(containsString("Unable to resolve function 'nonExistingFunction' with arguments [<test> (type: java.lang.String, name: undefined), <string> (type: java.lang.String, name: undefined), <2> (type: java.math.BigDecimal, name: undefined)]"));
+        expectedException.expectMessage(containsString("Unable to resolve function 'nonExistingFunction' with arguments [<test> (class java.lang.String), <string> (class java.lang.String), <2> (class java.math.BigDecimal)]"));
 
         JtwigTemplate
                 .inlineTemplate("{{ nonExistingFunction('test', 'string', 2) }}")
@@ -27,7 +27,7 @@ public class Issue076Test {
     @Test
     public void shouldGiveNiceExplanationForNonExistingFunctions() throws Exception {
         expectedException.expect(CalculationException.class);
-        expectedException.expectMessage(containsString("Unable to resolve function 'nonExistingFunction' with arguments [<test> (type: java.lang.String, name: undefined)]"));
+        expectedException.expectMessage(containsString("Unable to resolve function 'nonExistingFunction' with arguments [<test> (class java.lang.String)]"));
 
         JtwigTemplate
                 .inlineTemplate("{{ nonExistingFunction('test') }}")

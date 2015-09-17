@@ -6,7 +6,6 @@ import org.jtwig.reflection.model.Value;
 import org.jtwig.value.Undefined;
 
 import java.util.Collections;
-import java.util.Map;
 
 public class NullMapConverter extends MapConverter {
     public NullMapConverter() {

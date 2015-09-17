@@ -2,7 +2,9 @@ package org.jtwig.integration.node;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
-import org.jtwig.functions.SimpleFunction;
+import org.jtwig.functions.JtwigFunction;
+import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.SimpleJtwigFunction;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.junit.Test;
 
@@ -14,7 +16,7 @@ public class FilterTest extends AbstractIntegrationTest {
     @Test
     public void filterWithVariable() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% filter var1 %}1{% endfilter %}", configuration()
-                .functions().include(var1Function()).and()
+                .functions().withFunction(var1Function()).and()
                 .build()).render(JtwigModel.newModel());
 
         assertThat(result, is("12"));
@@ -32,7 +34,7 @@ public class FilterTest extends AbstractIntegrationTest {
     @Test
     public void filterWithFunction() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% filter var2(2) %}1{% endfilter %}", configuration()
-                .functions().include(var2Function()).and()
+                .functions().withFunction(var2Function()).and()
                 .build()).render(JtwigModel.newModel());
 
         assertThat(result, is("123"));
@@ -42,52 +44,52 @@ public class FilterTest extends AbstractIntegrationTest {
     public void filterWithComposition() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% filter var1 | var3 %}1{% endfilter %}", configuration()
                 .functions()
-                .include(var1Function())
-                .include(var3Function())
+                .withFunction(var1Function())
+                .withFunction(var3Function())
                 .and()
                 .build()).render(JtwigModel.newModel());
 
         assertThat(result, is("123"));
     }
 
-    private SimpleFunction var3Function() {
-        return new SimpleFunction() {
+    private JtwigFunction var3Function() {
+        return new SimpleJtwigFunction() {
             @Override
             public String name() {
                 return "var3";
             }
 
             @Override
-            public Object execute(Object... arguments) {
-                return arguments[0].toString() + "3";
+            public Object execute(JtwigFunctionRequest request) {
+                return request.get(0).asString() + "3";
             }
         };
     }
 
-    private SimpleFunction var2Function() {
-        return new SimpleFunction() {
+    private JtwigFunction var2Function() {
+        return new SimpleJtwigFunction() {
             @Override
             public String name() {
                 return "var2";
             }
 
             @Override
-            public Object execute(Object... arguments) {
-                return arguments[0].toString() + arguments[1].toString() + "3";
+            public Object execute(JtwigFunctionRequest request) {
+                return request.get(0).asString() + request.get(1).asString() + "3";
             }
         };
     }
 
-    private SimpleFunction var1Function() {
-        return new SimpleFunction() {
+    private JtwigFunction var1Function() {
+        return new SimpleJtwigFunction() {
             @Override
             public String name() {
                 return "var1";
             }
 
             @Override
-            public Object execute(Object... arguments) {
-                return arguments[0].toString() + "2";
+            public Object execute(JtwigFunctionRequest request) {
+                return request.get(0).asString() + "2";
             }
         };
     }

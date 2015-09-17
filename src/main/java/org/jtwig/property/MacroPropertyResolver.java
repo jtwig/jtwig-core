@@ -9,10 +9,11 @@ import org.jtwig.context.model.Macro;
 import org.jtwig.context.model.MacroContext;
 import org.jtwig.context.values.SimpleValueContext;
 import org.jtwig.context.values.ValueContext;
-import org.jtwig.functions.FunctionArgument;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.render.RenderResult;
 import org.jtwig.render.StringBuilderRenderResult;
+import org.jtwig.value.JtwigValue;
+import org.jtwig.value.Undefined;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,10 +37,10 @@ public class MacroPropertyResolver implements PropertyResolver {
             public Value apply(Macro macro) {
                 ValueContext valueContext = new SimpleValueContext(new HashMap<String, Value>());
 
-                Iterator<FunctionArgument> valueIterator = request.getArguments().iterator();
+                Iterator<JtwigValue> valueIterator = request.getArguments().iterator();
                 for (String variableName : macro.getArgumentNames()) {
                     if (valueIterator.hasNext()) {
-                        valueContext.add(variableName, valueIterator.next().getValue());
+                        valueContext.add(variableName, valueIterator.next().as(Object.class).or(new Value(Undefined.UNDEFINED)).getValue());
                     }
                 }
 

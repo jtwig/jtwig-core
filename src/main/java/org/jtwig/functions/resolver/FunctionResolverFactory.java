@@ -1,36 +1,30 @@
 package org.jtwig.functions.resolver;
 
-import org.jtwig.functions.FunctionArgument;
-import org.jtwig.functions.SimpleFunction;
-import org.jtwig.functions.extract.BeanFunctionReferenceExtractor;
-import org.jtwig.functions.extract.BeanMethodFunctionExtractor;
-import org.jtwig.functions.extract.FunctionNameExtractor;
-import org.jtwig.functions.reference.FunctionReference;
-import org.jtwig.functions.reference.SimpleFunctionReferenceAdapter;
-import org.jtwig.reflection.MethodInvoker;
-import org.jtwig.reflection.MethodInvokerBuilder;
-import org.jtwig.reflection.extractor.BeanMethodExtractor;
+import org.jtwig.exceptions.InvalidFunctionNameException;
+import org.jtwig.functions.JtwigFunction;
+
+import java.util.HashMap;
 
 public class FunctionResolverFactory {
+
+    public static final String IDENTIFIER_PATTERN = "[A-Za-z_$][A-Za-z0-9_$]*";
+
     public FunctionResolver create(FunctionResolverConfiguration configuration) {
-        MethodInvoker<FunctionArgument> argumentMethodInvoker = new MethodInvokerBuilder<FunctionArgument>()
-                .withInputParameterResolverFactory(new FunctionArgumentResolverFactory())
-                .withInputParameterValueResolver(new FunctionArgumentValueResolver())
-                .withArgumentResolvers(configuration.getArgumentResolvers())
-                .build();
-        BeanFunctionReferenceExtractor beanFunctionReferenceExtractor = new BeanFunctionReferenceExtractor(new BeanMethodExtractor(), new BeanMethodFunctionExtractor(argumentMethodInvoker, new FunctionNameExtractor()));
-        FunctionResolverBuilder functionResolverBuilder = new FunctionResolverBuilder();
-        for (Object bean : configuration.getBeans()) {
-            functionResolverBuilder.with(beanFunctionReferenceExtractor.extract(bean));
+        HashMap<String, JtwigFunction> map = new HashMap<>();
+        for (JtwigFunction jtwigFunction : configuration.getFunctions()) {
+            validate(jtwigFunction.name());
+            map.put(jtwigFunction.name(), jtwigFunction);
+            for (String alias : jtwigFunction.aliases()) {
+                validate(alias);
+                map.put(alias, jtwigFunction);
+            }
         }
+        return new CoreFunctionResolver(map);
+    }
 
-        for (FunctionReference functionReference : configuration.getFunctionReferences()) {
-            functionResolverBuilder.with(functionReference);
+    private void validate(String name) {
+        if (!name.matches(IDENTIFIER_PATTERN)) {
+            throw new InvalidFunctionNameException(String.format("Function name %s is invalid, it should be an identifier (regular expression: %s)", name, IDENTIFIER_PATTERN));
         }
-        for (SimpleFunction simpleFunction : configuration.getSimpleFunctions()) {
-            functionResolverBuilder.with(new SimpleFunctionReferenceAdapter(simpleFunction));
-        }
-
-        return functionResolverBuilder.build();
     }
 }

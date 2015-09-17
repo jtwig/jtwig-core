@@ -3,27 +3,34 @@ package org.jtwig.functions.resolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
-import org.jtwig.functions.FunctionArgument;
-import org.jtwig.functions.reference.FunctionReference;
+import org.jtwig.functions.JtwigFunction;
+import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.model.position.Position;
+import org.jtwig.value.JtwigValue;
 
 import java.util.List;
 import java.util.Map;
 
 public class CoreFunctionResolver implements FunctionResolver {
-    private final Map<String, FunctionReference> functions;
+    private final Map<String, JtwigFunction> functions;
 
-    public CoreFunctionResolver(Map<String, FunctionReference> functions) {
+    public CoreFunctionResolver(Map<String, JtwigFunction> functions) {
         this.functions = functions;
     }
 
     @Override
-    public Optional<Supplier> resolve(String functionName, final List<FunctionArgument> arguments) {
+    public Optional<Supplier> resolve(final Position position, final String functionName, final List<JtwigValue> arguments) {
         return Optional
                 .fromNullable(functions.get(functionName))
-                .transform(new Function<FunctionReference, Optional<Supplier>>() {
+                .transform(new Function<JtwigFunction, Supplier>() {
                     @Override
-                    public Optional<Supplier> apply(FunctionReference input) {
-                        return input.calculate(arguments);
+                    public Supplier apply(final JtwigFunction input) {
+                        return new Supplier() {
+                            @Override
+                            public Object get() {
+                                return input.execute(new JtwigFunctionRequest(position, functionName, arguments));
+                            }
+                        };
                     }
                 })
                 .or(Optional.<Supplier>absent());

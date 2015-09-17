@@ -2,7 +2,6 @@ package org.jtwig.context.values;
 
 import com.google.common.base.Optional;
 import org.jtwig.reflection.model.Value;
-import org.jtwig.value.JtwigValue;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;

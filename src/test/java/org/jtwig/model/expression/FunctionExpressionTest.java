@@ -16,9 +16,9 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 
 public class FunctionExpressionTest {
-    private final Position position = mock(Position.class);
     private final String functionIdentifier = "identifier";
     private final ArrayList<Argument> list = new ArrayList<>();
+    private final Position position = mock(Position.class);
     private FunctionExpression underTest = new FunctionExpression(position, functionIdentifier, list);
     private RenderContext context = mock(RenderContext.class, RETURNS_DEEP_STUBS);
 
@@ -28,7 +28,7 @@ public class FunctionExpressionTest {
         Supplier executable = mock(Supplier.class);
 
         when(executable.get()).thenReturn(expectedResult);
-        when(context.environment().functionResolver().resolve(eq(functionIdentifier), anyList())).thenReturn(Optional.of(executable));
+        when(context.environment().functionResolver().resolve(eq(position), eq(functionIdentifier), anyList())).thenReturn(Optional.of(executable));
 
         JtwigValue jtwigValue = underTest.calculate(context);
 
@@ -38,7 +38,7 @@ public class FunctionExpressionTest {
     @Test(expected = CalculationException.class)
     public void calculateWhenFunctionDoesNotExist() throws Exception {
 
-        when(context.environment().functionResolver().resolve(eq(functionIdentifier), anyList())).thenReturn(Optional.<Supplier>absent());
+        when(context.environment().functionResolver().resolve(eq(position), eq(functionIdentifier), anyList())).thenReturn(Optional.<Supplier>absent());
 
         underTest.calculate(context);
     }

@@ -2,11 +2,11 @@ package org.jtwig.integration.expression;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
-import org.jtwig.functions.SimpleFunction;
+import org.jtwig.functions.JtwigFunction;
+import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.SimpleJtwigFunction;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.value.JtwigValue;
-import org.jtwig.value.JtwigValueFactory;
-import org.jtwig.value.configuration.DefaultValueConfiguration;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -20,7 +20,7 @@ public class CompositionTest extends AbstractIntegrationTest {
     @Test
     public void compose() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ [1..10] | sum }}", configuration()
-                .functions().include(sumFunction()).and().build())
+                .functions().withFunction(sumFunction()).and().build())
                 .render(JtwigModel.newModel());
 
         assertThat(result, is("55"));
@@ -29,7 +29,7 @@ public class CompositionTest extends AbstractIntegrationTest {
     @Test
     public void composeWithFunctionWithParenthesis() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ [1..10] | sum() }}", configuration()
-                .functions().include(sumFunction()).and().build())
+                .functions().withFunction(sumFunction()).and().build())
                 .render(JtwigModel.newModel());
 
         assertThat(result, is("55"));
@@ -38,46 +38,42 @@ public class CompositionTest extends AbstractIntegrationTest {
     @Test
     public void composeWithFunction() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ 1 | plus(1) }}", configuration()
-                .functions().include(plusFunction()).and().build())
+                .functions().withFunction(plusFunction()).and().build())
                 .render(JtwigModel.newModel());
 
         assertThat(result, is("2"));
     }
 
-    private SimpleFunction plusFunction() {
-        return new SimpleFunction() {
+    private JtwigFunction plusFunction() {
+        return new SimpleJtwigFunction() {
             @Override
             public String name() {
                 return "plus";
             }
 
             @Override
-            public Object execute(Object... arguments) {
-                return value(arguments[0]).mandatoryNumber().add(BigDecimal.ONE);
+            public Object execute(JtwigFunctionRequest request) {
+                return request.get(0).mandatoryNumber().add(BigDecimal.ONE);
             }
         };
     }
 
-    private SimpleFunction sumFunction() {
-        return new SimpleFunction() {
+    private JtwigFunction sumFunction() {
+        return new SimpleJtwigFunction() {
             @Override
             public String name() {
                 return "sum";
             }
 
             @Override
-            public Object execute(Object... arguments) {
+            public Object execute(JtwigFunctionRequest request) {
                 BigDecimal result = BigDecimal.ZERO;
-                Collection<Object> objects = value(arguments[0]).asCollection();
-                for (Object object : objects) {
-                    result = result.add(value(object).mandatoryNumber());
+                Collection<JtwigValue> objects = request.get(0).asCollectionOfValues();
+                for (JtwigValue object : objects) {
+                    result = result.add(object.mandatoryNumber());
                 }
                 return result;
             }
         };
-    }
-
-    private JtwigValue value(Object argument) {
-        return JtwigValueFactory.value(argument, new DefaultValueConfiguration());
     }
 }

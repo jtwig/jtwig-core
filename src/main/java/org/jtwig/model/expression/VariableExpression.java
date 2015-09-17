@@ -27,7 +27,7 @@ public class VariableExpression extends InjectableExpression {
 
     @Override
     public Expression inject(Expression expression) {
-        return new FunctionExpression(getPosition(), identifier, Collections.singletonList(new Argument(Optional.<String>absent(), expression)));
+        return new FunctionExpression(getPosition(), identifier, Collections.singletonList(new Argument(expression)));
     }
 
     @Override

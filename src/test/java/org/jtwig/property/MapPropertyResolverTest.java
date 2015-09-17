@@ -1,8 +1,8 @@
 package org.jtwig.property;
 
 import com.google.common.base.Optional;
-import org.jtwig.functions.FunctionArgument;
 import org.jtwig.reflection.model.Value;
+import org.jtwig.value.JtwigValue;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -10,7 +10,8 @@ import java.util.HashMap;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -20,7 +21,7 @@ public class MapPropertyResolverTest {
 
     @Test
     public void resolveWhenWithArguments() throws Exception {
-        when(request.getArguments()).thenReturn(asList(mock(FunctionArgument.class)));
+        when(request.getArguments()).thenReturn(asList(mock(JtwigValue.class)));
 
         Optional<Value> result = underTest.resolve(request);
 
@@ -29,7 +30,7 @@ public class MapPropertyResolverTest {
 
     @Test
     public void resolveWhenNoArgumentsButNotAMap() throws Exception {
-        when(request.getArguments()).thenReturn(Collections.<FunctionArgument>emptyList());
+        when(request.getArguments()).thenReturn(Collections.<JtwigValue>emptyList());
         when(request.getEntity()).thenReturn(new Value(1));
 
         Optional<Value> result = underTest.resolve(request);
@@ -39,7 +40,7 @@ public class MapPropertyResolverTest {
 
     @Test
     public void resolveWhenNoArgumentsAndMapButKeyNotFound() throws Exception {
-        when(request.getArguments()).thenReturn(Collections.<FunctionArgument>emptyList());
+        when(request.getArguments()).thenReturn(Collections.<JtwigValue>emptyList());
         when(request.getEntity()).thenReturn(new Value(new HashMap<>()));
         when(request.getPropertyName()).thenReturn("property");
 
@@ -51,7 +52,7 @@ public class MapPropertyResolverTest {
     @Test
     public void resolveWhenNoArgumentsAndMapButKeyFound() throws Exception {
         final String property = "property";
-        when(request.getArguments()).thenReturn(Collections.<FunctionArgument>emptyList());
+        when(request.getArguments()).thenReturn(Collections.<JtwigValue>emptyList());
         when(request.getEntity()).thenReturn(new Value(new HashMap() {{
             put(property, "hello");
         }}));

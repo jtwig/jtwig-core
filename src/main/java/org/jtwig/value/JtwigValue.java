@@ -2,6 +2,7 @@ package org.jtwig.value;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import com.google.common.collect.Collections2;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.util.OptionalUtils;
 import org.jtwig.value.configuration.ValueConfiguration;
@@ -151,6 +152,16 @@ public class JtwigValue {
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        if (isNull()) return "null";
+        return String.format("<%s> (%s)", value, value.getClass());
+    }
+
+    public Collection<JtwigValue> asCollectionOfValues() {
+        return Collections2.transform(asCollection(), new Function<Object, JtwigValue>() {
+            @Override
+            public JtwigValue apply(Object input) {
+                return new JtwigValue(input, converter, configuration);
+            }
+        });
     }
 }

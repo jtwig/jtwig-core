@@ -2,17 +2,20 @@ package org.jtwig.property.method;
 
 import com.google.common.base.Optional;
 import org.apache.commons.lang3.StringUtils;
-import org.jtwig.functions.FunctionArgument;
 import org.jtwig.property.PropertyResolveRequest;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.reflection.model.java.JavaMethod;
 import org.jtwig.reflection.model.java.JavaMethodArgument;
 import org.jtwig.util.ErrorMessageFormatter;
+import org.jtwig.value.JtwigValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 public class MethodNameMethodPropertyExtractor implements MethodPropertyExtractor {
     private static Logger logger = LoggerFactory.getLogger(MethodNameMethodPropertyExtractor.class);
@@ -59,17 +62,17 @@ public class MethodNameMethodPropertyExtractor implements MethodPropertyExtracto
         return Optional.absent();
     }
 
-    private Optional<List<Object>> retrieveArguments(List<FunctionArgument> arguments, List<JavaMethodArgument> classes) {
-        Iterator<FunctionArgument> argumentsIterator = arguments.iterator();
+    private Optional<List<Object>> retrieveArguments(List<JtwigValue> arguments, List<JavaMethodArgument> classes) {
+        Iterator<JtwigValue> argumentsIterator = arguments.iterator();
         Iterator<JavaMethodArgument> methodArgumentIterator = classes.iterator();
         List<Object> result = new ArrayList<>();
 
         while (argumentsIterator.hasNext()) {
-            FunctionArgument next = argumentsIterator.next();
+            JtwigValue next = argumentsIterator.next();
             JavaMethodArgument argument = methodArgumentIterator.next();
 
             if ((next != null)) {
-                Optional<Value> valueOptional = next.getValue().as(argument.type());
+                Optional<Value> valueOptional = next.as(argument.type());
                 if (valueOptional.isPresent()) {
                     result.add(valueOptional.get().getValue());
                 } else {
