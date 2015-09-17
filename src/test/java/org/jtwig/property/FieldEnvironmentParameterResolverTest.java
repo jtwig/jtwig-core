@@ -1,10 +1,9 @@
 package org.jtwig.property;
 
 import com.google.common.base.Optional;
-import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.position.Position;
-import org.jtwig.reflection.MethodInvoker;
 import org.jtwig.reflection.model.Value;
+import org.jtwig.value.JtwigValue;
 import org.jtwig.value.converter.Converter;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.mock;
 
 public class FieldEnvironmentParameterResolverTest {
     private final Position position = mock(Position.class);
-    private final List<FunctionArgument> arguments = new ArrayList<>();
+    private final List<JtwigValue> arguments = new ArrayList<>();
     private FieldPropertyResolver underTest;
     private Converter converter = mock(Converter.class);
 

@@ -1,16 +1,11 @@
 package org.jtwig.property;
 
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.reflection.model.java.JavaField;
 import org.jtwig.util.ErrorMessageFormatter;
-import org.jtwig.value.JtwigValue;
-import org.jtwig.value.JtwigValueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.Field;
 
 public class FieldPropertyResolver implements PropertyResolver {
     private final Logger logger = LoggerFactory.getLogger(FieldPropertyResolver.class);

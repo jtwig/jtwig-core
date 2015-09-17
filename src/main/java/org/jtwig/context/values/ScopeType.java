@@ -1,7 +1,6 @@
 package org.jtwig.context.values;
 
 import org.jtwig.reflection.model.Value;
-import org.jtwig.value.JtwigValue;
 
 import java.util.HashMap;
 

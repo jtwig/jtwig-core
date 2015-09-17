@@ -4,7 +4,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import org.jtwig.context.RenderContext;
 import org.jtwig.exceptions.CalculationException;
-import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.FunctionExpression;
 import org.jtwig.model.expression.VariableExpression;
@@ -24,7 +23,7 @@ public class SelectionOperationCalculator implements BinaryOperationCalculator {
     public JtwigValue calculate(final RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
         JtwigValue value = leftOperand.calculate(context);
         String propertyName;
-        List<FunctionArgument> functionArguments;
+        List<JtwigValue> functionArguments;
         if (rightOperand instanceof VariableExpression) {
             propertyName = ((VariableExpression) rightOperand).getIdentifier();
             functionArguments = Collections.emptyList();

@@ -7,12 +7,11 @@ import org.jtwig.context.model.EscapeMode;
 import org.jtwig.context.model.Macro;
 import org.jtwig.context.model.MacroContext;
 import org.jtwig.context.values.ValueContext;
-import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.Node;
-import org.jtwig.reflection.MethodInvoker;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.render.impl.StringRenderable;
+import org.jtwig.value.JtwigValue;
 import org.jtwig.value.converter.Converter;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,9 +22,7 @@ import java.util.HashMap;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class MacroPropertyResolverTest {
     private static final String MACRO_NAME = "macroName";
@@ -42,7 +39,7 @@ public class MacroPropertyResolverTest {
             return renderContext;
         }
     };
-    private final ArrayList<FunctionArgument> arguments = new ArrayList<>();
+    private final ArrayList<JtwigValue> arguments = new ArrayList<>();
     private Converter converter = mock(Converter.class);
 
     @Before

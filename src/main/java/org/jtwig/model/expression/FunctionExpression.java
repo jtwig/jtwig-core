@@ -6,7 +6,6 @@ import com.google.common.base.Supplier;
 import com.google.common.collect.Collections2;
 import org.jtwig.context.RenderContext;
 import org.jtwig.exceptions.CalculationException;
-import org.jtwig.functions.FunctionArgument;
 import org.jtwig.model.expression.function.Argument;
 import org.jtwig.model.position.Position;
 import org.jtwig.reflection.exceptions.InvokeException;
@@ -37,9 +36,9 @@ public class FunctionExpression extends InjectableExpression {
 
     @Override
     public JtwigValue calculate(final RenderContext context) {
-        List<FunctionArgument> calculatedArguments = arguments.calculate(context);
+        List<JtwigValue> calculatedArguments = arguments.calculate(context);
         Optional<JtwigValue> value = context.environment().functionResolver()
-                .resolve(functionIdentifier, calculatedArguments)
+                .resolve(getPosition(), functionIdentifier, calculatedArguments)
                 .transform(new Function<Supplier, JtwigValue>() {
                     @Override
                     public JtwigValue apply(Supplier input) {
@@ -66,7 +65,7 @@ public class FunctionExpression extends InjectableExpression {
     @Override
     public Expression inject(Expression expression) {
         List<Argument> arguments = new ArrayList<>();
-        arguments.add(new Argument(Optional.<String>absent(), expression));
+        arguments.add(new Argument(expression));
         arguments.addAll(getArguments().arguments);
         return new FunctionExpression(getPosition(), functionIdentifier, arguments);
     }
@@ -82,10 +81,10 @@ public class FunctionExpression extends InjectableExpression {
             return arguments.size();
         }
 
-        public List<FunctionArgument> calculate(final RenderContext context) {
-            return new ArrayList<>(Collections2.transform(arguments, new Function<Argument, FunctionArgument>() {
+        public List<JtwigValue> calculate(final RenderContext context) {
+            return new ArrayList<>(Collections2.transform(arguments, new Function<Argument, JtwigValue>() {
                 @Override
-                public FunctionArgument apply(Argument input) {
+                public JtwigValue apply(Argument input) {
                     return input.calculate(context);
                 }
             }));

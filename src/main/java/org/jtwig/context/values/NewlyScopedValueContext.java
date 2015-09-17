@@ -2,7 +2,6 @@ package org.jtwig.context.values;
 
 import com.google.common.base.Optional;
 import org.jtwig.reflection.model.Value;
-import org.jtwig.util.Cursor;
 
 public class NewlyScopedValueContext implements ValueContext {
     private final ValueContext parent;

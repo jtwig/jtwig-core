@@ -1,7 +1,6 @@
 package org.jtwig.value.extract.map.selection;
 
 import com.google.common.base.Optional;
-import org.jtwig.model.expression.MapSelectionExpression;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
 import org.junit.Before;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

@@ -1,8 +1,6 @@
 package org.jtwig.parser.parboiled.expression;
 
-import com.google.common.base.Optional;
 import org.jtwig.model.expression.FunctionExpression;
-import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.expression.function.Argument;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.base.BasicParser;
@@ -85,18 +83,10 @@ public class FunctionExpressionParser extends ExpressionParser<FunctionExpressio
         Rule ArgumentExpression() {
             SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
             AnyExpressionParser anyExpressionParser = parserContext().parser(AnyExpressionParser.class);
-            VariableExpressionParser variableExpressionParser = parserContext().parser(VariableExpressionParser.class);
-            PositionTrackerParser positionTrackerParser = parserContext().parser(PositionTrackerParser.class);
-            return Sequence(FirstOf(
-                            Sequence(
-                                    variableExpressionParser.ExpressionRule(),
-                                    spacingParser.Spacing(), String("="), spacingParser.Spacing()
-                            ),
-                            variableExpressionParser.push(new VariableExpression(positionTrackerParser.currentPosition(), null))
-                    ),
+            return Sequence(
                     anyExpressionParser.ExpressionRule(),
                     spacingParser.Spacing(),
-                    peek(2).add(new Argument(Optional.fromNullable(variableExpressionParser.pop(1).getIdentifier()), anyExpressionParser.pop()))
+                    peek(1).add(new Argument(anyExpressionParser.pop()))
             );
         }
     }

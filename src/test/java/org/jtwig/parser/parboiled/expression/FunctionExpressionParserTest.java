@@ -44,35 +44,4 @@ public class FunctionExpressionParserTest extends AbstractParserTest {
         assertThat(functionExpression.getPosition().getColumn(), is(1));
     }
 
-
-    @Test
-    public void functionExpressionOneNamedArgument() throws Exception {
-        ParsingResult<Expression> result = parse(underTest.ExpressionRule(), "two(test = 1)");
-
-        assertThat(result.matched, is(true));
-        Expression expression = result.valueStack.pop();
-        assertThat(expression, is(instanceOf(FunctionExpression.class)));
-        FunctionExpression functionExpression = (FunctionExpression) expression;
-        assertThat(functionExpression.getFunctionIdentifier(), equalTo("two"));
-        assertThat(functionExpression.getArguments().size(), equalTo(1));
-        assertThat(functionExpression.getArguments().iterator().next().getName().get(), is("test"));
-        assertThat(functionExpression.getPosition().getLine(), is(1));
-        assertThat(functionExpression.getPosition().getColumn(), is(1));
-    }
-
-
-    @Test
-    public void functionExpressionTwoNamedArgument() throws Exception {
-        ParsingResult<Expression> result = parse(underTest.ExpressionRule(), "two(test = 1, note = 'hello')");
-
-        assertThat(result.matched, is(true));
-        Expression expression = result.valueStack.pop();
-        assertThat(expression, is(instanceOf(FunctionExpression.class)));
-        FunctionExpression functionExpression = (FunctionExpression) expression;
-        assertThat(functionExpression.getFunctionIdentifier(), equalTo("two"));
-        assertThat(functionExpression.getArguments().size(), equalTo(2));
-        assertThat(functionExpression.getArguments().iterator().next().getName().get(), is("test"));
-        assertThat(functionExpression.getPosition().getLine(), is(1));
-        assertThat(functionExpression.getPosition().getColumn(), is(1));
-    }
 }
