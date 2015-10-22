@@ -64,7 +64,13 @@ public class JtwigTemplate {
     private final Resource resource;
     private final Environment environment;
 
+    @Deprecated
     public JtwigTemplate(Resource resource, Environment environment) {
+        this.resource = resource;
+        this.environment = environment;
+    }
+
+    public JtwigTemplate(Environment environment, Resource resource) {
         this.resource = resource;
         this.environment = environment;
     }
