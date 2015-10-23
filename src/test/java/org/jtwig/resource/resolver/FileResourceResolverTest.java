@@ -12,7 +12,7 @@ import org.junit.Test;
 import java.io.File;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class FileResourceResolverTest {
     public static final File EXISTING_FILE = new File(FileUtils.getTempDirectory(), "example.twig");
@@ -37,7 +37,7 @@ public class FileResourceResolverTest {
         Optional<Resource> result = underTest.resolve(null, FileUtils.getTempDirectory().getPath() + "/example.twig");
 
         assertThat(result.isPresent(), is(true));
-        assertThat(IOUtils.toString(result.get().content()), is(CONTENT));
+        assertThat(IOUtils.toString(result.get().getContent()), is(CONTENT));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class FileResourceResolverTest {
         Optional<Resource> result = underTest.resolve(null, relativePath);
 
         assertThat(result.isPresent(), is(true));
-        assertThat(IOUtils.toString(result.get().content()), is("content"));
+        assertThat(IOUtils.toString(result.get().getContent()), is("content"));
 
         FileUtils.forceDelete(file);
     }
@@ -76,7 +76,7 @@ public class FileResourceResolverTest {
         Optional<Resource> result = underTest.resolve(new FileResource(MISSING_FILE), "example.twig");
 
         assertThat(result.isPresent(), is(true));
-        assertThat(IOUtils.toString(result.get().content()), is(CONTENT));
+        assertThat(IOUtils.toString(result.get().getContent()), is(CONTENT));
     }
 
     @Test

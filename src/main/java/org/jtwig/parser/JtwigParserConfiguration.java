@@ -6,7 +6,6 @@ import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.cache.TemplateCacheProvider;
 import org.jtwig.parser.config.SyntaxConfiguration;
 
-import java.nio.charset.Charset;
 import java.util.Collection;
 
 public class JtwigParserConfiguration {
@@ -14,15 +13,13 @@ public class JtwigParserConfiguration {
     private final Collection<AddonParserProvider> addonParserProviders;
     private final Collection<UnaryOperator> unaryOperators;
     private final Collection<BinaryOperator> binaryOperators;
-    private final Charset inputCharset;
     private final TemplateCacheProvider templateCacheProvider;
 
-    public JtwigParserConfiguration(SyntaxConfiguration syntaxConfiguration, Collection<AddonParserProvider> addonParserProviders, Collection<UnaryOperator> unaryOperators, Collection<BinaryOperator> binaryOperators, Charset inputCharset, TemplateCacheProvider templateCacheProvider) {
+    public JtwigParserConfiguration(SyntaxConfiguration syntaxConfiguration, Collection<AddonParserProvider> addonParserProviders, Collection<UnaryOperator> unaryOperators, Collection<BinaryOperator> binaryOperators, TemplateCacheProvider templateCacheProvider) {
         this.syntaxConfiguration = syntaxConfiguration;
         this.addonParserProviders = addonParserProviders;
         this.unaryOperators = unaryOperators;
         this.binaryOperators = binaryOperators;
-        this.inputCharset = inputCharset;
         this.templateCacheProvider = templateCacheProvider;
     }
 
@@ -32,10 +29,6 @@ public class JtwigParserConfiguration {
 
     public Collection<AddonParserProvider> getAddonParserProviders() {
         return addonParserProviders;
-    }
-
-    public Charset getInputCharset() {
-        return inputCharset;
     }
 
     public TemplateCacheProvider getTemplateCacheProvider() {

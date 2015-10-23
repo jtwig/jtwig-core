@@ -42,7 +42,7 @@ public class JtwigParserFactory {
             );
 
             try {
-                ParsingResult<Node> result = runner.run(readAllText(resource.content(), configuration.getInputCharset()));
+                ParsingResult<Node> result = runner.run(readAllText(resource.getContent(), resource.getCharset()));
                 if (result.hasErrors()) {
                     throw new ParseException(toMessage(result.parseErrors));
                 } else if (!result.matched) {

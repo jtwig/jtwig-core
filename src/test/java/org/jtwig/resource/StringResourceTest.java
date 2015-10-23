@@ -13,7 +13,7 @@ public class StringResourceTest {
 
     @Test
     public void content() throws Exception {
-        InputStream content = underTest.content();
+        InputStream content = underTest.getContent();
 
         assertThat(IOUtils.toString(content), is("one"));
     }

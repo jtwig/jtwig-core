@@ -14,7 +14,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         return new EnvironmentConfigurationBuilder(new DefaultEnvironmentConfiguration());
     }
 
-    private Map<String, Object> parameters = new HashMap<>();
+    private final Map<String, Object> parameters = new HashMap<>();
     private final Collection<Extension> extensions;
     private final AndFunctionResolverConfigurationBuilder functionResolverConfiguration;
     private final AndRenderConfigurationBuilder renderConfiguration;

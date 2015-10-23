@@ -1,16 +1,13 @@
 package org.jtwig.parser.parboiled.base;
 
 import org.jtwig.parser.parboiled.AbstractParserTest;
-import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.model.LimitProperties;
 import org.junit.Test;
 import org.parboiled.support.ParsingResult;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.jtwig.parser.config.ParserConfigurationBuilder.parserConfiguration;
 import static org.junit.Assert.assertNotNull;
-import static org.parboiled.Parboiled.createParser;
 
 public class LimitsParserTest extends AbstractParserTest {
     private LimitsParser underTest = context.parser(LimitsParser.class);

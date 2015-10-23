@@ -13,7 +13,7 @@ public class SpacingParser extends BasicParser<Object> {
         SyntaxConfiguration syntaxConfiguration = parserContext().syntaxConfiguration();
         return ZeroOrMore(FirstOf(
                 OneOrMore(AnyOf(" \t\r\n\f").label("Whitespace")),
-                Sequence(syntaxConfiguration.startComment(), ZeroOrMore(TestNot(syntaxConfiguration.endComment()), ANY), syntaxConfiguration.endComment())
+                Sequence(syntaxConfiguration.getStartComment(), ZeroOrMore(TestNot(syntaxConfiguration.getEndComment()), ANY), syntaxConfiguration.getEndComment())
         ));
     }
 

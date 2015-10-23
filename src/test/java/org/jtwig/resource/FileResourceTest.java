@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.io.File;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class FileResourceTest {
 
@@ -30,7 +30,7 @@ public class FileResourceTest {
     public void content() throws Exception {
         FileResource underTest = new FileResource(FILE);
 
-        String content = IOUtils.toString(underTest.content());
+        String content = IOUtils.toString(underTest.getContent());
 
         assertThat(content, is(CONTENT));
     }

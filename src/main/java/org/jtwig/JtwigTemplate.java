@@ -19,6 +19,7 @@ import org.jtwig.util.OptionalUtils;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 public class JtwigTemplate {
     public static final EnvironmentFactory ENVIRONMENT_FACTORY = new EnvironmentFactory();
@@ -27,7 +28,10 @@ public class JtwigTemplate {
         return inlineTemplate(template, new DefaultEnvironmentConfiguration());
     }
     public static JtwigTemplate inlineTemplate (String template, EnvironmentConfiguration configuration) {
-        return new JtwigTemplate(new StringResource(template), ENVIRONMENT_FACTORY.create(configuration));
+        return new JtwigTemplate(ENVIRONMENT_FACTORY.create(configuration), new StringResource(template));
+    }
+    public static JtwigTemplate inlineTemplate (Charset charset, String template, EnvironmentConfiguration configuration) {
+        return new JtwigTemplate(ENVIRONMENT_FACTORY.create(configuration), new StringResource(charset, template));
     }
 
     public static JtwigTemplate classpathTemplate(String location) {

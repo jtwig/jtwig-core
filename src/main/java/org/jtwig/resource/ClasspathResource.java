@@ -3,19 +3,31 @@ package org.jtwig.resource;
 import org.jtwig.resource.classpath.ClasspathResourceLoader;
 
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 public class ClasspathResource implements Resource {
+    private final Charset charset;
     private final String path;
     private final ClasspathResourceLoader defaultClasspathResourceLoader;
 
     public ClasspathResource(String path, ClasspathResourceLoader defaultClasspathResourceLoader) {
+        this(Charset.defaultCharset(), path, defaultClasspathResourceLoader);
+    }
+
+    public ClasspathResource(Charset charset, String path, ClasspathResourceLoader defaultClasspathResourceLoader) {
+        this.charset = charset;
         this.path = path;
         this.defaultClasspathResourceLoader = defaultClasspathResourceLoader;
     }
 
     @Override
-    public InputStream content() {
+    public InputStream getContent() {
         return defaultClasspathResourceLoader.load(path);
+    }
+
+    @Override
+    public Charset getCharset() {
+        return charset;
     }
 
     public String getPath() {
