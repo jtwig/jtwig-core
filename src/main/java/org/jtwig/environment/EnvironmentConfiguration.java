@@ -1,12 +1,12 @@
 package org.jtwig.environment;
 
-import org.jtwig.context.RenderConfiguration;
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.resolver.FunctionResolverConfiguration;
 import org.jtwig.model.expression.lists.EnumerationListStrategyConfiguration;
 import org.jtwig.parser.JtwigParserConfiguration;
 import org.jtwig.property.PropertyResolverConfiguration;
-import org.jtwig.resource.resolver.ResourceResolverConfiguration;
+import org.jtwig.render.config.RenderConfiguration;
+import org.jtwig.resource.config.ResourceConfiguration;
 import org.jtwig.value.configuration.ValueConfiguration;
 
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class EnvironmentConfiguration {
     private final ValueConfiguration valueConfiguration;
-    private final ResourceResolverConfiguration resourceResolverConfiguration;
+    private final ResourceConfiguration resourceConfiguration;
     private final FunctionResolverConfiguration functionResolverConfiguration;
     private final PropertyResolverConfiguration propertyResolverConfiguration;
     private final EnumerationListStrategyConfiguration enumerationListConfiguration;
@@ -24,9 +24,9 @@ public class EnvironmentConfiguration {
     private final Map<String, Object> parameters = new HashMap<>();
     private final Collection<? extends Extension> extensions;
 
-    public EnvironmentConfiguration(ValueConfiguration valueConfiguration, ResourceResolverConfiguration resourceResolverConfiguration, FunctionResolverConfiguration functionResolverConfiguration, PropertyResolverConfiguration propertyResolverConfiguration, EnumerationListStrategyConfiguration enumerationListConfiguration, JtwigParserConfiguration jtwigParserConfiguration, RenderConfiguration renderConfiguration, Map<String, Object> parameters, Collection<? extends Extension> extensions) {
+    public EnvironmentConfiguration(ValueConfiguration valueConfiguration, ResourceConfiguration resourceConfiguration, FunctionResolverConfiguration functionResolverConfiguration, PropertyResolverConfiguration propertyResolverConfiguration, EnumerationListStrategyConfiguration enumerationListConfiguration, JtwigParserConfiguration jtwigParserConfiguration, RenderConfiguration renderConfiguration, Map<String, Object> parameters, Collection<? extends Extension> extensions) {
         this.valueConfiguration = valueConfiguration;
-        this.resourceResolverConfiguration = resourceResolverConfiguration;
+        this.resourceConfiguration = resourceConfiguration;
         this.functionResolverConfiguration = functionResolverConfiguration;
         this.propertyResolverConfiguration = propertyResolverConfiguration;
         this.enumerationListConfiguration = enumerationListConfiguration;
@@ -40,8 +40,8 @@ public class EnvironmentConfiguration {
         return valueConfiguration;
     }
 
-    public ResourceResolverConfiguration getResourceResolverConfiguration() {
-        return resourceResolverConfiguration;
+    public ResourceConfiguration getResourceConfiguration() {
+        return resourceConfiguration;
     }
 
     public Map<String, Object> getParameters() {

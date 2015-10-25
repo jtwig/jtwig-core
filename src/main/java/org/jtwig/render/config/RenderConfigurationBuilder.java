@@ -1,4 +1,4 @@
-package org.jtwig.context;
+package org.jtwig.render.config;
 
 import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.context.model.EscapeMode;
@@ -10,11 +10,11 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
     private Charset outputCharset;
     private EscapeMode initialEscapeMode;
 
-    public RenderConfigurationBuilder () {}
-    public RenderConfigurationBuilder (RenderConfiguration prototype) {
+    public RenderConfigurationBuilder() {}
+    public RenderConfigurationBuilder(RenderConfiguration prototype) {
         this
                 .withInitialEscapeMode(prototype.getInitialEscapeMode())
-                .withOutputCharset(prototype.getOutputCharset())
+                .withOutputCharset(prototype.getDefaultOutputCharset())
                 .withStrictMode(prototype.getStrictMode())
         ;
     }

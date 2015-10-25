@@ -16,6 +16,8 @@ import org.jtwig.property.PropertyResolver;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.configuration.DefaultValueConfiguration;
+import org.jtwig.value.environment.ValueEnvironment;
+import org.jtwig.value.environment.ValueEnvironmentFactory;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,6 +33,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 public class SelectionOperationCalculatorTest {
+    public static final ValueEnvironment VALUE_ENVIRONMENT = new ValueEnvironmentFactory().crete(new DefaultValueConfiguration());
     private final RenderContext renderContext = mock(RenderContext.class, RETURNS_DEEP_STUBS);
     private final Position position = mock(Position.class);
     private final Expression leftOperand = mock(Expression.class);
@@ -43,7 +46,7 @@ public class SelectionOperationCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(renderContext.environment().valueConfiguration()).thenReturn(new DefaultValueConfiguration());
+        when(renderContext.environment().value()).thenReturn(VALUE_ENVIRONMENT);
     }
 
     @Test
@@ -94,7 +97,7 @@ public class SelectionOperationCalculatorTest {
         JtwigValue leftOperandValue = mock(JtwigValue.class);
         when(renderContext.environment()).thenReturn(environment);
         when(environment.propertyResolver()).thenReturn(propertyResolver);
-        when(environment.renderConfiguration().getStrictMode()).thenReturn(true);
+        when(environment.rendering().getStrictMode()).thenReturn(true);
         when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.<Value>absent());
         when(leftOperand.calculate(renderContext)).thenReturn(leftOperandValue);
         Expression rightOperand = new FunctionExpression(position, "test", new ArrayList<Argument>());
@@ -107,7 +110,7 @@ public class SelectionOperationCalculatorTest {
         JtwigValue leftOperandValue = mock(JtwigValue.class);
         when(renderContext.environment()).thenReturn(environment);
         when(environment.propertyResolver()).thenReturn(propertyResolver);
-        when(environment.renderConfiguration().getStrictMode()).thenReturn(false);
+        when(environment.rendering().getStrictMode()).thenReturn(false);
         when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.<Value>absent());
         when(leftOperand.calculate(renderContext)).thenReturn(leftOperandValue);
         Expression rightOperand = new FunctionExpression(position, "test", new ArrayList<Argument>());

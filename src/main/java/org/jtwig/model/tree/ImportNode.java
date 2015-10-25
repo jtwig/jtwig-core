@@ -2,9 +2,9 @@ package org.jtwig.model.tree;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
-
 import org.jtwig.context.RenderContext;
 import org.jtwig.context.model.ResourceRenderResult;
+import org.jtwig.environment.Environment;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
@@ -34,9 +34,9 @@ public class ImportNode extends Node {
     @Override
     public Renderable render(RenderContext context) {
         String path = importExpression.calculate(context).asString();
-        Optional<Resource> resource = context
-                .environment().resourceResolver()
-                .resolve(context.currentResource().resource(), path);
+        Environment environment = context.environment();
+        Optional<Resource> resource = environment.resources().getResourceResolver()
+                .resolve(environment, context.currentResource().resource(), path);
         ResourceRenderResult resourceRenderResult = context
                 .resourceRenderer()
                 .render(resource.or(throwException(path)));

@@ -5,9 +5,9 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.util.OptionalUtils;
-import org.jtwig.value.configuration.ValueConfiguration;
 import org.jtwig.value.converter.Converter;
 import org.jtwig.value.converter.number.ObjectNumberConverter;
+import org.jtwig.value.environment.ValueEnvironment;
 
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
@@ -15,13 +15,11 @@ import java.util.*;
 
 public class JtwigValue {
     private final Object value;
-    private final Converter converter;
-    private final ValueConfiguration configuration;
+    private final ValueEnvironment environment;
 
-    public JtwigValue(Object value, Converter converter, ValueConfiguration configuration) {
+    public JtwigValue(Object value, ValueEnvironment environment) {
         this.value = value;
-        this.converter = converter;
-        this.configuration = configuration;
+        this.environment = environment;
     }
 
     public boolean isPresent () {
@@ -92,17 +90,17 @@ public class JtwigValue {
         return asNumber().or(OptionalUtils.<BigDecimal, IllegalArgumentException>throwException(new IllegalArgumentException(String.format("Unable to convert '%s' into a number", value))));
     }
     public boolean isEqualTo(JtwigValue other) {
-        return configuration.getEqualComparator()
+        return environment.getEqualComparator()
                 .apply(this, other)
                 .or(false);
     }
     public boolean isIdenticalTo (JtwigValue other) {
-        return configuration.getIdenticalComparator()
+        return environment.getIdenticalComparator()
                 .apply(this, other)
                 .or(false);
     }
     public boolean isLowerThan (JtwigValue other) {
-        return configuration.getLowerComparator()
+        return environment.getLowerComparator()
                 .apply(this, other)
                 .or(false);
     }
@@ -118,18 +116,18 @@ public class JtwigValue {
     }
 
     public JtwigType getType () {
-        return configuration.getTypeExtractor()
+        return environment.getTypeExtractor()
                 .extract(value)
                 .or(JtwigType.OBJECT);
     }
 
     public JtwigValue map(Function<JtwigValue, Object> map) {
-        return new JtwigValue(map.apply(this), converter, configuration);
+        return new JtwigValue(map.apply(this), environment);
     }
 
     public boolean contains(JtwigValue value) {
         for (Object item : asCollection()) {
-            if (value.isEqualTo(new JtwigValue(item, converter, configuration))) {
+            if (value.isEqualTo(new JtwigValue(item, environment))) {
                 return true;
             }
         }
@@ -137,17 +135,17 @@ public class JtwigValue {
     }
 
     public JtwigValue getMapValue(JtwigValue key) {
-        Object value = configuration.getMapSelectionExtractor().extract(asMap(), key)
+        Object value = environment.getMapSelectionExtractor().extract(asMap(), key)
                 .or(new Value(Undefined.UNDEFINED)).getValue();
-        return new JtwigValue(value, converter, configuration);
+        return new JtwigValue(value, environment);
     }
 
     public Converter converter () {
-        return converter;
+        return environment.getConverter();
     }
 
     public Optional<Value> as(Class type) {
-        return converter.convert(value, type);
+        return converter().convert(value, type);
     }
 
     @Override
@@ -160,7 +158,7 @@ public class JtwigValue {
         return Collections2.transform(asCollection(), new Function<Object, JtwigValue>() {
             @Override
             public JtwigValue apply(Object input) {
-                return new JtwigValue(input, converter, configuration);
+                return new JtwigValue(input, environment);
             }
         });
     }

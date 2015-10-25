@@ -3,6 +3,7 @@ package org.jtwig.integration.node;
 import com.google.common.base.Optional;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
+import org.jtwig.environment.Environment;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
 import org.jtwig.resource.Resource;
@@ -129,7 +130,7 @@ public class ExtendsTest extends AbstractIntegrationTest {
     private ResourceResolver resolvePath(final String path, final String content) {
         return new ResourceResolver() {
             @Override
-            public Optional<Resource> resolve(Resource resource, String relativePath) {
+            public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
                 if (path.equals(relativePath)) {
                     return Optional.<Resource>of(new StringResource(content));
                 }

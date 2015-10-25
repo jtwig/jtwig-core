@@ -6,6 +6,8 @@ import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
 import org.jtwig.value.JtwigValueFactory;
 import org.jtwig.value.configuration.DefaultValueConfiguration;
+import org.jtwig.value.environment.ValueEnvironment;
+import org.jtwig.value.environment.ValueEnvironmentFactory;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -14,6 +16,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 public class SetNodeTest extends AbstractNodeTest {
+    public static final ValueEnvironment VALUE_ENVIRONMENT = new ValueEnvironmentFactory().crete(new DefaultValueConfiguration());
     private final Position position = mock(Position.class);
     private final VariableExpression variableExpression = mock(VariableExpression.class);
     private final Expression expression = mock(Expression.class);
@@ -23,7 +26,7 @@ public class SetNodeTest extends AbstractNodeTest {
     public void render() throws Exception {
         Object value = new Object();
         when(variableExpression.getIdentifier()).thenReturn("one");
-        when(expression.calculate(renderContext())).thenReturn(JtwigValueFactory.value(value, new DefaultValueConfiguration()));
+        when(expression.calculate(renderContext())).thenReturn(JtwigValueFactory.value(value, VALUE_ENVIRONMENT));
 
         Renderable result = underTest.render(renderContext());
 

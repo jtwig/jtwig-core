@@ -1,17 +1,17 @@
-package org.jtwig.context;
+package org.jtwig.render.environment;
 
 import org.jtwig.context.model.EscapeMode;
 
 import java.nio.charset.Charset;
 
-public class RenderConfiguration {
+public class RenderEnvironment {
     private final boolean strictMode;
-    private final Charset outputCharset;
+    private final Charset defaultOutputCharset;
     private final EscapeMode initialEscapeMode;
 
-    public RenderConfiguration(boolean strictMode, Charset outputCharset, EscapeMode initialEscapeMode) {
+    public RenderEnvironment(boolean strictMode, Charset defaultOutputCharset, EscapeMode initialEscapeMode) {
         this.strictMode = strictMode;
-        this.outputCharset = outputCharset;
+        this.defaultOutputCharset = defaultOutputCharset;
         this.initialEscapeMode = initialEscapeMode;
     }
 
@@ -19,8 +19,8 @@ public class RenderConfiguration {
         return strictMode;
     }
 
-    public Charset getOutputCharset() {
-        return outputCharset;
+    public Charset getDefaultOutputCharset() {
+        return defaultOutputCharset;
     }
 
     public EscapeMode getInitialEscapeMode() {

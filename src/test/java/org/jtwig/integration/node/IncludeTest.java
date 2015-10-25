@@ -3,6 +3,7 @@ package org.jtwig.integration.node;
 import com.google.common.base.Optional;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
+import org.jtwig.environment.Environment;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
 import org.jtwig.resource.Resource;
@@ -37,7 +38,7 @@ public class IncludeTest extends AbstractIntegrationTest {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' %}", configuration()
                 .resources().withResourceResolver(new ResourceResolver() {
                     @Override
-                    public Optional<Resource> resolve(Resource resource, String relativePath) {
+                    public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
                         if ("a".equals(relativePath)) {
                             return Optional.<Resource>of(new StringResource("{{ name }}"));
                         }
@@ -56,7 +57,7 @@ public class IncludeTest extends AbstractIntegrationTest {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' %}{{ name }}", configuration()
                 .resources().withResourceResolver(new ResourceResolver() {
                     @Override
-                    public Optional<Resource> resolve(Resource resource, String relativePath) {
+                    public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
                         if ("a".equals(relativePath)) {
                             return Optional.<Resource>of(new StringResource("{% set name = 'test' %}"));
                         }
@@ -75,7 +76,7 @@ public class IncludeTest extends AbstractIntegrationTest {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' %}{{ var }}", configuration()
                 .resources().withResourceResolver(new ResourceResolver() {
                     @Override
-                    public Optional<Resource> resolve(Resource resource, String relativePath) {
+                    public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
                         if ("a".equals(relativePath)) {
                             return Optional.<Resource>of(new StringResource("{% set var = 'test' %}"));
                         }

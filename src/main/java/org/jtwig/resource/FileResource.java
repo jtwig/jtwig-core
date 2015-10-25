@@ -9,10 +9,6 @@ public class FileResource implements Resource {
     private final Charset charset;
     private final File file;
 
-    public FileResource(File file) {
-        this(Charset.defaultCharset(), file);
-    }
-
     public FileResource(Charset charset, File file) {
         this.charset = charset;
         this.file = file;

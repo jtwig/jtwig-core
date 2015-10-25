@@ -43,7 +43,7 @@ public class FunctionExpression extends InjectableExpression {
                     @Override
                     public JtwigValue apply(Supplier input) {
                         try {
-                            return JtwigValueFactory.value(input.get(), context.environment().valueConfiguration());
+                            return JtwigValueFactory.value(input.get(), context.environment().value());
                         } catch (InvokeException e) {
                             if (e.getCause() instanceof InvocationTargetException) {
                                 if (e.getCause().getCause() instanceof CalculationException) {

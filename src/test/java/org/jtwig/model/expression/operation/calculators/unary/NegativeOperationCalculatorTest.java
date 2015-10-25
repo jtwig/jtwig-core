@@ -7,6 +7,8 @@ import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
 import org.jtwig.value.configuration.DefaultValueConfiguration;
+import org.jtwig.value.environment.ValueEnvironment;
+import org.jtwig.value.environment.ValueEnvironmentFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,20 +20,21 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class NegativeOperationCalculatorTest {
+    public static final ValueEnvironment VALUE_ENVIRONMENT = new ValueEnvironmentFactory().crete(new DefaultValueConfiguration());
     private final RenderContext renderContext = mock(RenderContext.class, RETURNS_DEEP_STUBS);
     private final Position position = mock(Position.class);
     private NegativeOperationCalculator underTest = new NegativeOperationCalculator();
 
     @Before
     public void setUp() throws Exception {
-        when(renderContext.environment().valueConfiguration().getMathContext()).thenReturn(MathContext.DECIMAL32);
-        when(renderContext.environment().valueConfiguration()).thenReturn(new DefaultValueConfiguration());
+        when(renderContext.environment().value().getMathContext()).thenReturn(MathContext.DECIMAL32);
+        when(renderContext.environment().value()).thenReturn(VALUE_ENVIRONMENT);
     }
 
     @Test
     public void negative() throws Exception {
         Expression operand = mock(Expression.class);
-        when(operand.calculate(renderContext)).thenReturn(JtwigValueFactory.value(new BigDecimal("2.0"), new DefaultValueConfiguration()));
+        when(operand.calculate(renderContext)).thenReturn(JtwigValueFactory.value(new BigDecimal("2.0"), VALUE_ENVIRONMENT));
 
         JtwigValue result = underTest.calculate(renderContext, position, operand);
 

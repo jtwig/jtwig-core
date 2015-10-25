@@ -19,7 +19,7 @@ public class IntegerDivideOperationCalculator implements BinaryOperationCalculat
         return JtwigValueFactory.value(
                 leftValue
                         .divide(rightValue, context.environment()
-                                .valueConfiguration().getMathContext())
-                        .setScale(0, RoundingMode.HALF_UP), context.environment().valueConfiguration());
+                                .value().getMathContext())
+                        .setScale(0, RoundingMode.HALF_UP), context.environment().value());
     }
 }

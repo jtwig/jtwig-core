@@ -19,7 +19,7 @@ public class IntegerMultiplyOperationCalculator implements BinaryOperationCalcul
         return JtwigValueFactory.value(
                 leftValue
                         .multiply(rightValue, context.environment()
-                                .valueConfiguration().getMathContext())
-                        .setScale(0, RoundingMode.HALF_UP), context.environment().valueConfiguration());
+                                .value().getMathContext())
+                        .setScale(0, RoundingMode.HALF_UP), context.environment().value());
     }
 }

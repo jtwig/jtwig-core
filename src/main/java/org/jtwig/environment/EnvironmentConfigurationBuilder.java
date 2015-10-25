@@ -19,7 +19,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     private final AndFunctionResolverConfigurationBuilder functionResolverConfiguration;
     private final AndRenderConfigurationBuilder renderConfiguration;
     private final AndJtwigParserConfigurationBuilder jtwigParserConfigurationBuilder;
-    private final AndResourceResolverConfigurationBuilder resourceResolverConfigurationBuilder;
+    private final AndResourceConfigurationBuilder resourceConfigurationBuilder;
     private final AndPropertyResolverConfigurationBuilder propertyResolverConfigurationBuilder;
     private final AndEnumerationListStrategyConfigurationBuilder enumerationListStrategyConfigurationBuilder;
     private final AndValueConfigurationBuilder valueConfigurationBuilder;
@@ -28,7 +28,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         functionResolverConfiguration  = new AndFunctionResolverConfigurationBuilder(this);
         renderConfiguration = new AndRenderConfigurationBuilder(this);
         jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(this);
-        resourceResolverConfigurationBuilder = new AndResourceResolverConfigurationBuilder(this);
+        resourceConfigurationBuilder = new AndResourceConfigurationBuilder(this);
         propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(this);
         enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(this);
         valueConfigurationBuilder = new AndValueConfigurationBuilder(this);
@@ -38,7 +38,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         functionResolverConfiguration  = new AndFunctionResolverConfigurationBuilder(prototype.getFunctionResolverConfiguration(), this);
         renderConfiguration = new AndRenderConfigurationBuilder(prototype.getRenderConfiguration(), this);
         jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(prototype.getJtwigParserConfiguration(), this);
-        resourceResolverConfigurationBuilder = new AndResourceResolverConfigurationBuilder(prototype.getResourceResolverConfiguration(), this);
+        resourceConfigurationBuilder = new AndResourceConfigurationBuilder(prototype.getResourceConfiguration(), this);
         propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(prototype.getPropertyResolverConfiguration(), this);
         enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(prototype.getEnumerationListConfiguration(), this);
         valueConfigurationBuilder = new AndValueConfigurationBuilder(prototype.getValueConfiguration(), this);
@@ -50,7 +50,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     public EnvironmentConfiguration build() {
         return new EnvironmentConfiguration(
                 valueConfigurationBuilder.build(),
-                resourceResolverConfigurationBuilder.build(),
+                resourceConfigurationBuilder.build(),
                 functionResolverConfiguration.build(),
                 propertyResolverConfigurationBuilder.build(),
                 enumerationListStrategyConfigurationBuilder.build(),
@@ -72,8 +72,8 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         return renderConfiguration;
     }
 
-    public AndResourceResolverConfigurationBuilder resources() {
-        return resourceResolverConfigurationBuilder;
+    public AndResourceConfigurationBuilder resources() {
+        return resourceConfigurationBuilder;
     }
 
     public AndPropertyResolverConfigurationBuilder propertyResolver() {

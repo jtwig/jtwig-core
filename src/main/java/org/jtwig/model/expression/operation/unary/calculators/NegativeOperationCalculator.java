@@ -12,6 +12,6 @@ public class NegativeOperationCalculator implements UnaryOperationCalculator {
     @Override
     public JtwigValue calculate(RenderContext context, Position position, Expression operand) {
         return JtwigValueFactory.value(operand.calculate(context).mandatoryNumber().multiply(new BigDecimal(-1), context.environment()
-                .valueConfiguration().getMathContext()), context.environment().valueConfiguration());
+                .value().getMathContext()), context.environment().value());
     }
 }

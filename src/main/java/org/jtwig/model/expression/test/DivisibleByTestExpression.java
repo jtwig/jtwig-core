@@ -26,7 +26,7 @@ public class DivisibleByTestExpression extends TestExpression {
                         .or(OptionalUtils.<BigDecimal, CalculationException>throwException(new CalculationException(ErrorMessageFormatter.errorMessage(expression.getPosition(), String.format("Expecting a number")))));
                 return input.asNumber().or(OptionalUtils.<BigDecimal, CalculationException>throwException(new CalculationException(ErrorMessageFormatter.errorMessage(expression.getPosition(), String.format("Expecting a number")))))
                         .remainder(divisor, context.environment()
-                                .valueConfiguration().getMathContext())
+                                .value().getMathContext())
                         .equals(BigDecimal.ZERO);
             }
         });

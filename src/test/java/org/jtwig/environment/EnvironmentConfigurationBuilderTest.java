@@ -85,7 +85,7 @@ public class EnvironmentConfigurationBuilderTest {
                 .and()
                 .build();
 
-        assertThat(result.getResourceResolverConfiguration().getResourceResolvers(), hasItem(resourceResolver));
+        assertThat(result.getResourceConfiguration().getResourceResolvers(), hasItem(resourceResolver));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class EnvironmentConfigurationBuilderTest {
                 .and().build();
 
         assertThat(result.getRenderConfiguration().getInitialEscapeMode(), is(initialEscapeMode));
-        assertThat(result.getRenderConfiguration().getOutputCharset(), is(outputCharset));
+        assertThat(result.getRenderConfiguration().getDefaultOutputCharset(), is(outputCharset));
         assertThat(result.getRenderConfiguration().getStrictMode(), is(strictMode));
     }
 

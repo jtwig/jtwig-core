@@ -5,6 +5,8 @@ import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
 import org.jtwig.value.configuration.DefaultValueConfiguration;
+import org.jtwig.value.environment.ValueEnvironment;
+import org.jtwig.value.environment.ValueEnvironmentFactory;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -12,6 +14,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class TernaryOperationExpressionTest {
+    public static final ValueEnvironment VALUE_ENVIRONMENT = new ValueEnvironmentFactory().crete(new DefaultValueConfiguration());
     private final Position position = mock(Position.class);
     private final Expression condition = mock(Expression.class);
     private final Expression ifTrueExpression = mock(Expression.class);
@@ -21,8 +24,8 @@ public class TernaryOperationExpressionTest {
 
     @Test
     public void calculateWhenConditionTrue() throws Exception {
-        JtwigValue value = JtwigValueFactory.value("one", new DefaultValueConfiguration());
-        when(condition.calculate(context)).thenReturn(JtwigValueFactory.value(true, new DefaultValueConfiguration()));
+        JtwigValue value = JtwigValueFactory.value("one", VALUE_ENVIRONMENT);
+        when(condition.calculate(context)).thenReturn(JtwigValueFactory.value(true, VALUE_ENVIRONMENT));
         when(ifTrueExpression.calculate(context)).thenReturn(value);
 
         JtwigValue result = underTest.calculate(context);
@@ -33,8 +36,8 @@ public class TernaryOperationExpressionTest {
 
     @Test
     public void calculateWhenConditionFalse() throws Exception {
-        JtwigValue value = JtwigValueFactory.value("one", new DefaultValueConfiguration());
-        when(condition.calculate(context)).thenReturn(JtwigValueFactory.value(false, new DefaultValueConfiguration()));
+        JtwigValue value = JtwigValueFactory.value("one", VALUE_ENVIRONMENT);
+        when(condition.calculate(context)).thenReturn(JtwigValueFactory.value(false, VALUE_ENVIRONMENT));
         when(ifFalseExpression.calculate(context)).thenReturn(value);
 
         JtwigValue result = underTest.calculate(context);

@@ -5,6 +5,8 @@ import org.jtwig.model.position.Position;
 import org.jtwig.render.Renderable;
 import org.jtwig.value.JtwigValueFactory;
 import org.jtwig.value.configuration.DefaultValueConfiguration;
+import org.jtwig.value.environment.ValueEnvironment;
+import org.jtwig.value.environment.ValueEnvironmentFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,6 +20,7 @@ import static org.mockito.Mockito.when;
 
 public class IfNodeTest extends AbstractNodeTest {
 
+    public static final ValueEnvironment VALUE_ENVIRONMENT = new ValueEnvironmentFactory().crete(new DefaultValueConfiguration());
     public static final Position POSITION = mock(Position.class);
     private Collection<IfNode.IfConditionNode> conditions = new ArrayList<>();
     private IfNode underTest = new IfNode(POSITION, conditions);
@@ -41,7 +44,7 @@ public class IfNodeTest extends AbstractNodeTest {
         IfNode.IfConditionNode ifCondition = new IfNode.IfConditionNode(POSITION, condition, node);
         conditions.add(ifCondition);
 
-        when(condition.calculate(renderContext())).thenReturn(JtwigValueFactory.value(true, new DefaultValueConfiguration()));
+        when(condition.calculate(renderContext())).thenReturn(JtwigValueFactory.value(true, VALUE_ENVIRONMENT));
         render(node, "test");
 
         Renderable result = underTest.render(renderContext());

@@ -1,4 +1,4 @@
-package org.jtwig.context;
+package org.jtwig.render.config;
 
 import org.jtwig.context.model.EscapeMode;
 
