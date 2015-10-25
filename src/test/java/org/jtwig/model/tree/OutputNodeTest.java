@@ -13,7 +13,7 @@ import org.junit.Test;
 import java.nio.charset.Charset;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -27,7 +27,7 @@ public class OutputNodeTest extends AbstractNodeTest {
         NodeContext nodeContext = mock(NodeContext.class);
         when(renderContext().currentNode()).thenReturn(nodeContext);
         when(nodeContext.mode()).thenReturn(Optional.<EscapeMode>absent());
-        when(renderContext().environment().renderConfiguration().outputCharset()).thenReturn(Charset.defaultCharset());
+        when(renderContext().environment().renderConfiguration().getOutputCharset()).thenReturn(Charset.defaultCharset());
         when(expression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", new DefaultValueConfiguration()));
 
         Renderable result = underTest.render(renderContext());

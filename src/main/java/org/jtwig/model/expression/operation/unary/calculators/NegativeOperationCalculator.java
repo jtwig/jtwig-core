@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 public class NegativeOperationCalculator implements UnaryOperationCalculator {
     @Override
     public JtwigValue calculate(RenderContext context, Position position, Expression operand) {
-        return JtwigValueFactory.value(operand.calculate(context).mandatoryNumber().multiply(new BigDecimal(-1), context.environment().renderConfiguration().mathContext()), context.environment().valueConfiguration());
+        return JtwigValueFactory.value(operand.calculate(context).mandatoryNumber().multiply(new BigDecimal(-1), context.environment()
+                .valueConfiguration().getMathContext()), context.environment().valueConfiguration());
     }
 }

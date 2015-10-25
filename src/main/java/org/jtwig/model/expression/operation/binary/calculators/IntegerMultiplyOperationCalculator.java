@@ -18,7 +18,8 @@ public class IntegerMultiplyOperationCalculator implements BinaryOperationCalcul
                 .mandatoryNumber().setScale(0, RoundingMode.HALF_UP);
         return JtwigValueFactory.value(
                 leftValue
-                        .multiply(rightValue, context.environment().renderConfiguration().mathContext())
+                        .multiply(rightValue, context.environment()
+                                .valueConfiguration().getMathContext())
                         .setScale(0, RoundingMode.HALF_UP), context.environment().valueConfiguration());
     }
 }

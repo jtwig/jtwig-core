@@ -11,7 +11,6 @@ import org.jtwig.parser.cache.TemplateCacheProvider;
 import org.jtwig.resource.resolver.ResourceResolver;
 import org.junit.Test;
 
-import java.math.MathContext;
 import java.nio.charset.Charset;
 
 import static org.hamcrest.core.Is.is;
@@ -83,22 +82,19 @@ public class EnvironmentConfigurationBuilderTest {
     public void renderConfig() throws Exception {
 
         EscapeMode initialEscapeMode = EscapeMode.NONE;
-        MathContext mathContext = MathContext.DECIMAL128;
         boolean strictMode = false;
         Charset outputCharset = Charset.defaultCharset();
 
         EnvironmentConfiguration result = new EnvironmentConfigurationBuilder()
                 .render()
-                .withStrictMode(strictMode)
-                .withMathContext(mathContext)
-                .withInitialEscapeMode(initialEscapeMode)
-                .withOutputCharset(outputCharset)
+                    .withStrictMode(strictMode)
+                    .withInitialEscapeMode(initialEscapeMode)
+                    .withOutputCharset(outputCharset)
                 .and().build();
 
-        assertThat(result.getRenderConfiguration().initialEscapeMode(), is(initialEscapeMode));
-        assertThat(result.getRenderConfiguration().outputCharset(), is(outputCharset));
-        assertThat(result.getRenderConfiguration().strictMode(), is(strictMode));
-        assertThat(result.getRenderConfiguration().mathContext(), is(mathContext));
+        assertThat(result.getRenderConfiguration().getInitialEscapeMode(), is(initialEscapeMode));
+        assertThat(result.getRenderConfiguration().getOutputCharset(), is(outputCharset));
+        assertThat(result.getRenderConfiguration().getStrictMode(), is(strictMode));
     }
 
     private UnaryOperator customUnaryOperator() {

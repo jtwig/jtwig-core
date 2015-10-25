@@ -49,7 +49,7 @@ public class SelectionOperationCalculator implements BinaryOperationCalculator {
         return new Supplier<JtwigValue>() {
             @Override
             public JtwigValue get() {
-                if (context.environment().renderConfiguration().strictMode()) {
+                if (context.environment().renderConfiguration().getStrictMode()) {
                     throw new CalculationException(errorMessage(position, String.format("Impossible to access an attribute '%s' on '%s'", propertyName, value)));
                 } else {
                     return JtwigValueFactory.undefined(context.environment().valueConfiguration());

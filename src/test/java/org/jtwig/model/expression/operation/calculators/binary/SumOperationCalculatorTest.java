@@ -24,7 +24,7 @@ public class SumOperationCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(renderContext.environment().renderConfiguration().mathContext()).thenReturn(MathContext.DECIMAL32);
+        when(renderContext.environment().valueConfiguration().getMathContext()).thenReturn(MathContext.DECIMAL32);
         when(renderContext.environment().valueConfiguration()).thenReturn(new DefaultValueConfiguration());
     }
 

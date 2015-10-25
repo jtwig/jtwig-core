@@ -2,35 +2,28 @@ package org.jtwig.context;
 
 import org.jtwig.context.model.EscapeMode;
 
-import java.math.MathContext;
 import java.nio.charset.Charset;
 
 public class RenderConfiguration {
     private final boolean strictMode;
     private final Charset outputCharset;
-    private final MathContext mathContext;
     private final EscapeMode initialEscapeMode;
 
-    public RenderConfiguration(boolean strictMode, Charset outputCharset, MathContext mathContext, EscapeMode initialEscapeMode) {
+    public RenderConfiguration(boolean strictMode, Charset outputCharset, EscapeMode initialEscapeMode) {
         this.strictMode = strictMode;
         this.outputCharset = outputCharset;
-        this.mathContext = mathContext;
         this.initialEscapeMode = initialEscapeMode;
     }
 
-    public boolean strictMode() {
+    public boolean getStrictMode() {
         return strictMode;
     }
 
-    public Charset outputCharset() {
+    public Charset getOutputCharset() {
         return outputCharset;
     }
 
-    public MathContext mathContext() {
-        return mathContext;
-    }
-
-    public EscapeMode initialEscapeMode() {
+    public EscapeMode getInitialEscapeMode() {
         return initialEscapeMode;
     }
 }

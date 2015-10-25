@@ -7,10 +7,12 @@ import org.jtwig.value.extract.Extractor;
 import org.jtwig.value.extract.map.selection.MapSelectionExtractor;
 import org.jtwig.value.relational.RelationalComparator;
 
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class ValueConfigurationBuilder<B extends ValueConfigurationBuilder> implements Builder<ValueConfiguration> {
+    private MathContext mathContext;
     private RelationalComparator equalComparator;
     private RelationalComparator identicalComparator;
     private RelationalComparator lowerComparator;
@@ -23,7 +25,8 @@ public class ValueConfigurationBuilder<B extends ValueConfigurationBuilder> impl
     public ValueConfigurationBuilder () {}
     public ValueConfigurationBuilder (ValueConfiguration prototype) {
         this
-                .withConverters(prototype.getConverter())
+            .withMathContext(prototype.getMathContext())
+            .withConverters(prototype.getConverter())
             .withEqualComparator(prototype.getEqualComparator())
             .withIdenticalComparator(prototype.getIdenticalComparator())
             .withGreaterComparator(prototype.getGreaterComparator())
@@ -31,6 +34,11 @@ public class ValueConfigurationBuilder<B extends ValueConfigurationBuilder> impl
             .withMapSelectionExtractor(prototype.getMapSelectionExtractor())
             .withTypeExtractor(prototype.getTypeExtractor())
         ;
+    }
+
+    public B withMathContext(MathContext mathContext) {
+        this.mathContext = mathContext;
+        return self();
     }
 
     public B withEqualComparator(RelationalComparator equalComparator) {
@@ -75,7 +83,7 @@ public class ValueConfigurationBuilder<B extends ValueConfigurationBuilder> impl
 
     @Override
     public ValueConfiguration build() {
-        return new ValueConfiguration(equalComparator, identicalComparator, lowerComparator, greaterComparator, typeExtractor, mapSelectionExtractor, converter);
+        return new ValueConfiguration(mathContext, equalComparator, identicalComparator, lowerComparator, greaterComparator, typeExtractor, mapSelectionExtractor, converter);
     }
 
     protected B self () {

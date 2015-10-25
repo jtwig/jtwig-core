@@ -14,10 +14,8 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
 public class DivideOperationCalculatorTest {
     private final Position position = mock(Position.class);
@@ -29,7 +27,7 @@ public class DivideOperationCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(context.environment().renderConfiguration().mathContext()).thenReturn(MathContext.DECIMAL32);
+        when(context.environment().valueConfiguration().getMathContext()).thenReturn(MathContext.DECIMAL32);
         when(context.environment().valueConfiguration()).thenReturn(new DefaultValueConfiguration());
     }
 

@@ -36,7 +36,7 @@ public class VariableExpression extends InjectableExpression {
         if (valueOptional.isPresent()) {
             return JtwigValueFactory.value(valueOptional.get().getValue(), context.environment().valueConfiguration());
         } else {
-            if (context.environment().renderConfiguration().strictMode()) {
+            if (context.environment().renderConfiguration().getStrictMode()) {
                 throw new CalculationException(errorMessage(getPosition(), String.format("Variable '%s' undefined", identifier)));
             } else {
                 return JtwigValueFactory.undefined(context.environment().valueConfiguration());

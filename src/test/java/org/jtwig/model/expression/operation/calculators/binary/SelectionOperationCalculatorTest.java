@@ -94,7 +94,7 @@ public class SelectionOperationCalculatorTest {
         JtwigValue leftOperandValue = mock(JtwigValue.class);
         when(renderContext.environment()).thenReturn(environment);
         when(environment.propertyResolver()).thenReturn(propertyResolver);
-        when(environment.renderConfiguration().strictMode()).thenReturn(true);
+        when(environment.renderConfiguration().getStrictMode()).thenReturn(true);
         when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.<Value>absent());
         when(leftOperand.calculate(renderContext)).thenReturn(leftOperandValue);
         Expression rightOperand = new FunctionExpression(position, "test", new ArrayList<Argument>());
@@ -107,7 +107,7 @@ public class SelectionOperationCalculatorTest {
         JtwigValue leftOperandValue = mock(JtwigValue.class);
         when(renderContext.environment()).thenReturn(environment);
         when(environment.propertyResolver()).thenReturn(propertyResolver);
-        when(environment.renderConfiguration().strictMode()).thenReturn(false);
+        when(environment.renderConfiguration().getStrictMode()).thenReturn(false);
         when(propertyResolver.resolve(any(PropertyResolveRequest.class))).thenReturn(Optional.<Value>absent());
         when(leftOperand.calculate(renderContext)).thenReturn(leftOperandValue);
         Expression rightOperand = new FunctionExpression(position, "test", new ArrayList<Argument>());
