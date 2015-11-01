@@ -9,6 +9,7 @@ import org.jtwig.context.RenderContextHolder;
 import org.jtwig.context.model.EscapeMode;
 import org.jtwig.functions.JtwigFunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
+import org.jtwig.value.JtwigType;
 
 import static java.util.Arrays.asList;
 
@@ -25,9 +26,15 @@ public class EscapeFunction extends SimpleJtwigFunction {
 
         EscapeMode escapeMode = EscapeMode.HTML;
         if (request.getNumberOfArguments() == 2) {
-            final String requestedEscapeMode = request.getArgument(1, String.class);
-            escapeMode = EscapeMode.fromString(requestedEscapeMode.toUpperCase())
-                .or(throwError(request, requestedEscapeMode));
+            if (request.get(1).getType() == JtwigType.BOOLEAN) {
+                if (!request.get(1).asBoolean()) {
+                    escapeMode = EscapeMode.NONE;
+                }
+            } else {
+                final String requestedEscapeMode = request.getArgument(1, String.class);
+                escapeMode = EscapeMode.fromString(requestedEscapeMode.toUpperCase())
+                        .or(throwError(request, requestedEscapeMode));
+            }
         }
 
         getRenderContext().currentNode().mode(escapeMode);

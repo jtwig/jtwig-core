@@ -57,6 +57,14 @@ public class EscapeFunctionTest extends AbstractFunctionTest {
     }
 
     @Test
+    public void falseEscapeMode() throws Exception {
+        Object result = underTest.execute(arguments(realValue("value"), realValue(false)));
+
+        verify(renderContext.currentNode()).mode(EscapeMode.NONE);
+        assertEquals("value", result);
+    }
+
+    @Test
     public void jsEscapeMode() throws Exception {
         Object result = underTest.execute(arguments(newValue("value"), newValue("js")));
 

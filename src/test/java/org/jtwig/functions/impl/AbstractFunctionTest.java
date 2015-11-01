@@ -5,6 +5,9 @@ import org.jtwig.functions.JtwigFunctionRequest;
 import org.jtwig.model.position.Position;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.value.JtwigValue;
+import org.jtwig.value.configuration.DefaultValueConfiguration;
+import org.jtwig.value.environment.ValueEnvironment;
+import org.jtwig.value.environment.ValueEnvironmentFactory;
 
 import java.util.Collections;
 
@@ -30,5 +33,11 @@ public abstract class AbstractFunctionTest {
         JtwigValue jtwigValue = mock(JtwigValue.class);
         when(jtwigValue.as(any(Class.class))).thenReturn(Optional.of(new Value(value)));
         return jtwigValue;
+    }
+
+    protected JtwigValue realValue (Object value) {
+        DefaultValueConfiguration configuration = new DefaultValueConfiguration();
+        ValueEnvironment valueEnvironment = new ValueEnvironmentFactory().crete(configuration);
+        return new JtwigValue(value, valueEnvironment);
     }
 }
