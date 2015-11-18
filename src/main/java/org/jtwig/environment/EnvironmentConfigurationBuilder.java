@@ -14,7 +14,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         return new EnvironmentConfigurationBuilder(new DefaultEnvironmentConfiguration());
     }
 
-    private final Map<String, Object> parameters = new HashMap<>();
+    private final Map<String, Object> parameters;
     private final Collection<Extension> extensions;
     private final AndFunctionResolverConfigurationBuilder functionResolverConfiguration;
     private final AndRenderConfigurationBuilder renderConfiguration;
@@ -33,6 +33,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(this);
         valueConfigurationBuilder = new AndValueConfigurationBuilder(this);
         extensions = new ArrayList<>();
+        parameters = new HashMap<>();
     }
     public EnvironmentConfigurationBuilder (EnvironmentConfiguration prototype) {
         functionResolverConfiguration  = new AndFunctionResolverConfigurationBuilder(prototype.getFunctionResolverConfiguration(), this);
@@ -44,6 +45,8 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         valueConfigurationBuilder = new AndValueConfigurationBuilder(prototype.getValueConfiguration(), this);
         extensions = new ArrayList<>();
         extensions.addAll(prototype.getExtensions());
+        parameters = new HashMap<>();
+        parameters.putAll(prototype.getParameters());
     }
 
     @Override
