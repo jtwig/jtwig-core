@@ -1,6 +1,5 @@
 package org.jtwig.environment;
 
-import com.google.common.collect.ImmutableMap;
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.resolver.FunctionResolverFactory;
 import org.jtwig.model.expression.lists.EnumerationListStrategyFactory;
@@ -50,7 +49,7 @@ public class EnvironmentFactory {
 
         return new Environment(
                 jtwigParserFactory.create(environmentConfiguration.getJtwigParserConfiguration()),
-                ImmutableMap.copyOf(environmentConfiguration.getParameters()),
+                environmentConfiguration.getParameters(),
                 resourceEnvironmentFactory.create(environmentConfiguration.getResourceConfiguration()),
                 functionResolverFactory.create(environmentConfiguration.getFunctionResolverConfiguration()),
                 propertyResolverFactory.create(environmentConfiguration.getPropertyResolverConfiguration()),
