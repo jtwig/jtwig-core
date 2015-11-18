@@ -1,8 +1,8 @@
 package org.jtwig.environment.and;
 
-import org.jtwig.context.RenderConfiguration;
-import org.jtwig.context.RenderConfigurationBuilder;
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
+import org.jtwig.render.config.RenderConfiguration;
+import org.jtwig.render.config.RenderConfigurationBuilder;
 
 public class AndRenderConfigurationBuilder extends RenderConfigurationBuilder<AndRenderConfigurationBuilder> implements AndBuilder<EnvironmentConfigurationBuilder> {
     private final EnvironmentConfigurationBuilder parent;

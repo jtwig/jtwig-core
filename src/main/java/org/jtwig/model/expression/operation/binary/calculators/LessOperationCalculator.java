@@ -11,6 +11,6 @@ public class LessOperationCalculator implements BinaryOperationCalculator {
     public JtwigValue calculate(RenderContext context, Position position, Expression leftOperand, Expression rightOperand) {
         JtwigValue left = leftOperand.calculate(context);
         JtwigValue right = rightOperand.calculate(context);
-        return JtwigValueFactory.value(left.isLowerThan(right), context.environment().valueConfiguration());
+        return JtwigValueFactory.value(left.isLowerThan(right), context.environment().value());
     }
 }

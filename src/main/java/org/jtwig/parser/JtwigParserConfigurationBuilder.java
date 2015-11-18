@@ -4,51 +4,39 @@ import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.model.expression.operation.binary.BinaryOperator;
 import org.jtwig.model.expression.operation.unary.UnaryOperator;
 import org.jtwig.parser.addon.AddonParserProvider;
-import org.jtwig.parser.cache.TemplateCacheProvider;
 import org.jtwig.parser.cache.NoTemplateCacheProvider;
-import org.jtwig.parser.config.SyntaxConfiguration;
+import org.jtwig.parser.cache.TemplateCacheProvider;
+import org.jtwig.parser.config.AndSyntaxConfigurationBuilder;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationBuilder> implements Builder<JtwigParserConfiguration> {
-    private SyntaxConfiguration syntaxConfiguration;
-    private Charset inputCharset;
+    private AndSyntaxConfigurationBuilder<B> syntaxConfiguration;
     private Collection<AddonParserProvider> addonParserProviders = new ArrayList<>();
     private Collection<UnaryOperator> unaryOperators = new ArrayList<>();
     private Collection<BinaryOperator> binaryOperators = new ArrayList<>();
     private TemplateCacheProvider templateCacheProvider = new NoTemplateCacheProvider();
 
-    public JtwigParserConfigurationBuilder () {}
+    public JtwigParserConfigurationBuilder () {
+        this.syntaxConfiguration  = new AndSyntaxConfigurationBuilder<>((B) this);
+    }
     public JtwigParserConfigurationBuilder (JtwigParserConfiguration prototype) {
+        this.syntaxConfiguration  = new AndSyntaxConfigurationBuilder<>((B) this, prototype.getSyntaxConfiguration());
         this
                 .withAddonParserProviders(prototype.getAddonParserProviders())
-                .withInputCharset(prototype.getInputCharset())
-                .withSyntaxConfiguration(prototype.getSyntaxConfiguration())
                 .withCacheProvider(prototype.getTemplateCacheProvider())
                 .withBinaryOperators(prototype.getBinaryOperators())
                 .withUnaryOperators(prototype.getUnaryOperators())
         ;
     }
 
-    public B withSyntaxConfiguration(SyntaxConfiguration syntaxConfiguration) {
-        this.syntaxConfiguration = syntaxConfiguration;
-        return self();
-    }
-
-    public B withInputCharset(Charset inputCharset) {
-        this.inputCharset = inputCharset;
-        return self();
+    public AndSyntaxConfigurationBuilder<B> syntax () {
+        return syntaxConfiguration;
     }
 
     public B withAddonParserProviders(Collection<AddonParserProvider> addonParserProviders) {
         this.addonParserProviders.addAll(addonParserProviders);
-        return self();
-    }
-
-    public B withAddOnParser(AddonParserProvider addonParserProvider) {
-        this.addonParserProviders.add(addonParserProvider);
         return self();
     }
 
@@ -88,6 +76,6 @@ public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationB
 
     @Override
     public JtwigParserConfiguration build() {
-        return new JtwigParserConfiguration(syntaxConfiguration, addonParserProviders, unaryOperators, binaryOperators, inputCharset, templateCacheProvider);
+        return new JtwigParserConfiguration(syntaxConfiguration.build(), addonParserProviders, unaryOperators, binaryOperators, templateCacheProvider);
     }
 }

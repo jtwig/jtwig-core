@@ -15,7 +15,7 @@ public class DivideOperationCalculator implements BinaryOperationCalculator {
         BigDecimal rightValue = rightOperand.calculate(context).mandatoryNumber();
         BigDecimal value = leftValue
                 .divide(rightValue, context.environment()
-                        .renderConfiguration().mathContext());
-        return JtwigValueFactory.value(value, context.environment().valueConfiguration());
+                        .value().getMathContext());
+        return JtwigValueFactory.value(value, context.environment().value());
     }
 }

@@ -31,7 +31,7 @@ public class ComprehensionListExpression extends Expression {
                 .transform(new Function<Collection<Object>, JtwigValue>() {
                     @Override
                     public JtwigValue apply(Collection<Object> input) {
-                        return JtwigValueFactory.value(input, context.environment().valueConfiguration());
+                        return JtwigValueFactory.value(input, context.environment().value());
                     }
                 })
                 .or(new Supplier<JtwigValue>() {

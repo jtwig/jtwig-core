@@ -1,16 +1,16 @@
 package org.jtwig.value.configuration;
 
-import org.jtwig.value.converter.Converter;
 import org.jtwig.value.JtwigType;
+import org.jtwig.value.converter.Converter;
 import org.jtwig.value.extract.Extractor;
 import org.jtwig.value.extract.map.selection.MapSelectionExtractor;
 import org.jtwig.value.relational.RelationalComparator;
 
-import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Collection;
-import java.util.Map;
 
 public class ValueConfiguration {
+    private final MathContext mathContext;
     private final RelationalComparator equalComparator;
     private final RelationalComparator identicalComparator;
     private final RelationalComparator lowerComparator;
@@ -19,7 +19,8 @@ public class ValueConfiguration {
     private final MapSelectionExtractor mapSelectionExtractor;
     private final Collection<Converter> converter;
 
-    public ValueConfiguration(RelationalComparator equalComparator, RelationalComparator identicalComparator, RelationalComparator lowerComparator, RelationalComparator greaterComparator, Extractor<JtwigType> typeExtractor, MapSelectionExtractor mapSelectionExtractor, Collection<Converter> converter) {
+    public ValueConfiguration(MathContext mathContext, RelationalComparator equalComparator, RelationalComparator identicalComparator, RelationalComparator lowerComparator, RelationalComparator greaterComparator, Extractor<JtwigType> typeExtractor, MapSelectionExtractor mapSelectionExtractor, Collection<Converter> converter) {
+        this.mathContext = mathContext;
         this.equalComparator = equalComparator;
         this.identicalComparator = identicalComparator;
         this.lowerComparator = lowerComparator;
@@ -27,6 +28,10 @@ public class ValueConfiguration {
         this.typeExtractor = typeExtractor;
         this.mapSelectionExtractor = mapSelectionExtractor;
         this.converter = converter;
+    }
+
+    public MathContext getMathContext() {
+        return mathContext;
     }
 
     public RelationalComparator getEqualComparator() {

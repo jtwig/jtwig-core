@@ -12,6 +12,6 @@ public class ConcatOperationCalculator implements BinaryOperationCalculator {
         return JtwigValueFactory.value(new StringBuilder()
                 .append(leftOperand.calculate(context).asString())
                 .append(rightOperand.calculate(context).asString())
-                .toString(), context.environment().valueConfiguration());
+                .toString(), context.environment().value());
     }
 }

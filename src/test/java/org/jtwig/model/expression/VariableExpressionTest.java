@@ -30,7 +30,7 @@ public class VariableExpressionTest {
 
     @Test
     public void calculateWhenVariableUndefinedAndStrictModeDisabled() throws Exception {
-        when(context.environment().renderConfiguration().strictMode()).thenReturn(false);
+        when(context.environment().rendering().getStrictMode()).thenReturn(false);
         when(context.valueContext().value(identifier)).thenReturn(Optional.<Value>absent());
 
         JtwigValue result = underTest.calculate(context);
@@ -40,7 +40,7 @@ public class VariableExpressionTest {
 
     @Test(expected = CalculationException.class)
     public void calculateWhenVariableUndefinedAndStrictModeEnabled() throws Exception {
-        when(context.environment().renderConfiguration().strictMode()).thenReturn(true);
+        when(context.environment().rendering().getStrictMode()).thenReturn(true);
         when(context.valueContext().value(identifier)).thenReturn(Optional.<Value>absent());
 
         underTest.calculate(context);

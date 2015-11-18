@@ -39,7 +39,7 @@ public class SelectionOperationCalculator implements BinaryOperationCalculator {
                 .transform(new Function<Value, JtwigValue>() {
                     @Override
                     public JtwigValue apply(Value input) {
-                        return JtwigValueFactory.value(input.getValue(), context.environment().valueConfiguration());
+                        return JtwigValueFactory.value(input.getValue(), context.environment().value());
                     }
                 })
                 .or(throwUnresolvableException(context, position, propertyName, value.asObject()));
@@ -49,10 +49,10 @@ public class SelectionOperationCalculator implements BinaryOperationCalculator {
         return new Supplier<JtwigValue>() {
             @Override
             public JtwigValue get() {
-                if (context.environment().renderConfiguration().strictMode()) {
+                if (context.environment().rendering().getStrictMode()) {
                     throw new CalculationException(errorMessage(position, String.format("Impossible to access an attribute '%s' on '%s'", propertyName, value)));
                 } else {
-                    return JtwigValueFactory.undefined(context.environment().valueConfiguration());
+                    return JtwigValueFactory.undefined(context.environment().value());
                 }
             }
         };

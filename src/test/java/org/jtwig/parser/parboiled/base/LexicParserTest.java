@@ -1,12 +1,7 @@
 package org.jtwig.parser.parboiled.base;
 
-import org.jtwig.parser.config.ParserConfigurationBuilder;
 import org.jtwig.parser.parboiled.AbstractParserTest;
-import org.jtwig.parser.parboiled.ParserContext;
-import org.junit.Before;
 import org.junit.Test;
-import org.parboiled.Rule;
-import org.parboiled.parserunners.ReportingParseRunner;
 import org.parboiled.support.ParsingResult;
 
 import static java.util.Arrays.asList;

@@ -18,7 +18,7 @@ public class RenderContextFactory {
         valueContextStack.push(model);
         resourceContextStack.push(new ResourceContext(template, new HashMap<String, Macro>(), new HashMap<String, Renderable>(), model));
         Stack<EscapeMode> escapeContextStack = new Stack<>();
-        escapeContextStack.push(environment.renderConfiguration().initialEscapeMode());
+        escapeContextStack.push(environment.rendering().getInitialEscapeMode());
         EscapeModeContext escapeModeContext = new EscapeModeContext(escapeContextStack);
         return new CoreRenderContext(environment, valueContextStack, resourceContextStack, nodeContextStack, escapeModeContext);
     }

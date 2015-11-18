@@ -3,6 +3,7 @@ package org.jtwig.model.tree;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import org.jtwig.context.RenderContext;
+import org.jtwig.environment.Environment;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.include.IncludeConfiguration;
@@ -34,9 +35,10 @@ public class IncludeNode extends Node {
     @Override
     public Renderable render(RenderContext context) {
         String path = configuration.getInclude().calculate(context).asString();
-        Optional<Resource> resource = context.environment()
-                .resourceResolver()
-                .resolve(context.currentResource().resource(), path);
+        Environment environment = context.environment();
+        Optional<Resource> resource = environment
+                .resources().getResourceResolver()
+                .resolve(environment, context.currentResource().resource(), path);
         if (configuration.isIgnoreMissing() && !resource.isPresent()) {
             return EmptyRenderable.instance();
         } else {

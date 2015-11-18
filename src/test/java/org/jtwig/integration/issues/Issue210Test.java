@@ -18,8 +18,7 @@ public class Issue210Test {
         model.with("text", "tête de bou  간편한 설치 및 사용");
 
         String result = JtwigTemplate
-                .inlineTemplate("{{ text }}", configuration()
-                        .parser().withInputCharset(Charset.forName("UTF-8")).and()
+                .inlineTemplate(Charset.forName("UTF-8"), "{{ text }}", configuration()
                         .render().withOutputCharset(Charset.forName("ISO-8859-1")).and()
                         .build())
                 .render(model);
@@ -33,8 +32,7 @@ public class Issue210Test {
         model.with("text", "tête de bou  간편한 설치 및 사용");
 
         String result = JtwigTemplate
-                .inlineTemplate("{{ text }}", configuration()
-                        .parser().withInputCharset(Charset.forName("UTF-8")).and()
+                .inlineTemplate(Charset.forName("UTF-8"), "{{ text }}", configuration()
                         .render().withOutputCharset(Charset.forName("UTF-8")).and()
                         .build())
                 .render(model);

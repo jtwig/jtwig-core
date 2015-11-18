@@ -1,6 +1,7 @@
 package org.jtwig.resource.resolver;
 
 import com.google.common.base.Optional;
+import org.jtwig.environment.Environment;
 import org.jtwig.resource.ClasspathResource;
 import org.jtwig.resource.Resource;
 import org.jtwig.resource.classpath.ClasspathResourceLoader;
@@ -19,7 +20,7 @@ public class ClasspathResourceResolver implements ResourceResolver {
     }
 
     @Override
-    public Optional<Resource> resolve(Resource resource, String path) {
+    public Optional<Resource> resolve(Environment environment, Resource resource, String path) {
         if (path.startsWith(PREFIX)) {
             path = path.substring(PREFIX.length());
         }

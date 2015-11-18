@@ -29,7 +29,7 @@ public class AddOnParserTest extends AbstractIntegrationTest {
     @Test
     public void addOn() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% hello %}", configuration()
-                .parser().withAddOnParser(new AddonParserProvider() {
+                .parser().withAddonParserProvider(new AddonParserProvider() {
                     @Override
                     public Class<? extends AddonParser> parser() {
                         return SimpleAddOnParser.class;

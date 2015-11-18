@@ -35,6 +35,7 @@ import org.jtwig.value.relational.equal.*;
 import org.jtwig.value.relational.identical.SameTypeComparator;
 import org.jtwig.value.relational.lower.*;
 
+import java.math.MathContext;
 import java.util.Arrays;
 
 import static java.util.Arrays.asList;
@@ -58,7 +59,7 @@ public class DefaultValueConfiguration extends ValueConfiguration {
     ));
 
     public DefaultValueConfiguration() {
-        super(EQUAL_COMPARATOR,
+        super(MathContext.DECIMAL128, EQUAL_COMPARATOR,
                 new SameTypeComparator(EQUAL_COMPARATOR),
                 LOWER_COMPARATOR,
                 new CompositeRelationalComparator(Arrays.<RelationalComparator>asList(

@@ -1,7 +1,7 @@
 package org.jtwig.resource;
 
 import com.google.common.base.Optional;
-
+import org.jtwig.environment.Environment;
 import org.jtwig.resource.resolver.CompositeResourceResolver;
 import org.jtwig.resource.resolver.ResourceResolver;
 import org.junit.Before;
@@ -16,6 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class CompositeResourceResolverTest {
+    private final Environment environment = mock(Environment.class);
     private Collection<ResourceResolver> resolvers = new ArrayList<>();
     private CompositeResourceResolver underTest = new CompositeResourceResolver(resolvers);
 
@@ -30,9 +31,9 @@ public class CompositeResourceResolverTest {
         String relativePath = "/ba";
         ResourceResolver resourceResolver = mock(ResourceResolver.class);
         resolvers.add(resourceResolver);
-        when(resourceResolver.resolve(resource, relativePath)).thenReturn(Optional.<Resource>absent());
+        when(resourceResolver.resolve(environment, resource, relativePath)).thenReturn(Optional.<Resource>absent());
 
-        Optional<Resource> result = underTest.resolve(resource, relativePath);
+        Optional<Resource> result = underTest.resolve(environment, resource, relativePath);
 
         assertThat(result.isPresent(), is(false));
     }
@@ -44,9 +45,9 @@ public class CompositeResourceResolverTest {
         Resource reference = mock(Resource.class);
         ResourceResolver resourceResolver = mock(ResourceResolver.class);
         resolvers.add(resourceResolver);
-        when(resourceResolver.resolve(resource, relativePath)).thenReturn(Optional.of(reference));
+        when(resourceResolver.resolve(environment, resource, relativePath)).thenReturn(Optional.of(reference));
 
-        Optional<Resource> result = underTest.resolve(resource, relativePath);
+        Optional<Resource> result = underTest.resolve(environment, resource, relativePath);
 
         assertThat(result.isPresent(), is(true));
         assertThat(result.get(), is(reference));

@@ -3,11 +3,14 @@ package org.jtwig.resource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
 
 import java.io.*;
+import java.nio.charset.Charset;
 
 public class FileResource implements Resource {
+    private final Charset charset;
     private final File file;
 
-    public FileResource(File file) {
+    public FileResource(Charset charset, File file) {
+        this.charset = charset;
         this.file = file;
     }
 
@@ -16,12 +19,17 @@ public class FileResource implements Resource {
     }
 
     @Override
-    public InputStream content() {
+    public InputStream getContent() {
         try {
             return new FileInputStream(file);
         } catch (FileNotFoundException e) {
             throw new ResourceNotFoundException(e);
         }
+    }
+
+    @Override
+    public Charset getCharset() {
+        return charset;
     }
 
     @Override

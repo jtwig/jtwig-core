@@ -2,6 +2,7 @@ package org.jtwig.model.tree;
 
 import com.google.common.base.Optional;
 import org.jtwig.context.impl.ResourceRenderer;
+import org.jtwig.environment.Environment;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.include.IncludeConfiguration;
@@ -10,6 +11,8 @@ import org.jtwig.resource.Resource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
 import org.jtwig.value.JtwigValueFactory;
 import org.jtwig.value.configuration.DefaultValueConfiguration;
+import org.jtwig.value.environment.ValueEnvironment;
+import org.jtwig.value.environment.ValueEnvironmentFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,12 +27,14 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class EmbedNodeTest extends AbstractNodeTest {
+    public static final ValueEnvironment VALUE_ENVIRONMENT = new ValueEnvironmentFactory().crete(new DefaultValueConfiguration());
     private final Position position = mock(Position.class);
     private final ArrayList<OverrideBlockNode> nodes = new ArrayList<>();
     private final Expression includeExpression = mock(Expression.class);
     private final IncludeConfiguration includeConfiguration = mock(IncludeConfiguration.class, RETURNS_DEEP_STUBS);
     private final ResourceRenderer resourceRenderer = renderContext().resourceRenderer();
     private final Resource resource = mock(Resource.class);
+    private final Environment environment = mock(Environment.class);
     private EmbedNode underTest = new EmbedNode(position, nodes, includeConfiguration);
 
     @Before
@@ -40,8 +45,8 @@ public class EmbedNodeTest extends AbstractNodeTest {
     @Test
     public void renderWithNonExistingResourceWhenIgnoreMissing() throws Exception {
         when(includeConfiguration.isIgnoreMissing()).thenReturn(true);
-        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", new DefaultValueConfiguration()));
-        when(renderContext().environment().resourceResolver().resolve(any(Resource.class), anyString())).thenReturn(Optional.<Resource>absent());
+        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", VALUE_ENVIRONMENT));
+        when(renderContext().environment().resources().getResourceResolver().resolve(any(Environment.class), any(Resource.class), anyString())).thenReturn(Optional.<Resource>absent());
 
         Renderable result = underTest.render(renderContext());
 
@@ -50,10 +55,10 @@ public class EmbedNodeTest extends AbstractNodeTest {
 
     @Test(expected = ResourceNotFoundException.class)
     public void renderWithNonExistingResourceWhenNotIgnoringMissing() throws Exception {
-        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", new DefaultValueConfiguration()));
+        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", VALUE_ENVIRONMENT));
         when(includeConfiguration.getInclude()).thenReturn(includeExpression);
         when(includeConfiguration.isIgnoreMissing()).thenReturn(false);
-        when(renderContext().environment().resourceResolver().resolve(any(Resource.class), anyString())).thenReturn(Optional.<Resource>absent());
+        when(renderContext().environment().resources().getResourceResolver().resolve(any(Environment.class), any(Resource.class), anyString())).thenReturn(Optional.<Resource>absent());
         when(resourceRenderer.inheritModel(anyBoolean())).thenReturn(resourceRenderer);
         when(resourceRenderer.define(anyMap())).thenReturn(resourceRenderer);
 
@@ -62,10 +67,10 @@ public class EmbedNodeTest extends AbstractNodeTest {
 
     @Test
     public void renderWithExistingResourceWhenIgnoreMissing() throws Exception {
-        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", new DefaultValueConfiguration()));
+        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", VALUE_ENVIRONMENT));
         when(includeConfiguration.getInclude()).thenReturn(includeExpression);
         when(includeConfiguration.isIgnoreMissing()).thenReturn(true);
-        when(renderContext().environment().resourceResolver().resolve(any(Resource.class), anyString())).thenReturn(Optional.<Resource>absent());
+        when(renderContext().environment().resources().getResourceResolver().resolve(any(Environment.class), any(Resource.class), anyString())).thenReturn(Optional.<Resource>absent());
         when(resourceRenderer.inheritModel(anyBoolean())).thenReturn(resourceRenderer);
         when(resourceRenderer.define(anyMap())).thenReturn(resourceRenderer);
 
@@ -76,10 +81,10 @@ public class EmbedNodeTest extends AbstractNodeTest {
 
     @Test
     public void renderWithExistingResourceNotIgnoreMissing() throws Exception {
-        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", new DefaultValueConfiguration()));
+        when(includeExpression.calculate(renderContext())).thenReturn(JtwigValueFactory.value("test", VALUE_ENVIRONMENT));
         when(includeConfiguration.getInclude()).thenReturn(includeExpression);
         when(includeConfiguration.isIgnoreMissing()).thenReturn(false);
-        when(renderContext().environment().resourceResolver().resolve(any(Resource.class), anyString())).thenReturn(Optional.of(resource));
+        when(renderContext().environment().resources().getResourceResolver().resolve(any(Environment.class), any(Resource.class), anyString())).thenReturn(Optional.of(resource));
         when(resourceRenderer.inheritModel(anyBoolean())).thenReturn(resourceRenderer);
         when(resourceRenderer.define(anyMap())).thenReturn(resourceRenderer);
 

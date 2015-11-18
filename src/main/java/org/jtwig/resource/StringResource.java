@@ -2,17 +2,30 @@ package org.jtwig.resource;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 public class StringResource implements Resource {
     private final String content;
+    private final Charset charset;
 
     public StringResource(String content) {
+        this.content = content;
+        this.charset = Charset.defaultCharset();
+    }
+
+    public StringResource(Charset charset, String content) {
+        this.charset = charset;
         this.content = content;
     }
 
     @Override
-    public InputStream content() {
+    public InputStream getContent() {
         return new ByteArrayInputStream(content.getBytes());
+    }
+
+    @Override
+    public Charset getCharset() {
+        return charset;
     }
 
     @Override

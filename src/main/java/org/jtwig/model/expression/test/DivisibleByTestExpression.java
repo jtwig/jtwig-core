@@ -25,7 +25,8 @@ public class DivisibleByTestExpression extends TestExpression {
                 BigDecimal divisor = expression.calculate(context).asNumber()
                         .or(OptionalUtils.<BigDecimal, CalculationException>throwException(new CalculationException(ErrorMessageFormatter.errorMessage(expression.getPosition(), String.format("Expecting a number")))));
                 return input.asNumber().or(OptionalUtils.<BigDecimal, CalculationException>throwException(new CalculationException(ErrorMessageFormatter.errorMessage(expression.getPosition(), String.format("Expecting a number")))))
-                        .remainder(divisor, context.environment().renderConfiguration().mathContext())
+                        .remainder(divisor, context.environment()
+                                .value().getMathContext())
                         .equals(BigDecimal.ZERO);
             }
         });

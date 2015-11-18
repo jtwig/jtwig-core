@@ -1,15 +1,14 @@
 package org.jtwig.value;
 
-import org.jtwig.value.converter.CompositeConverter;
-import org.jtwig.value.configuration.ValueConfiguration;
+import org.jtwig.value.environment.ValueEnvironment;
 
 public class JtwigValueFactory {
 
-    public static JtwigValue value(Object value, ValueConfiguration configuration) {
-        return new JtwigValue(value, new CompositeConverter(configuration.getConverter()), configuration);
+    public static JtwigValue value(Object value, ValueEnvironment valueEnvironment) {
+        return new JtwigValue(value, valueEnvironment);
     }
 
-    public static JtwigValue undefined(ValueConfiguration configuration) {
-        return value(Undefined.UNDEFINED, configuration);
+    public static JtwigValue undefined(ValueEnvironment valueEnvironment) {
+        return value(Undefined.UNDEFINED, valueEnvironment);
     }
 }

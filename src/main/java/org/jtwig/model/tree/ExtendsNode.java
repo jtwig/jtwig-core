@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import org.jtwig.context.RenderContext;
 import org.jtwig.context.values.ScopeType;
+import org.jtwig.environment.Environment;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.visitor.NodeVisitor;
@@ -34,9 +35,9 @@ public class ExtendsNode extends Node {
     @Override
     public Renderable render(RenderContext context) {
         String path = extendsExpression.calculate(context).asString();
-        Optional<Resource> extendResource = context
-                .environment().resourceResolver()
-                .resolve(context.currentResource().resource(), path);
+        Environment environment = context.environment();
+        Optional<Resource> extendResource = environment.resources().getResourceResolver()
+                .resolve(environment, context.currentResource().resource(), path);
 
         Resource resource = extendResource.or(throwException(path));
         context.currentResource().parent(resource);

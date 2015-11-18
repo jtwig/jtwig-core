@@ -1,24 +1,21 @@
-package org.jtwig.context;
+package org.jtwig.render.config;
 
 import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.context.model.EscapeMode;
 
-import java.math.MathContext;
 import java.nio.charset.Charset;
 
 public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> implements Builder<RenderConfiguration> {
     private boolean strictMode;
     private Charset outputCharset;
-    private MathContext mathContext;
     private EscapeMode initialEscapeMode;
 
-    public RenderConfigurationBuilder () {}
-    public RenderConfigurationBuilder (RenderConfiguration prototype) {
+    public RenderConfigurationBuilder() {}
+    public RenderConfigurationBuilder(RenderConfiguration prototype) {
         this
-                .withInitialEscapeMode(prototype.initialEscapeMode())
-                .withMathContext(prototype.mathContext())
-                .withOutputCharset(prototype.outputCharset())
-                .withStrictMode(prototype.strictMode())
+                .withInitialEscapeMode(prototype.getInitialEscapeMode())
+                .withOutputCharset(prototype.getDefaultOutputCharset())
+                .withStrictMode(prototype.getStrictMode())
         ;
     }
 
@@ -29,11 +26,6 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
 
     public B withOutputCharset(Charset outputCharset) {
         this.outputCharset = outputCharset;
-        return self();
-    }
-
-    public B withMathContext(MathContext mathContext) {
-        this.mathContext = mathContext;
         return self();
     }
 
@@ -48,6 +40,6 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
 
     @Override
     public RenderConfiguration build() {
-        return new RenderConfiguration(strictMode, outputCharset, mathContext, initialEscapeMode);
+        return new RenderConfiguration(strictMode, outputCharset, initialEscapeMode);
     }
 }

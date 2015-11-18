@@ -19,6 +19,7 @@ import org.jtwig.util.OptionalUtils;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 public class JtwigTemplate {
     public static final EnvironmentFactory ENVIRONMENT_FACTORY = new EnvironmentFactory();
@@ -27,7 +28,10 @@ public class JtwigTemplate {
         return inlineTemplate(template, new DefaultEnvironmentConfiguration());
     }
     public static JtwigTemplate inlineTemplate (String template, EnvironmentConfiguration configuration) {
-        return new JtwigTemplate(new StringResource(template), ENVIRONMENT_FACTORY.create(configuration));
+        return new JtwigTemplate(ENVIRONMENT_FACTORY.create(configuration), new StringResource(template));
+    }
+    public static JtwigTemplate inlineTemplate (Charset charset, String template, EnvironmentConfiguration configuration) {
+        return new JtwigTemplate(ENVIRONMENT_FACTORY.create(configuration), new StringResource(charset, template));
     }
 
     public static JtwigTemplate classpathTemplate(String location) {
@@ -39,12 +43,13 @@ public class JtwigTemplate {
             location = ClasspathResourceResolver.PREFIX + location;
         }
         Environment environment = ENVIRONMENT_FACTORY.create(environmentConfiguration);
-        Optional<Resource> resource = environment.resourceResolver().resolve(null, location);
+        Optional<Resource> resource = environment.resources().getResourceResolver().resolve(environment, null, location);
         return new JtwigTemplate(resource.or(OptionalUtils.<Resource>throwException(String.format("Classpath resource '%s' not found", location))), environment);
     }
 
-    public static JtwigTemplate fileTemplate (File file, EnvironmentConfiguration environment) {
-        return new JtwigTemplate(new FileResource(file), ENVIRONMENT_FACTORY.create(environment));
+    public static JtwigTemplate fileTemplate (File file, EnvironmentConfiguration environmentConfiguration) {
+        Environment environment = ENVIRONMENT_FACTORY.create(environmentConfiguration);
+        return new JtwigTemplate(new FileResource(environment.resources().getDefaultInputCharset(), file), environment);
     }
 
 
@@ -52,8 +57,9 @@ public class JtwigTemplate {
         return fileTemplate(file, new DefaultEnvironmentConfiguration());
     }
 
-    public static JtwigTemplate fileTemplate (String path, EnvironmentConfiguration environment) {
-        return new JtwigTemplate(new FileResource(new File(path)), ENVIRONMENT_FACTORY.create(environment));
+    public static JtwigTemplate fileTemplate (String path, EnvironmentConfiguration environmentConfiguration) {
+        Environment environment = ENVIRONMENT_FACTORY.create(environmentConfiguration);
+        return new JtwigTemplate(new FileResource(environment.resources().getDefaultInputCharset(), new File(path)), environment);
     }
 
     public static JtwigTemplate fileTemplate (String path) {
@@ -64,7 +70,13 @@ public class JtwigTemplate {
     private final Resource resource;
     private final Environment environment;
 
+    @Deprecated
     public JtwigTemplate(Resource resource, Environment environment) {
+        this.resource = resource;
+        this.environment = environment;
+    }
+
+    public JtwigTemplate(Environment environment, Resource resource) {
         this.resource = resource;
         this.environment = environment;
     }

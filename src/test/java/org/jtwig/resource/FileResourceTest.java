@@ -7,9 +7,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.nio.charset.Charset;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class FileResourceTest {
 
@@ -28,9 +29,9 @@ public class FileResourceTest {
 
     @Test
     public void content() throws Exception {
-        FileResource underTest = new FileResource(FILE);
+        FileResource underTest = new FileResource(Charset.defaultCharset(), FILE);
 
-        String content = IOUtils.toString(underTest.content());
+        String content = IOUtils.toString(underTest.getContent());
 
         assertThat(content, is(CONTENT));
     }
@@ -38,8 +39,8 @@ public class FileResourceTest {
     @Test
     public void hashCodeOfRelative() throws Exception {
         File file = new File("two");
-        FileResource fileResource = new FileResource(file);
-        FileResource anotherResource = new FileResource(new File(file, "../two"));
+        FileResource fileResource = new FileResource(Charset.defaultCharset(), file);
+        FileResource anotherResource = new FileResource(Charset.defaultCharset(), new File(file, "../two"));
 
         assertThat(fileResource.hashCode(), is(anotherResource.hashCode()));
     }

@@ -5,9 +5,8 @@ import org.jtwig.model.expression.operation.unary.impl.NegativeUnaryOperator;
 import org.jtwig.model.expression.operation.unary.impl.NotUnaryOperator;
 import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.cache.NoTemplateCacheProvider;
-import org.jtwig.parser.config.SyntaxConfigurationBuilder;
+import org.jtwig.parser.config.DefaultSyntaxConfiguration;
 
-import java.nio.charset.Charset;
 import java.util.Collections;
 
 import static java.util.Arrays.asList;
@@ -15,7 +14,7 @@ import static java.util.Arrays.asList;
 public class DefaultJtwigParserConfiguration extends JtwigParserConfiguration {
 
     public DefaultJtwigParserConfiguration() {
-        super(SyntaxConfigurationBuilder.syntaxConfiguration().build(),
+        super(new DefaultSyntaxConfiguration(),
                 Collections.<AddonParserProvider>emptyList(),
                 asList(
                         new NegativeUnaryOperator(),
@@ -45,7 +44,6 @@ public class DefaultJtwigParserConfiguration extends JtwigParserConfiguration {
                         new EquivalentOperator(),
                         new DifferentOperator()
                 ),
-                Charset.defaultCharset(),
                 new NoTemplateCacheProvider());
     }
 }

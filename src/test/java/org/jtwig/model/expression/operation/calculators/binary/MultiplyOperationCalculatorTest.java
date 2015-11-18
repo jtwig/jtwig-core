@@ -7,6 +7,8 @@ import org.jtwig.model.position.Position;
 import org.jtwig.value.JtwigValue;
 import org.jtwig.value.JtwigValueFactory;
 import org.jtwig.value.configuration.DefaultValueConfiguration;
+import org.jtwig.value.environment.ValueEnvironment;
+import org.jtwig.value.environment.ValueEnvironmentFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,20 +22,21 @@ import static org.mockito.Mockito.*;
 public class MultiplyOperationCalculatorTest {
     private final RenderContext renderContext = mock(RenderContext.class, RETURNS_DEEP_STUBS);
     private final Position position = mock(Position.class);
+    private final ValueEnvironment valueEnvironment = new ValueEnvironmentFactory().crete(new DefaultValueConfiguration());
     private MultiplyOperationCalculator underTest = new MultiplyOperationCalculator();
 
     @Before
     public void setUp() throws Exception {
-        when(renderContext.environment().renderConfiguration().mathContext()).thenReturn(MathContext.DECIMAL32);
-        when(renderContext.environment().valueConfiguration()).thenReturn(new DefaultValueConfiguration());
+        when(renderContext.environment().value().getMathContext()).thenReturn(MathContext.DECIMAL32);
+        when(renderContext.environment().value()).thenReturn(valueEnvironment);
     }
 
     @Test
     public void multiplyWithFloating() throws Exception {
         Expression leftOperand = mock(Expression.class);
         Expression rightOperand = mock(Expression.class);
-        when(leftOperand.calculate(renderContext)).thenReturn(JtwigValueFactory.value(new BigDecimal("1.3"), new DefaultValueConfiguration()));
-        when(rightOperand.calculate(renderContext)).thenReturn(JtwigValueFactory.value(new BigDecimal("2.3"), new DefaultValueConfiguration()));
+        when(leftOperand.calculate(renderContext)).thenReturn(JtwigValueFactory.value(new BigDecimal("1.3"), valueEnvironment));
+        when(rightOperand.calculate(renderContext)).thenReturn(JtwigValueFactory.value(new BigDecimal("2.3"), valueEnvironment));
 
         JtwigValue result = underTest.calculate(renderContext, position, leftOperand, rightOperand);
 

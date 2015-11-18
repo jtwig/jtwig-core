@@ -2,54 +2,62 @@ package org.jtwig.parser.config;
 
 import org.apache.commons.lang3.builder.Builder;
 
-public class SyntaxConfigurationBuilder implements Builder<SyntaxConfiguration> {
-    public static SyntaxConfigurationBuilder syntaxConfiguration () {
-        return new SyntaxConfigurationBuilder();
+public class SyntaxConfigurationBuilder<B extends SyntaxConfigurationBuilder> implements Builder<SyntaxConfiguration> {
+    private String startComment;
+    private String endComment;
+    private String startOutput;
+    private String endOutput;
+    private String startCode;
+    private String endCode;
+
+    public SyntaxConfigurationBuilder () {}
+    public SyntaxConfigurationBuilder (SyntaxConfiguration prototype) {
+        this.startComment = prototype.getStartComment();
+        this.endComment = prototype.getEndComment();
+        this.startOutput = prototype.getStartOutput();
+        this.endOutput = prototype.getEndOutput();
+        this.startCode = prototype.getStartCode();
+        this.endCode = prototype.getEndCode();
     }
 
-    private String startComment = "{#";
-    private String endComment = "#}";
-    private String startOutput = "{{";
-    private String endOutput = "}}";
-    private String startCode = "{%";
-    private String endCode = "%}";
 
-    private SyntaxConfigurationBuilder() {
-    }
-
-    public SyntaxConfigurationBuilder withStartComment(String startComment) {
+    public B withStartComment(String startComment) {
         this.startComment = startComment;
-        return this;
+        return self();
     }
 
-    public SyntaxConfigurationBuilder withEndComment(String endComment) {
+    public B withEndComment(String endComment) {
         this.endComment = endComment;
-        return this;
+        return self();
     }
 
-    public SyntaxConfigurationBuilder withStartOutput(String startOutput) {
+    public B withStartOutput(String startOutput) {
         this.startOutput = startOutput;
-        return this;
+        return self();
     }
 
-    public SyntaxConfigurationBuilder withEndOutput(String endOutput) {
+    public B withEndOutput(String endOutput) {
         this.endOutput = endOutput;
-        return this;
+        return self();
     }
 
-    public SyntaxConfigurationBuilder withStartCode(String startCode) {
+    public B withStartCode(String startCode) {
         this.startCode = startCode;
-        return this;
+        return self();
     }
 
-    public SyntaxConfigurationBuilder withEndCode(String endCode) {
+    public B withEndCode(String endCode) {
         this.endCode = endCode;
-        return this;
+        return self();
+    }
+
+    protected B self() {
+        return (B) this;
     }
 
     @Override
     public SyntaxConfiguration build() {
-        return new GeneratedSyntaxConfiguration(
+        return new SyntaxConfiguration(
                 startComment,
                 endComment,
                 startOutput,
@@ -57,53 +65,5 @@ public class SyntaxConfigurationBuilder implements Builder<SyntaxConfiguration> 
                 startCode,
                 endCode
         );
-    }
-
-    private static class GeneratedSyntaxConfiguration implements SyntaxConfiguration {
-        private final String startComment;
-        private final String endComment;
-        private final String startOutput;
-        private final String endOutput;
-        private final String startCode;
-        private final String endCode;
-
-        public GeneratedSyntaxConfiguration(String startComment, String endComment, String startOutput, String endOutput, String startCode, String endCode) {
-            this.startComment = startComment;
-            this.endComment = endComment;
-            this.startOutput = startOutput;
-            this.endOutput = endOutput;
-            this.startCode = startCode;
-            this.endCode = endCode;
-        }
-
-        @Override
-        public String startComment() {
-            return startComment;
-        }
-
-        @Override
-        public String endComment() {
-            return endComment;
-        }
-
-        @Override
-        public String startOutput() {
-            return startOutput;
-        }
-
-        @Override
-        public String endOutput() {
-            return endOutput;
-        }
-
-        @Override
-        public String startCode() {
-            return startCode;
-        }
-
-        @Override
-        public String endCode() {
-            return endCode;
-        }
     }
 }

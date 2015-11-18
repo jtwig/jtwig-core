@@ -18,7 +18,8 @@ public class IntegerDivideOperationCalculator implements BinaryOperationCalculat
                 .mandatoryNumber().setScale(0, RoundingMode.HALF_UP);
         return JtwigValueFactory.value(
                 leftValue
-                        .divide(rightValue, context.environment().renderConfiguration().mathContext())
-                        .setScale(0, RoundingMode.HALF_UP), context.environment().valueConfiguration());
+                        .divide(rightValue, context.environment()
+                                .value().getMathContext())
+                        .setScale(0, RoundingMode.HALF_UP), context.environment().value());
     }
 }
