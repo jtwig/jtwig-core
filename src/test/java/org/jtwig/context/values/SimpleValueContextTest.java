@@ -20,12 +20,6 @@ public class SimpleValueContextTest {
         map.clear();
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void addSad() throws Exception {
-        underTest.add("with space", null);
-    }
-
-
     @Test
     public void addHappy() throws Exception {
         underTest.add("bluh", null);
