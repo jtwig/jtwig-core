@@ -2,10 +2,10 @@ package org.jtwig.environment;
 
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.resolver.FunctionResolverFactory;
-import org.jtwig.model.expression.lists.EnumerationListStrategyFactory;
 import org.jtwig.parser.JtwigParserFactory;
 import org.jtwig.property.PropertyResolverFactory;
 import org.jtwig.render.environment.RenderEnvironmentFactory;
+import org.jtwig.render.expression.calculator.enumerated.environment.EnumerationListStrategyFactory;
 import org.jtwig.resource.environment.ResourceEnvironmentFactory;
 import org.jtwig.value.environment.ValueEnvironmentFactory;
 
@@ -18,17 +18,19 @@ public class EnvironmentFactory {
     private final RenderEnvironmentFactory renderEnvironmentFactory;
     private final FunctionResolverFactory functionResolverFactory;
     private final PropertyResolverFactory propertyResolverFactory;
-    private final EnumerationListStrategyFactory enumerationListStrategyFactory;
     private final ValueEnvironmentFactory valueEnvironmentFactory;
+    private final EnumerationListStrategyFactory enumerationListStrategyFactory;
 
     public EnvironmentFactory () {
         this(new JtwigParserFactory(), new ResourceEnvironmentFactory(),
                 new RenderEnvironmentFactory(), new FunctionResolverFactory(),
-                new PropertyResolverFactory(), new EnumerationListStrategyFactory(),
-                new ValueEnvironmentFactory());
+                new PropertyResolverFactory(),
+                new ValueEnvironmentFactory(),
+                new EnumerationListStrategyFactory()
+        );
     }
 
-    public EnvironmentFactory(JtwigParserFactory jtwigParserFactory, ResourceEnvironmentFactory resourceEnvironmentFactory, RenderEnvironmentFactory renderEnvironmentFactory, FunctionResolverFactory functionResolverFactory, PropertyResolverFactory propertyResolverFactory, EnumerationListStrategyFactory enumerationListStrategyFactory, ValueEnvironmentFactory valueEnvironmentFactory) {
+    public EnvironmentFactory(JtwigParserFactory jtwigParserFactory, ResourceEnvironmentFactory resourceEnvironmentFactory, RenderEnvironmentFactory renderEnvironmentFactory, FunctionResolverFactory functionResolverFactory, PropertyResolverFactory propertyResolverFactory, ValueEnvironmentFactory valueEnvironmentFactory, EnumerationListStrategyFactory enumerationListStrategyFactory) {
         this.jtwigParserFactory = jtwigParserFactory;
         this.resourceEnvironmentFactory = resourceEnvironmentFactory;
         this.renderEnvironmentFactory = renderEnvironmentFactory;
@@ -38,14 +40,14 @@ public class EnvironmentFactory {
         this.valueEnvironmentFactory = valueEnvironmentFactory;
     }
 
-    public Environment create(EnvironmentConfiguration configuration) {
-        EnvironmentConfigurationBuilder builder = new EnvironmentConfigurationBuilder(configuration);
-
-        for (Extension extension : configuration.getExtensions()) {
-            extension.configure(builder);
+    public Environment create(EnvironmentConfiguration environmentConfiguration) {
+        if (!environmentConfiguration.getExtensions().isEmpty()) {
+            EnvironmentConfigurationBuilder builder = new EnvironmentConfigurationBuilder(environmentConfiguration);
+            for (Extension extension : environmentConfiguration.getExtensions()) {
+                extension.configure(builder);
+            }
+            environmentConfiguration = builder.build();
         }
-
-        EnvironmentConfiguration environmentConfiguration = builder.build();
 
         return new Environment(
                 jtwigParserFactory.create(environmentConfiguration.getJtwigParserConfiguration()),
@@ -54,7 +56,7 @@ public class EnvironmentFactory {
                 functionResolverFactory.create(environmentConfiguration.getFunctionResolverConfiguration()),
                 propertyResolverFactory.create(environmentConfiguration.getPropertyResolverConfiguration()),
                 renderEnvironmentFactory.create(environmentConfiguration.getRenderConfiguration()),
-                valueEnvironmentFactory.crete(environmentConfiguration.getValueConfiguration()),
+                valueEnvironmentFactory.create(environmentConfiguration.getValueConfiguration()),
                 enumerationListStrategyFactory.create(environmentConfiguration.getEnumerationListConfiguration())
         );
     }

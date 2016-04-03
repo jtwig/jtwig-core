@@ -67,7 +67,7 @@ public class TestExpressionTest extends AbstractIntegrationTest {
     @Test
     public void isDivisibleByError() throws Exception {
         expectedException.expect(CalculationException.class);
-        expectedException.expectMessage(containsString("Expecting a number"));
+        expectedException.expectMessage(containsString("Cannot convert 'a' to number"));
 
         String result = JtwigTemplate.inlineTemplate("{% if (2 is divisible by 'a') %}ok{% else %}ko{% endif %}")
                 .render(JtwigModel.newModel());

@@ -1,14 +1,12 @@
 package org.jtwig.parser.parboiled.node;
 
 import com.google.common.base.Optional;
-import org.jtwig.context.model.EscapeMode;
 import org.jtwig.model.tree.AutoEscapeNode;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.base.*;
-import org.jtwig.parser.parboiled.expression.AnyExpressionParser;
-import org.jtwig.parser.parboiled.expression.BooleanExpressionParser;
 import org.jtwig.parser.parboiled.expression.StringExpressionParser;
 import org.jtwig.parser.parboiled.model.Keyword;
+import org.jtwig.render.context.model.EscapeMode;
 import org.parboiled.Rule;
 import org.parboiled.annotations.Label;
 

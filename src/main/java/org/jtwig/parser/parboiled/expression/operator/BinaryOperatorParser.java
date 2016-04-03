@@ -1,16 +1,14 @@
 package org.jtwig.parser.parboiled.expression.operator;
 
-import org.jtwig.model.expression.operation.binary.BinaryOperator;
-import org.jtwig.model.expression.operation.binary.calculators.BinaryOperationCalculator;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.base.BasicParser;
 import org.jtwig.parser.parboiled.base.LexicParser;
-import org.jtwig.parser.parboiled.base.SpacingParser;
+import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
 import org.parboiled.Rule;
 
 import java.util.List;
 
-public class BinaryOperatorParser extends BasicParser<BinaryOperationCalculator> {
+public class BinaryOperatorParser extends BasicParser<BinaryOperator> {
     public BinaryOperatorParser(ParserContext context) {
         super(BinaryOperatorParser.class, context);
     }
@@ -20,12 +18,12 @@ public class BinaryOperatorParser extends BasicParser<BinaryOperationCalculator>
             return Sequence(
                     String(operator.symbol()),
                     TestNot(parserContext().parser(LexicParser.class).LetterOrDigit()),
-                    push(operator.calculator())
+                    push(operator)
             );
         } else {
             return Sequence(
                     String(operator.symbol()),
-                    push(operator.calculator())
+                    push(operator)
             );
         }
     }

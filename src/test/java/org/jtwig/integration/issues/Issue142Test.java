@@ -18,7 +18,7 @@ public class Issue142Test extends AbstractIntegrationTest {
         String result = JtwigTemplate.inlineTemplate("{{ var == 5 }}")
                 .render(model);
 
-        assertThat(result, is(equalTo("1")));
+        assertThat(result, is(equalTo("true")));
     }
 
     @Test
@@ -29,6 +29,6 @@ public class Issue142Test extends AbstractIntegrationTest {
         String result = JtwigTemplate.inlineTemplate("{{ 5 == var }}")
                 .render(model);
 
-        assertThat(result, is(equalTo("1")));
+        assertThat(result, is(equalTo("true")));
     }
 }

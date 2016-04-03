@@ -52,7 +52,12 @@ public class FileResourceResolverTest {
         assertThat(result.isPresent(), is(false));
     }
 
+    @Test
+    public void resolveWhenAbsolutePrefixMissing() throws Exception {
+        Optional<Resource> result = underTest.resolve(environment, null, "file:"+FileUtils.getTempDirectory().getPath() + "/missing.twig");
 
+        assertThat(result.isPresent(), is(false));
+    }
 
     @Test
     public void resolveWhenRelativeCurrentExists() throws Exception {

@@ -3,17 +3,44 @@ package org.jtwig.integration.function;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
 
 public class EscapeRawTest extends AbstractIntegrationTest {
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     @Test
     public void latestApply() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ '&' | escape | raw }}").render(JtwigModel.newModel());
 
         assertThat(result, is("&"));
+    }
+
+    @Test
+    public void escape() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{{ '&' | escape('html') | escape(false) }}").render(JtwigModel.newModel());
+
+        assertThat(result, is("&"));
+    }
+
+    @Test
+    public void escapeTrue() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{{ '&' | escape(true) }}").render(JtwigModel.newModel());
+
+        assertThat(result, is("&amp;"));
+    }
+
+    @Test
+    public void escapeInvalid() throws Exception {
+        expectedException.expectMessage(containsString("Function escape error: Invalid escape mode requested 'blah'. Only supporting [NONE, HTML, JS, JAVASCRIPT]"));
+
+        JtwigTemplate.inlineTemplate("{{ '&' | escape('blah') }}").render(JtwigModel.newModel());
     }
 
     @Test

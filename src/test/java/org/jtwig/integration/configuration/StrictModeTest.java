@@ -1,7 +1,7 @@
 package org.jtwig.integration.configuration;
 
 import org.jtwig.JtwigTemplate;
-import org.jtwig.exceptions.CalculationException;
+import org.jtwig.exceptions.ResolveValueException;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,7 +18,7 @@ public class StrictModeTest extends AbstractIntegrationTest {
 
     @Test
     public void strictModeActive() throws Exception {
-        expectedException.expect(CalculationException.class);
+        expectedException.expect(ResolveValueException.class);
 
         JtwigTemplate.inlineTemplate("{{ undefined }}", configuration()
                 .render().withStrictMode(true).and()

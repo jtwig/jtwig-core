@@ -43,7 +43,7 @@ public class AnyTestExpressionParser extends TestExpressionParser<TestExpression
     Rule ruleFor(TestExpressionParser parser, NotParser notParser) {
         return Sequence(
                 parser.Test(),
-                push(new NotTestExpression(notParser.pop(1), (TestExpression) parser.pop()))
+                push(NotTestExpression.create(notParser.pop(1), (TestExpression) parser.pop()))
         );
     }
 

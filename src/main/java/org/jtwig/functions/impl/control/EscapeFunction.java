@@ -1,17 +1,13 @@
 package org.jtwig.functions.impl.control;
 
-import com.google.common.base.Function;
-import com.google.common.base.Supplier;
-import com.google.common.collect.Collections2;
+import com.google.common.base.Optional;
 import org.apache.commons.lang3.StringUtils;
-import org.jtwig.context.RenderContext;
-import org.jtwig.context.RenderContextHolder;
-import org.jtwig.context.model.EscapeMode;
-import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
-import org.jtwig.value.JtwigType;
+import org.jtwig.render.context.model.EscapeMode;
 
-import static java.util.Arrays.asList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EscapeFunction extends SimpleJtwigFunction {
     @Override
@@ -20,43 +16,37 @@ public class EscapeFunction extends SimpleJtwigFunction {
     }
 
     @Override
-    public Object execute(final JtwigFunctionRequest request) {
+    public Object execute(final FunctionRequest request) {
         request.minimumNumberOfArguments(1);
         request.maximumNumberOfArguments(2);
 
         EscapeMode escapeMode = EscapeMode.HTML;
         if (request.getNumberOfArguments() == 2) {
-            if (request.get(1).getType() == JtwigType.BOOLEAN) {
-                if (!request.get(1).asBoolean()) {
+            if (request.get(1) instanceof Boolean) {
+                if (!(boolean) request.get(1)) {
                     escapeMode = EscapeMode.NONE;
                 }
             } else {
-                final String requestedEscapeMode = request.getArgument(1, String.class);
-                escapeMode = EscapeMode.fromString(requestedEscapeMode.toUpperCase())
-                        .or(throwError(request, requestedEscapeMode));
+                String requestedEscapeMode = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(1));
+                Optional<EscapeMode> escapeModeOptional = EscapeMode.fromString(requestedEscapeMode.toUpperCase());
+                if (escapeModeOptional.isPresent()) {
+                    escapeMode = escapeModeOptional.get();
+                } else {
+                    String possibleEscapeModes = possibleEscapeModes();
+                    throw request.exception(String.format("Invalid escape mode requested '%s'. Only supporting [%s]", requestedEscapeMode, possibleEscapeModes));
+                }
             }
         }
 
-        getRenderContext().currentNode().mode(escapeMode);
-        return request.getArgument(0, Object.class);
+        request.getRenderContext().getEscapeModeContext().set(escapeMode);
+        return request.get(0);
     }
 
-    private Supplier<EscapeMode> throwError(final JtwigFunctionRequest request, final String requestedEscapeMode) {
-        return new Supplier<EscapeMode>() {
-            @Override
-            public EscapeMode get() {
-                String possibleEscapeModes = StringUtils.join(Collections2.transform(asList(EscapeMode.values()), new Function<EscapeMode, String>() {
-                    @Override
-                    public String apply(EscapeMode input) {
-                        return input.toString();
-                    }
-                }), ", ");
-                throw request.exception(String.format("Invalid escape mode requested '%s'. Only supporting [%s]", requestedEscapeMode, possibleEscapeModes));
-            }
-        };
-    }
-
-    protected RenderContext getRenderContext() {
-        return RenderContextHolder.get();
+    private String possibleEscapeModes() {
+        List<String> escapeModes = new ArrayList<>();
+        for (EscapeMode escapeMode : EscapeMode.values()) {
+            escapeModes.add(escapeMode.toString());
+        }
+        return StringUtils.join(escapeModes, ", ");
     }
 }

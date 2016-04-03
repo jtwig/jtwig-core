@@ -39,7 +39,7 @@ public class AbsFunctionTest extends AbstractIntegrationTest {
     public void absVarDouble() throws Exception {
 
         String result = JtwigTemplate.inlineTemplate("{{ abs(var) }}")
-                .render(JtwigModel.newModel().with("var", -1.1D));
+                .render(JtwigModel.newModel().with("var", "-1.1"));
 
         assertThat(result, is("1.1"));
     }

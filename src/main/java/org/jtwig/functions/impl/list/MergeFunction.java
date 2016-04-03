@@ -1,9 +1,12 @@
 package org.jtwig.functions.impl.list;
 
-import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
+import org.jtwig.value.WrappedCollection;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class MergeFunction extends SimpleJtwigFunction {
     @Override
@@ -12,54 +15,20 @@ public class MergeFunction extends SimpleJtwigFunction {
     }
 
     @Override
-    public Object execute(JtwigFunctionRequest request) {
+    public Object execute(FunctionRequest request) {
         request.minimumNumberOfArguments(2);
-        Object first = request.getArgument(0, Object.class);
-        Object[] remainingArguments = request.getRemainingArguments(1);
-        if (first instanceof Iterable) {
-            return mergeList(first, remainingArguments);
-        } else if (first instanceof Map)
-            return mergeMap(first, remainingArguments);
-        else // is array (precondition)
-            return mergeArray(first, remainingArguments);
-    }
+        Collection<Object> result = new ArrayList<>();
+        List<Object> arguments = request.getArguments();
 
-
-    private Object mergeArray(Object first, Object[] arguments) {
-        List<Object> result = new ArrayList<>();
-        for (Object obj : (Object[]) first)
-            result.add(obj);
-        for (Object obj : arguments) {
-            if (obj == null) continue;
-            Object[] list = (Object[]) obj;
-            for (Object value : list) {
-                result.add(value);
-            }
+        for (Object argument : arguments) {
+            WrappedCollection collection = getCollection(request, argument);
+            result.addAll(collection.values());
         }
-        return result.toArray();
-    }
 
-    private Object mergeMap(Object first, Object[] arguments) {
-        Map<Object, Object> result;
-        if (first instanceof TreeMap)
-            result = new TreeMap<Object, Object>();
-        else
-            result = new HashMap<Object, Object>();
-        result.putAll((Map) first);
-        for (Object obj : arguments) {
-            if (obj == null) continue;
-            result.putAll((Map) obj);
-        }
         return result;
     }
 
-    private Object mergeList(Object first, Object[] arguments) {
-        List<Object> result = new ArrayList<Object>();
-        result.addAll((List) first);
-        for (Object obj : arguments) {
-            if (obj == null) continue;
-            result.addAll((List) obj);
-        }
-        return result;
+    private WrappedCollection getCollection(FunctionRequest request, Object value) {
+        return request.getEnvironment().getValueEnvironment().getCollectionConverter().convert(value).or(WrappedCollection.singleton(value));
     }
 }

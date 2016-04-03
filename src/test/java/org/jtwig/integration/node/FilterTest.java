@@ -2,8 +2,8 @@ package org.jtwig.integration.node;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.JtwigFunction;
-import org.jtwig.functions.JtwigFunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.junit.Test;
@@ -60,8 +60,8 @@ public class FilterTest extends AbstractIntegrationTest {
             }
 
             @Override
-            public Object execute(JtwigFunctionRequest request) {
-                return request.get(0).asString() + "3";
+            public Object execute(FunctionRequest request) {
+                return request.get(0).toString() + "3";
             }
         };
     }
@@ -74,8 +74,8 @@ public class FilterTest extends AbstractIntegrationTest {
             }
 
             @Override
-            public Object execute(JtwigFunctionRequest request) {
-                return request.get(0).asString() + request.get(1).asString() + "3";
+            public Object execute(FunctionRequest request) {
+                return request.get(0).toString() + request.get(1).toString() + "3";
             }
         };
     }
@@ -88,8 +88,8 @@ public class FilterTest extends AbstractIntegrationTest {
             }
 
             @Override
-            public Object execute(JtwigFunctionRequest request) {
-                return request.get(0).asString() + "2";
+            public Object execute(FunctionRequest request) {
+                return request.get(0).toString() + "2";
             }
         };
     }

@@ -1,7 +1,8 @@
 package org.jtwig.functions.impl.mixed;
 
-import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
+import org.jtwig.value.Undefined;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -13,11 +14,13 @@ public class LengthFunction extends SimpleJtwigFunction {
     }
 
     @Override
-    public Object execute(JtwigFunctionRequest request) {
+    public Object execute(FunctionRequest request) {
         request.maximumNumberOfArguments(1).minimumNumberOfArguments(1);
-        Object input = request.getArgument(0, Object.class);
+        Object input = request.get(0);
 
-        if (input.getClass().isArray()) {
+        if (input == null || input == Undefined.UNDEFINED) {
+            return 0;
+        } else if (input.getClass().isArray()) {
             return ((Object[]) input).length;
         } else if (input instanceof Iterable) {
             return length((Iterable) input);

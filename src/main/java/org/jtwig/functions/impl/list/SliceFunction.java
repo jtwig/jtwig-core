@@ -1,10 +1,9 @@
 package org.jtwig.functions.impl.list;
 
 import org.jtwig.exceptions.CalculationException;
-import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
-import org.jtwig.value.JtwigType;
-import org.jtwig.value.JtwigValue;
+import org.jtwig.value.WrappedCollection;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,21 +17,25 @@ public class SliceFunction extends SimpleJtwigFunction {
     }
 
     @Override
-    public Object execute(JtwigFunctionRequest request) {
+    public Object execute(FunctionRequest request) {
         request.minimumNumberOfArguments(3).maximumNumberOfArguments(3);
-        return slice(request.get(0),
-                request.getArgument(1, BigDecimal.class).intValue(),
-                request.getArgument(2, BigDecimal.class).intValue());
+        return slice(request, request.get(0),
+                getNumber(request, 1).intValue(),
+                getNumber(request, 2).intValue());
     }
 
-    private Object slice(JtwigValue input, int begin, int length) throws CalculationException {
-        if (input.getType() == JtwigType.STRING) {
-            String value = input.asString();
+
+    private BigDecimal getNumber(FunctionRequest request, int index) {
+        return request.getEnvironment().getValueEnvironment().getNumberConverter().convert(request.get(index)).orThrow(request.getPosition(), String.format("Cannot convert argument %d of number_format to number", index + 1));
+    }
+    private Object slice(FunctionRequest request, Object input, int begin, int length) throws CalculationException {
+        if (input instanceof String) {
+            String value = (String) input;
             if (value.length() < begin) return "";
             return value.substring(begin, Math.min(value.length(), begin + length));
         }
 
-        Iterator<Object> iterator = input.asCollection().iterator();
+        Iterator<Object> iterator = getCollection(request, input).iterator();
         List list = new ArrayList();
         int i = 0;
         while (iterator.hasNext()) {
@@ -43,9 +46,13 @@ public class SliceFunction extends SimpleJtwigFunction {
             i++;
         }
 
-        if (input instanceof Iterable)
-            return list;
-        else
-            return list.toArray();
+        return list;
+    }
+
+
+    private Iterable<Object> getCollection(FunctionRequest request, Object input) {
+        return request.getEnvironment().getValueEnvironment().getCollectionConverter()
+                .convert(input).or(WrappedCollection.singleton(input))
+                .values();
     }
 }

@@ -2,7 +2,7 @@ package org.jtwig.integration.issues;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
-import org.jtwig.exceptions.CalculationException;
+import org.jtwig.exceptions.ResolveValueException;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class Issue140Test extends AbstractIntegrationTest {
      */
     @Test
     public void undefinedVarThrowsExceptionOnEvaluation() throws Exception {
-        expectedException.expect(CalculationException.class);
+        expectedException.expect(ResolveValueException.class);
         expectedException.expectMessage(containsString("Variable 'var' undefined"));
 
         JtwigTemplate.inlineTemplate("{{ var is null }}", configuration()
@@ -46,6 +46,6 @@ public class Issue140Test extends AbstractIntegrationTest {
                 .build())
                 .render(JtwigModel.newModel());
 
-        assertThat(result, is(equalTo("1")));
+        assertThat(result, is(equalTo("true")));
     }
 }

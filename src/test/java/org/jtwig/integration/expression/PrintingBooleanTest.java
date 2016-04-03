@@ -13,13 +13,13 @@ public class PrintingBooleanTest extends AbstractIntegrationTest {
     public void printTrue() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ true }}").render(JtwigModel.newModel());
 
-        assertThat(result, is("1"));
+        assertThat(result, is("true"));
     }
 
     @Test
     public void printFalse() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ false }}").render(JtwigModel.newModel());
 
-        assertThat(result, is(""));
+        assertThat(result, is("false"));
     }
 }

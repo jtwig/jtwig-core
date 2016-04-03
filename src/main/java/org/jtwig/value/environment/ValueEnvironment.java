@@ -1,66 +1,64 @@
 package org.jtwig.value.environment;
 
-import org.jtwig.value.JtwigType;
-import org.jtwig.value.converter.Converter;
-import org.jtwig.value.extract.Extractor;
-import org.jtwig.value.extract.map.selection.MapSelectionExtractor;
-import org.jtwig.value.relational.RelationalComparator;
+import org.jtwig.value.WrappedCollection;
+import org.jtwig.value.compare.ValueComparator;
+import org.jtwig.value.convert.Converter;
+import org.jtwig.value.convert.string.StringConverter;
 
+import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 
 public class ValueEnvironment {
     private final MathContext mathContext;
-    private final RelationalComparator equalComparator;
-    private final RelationalComparator identicalComparator;
-    private final RelationalComparator lowerComparator;
-    private final RelationalComparator greaterComparator;
-    private final Extractor<JtwigType> typeExtractor;
-    private final MapSelectionExtractor mapSelectionExtractor;
-    private final Converter converter;
+    private final RoundingMode roundingMode;
+    private final Converter<BigDecimal> numberConverter;
+    private final Converter<Boolean> booleanConverter;
+    private final Converter<WrappedCollection> collectionConverter;
+    private final Converter<Character> charConverter;
+    private final ValueComparator valueComparator;
+    private final StringConverter stringConverter;
 
-    public ValueEnvironment(MathContext mathContext, RelationalComparator equalComparator,
-                            RelationalComparator identicalComparator, RelationalComparator lowerComparator,
-                            RelationalComparator greaterComparator, Extractor<JtwigType> typeExtractor,
-                            MapSelectionExtractor mapSelectionExtractor, Converter converter) {
+    public ValueEnvironment(MathContext mathContext, RoundingMode roundingMode, Converter<BigDecimal> numberConverter, Converter<Boolean> booleanConverter, Converter<WrappedCollection> collectionConverter, Converter<Character> charConverter, ValueComparator valueComparator, StringConverter stringConverter) {
         this.mathContext = mathContext;
-        this.equalComparator = equalComparator;
-        this.identicalComparator = identicalComparator;
-        this.lowerComparator = lowerComparator;
-        this.greaterComparator = greaterComparator;
-        this.typeExtractor = typeExtractor;
-        this.mapSelectionExtractor = mapSelectionExtractor;
-        this.converter = converter;
+        this.roundingMode = roundingMode;
+        this.numberConverter = numberConverter;
+        this.booleanConverter = booleanConverter;
+        this.collectionConverter = collectionConverter;
+        this.charConverter = charConverter;
+        this.valueComparator = valueComparator;
+        this.stringConverter = stringConverter;
     }
 
     public MathContext getMathContext() {
         return mathContext;
     }
 
-    public RelationalComparator getEqualComparator() {
-        return equalComparator;
+    public RoundingMode getRoundingMode() {
+        return roundingMode;
     }
 
-    public RelationalComparator getIdenticalComparator() {
-        return identicalComparator;
+    public Converter<BigDecimal> getNumberConverter() {
+        return numberConverter;
     }
 
-    public RelationalComparator getLowerComparator() {
-        return lowerComparator;
+    public Converter<Boolean> getBooleanConverter() {
+        return booleanConverter;
     }
 
-    public RelationalComparator getGreaterComparator() {
-        return greaterComparator;
+    public Converter<WrappedCollection> getCollectionConverter() {
+        return collectionConverter;
     }
 
-    public Extractor<JtwigType> getTypeExtractor() {
-        return typeExtractor;
+    public Converter<Character> getCharConverter() {
+        return charConverter;
     }
 
-    public MapSelectionExtractor getMapSelectionExtractor() {
-        return mapSelectionExtractor;
+    public ValueComparator getValueComparator() {
+        return valueComparator;
     }
 
-    public Converter getConverter() {
-        return converter;
+    public StringConverter getStringConverter() {
+        return stringConverter;
     }
 }

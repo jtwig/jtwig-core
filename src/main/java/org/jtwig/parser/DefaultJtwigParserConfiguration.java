@@ -1,11 +1,11 @@
 package org.jtwig.parser;
 
-import org.jtwig.model.expression.operation.binary.impl.*;
-import org.jtwig.model.expression.operation.unary.impl.NegativeUnaryOperator;
-import org.jtwig.model.expression.operation.unary.impl.NotUnaryOperator;
 import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.cache.NoTemplateCacheProvider;
 import org.jtwig.parser.config.DefaultSyntaxConfiguration;
+import org.jtwig.render.expression.calculator.operation.binary.impl.*;
+import org.jtwig.render.expression.calculator.operation.unary.impl.NegativeUnaryOperator;
+import org.jtwig.render.expression.calculator.operation.unary.impl.NotUnaryOperator;
 
 import java.util.Collections;
 

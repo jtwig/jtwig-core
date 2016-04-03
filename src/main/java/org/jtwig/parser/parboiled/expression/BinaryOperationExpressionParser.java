@@ -4,11 +4,11 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimaps;
 import org.jtwig.model.expression.BinaryOperationExpression;
-import org.jtwig.model.expression.operation.binary.BinaryOperator;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.base.PositionTrackerParser;
 import org.jtwig.parser.parboiled.base.SpacingParser;
 import org.jtwig.parser.parboiled.expression.operator.BinaryOperatorParser;
+import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
 import org.parboiled.Rule;
 
 import java.util.ArrayList;

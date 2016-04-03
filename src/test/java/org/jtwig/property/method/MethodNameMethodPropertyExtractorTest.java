@@ -5,13 +5,13 @@ import org.jtwig.property.PropertyResolveRequest;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.reflection.model.java.JavaMethod;
 import org.jtwig.reflection.model.java.JavaMethodArgument;
-import org.jtwig.value.JtwigValue;
 import org.junit.Test;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
@@ -21,7 +21,8 @@ public class MethodNameMethodPropertyExtractorTest {
     private final Comparator methodNameComparator = mock(Comparator.class);
     private final JavaMethod javaMethod = mock(JavaMethod.class);
     private final PropertyResolveRequest propertyResolveRequest = mock(PropertyResolveRequest.class, RETURNS_DEEP_STUBS);
-    private final MethodNameMethodPropertyExtractor underTest = new MethodNameMethodPropertyExtractor(methodNameComparator);
+    private final RetrieveArgumentsService retrieveArgumentsService = mock(RetrieveArgumentsService.class);
+    private final MethodNameMethodPropertyExtractor underTest = new MethodNameMethodPropertyExtractor(retrieveArgumentsService, methodNameComparator);
 
     @Test
     public void extractWhenMethodNameComparatorDoesNotMatch() throws Exception {
@@ -37,15 +38,17 @@ public class MethodNameMethodPropertyExtractorTest {
     }
 
     @Test
-    public void extractWhenDifferentNumberOfArguments() throws Exception {
+    public void extractWhenArgumentsDifferentSize() throws Exception {
         String methodName = "parameter";
         String providedParameterName = "argument";
+        List<JavaMethodArgument> javaMethodArguments = Collections.singletonList(mock(JavaMethodArgument.class));
+        List<Object> arguments = asList(new Object(), new Object());
+
         when(propertyResolveRequest.getPropertyName()).thenReturn(providedParameterName);
         when(javaMethod.name()).thenReturn(methodName);
+        when(javaMethod.arguments()).thenReturn(javaMethodArguments);
+        when(propertyResolveRequest.getArguments()).thenReturn(arguments);
         when(methodNameComparator.compare(methodName, providedParameterName)).thenReturn(0);
-
-        when(propertyResolveRequest.getArguments()).thenReturn(Collections.<JtwigValue>emptyList());
-        when(javaMethod.arguments()).thenReturn(Collections.singletonList(mock(JavaMethodArgument.class)));
 
         Optional<Value> result = underTest.extract(propertyResolveRequest, javaMethod);
 
@@ -53,19 +56,18 @@ public class MethodNameMethodPropertyExtractorTest {
     }
 
     @Test
-    public void extractWhenArgumentTypesNotAssignable() throws Exception {
+    public void extractWhenArgumentsNotMatch() throws Exception {
         String methodName = "parameter";
         String providedParameterName = "argument";
+        List<JavaMethodArgument> javaMethodArguments = Collections.singletonList(mock(JavaMethodArgument.class));
+        List<Object> arguments = Collections.singletonList(new Object());
+
         when(propertyResolveRequest.getPropertyName()).thenReturn(providedParameterName);
         when(javaMethod.name()).thenReturn(methodName);
+        when(javaMethod.arguments()).thenReturn(javaMethodArguments);
+        when(propertyResolveRequest.getArguments()).thenReturn(arguments);
         when(methodNameComparator.compare(methodName, providedParameterName)).thenReturn(0);
-
-        JtwigValue givenArgument = mock(JtwigValue.class);
-        JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
-        when(propertyResolveRequest.getArguments()).thenReturn(Collections.singletonList(givenArgument));
-        when(javaMethod.arguments()).thenReturn(Collections.singletonList(javaMethodArgument));
-        when(givenArgument.as(Integer.class)).thenReturn(Optional.<Value>absent());
-        when(javaMethodArgument.type()).thenReturn(Integer.class);
+        when(retrieveArgumentsService.retrieveArguments(arguments, javaMethodArguments)).thenReturn(Optional.<List<Object>>absent());
 
         Optional<Value> result = underTest.extract(propertyResolveRequest, javaMethod);
 
@@ -73,105 +75,27 @@ public class MethodNameMethodPropertyExtractorTest {
     }
 
     @Test
-    public void extractWhenInvocationTargetException() throws Exception {
+    public void extractHappy() throws Exception {
         String methodName = "parameter";
         String providedParameterName = "argument";
+        List<JavaMethodArgument> javaMethodArguments = Collections.singletonList(mock(JavaMethodArgument.class));
+        List<Object> arguments = Collections.singletonList(new Object());
+        List<Object> resultArguments = asList(new Object());
+        Object entity = new Object();
+        Object expected = new Object();
+
         when(propertyResolveRequest.getPropertyName()).thenReturn(providedParameterName);
         when(javaMethod.name()).thenReturn(methodName);
+        when(javaMethod.arguments()).thenReturn(javaMethodArguments);
+        when(propertyResolveRequest.getArguments()).thenReturn(arguments);
+        when(propertyResolveRequest.getEntity()).thenReturn(new Value(entity));
         when(methodNameComparator.compare(methodName, providedParameterName)).thenReturn(0);
-
-        JtwigValue givenArgument = mock(JtwigValue.class);
-        JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
-        when(propertyResolveRequest.getArguments()).thenReturn(Collections.singletonList(givenArgument));
-        when(javaMethod.arguments()).thenReturn(Collections.singletonList(javaMethodArgument));
-
-        when(givenArgument.as(String.class)).thenReturn(Optional.of(new Value("")));
-        when(javaMethodArgument.type()).thenReturn(String.class);
-
-        Object context = new Object();
-        when(propertyResolveRequest.getEntity().getValue()).thenReturn(context);
-        when(javaMethod.invoke(context, new Object[]{""})).thenThrow(InvocationTargetException.class);
-
-        Optional<Value> result = underTest.extract(propertyResolveRequest, javaMethod);
-
-        assertThat(result.isPresent(), is(false));
-    }
-
-    @Test
-    public void extractWhenIllegalAccessException() throws Exception {
-        String methodName = "parameter";
-        String providedParameterName = "argument";
-        when(propertyResolveRequest.getPropertyName()).thenReturn(providedParameterName);
-        when(javaMethod.name()).thenReturn(methodName);
-        when(methodNameComparator.compare(methodName, providedParameterName)).thenReturn(0);
-
-        JtwigValue givenArgument = mock(JtwigValue.class);
-        JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
-        when(propertyResolveRequest.getArguments()).thenReturn(Collections.singletonList(givenArgument));
-        when(javaMethod.arguments()).thenReturn(Collections.singletonList(javaMethodArgument));
-
-        when(givenArgument.as(String.class)).thenReturn(Optional.of(new Value("")));
-        when(javaMethodArgument.type()).thenReturn(String.class);
-
-        Object context = new Object();
-        when(propertyResolveRequest.getEntity().getValue()).thenReturn(context);
-        when(javaMethod.invoke(context, new Object[] {""})).thenThrow(IllegalAccessException.class);
-
-        Optional<Value> result = underTest.extract(propertyResolveRequest, javaMethod);
-
-        assertThat(result.isPresent(), is(false));
-    }
-
-    @Test
-    public void extractHappyPath() throws Exception {
-        String methodName = "parameter";
-        String providedParameterName = "argument";
-        when(propertyResolveRequest.getPropertyName()).thenReturn(providedParameterName);
-        when(javaMethod.name()).thenReturn(methodName);
-        when(methodNameComparator.compare(methodName, providedParameterName)).thenReturn(0);
-
-        JtwigValue givenArgument = mock(JtwigValue.class);
-        JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
-        when(propertyResolveRequest.getArguments()).thenReturn(Collections.singletonList(givenArgument));
-        when(javaMethod.arguments()).thenReturn(Collections.singletonList(javaMethodArgument));
-        when(givenArgument.as(String.class)).thenReturn(Optional.of(new Value("")));
-        when(javaMethodArgument.type()).thenReturn(String.class);
-
-        Object context = new Object();
-        Object methodInvocationResult = new Object();
-        when(propertyResolveRequest.getEntity().getValue()).thenReturn(context);
-        when(javaMethod.invoke(context, new Object[] {""})).thenReturn(methodInvocationResult);
+        when(retrieveArgumentsService.retrieveArguments(arguments, javaMethodArguments)).thenReturn(Optional.of(resultArguments));
+        when(javaMethod.invoke(entity, resultArguments.toArray())).thenReturn(expected);
 
         Optional<Value> result = underTest.extract(propertyResolveRequest, javaMethod);
 
         assertThat(result.isPresent(), is(true));
-        assertSame(result.get().getValue(), methodInvocationResult);
-    }
-
-    @Test
-    public void extractNullAlwaysAssignable() throws Exception {
-        String methodName = "parameter";
-        String providedParameterName = "argument";
-        when(propertyResolveRequest.getPropertyName()).thenReturn(providedParameterName);
-        when(javaMethod.name()).thenReturn(methodName);
-        when(methodNameComparator.compare(methodName, providedParameterName)).thenReturn(0);
-
-        JtwigValue givenArgument = mock(JtwigValue.class);
-        JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
-        when(propertyResolveRequest.getArguments()).thenReturn(Collections.singletonList(givenArgument));
-        when(javaMethod.arguments()).thenReturn(Collections.singletonList(javaMethodArgument));
-
-        when(givenArgument.as(String.class)).thenReturn(Optional.of(new Value(null)));
-        when(javaMethodArgument.type()).thenReturn(String.class);
-
-        Object context = new Object();
-        Object methodInvocationResult = new Object();
-        when(propertyResolveRequest.getEntity().getValue()).thenReturn(context);
-        when(javaMethod.invoke(context, new Object[] {null})).thenReturn(methodInvocationResult);
-
-        Optional<Value> result = underTest.extract(propertyResolveRequest, javaMethod);
-
-        assertThat(result.isPresent(), is(true));
-        assertSame(result.get().getValue(), methodInvocationResult);
+        assertSame(expected, result.get().getValue());
     }
 }

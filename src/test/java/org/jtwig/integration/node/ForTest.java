@@ -20,7 +20,6 @@ public class ForTest extends AbstractIntegrationTest {
     public void simpleFor() throws Exception {
         JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for i in list %}{{i}}{% endfor %}");
         String result = jtwigTemplate.render(newModel().with("list", new Integer[]{1, 2}));
-
         assertThat(result, is("12"));
     }
 
@@ -63,15 +62,15 @@ public class ForTest extends AbstractIntegrationTest {
         JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for i in list %}{% set a = 1 %}{% endfor %}{{ a }}");
         String result = jtwigTemplate.render(newModel().with("list", new Integer[]{1, 2}));
 
-        assertThat(result, is(""));
+        assertThat(result, is("1"));
     }
 
     @Test
     public void simpleForMap() throws Exception {
-        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for k,v in list %}{{k}}={{v}} {% endfor %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for k,v in list %}{{k}}{{v}}{% endfor %}");
         String result = jtwigTemplate.render(newModel().with("list", new Integer[]{1,2}));
 
-        assertThat(result, is("0=1 1=2 "));
+        assertThat(result, is("0112"));
     }
 
     @Test

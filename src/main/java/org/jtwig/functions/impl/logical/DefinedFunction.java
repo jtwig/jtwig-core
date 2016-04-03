@@ -1,7 +1,8 @@
 package org.jtwig.functions.impl.logical;
 
-import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
+import org.jtwig.value.Undefined;
 
 public class DefinedFunction extends SimpleJtwigFunction {
     @Override
@@ -10,9 +11,10 @@ public class DefinedFunction extends SimpleJtwigFunction {
     }
 
     @Override
-    public Boolean execute(JtwigFunctionRequest request) {
+    public Boolean execute(FunctionRequest request) {
         request.maximumNumberOfArguments(1);
         request.minimumNumberOfArguments(1);
-        return request.get(0).isDefined();
+
+        return request.get(0) != Undefined.UNDEFINED;
     }
 }

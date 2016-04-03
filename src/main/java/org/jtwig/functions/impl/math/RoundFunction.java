@@ -1,6 +1,6 @@
 package org.jtwig.functions.impl.math;
 
-import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
 
 import java.math.BigDecimal;
@@ -12,27 +12,35 @@ public class RoundFunction extends SimpleJtwigFunction {
     }
 
     @Override
-    public Object execute(JtwigFunctionRequest request) {
+    public Object execute(FunctionRequest request) {
         request.maximumNumberOfArguments(2).minimumNumberOfArguments(1);
         if (request.getNumberOfArguments() == 2) {
-            String strategy = request.getArgument(1, String.class);
+            String strategy = getString(request, 1);
             switch (RoundStrategy.valueOf(strategy.toUpperCase())) {
                 case CEIL:
                     return round(request, BigDecimal.ROUND_CEILING);
                 case FLOOR:
                     return round(request, BigDecimal.ROUND_FLOOR);
+                default:
+                    return round(request, BigDecimal.ROUND_HALF_DOWN);
             }
         }
         return round(request, BigDecimal.ROUND_HALF_DOWN);
     }
 
-    private Object round(JtwigFunctionRequest request, int mode) {
-        BigDecimal input = request.getArgument(0, BigDecimal.class);
-        return input.setScale(0, mode);
+
+    private String getString(FunctionRequest request, int index) {
+        return request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(index));
     }
 
+    private Object round(FunctionRequest request, int mode) {
+        BigDecimal conversionResult = request.getEnvironment().getValueEnvironment().getNumberConverter().convert(request.get(0))
+                .orThrow(request.getPosition(), String.format("Cannot convert %s to number", request.get(0)));
 
-    public static enum RoundStrategy {
+        return conversionResult.setScale(0, mode);
+    }
+
+    public enum RoundStrategy {
         COMMON,
         CEIL,
         FLOOR

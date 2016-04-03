@@ -1,10 +1,14 @@
 package org.jtwig.integration.node;
 
+import com.google.common.collect.ImmutableMap;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
+import org.jtwig.resource.Resource;
+import org.jtwig.resource.StringResource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
+import org.jtwig.resource.resolver.InMemoryResourceResolver;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -12,6 +16,7 @@ import org.junit.rules.ExpectedException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuration;
 
 public class ImportTest extends AbstractIntegrationTest {
     @Rule
@@ -26,7 +31,27 @@ public class ImportTest extends AbstractIntegrationTest {
         assertThat(result, is("hello"));
     }
 
+    @Test
+    public void macroImportLessArguments() throws Exception {
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% import 'classpath:/example/macros/macro-example.twig' as inputs %}{{ inputs.text() }}");
 
+        String result = template.render(JtwigModel.newModel());
+
+        assertThat(result, is(""));
+    }
+
+    @Test
+    public void nestedImports() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{% import 'a' as a %}{{ a.example('hello') }}", configuration()
+                .resources().withResourceResolver(new InMemoryResourceResolver(ImmutableMap.<String, Resource>builder()
+                        .put("a", new StringResource("{% import 'b' as b %}{% macro example (input) %}{{ b.example(input) }}{% endmacro %}"))
+                        .put("b", new StringResource("{% macro example (input) %}{{ input }}{% endmacro %}"))
+                        .build())).and()
+                .build())
+                .render(JtwigModel.newModel());
+
+        assertThat(result, is("hello"));
+    }
 
     @Test
     public void importResourceNotFound() throws Exception {

@@ -1,21 +1,28 @@
 package org.jtwig;
 
-import org.jtwig.context.values.SimpleValueContext;
+import com.google.common.base.Optional;
 import org.jtwig.reflection.model.Value;
 
 import java.util.HashMap;
+import java.util.Map;
 
-public class JtwigModel extends SimpleValueContext {
+public class JtwigModel {
     public static JtwigModel newModel () {
         return new JtwigModel();
     }
 
+    private final Map<String, Value> values;
+
     public JtwigModel() {
-        super(new HashMap<String, Value>());
+        this.values = new HashMap<>();
     }
 
     public JtwigModel with (String name, Object value) {
-        super.add(name, value);
+        values.put(name, new Value(value));
         return this;
+    }
+
+    public Optional<Value> get (String key) {
+        return Optional.fromNullable(values.get(key));
     }
 }

@@ -1,8 +1,6 @@
 package org.jtwig.model.expression;
 
-import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
-import org.jtwig.value.JtwigValue;
 
 public class MapSelectionExpression extends Expression {
     private final Expression mapExpression;
@@ -14,9 +12,17 @@ public class MapSelectionExpression extends Expression {
         this.selectValue = selectValue;
     }
 
-    @Override
-    public JtwigValue calculate(RenderContext context) {
-        JtwigValue map = mapExpression.calculate(context);
-        return map.getMapValue(selectValue.calculate(context));
+    public Expression getMapExpression() {
+        return mapExpression;
     }
+
+    public Expression getSelectValue() {
+        return selectValue;
+    }
+
+    //    @Override
+//    public JtwigValue calculate(CalculateRequest request) {
+//        JtwigValue map = mapExpression.calculate(request);
+//        return map.getMapValue(selectValue.calculate(request));
+//    }
 }

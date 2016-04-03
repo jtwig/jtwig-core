@@ -1,9 +1,7 @@
 package org.jtwig.model.expression;
 
-import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.position.Traceable;
-import org.jtwig.value.JtwigValue;
 
 public abstract class Expression implements Traceable {
     private final Position position;
@@ -16,6 +14,4 @@ public abstract class Expression implements Traceable {
     public Position getPosition() {
         return position;
     }
-
-    public abstract JtwigValue calculate(RenderContext context);
 }

@@ -1,8 +1,6 @@
 package org.jtwig.model.expression;
 
-import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
-import org.jtwig.value.JtwigValue;
 
 public class TernaryOperationExpression extends Expression {
     private final Expression firstExpression;
@@ -26,13 +24,5 @@ public class TernaryOperationExpression extends Expression {
 
     public Expression getThirdExpression() {
         return thirdExpression;
-    }
-
-    @Override
-    public JtwigValue calculate(RenderContext context) {
-        return firstExpression.calculate(context).asBoolean() ?
-                secondExpression.calculate(context) :
-                thirdExpression.calculate(context)
-                ;
     }
 }

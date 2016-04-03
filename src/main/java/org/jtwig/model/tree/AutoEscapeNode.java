@@ -1,10 +1,8 @@
 package org.jtwig.model.tree;
 
 import com.google.common.base.Optional;
-import org.jtwig.context.RenderContext;
-import org.jtwig.context.model.EscapeMode;
 import org.jtwig.model.position.Position;
-import org.jtwig.render.Renderable;
+import org.jtwig.render.context.model.EscapeMode;
 
 public class AutoEscapeNode extends ContentNode {
     private final Optional<EscapeMode> escapeMode;
@@ -14,11 +12,7 @@ public class AutoEscapeNode extends ContentNode {
         this.escapeMode = escapeMode;
     }
 
-    @Override
-    public Renderable render(RenderContext context) {
-        context.escapeContext().startEscapeMode(escapeMode.or(EscapeMode.HTML));
-        Renderable render = super.render(context);
-        context.escapeContext().stop();
-        return render;
+    public Optional<EscapeMode> getEscapeMode() {
+        return escapeMode;
     }
 }

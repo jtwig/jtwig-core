@@ -1,46 +1,30 @@
 package org.jtwig.property;
 
 import com.google.common.base.Optional;
-import org.jtwig.context.RenderContext;
-import org.jtwig.context.impl.NodeRenderer;
-import org.jtwig.context.model.EscapeMode;
-import org.jtwig.context.model.Macro;
-import org.jtwig.context.model.MacroContext;
-import org.jtwig.context.values.ValueContext;
+import org.jtwig.environment.Environment;
 import org.jtwig.model.position.Position;
-import org.jtwig.model.tree.Node;
 import org.jtwig.reflection.model.Value;
-import org.jtwig.render.impl.StringRenderable;
-import org.jtwig.value.JtwigValue;
-import org.jtwig.value.converter.Converter;
+import org.jtwig.render.context.model.Macro;
+import org.jtwig.render.context.model.MacroDefinitionContext;
+import org.jtwig.render.context.model.RenderContext;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
 
 public class MacroPropertyResolverTest {
     private static final String MACRO_NAME = "macroName";
     private final Position position = mock(Position.class);
+    private final Environment environment = mock(Environment.class, RETURNS_DEEP_STUBS);
     private RenderContext renderContext = mock(RenderContext.class, RETURNS_DEEP_STUBS);
-    private MacroPropertyResolver underTest = new MacroPropertyResolver() {
-        @Override
-        protected RenderContext createRenderContext(ValueContext valueContext) {
-            return renderContext;
-        }
-
-        @Override
-        protected RenderContext getRenderContext() {
-            return renderContext;
-        }
-    };
-    private final ArrayList<JtwigValue> arguments = new ArrayList<>();
-    private Converter converter = mock(Converter.class);
+    private MacroPropertyResolver underTest = new MacroPropertyResolver(null);
+    private final ArrayList<Object> arguments = new ArrayList<>();
 
     @Before
     public void setUp() throws Exception {
@@ -50,7 +34,7 @@ public class MacroPropertyResolverTest {
     @Test
     public void resolveWhenNotMacroContext() throws Exception {
         Value value = mock(Value.class);
-        PropertyResolveRequest request = new PropertyResolveRequest(position, value, MACRO_NAME, arguments, converter);
+        PropertyResolveRequest request = new PropertyResolveRequest(renderContext, environment, position, value, MACRO_NAME, arguments);
 
         Optional<Value> result = underTest.resolve(request);
 
@@ -59,32 +43,11 @@ public class MacroPropertyResolverTest {
 
     @Test
     public void resolveWhenEmptyMacroContext() throws Exception {
-        HashMap<String, Macro> macros = new HashMap<>();
-        MacroContext macroContext = new MacroContext(macros);
-        Value value = new Value(macroContext);
-        PropertyResolveRequest request = new PropertyResolveRequest(position, value, MACRO_NAME, arguments, converter);
+        MacroDefinitionContext macros = new MacroDefinitionContext(new HashMap<String, Macro>());
+        PropertyResolveRequest request = new PropertyResolveRequest(renderContext, environment, position, new Value(macros), MACRO_NAME, arguments);
 
         Optional<Value> result = underTest.resolve(request);
 
         assertThat(result.isPresent(), is(false));
-    }
-
-    @Test
-    public void resolveWhenMacroContextContainsMacro() throws Exception {
-        ArrayList<String> argumentNames = new ArrayList<>();
-        HashMap<String, Macro> macros = new HashMap<>();
-        MacroContext macroContext = new MacroContext(macros);
-        Node content = mock(Node.class);
-        NodeRenderer nodeRenderer = mock(NodeRenderer.class);
-
-        macros.put(MACRO_NAME, new Macro(argumentNames, content));
-        when(renderContext.nodeRenderer()).thenReturn(nodeRenderer);
-        when(nodeRenderer.render(content)).thenReturn(new StringRenderable("one", EscapeMode.NONE));
-        PropertyResolveRequest request = new PropertyResolveRequest(position, new Value(macroContext), MACRO_NAME, arguments, converter);
-
-        Optional<Value> result = underTest.resolve(request);
-
-        assertThat(result.isPresent(), is(true));
-        assertEquals(result.get().getValue(), "one");
     }
 }

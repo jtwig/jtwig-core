@@ -2,8 +2,6 @@ package org.jtwig.integration.addon;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
-import org.jtwig.context.RenderContext;
-import org.jtwig.context.model.EscapeMode;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.Node;
@@ -13,8 +11,11 @@ import org.jtwig.parser.parboiled.base.LimitsParser;
 import org.jtwig.parser.parboiled.base.PositionTrackerParser;
 import org.jtwig.parser.parboiled.base.SpacingParser;
 import org.jtwig.parser.parboiled.node.AddonParser;
-import org.jtwig.render.Renderable;
-import org.jtwig.render.impl.StringRenderable;
+import org.jtwig.render.RenderRequest;
+import org.jtwig.render.context.model.EscapeMode;
+import org.jtwig.render.node.renderer.NodeRender;
+import org.jtwig.renderable.Renderable;
+import org.jtwig.renderable.impl.StringRenderable;
 import org.junit.Test;
 import org.parboiled.Rule;
 
@@ -40,9 +41,18 @@ public class AddOnParserTest extends AbstractIntegrationTest {
                         return Collections.emptyList();
                     }
                 }).and()
+                .render().withRender(SimpleAddOn.class, new AddOnNodeRender()).and()
                 .build()).render(JtwigModel.newModel());
 
         assertThat(result, is("Hello World!"));
+    }
+
+    public static class AddOnNodeRender implements NodeRender<SimpleAddOn> {
+
+        @Override
+        public Renderable render(RenderRequest renderRequest, SimpleAddOn node) {
+            return new StringRenderable("Hello World!", EscapeMode.NONE);
+        }
     }
 
     public static class SimpleAddOnParser extends AddonParser {
@@ -70,11 +80,6 @@ public class AddOnParserTest extends AbstractIntegrationTest {
     public static class SimpleAddOn extends Node {
         protected SimpleAddOn(Position position) {
             super(position);
-        }
-
-        @Override
-        public Renderable render(RenderContext context) {
-            return new StringRenderable("Hello World!", EscapeMode.NONE);
         }
     }
 }

@@ -11,7 +11,7 @@ public class Issue061Test {
 
     @Test
     public void issue61() throws Exception {
-        JtwigModel model = new JtwigModel();
+        JtwigModel model = JtwigModel.newModel();
 
         String result = JtwigTemplate
                 .classpathTemplate("/example/classpath-template.twig")

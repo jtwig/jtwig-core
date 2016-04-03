@@ -2,15 +2,17 @@ package org.jtwig.integration.expression;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.JtwigFunction;
-import org.jtwig.functions.JtwigFunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
 import org.jtwig.integration.AbstractIntegrationTest;
-import org.jtwig.value.JtwigValue;
+import org.jtwig.value.WrappedCollection;
+import org.jtwig.value.convert.Converter;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -52,8 +54,8 @@ public class CompositionTest extends AbstractIntegrationTest {
             }
 
             @Override
-            public Object execute(JtwigFunctionRequest request) {
-                return request.get(0).mandatoryNumber().add(BigDecimal.ONE);
+            public Object execute(FunctionRequest request) {
+                return ((BigDecimal) request.get(0)).add(BigDecimal.ONE);
             }
         };
     }
@@ -66,11 +68,20 @@ public class CompositionTest extends AbstractIntegrationTest {
             }
 
             @Override
-            public Object execute(JtwigFunctionRequest request) {
+            public Object execute(FunctionRequest request) {
                 BigDecimal result = BigDecimal.ZERO;
-                Collection<JtwigValue> objects = request.get(0).asCollectionOfValues();
-                for (JtwigValue object : objects) {
-                    result = result.add(object.mandatoryNumber());
+                Converter<WrappedCollection> collectionConverter = request.getEnvironment().getValueEnvironment().getCollectionConverter();
+                Converter<BigDecimal> numberConverter = request.getEnvironment().getValueEnvironment().getNumberConverter();
+
+                Object list = request.get(0);
+                WrappedCollection collection = collectionConverter
+                        .convert(list).or(WrappedCollection.singleton(list));
+
+                Iterator<Map.Entry<String, Object>> iterator = collection.iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry<String, Object> next = iterator.next();
+                    BigDecimal number = numberConverter.convert(next.getValue()).orThrow(request.getPosition(), String.format("Cannot convert '%s' to number", next.getValue()));
+                    result = result.add(number);
                 }
                 return result;
             }

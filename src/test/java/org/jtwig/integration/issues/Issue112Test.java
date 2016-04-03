@@ -2,7 +2,7 @@ package org.jtwig.integration.issues;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
-import org.jtwig.exceptions.CalculationException;
+import org.jtwig.exceptions.ResolveValueException;
 import org.jtwig.parser.ParseException;
 import org.junit.Rule;
 import org.junit.Test;
@@ -79,7 +79,7 @@ public class Issue112Test {
     // 2.C
     @Test
     public void selectionExampleWithoutStrictValidation() throws Exception {
-        expectedException.expect(CalculationException.class);
+        expectedException.expect(ResolveValueException.class);
         expectedException.expectMessage(containsString("Variable 'undefinedVar' undefined"));
 
         JtwigModel model = new JtwigModel();
@@ -107,7 +107,7 @@ public class Issue112Test {
     // 3.B
     @Test
     public void operationExampleWithStrictValidation () throws Exception {
-        expectedException.expect(CalculationException.class);
+        expectedException.expect(ResolveValueException.class);
         expectedException.expectMessage(containsString("Variable 'undefinedVar' undefined"));
 
         JtwigModel model = new JtwigModel();
@@ -122,7 +122,7 @@ public class Issue112Test {
     // 3.C
     @Test
     public void operationWithNonexistentVarThrowsException() throws Exception {
-        expectedException.expect(CalculationException.class);
+        expectedException.expect(ResolveValueException.class);
         expectedException.expectMessage(containsString("Variable 'b' undefined"));
 
         JtwigModel model = new JtwigModel();
@@ -218,19 +218,6 @@ public class Issue112Test {
         assertThat(result, is(equalTo("")));
     }
 
-
-    @Test
-    public void booleanValuesShouldBePrintItsIntegerRepresentation() throws Exception {JtwigModel model = new JtwigModel();
-
-        String result = JtwigTemplate
-                .inlineTemplate("{{ true }}", configuration()
-                        .render().withStrictMode(false).and()
-                        .build())
-                .render(model);
-
-        assertThat(result, is(equalTo("1")));
-    }
-
     @Test
     public void comparisonBetweenUndefinedAndZero() throws Exception {JtwigModel model = new JtwigModel();
 
@@ -240,7 +227,7 @@ public class Issue112Test {
                         .build())
                 .render(model);
 
-        assertThat(result, is(equalTo("1")));
+        assertThat(result, is(equalTo("true")));
     }
 
     @Test
@@ -253,7 +240,7 @@ public class Issue112Test {
                         .build())
                 .render(model);
 
-        assertThat(result, is(equalTo("1")));
+        assertThat(result, is(equalTo("true")));
     }
 
     @Test

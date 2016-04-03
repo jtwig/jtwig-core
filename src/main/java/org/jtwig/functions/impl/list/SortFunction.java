@@ -1,7 +1,9 @@
 package org.jtwig.functions.impl.list;
 
-import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
+import org.jtwig.value.WrappedCollection;
+import org.jtwig.value.convert.Converter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,19 +16,26 @@ public class SortFunction extends SimpleJtwigFunction {
     }
 
     @Override
-    public Object execute(JtwigFunctionRequest request) {
+    public Object execute(FunctionRequest request) {
         request.maximumNumberOfArguments(1).minimumNumberOfArguments(1);
-        ArrayList<Object> result = new ArrayList<>(request.get(0).asCollection());
+        Converter<WrappedCollection> collectionConverter = request.getEnvironment().getValueEnvironment().getCollectionConverter();
+
+        Object object = request.get(0);
+        List<Object> result = new ArrayList<>(collectionConverter.convert(object)
+                .or(WrappedCollection.singleton(object))
+                .values());
+
+
         if (result.isEmpty() || result.size() == 1) {
             return result;
         } else {
             if (result.get(0) instanceof Comparable) {
-                List<Comparable> comparables = (List) result;
-                Collections.sort(comparables);
+                Collections.sort((List) result);
             } else {
                 throw request.exception("Cannot sort list of uncomparable items");
             }
         }
+
         return result;
     }
 }

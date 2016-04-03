@@ -2,12 +2,8 @@ package org.jtwig.model.tree;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import org.jtwig.context.RenderContext;
-import org.jtwig.context.model.Macro;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
-import org.jtwig.render.Renderable;
-import org.jtwig.render.impl.EmptyRenderable;
 
 import java.util.Collection;
 
@@ -36,10 +32,7 @@ public class MacroNode extends Node {
         return macroArgumentNames;
     }
 
-    @Override
-    public Renderable render(RenderContext context) {
-        Macro macro = new Macro(macroArgumentNames, content);
-        context.currentResource().register(macroName.getIdentifier(), macro);
-        return EmptyRenderable.instance();
+    public Node getContent() {
+        return content;
     }
 }

@@ -1,15 +1,6 @@
 package org.jtwig.model.expression;
 
-import com.google.common.base.Function;
-import com.google.common.base.Supplier;
-import org.jtwig.context.RenderContext;
-import org.jtwig.exceptions.CalculationException;
 import org.jtwig.model.position.Position;
-import org.jtwig.util.ErrorMessageFormatter;
-import org.jtwig.value.JtwigValue;
-import org.jtwig.value.JtwigValueFactory;
-
-import java.util.Collection;
 
 public class ComprehensionListExpression extends Expression {
     private final Expression start;
@@ -21,24 +12,30 @@ public class ComprehensionListExpression extends Expression {
         this.end = end;
     }
 
-
-
-    @Override
-    public JtwigValue calculate(final RenderContext context) {
-        final JtwigValue startValue = start.calculate(context);
-        final JtwigValue endValue = end.calculate(context);
-        return context.environment().enumerationStrategy().enumerate(startValue, endValue)
-                .transform(new Function<Collection<Object>, JtwigValue>() {
-                    @Override
-                    public JtwigValue apply(Collection<Object> input) {
-                        return JtwigValueFactory.value(input, context.environment().value());
-                    }
-                })
-                .or(new Supplier<JtwigValue>() {
-                    @Override
-                    public JtwigValue get() {
-                        throw new CalculationException(ErrorMessageFormatter.errorMessage(getPosition(), String.format("Unable to calculate a list from a comprehension list starting with '%s' and ending with '%s'", startValue.asObject(), endValue.asObject())));
-                    }
-                });
+    public Expression getStart() {
+        return start;
     }
+
+    public Expression getEnd() {
+        return end;
+    }
+
+    //    @Override
+//    public JtwigValue calculate(final CalculateRequest request) {
+//        final JtwigValue startValue = start.calculate(request);
+//        final JtwigValue endValue = end.calculate(request);
+//        return request.getEnvironment().getListEnumerationStrategy().enumerate(startValue, endValue)
+//                .transform(new Function<Collection<Object>, JtwigValue>() {
+//                    @Override
+//                    public JtwigValue apply(Collection<Object> input) {
+//                        return request.getEnvironment().getValueEnvironment().newJtwigValue(input);
+//                    }
+//                })
+//                .or(new Supplier<JtwigValue>() {
+//                    @Override
+//                    public JtwigValue get() {
+//                        throw new CalculationException(errorMessage(getPosition(), String.format("Unable to calculate a list from a comprehension list starting with '%s' and ending with '%s'", startValue.asObject(), endValue.asObject())));
+//                    }
+//                });
+//    }
 }
