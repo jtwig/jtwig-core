@@ -30,7 +30,7 @@ public class RetrieveArgumentsService {
             JavaMethodArgument argument = methodArgumentIterator.next();
 
             if ((next != null)) {
-                if (next.getClass().equals(argument.type())) {
+                if (argument.type().isAssignableFrom(next.getClass())) {
                     result.add(next);
                 } else {
                     return Optional.absent();
