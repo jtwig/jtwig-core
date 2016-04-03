@@ -1,6 +1,6 @@
 package org.jtwig.functions.impl.string;
 
-import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
 
 public class TrimFunction extends SimpleJtwigFunction {
@@ -10,9 +10,14 @@ public class TrimFunction extends SimpleJtwigFunction {
     }
 
     @Override
-    public Object execute(JtwigFunctionRequest request) {
+    public Object execute(FunctionRequest request) {
         request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
-        String input = request.getArgument(0, String.class);
-        return (input == null) ? null : input.trim();
+        String input = getString(request, 0);
+        return input.trim();
+    }
+
+
+    private String getString(FunctionRequest request, int index) {
+        return request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(index));
     }
 }

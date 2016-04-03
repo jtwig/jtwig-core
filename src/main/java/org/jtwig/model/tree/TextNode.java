@@ -1,9 +1,6 @@
 package org.jtwig.model.tree;
 
-import org.jtwig.context.RenderContext;
 import org.jtwig.model.position.Position;
-import org.jtwig.render.Renderable;
-import org.jtwig.render.impl.StringRenderable;
 
 public class TextNode extends Node {
     private final String text;
@@ -24,20 +21,8 @@ public class TextNode extends Node {
         return this;
     }
 
-    private String trimRight(String content) {
-        return content.replaceAll("\\s+$", "");
-    }
-
-    private String trimLeft(String content) {
-        return content.replaceAll("^\\s+", "");
-    }
-
-    @Override
-    public Renderable render(RenderContext context) {
-        String modifiedContent = text;
-        modifiedContent = configuration.isTrimLeft() ? trimLeft(modifiedContent) : modifiedContent;
-        modifiedContent = configuration.isTrimRight() ? trimRight(modifiedContent) : modifiedContent;
-        return new StringRenderable(modifiedContent, context.escapeContext().currentEscapeMode());
+    public Configuration getConfiguration() {
+        return configuration;
     }
 
     public static class Configuration {

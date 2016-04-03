@@ -2,6 +2,7 @@ package org.jtwig.resource.classpath;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -16,7 +17,13 @@ public class DefaultClasspathResourceLoader implements ClasspathResourceLoader {
     public boolean exists(String path) {
         try {
             URL resource = classLoader.getResource(preparePath(path));
-            return resource != null && new File(resource.toURI()).exists();
+            if (resource == null) {
+                return false;
+            } else {
+                return new File(new URI(resource.toString())).exists();
+            }
+        } catch (IllegalArgumentException e) {
+            return false;
         } catch (URISyntaxException e) {
             return false;
         }

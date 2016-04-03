@@ -1,8 +1,9 @@
 package org.jtwig.property;
 
 import com.google.common.base.Optional;
-import org.jtwig.context.values.ValueContext;
 import org.jtwig.reflection.model.Value;
+import org.jtwig.value.Undefined;
+import org.jtwig.value.context.ValueContext;
 
 public class ValueContextPropertyResolver implements PropertyResolver {
     @Override
@@ -10,7 +11,12 @@ public class ValueContextPropertyResolver implements PropertyResolver {
         if (request.getArguments().isEmpty()) {
             Object value = request.getEntity().getValue();
             if (value instanceof ValueContext) {
-                return ((ValueContext) value).value(request.getPropertyName());
+                Object resolve = ((ValueContext) value).resolve(request.getPropertyName());
+                if (resolve != Undefined.UNDEFINED) {
+                    return Optional.of(new Value(resolve));
+                } else {
+                    return Optional.absent();
+                }
             } else {
                 return Optional.absent();
             }

@@ -24,8 +24,4 @@ public class CompositeResourceResolver implements ResourceResolver {
 
         return Optional.absent();
     }
-
-    public int size() {
-        return resourceResolvers.size();
-    }
 }

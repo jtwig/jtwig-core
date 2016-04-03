@@ -1,23 +1,23 @@
 package org.jtwig.environment.and;
 
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
-import org.jtwig.value.configuration.ValueConfiguration;
-import org.jtwig.value.configuration.ValueConfigurationBuilder;
+import org.jtwig.value.config.ValueConfiguration;
+import org.jtwig.value.config.ValueConfigurationBuilder;
 
 public class AndValueConfigurationBuilder extends ValueConfigurationBuilder<AndValueConfigurationBuilder> implements AndBuilder<EnvironmentConfigurationBuilder> {
-    private final EnvironmentConfigurationBuilder parent;
+    private final EnvironmentConfigurationBuilder environmentConfigurationBuilder;
 
-    public AndValueConfigurationBuilder(EnvironmentConfigurationBuilder parent) {
-        this.parent = parent;
+    public AndValueConfigurationBuilder(EnvironmentConfigurationBuilder environmentConfigurationBuilder) {
+        this.environmentConfigurationBuilder = environmentConfigurationBuilder;
     }
 
     public AndValueConfigurationBuilder(ValueConfiguration prototype, EnvironmentConfigurationBuilder environmentConfigurationBuilder) {
         super(prototype);
-        this.parent = environmentConfigurationBuilder;
+        this.environmentConfigurationBuilder = environmentConfigurationBuilder;
     }
 
     @Override
     public EnvironmentConfigurationBuilder and() {
-        return parent;
+        return environmentConfigurationBuilder;
     }
 }

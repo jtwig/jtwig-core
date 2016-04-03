@@ -1,9 +1,8 @@
 package org.jtwig.functions.impl.logical;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
+import org.jtwig.value.convert.Converter;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -19,7 +18,7 @@ public class EmptyFunction extends SimpleJtwigFunction {
     }
 
     @Override
-    public Object execute(JtwigFunctionRequest request) {
+    public Object execute(FunctionRequest request) {
         return nullFunction.execute(request) ||
                 !definedFunction.execute(request) ||
                 isEmptyIterable(request) ||
@@ -27,19 +26,21 @@ public class EmptyFunction extends SimpleJtwigFunction {
                 ;
     }
 
-    private boolean isZero(JtwigFunctionRequest request) {
-        Optional<BigDecimal> number = request.get(0).asNumber();
-        return number.transform(new Function<BigDecimal, Boolean>() {
-            @Override
-            public Boolean apply(BigDecimal input) {
-                return BigDecimal.ZERO.equals(input);
-            }
-        }).or(false);
+    private boolean isZero(FunctionRequest request) {
+        Converter<BigDecimal> numberConverter = request.getEnvironment().getValueEnvironment().getNumberConverter();
+
+        Converter.Result<BigDecimal> decimalResult = numberConverter.convert(request.get(0));
+
+        if (decimalResult.isDefined()) {
+            return BigDecimal.ZERO.equals(decimalResult.get());
+        } else {
+            return false;
+        }
     }
 
-    private boolean isEmptyIterable(JtwigFunctionRequest request) {
+    private boolean isEmptyIterable(FunctionRequest request) {
         if (iterableFunction.execute(request)) {
-            Object input = request.getArgument(0, Object.class);
+            Object input = request.get(0);
             if (input instanceof Map) {
                 return ((Map) input).isEmpty();
             }
@@ -48,9 +49,7 @@ public class EmptyFunction extends SimpleJtwigFunction {
                 return !((Iterable) input).iterator().hasNext();
             }
 
-            if (input.getClass().isArray()) {
-                return ((Object[]) input).length == 0;
-            }
+            return ((Object[]) input).length == 0;
         }
         return false;
     }

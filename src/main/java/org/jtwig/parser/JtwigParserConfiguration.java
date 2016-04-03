@@ -1,10 +1,10 @@
 package org.jtwig.parser;
 
-import org.jtwig.model.expression.operation.binary.BinaryOperator;
-import org.jtwig.model.expression.operation.unary.UnaryOperator;
 import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.cache.TemplateCacheProvider;
 import org.jtwig.parser.config.SyntaxConfiguration;
+import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
+import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
 
 import java.util.Collection;
 

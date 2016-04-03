@@ -1,6 +1,6 @@
 package org.jtwig.functions.impl.string;
 
-import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
 
 import static java.util.Arrays.asList;
@@ -12,10 +12,14 @@ public class SplitFunction extends SimpleJtwigFunction {
     }
 
     @Override
-    public Object execute(JtwigFunctionRequest request) {
+    public Object execute(FunctionRequest request) {
         request.minimumNumberOfArguments(2).maximumNumberOfArguments(2);
-        String input = request.getArgument(0, String.class);
-        String separator = request.getArgument(1, String.class);
+        String input = getString(request, 0);
+        String separator = getString(request, 1);
         return asList(input.split(separator));
+    }
+
+    private String getString(FunctionRequest request, int index) {
+        return request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(index));
     }
 }

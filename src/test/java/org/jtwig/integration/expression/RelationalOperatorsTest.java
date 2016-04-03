@@ -40,7 +40,7 @@ public class RelationalOperatorsTest {
                 .inlineTemplate("{{ var1 == var2 }}")
                 .render(model);
 
-        assertThat(result, is(equalTo("1")));
+        assertThat(result, is(equalTo("true")));
     }
 
     @Test
@@ -52,6 +52,100 @@ public class RelationalOperatorsTest {
                 .inlineTemplate("{{ var1 == var2 }}")
                 .render(model);
 
-        assertThat(result, is(equalTo("1")));
+        assertThat(result, is(equalTo("true")));
+    }
+
+    @Test
+    public void lessTrue() throws Exception {
+        JtwigModel model = new JtwigModel();
+        model.with("var1", 'a').with("var2", "b");
+
+        String result = JtwigTemplate
+                .inlineTemplate("{{ var1 < var2 }}")
+                .render(model);
+
+        assertThat(result, is(equalTo("true")));
+    }
+
+    @Test
+    public void lessFalse() throws Exception {
+        JtwigModel model = new JtwigModel();
+        model.with("var1", "b").with("var2", "a");
+
+        String result = JtwigTemplate
+                .inlineTemplate("{{ var1 < var2 }}")
+                .render(model);
+
+        assertThat(result, is(equalTo("false")));
+    }
+    @Test
+    public void greaterTrue() throws Exception {
+        JtwigModel model = new JtwigModel();
+        model.with("var1", 'a').with("var2", "b");
+
+        String result = JtwigTemplate
+                .inlineTemplate("{{ var1 > var2 }}")
+                .render(model);
+
+        assertThat(result, is(equalTo("false")));
+    }
+
+    @Test
+    public void greaterFalse() throws Exception {
+        JtwigModel model = new JtwigModel();
+        model.with("var1", "b").with("var2", "a");
+
+        String result = JtwigTemplate
+                .inlineTemplate("{{ var1 > var2 }}")
+                .render(model);
+
+        assertThat(result, is(equalTo("true")));
+    }
+
+    @Test
+    public void lessOrEqualTrue() throws Exception {
+        JtwigModel model = new JtwigModel();
+        model.with("var1", 'a').with("var2", "b");
+
+        String result = JtwigTemplate
+                .inlineTemplate("{{ var1 <= var2 }}")
+                .render(model);
+
+        assertThat(result, is(equalTo("true")));
+    }
+
+    @Test
+    public void lessOrEqualFalse() throws Exception {
+        JtwigModel model = new JtwigModel();
+        model.with("var1", "b").with("var2", "a");
+
+        String result = JtwigTemplate
+                .inlineTemplate("{{ var1 <= var2 }}")
+                .render(model);
+
+        assertThat(result, is(equalTo("false")));
+    }
+    @Test
+    public void greaterOrEqualTrue() throws Exception {
+        JtwigModel model = new JtwigModel();
+        model.with("var1", 'a').with("var2", "b");
+
+        String result = JtwigTemplate
+                .inlineTemplate("{{ var1 >= var2 }}")
+                .render(model);
+
+        assertThat(result, is(equalTo("false")));
+    }
+
+    @Test
+    public void greaterOrEqualFalse() throws Exception {
+        JtwigModel model = new JtwigModel();
+        model.with("var1", "b").with("var2", "a");
+
+        String result = JtwigTemplate
+                .inlineTemplate("{{ var1 >= var2 }}")
+                .render(model);
+
+        assertThat(result, is(equalTo("true")));
     }
 }

@@ -36,11 +36,19 @@ public class ListTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void comprehensionListDescendingIntegers() throws Exception {
+    public void comprehensionListAscendingRealIntegers() throws Exception {
 
-        String result = JtwigTemplate.inlineTemplate("{{ [3..1] }}").render(JtwigModel.newModel());
+        String result = JtwigTemplate.inlineTemplate("{{ [10..12] }}").render(JtwigModel.newModel());
 
-        assertThat(result, is("[3, 2, 1]"));
+        assertThat(result, is("[10, 11, 12]"));
+    }
+
+    @Test
+    public void comprehensionListDescendingRealIntegers() throws Exception {
+
+        String result = JtwigTemplate.inlineTemplate("{{ [30..28] }}").render(JtwigModel.newModel());
+
+        assertThat(result, is("[30, 29, 28]"));
     }
 
     @Test
@@ -55,9 +63,9 @@ public class ListTest extends AbstractIntegrationTest {
     @Test
     public void comprehensionListInvalid() throws Exception {
         expectedException.expect(CalculationException.class);
-        expectedException.expectMessage(containsString("Unable to calculate a list from a comprehension list starting with 'a' and ending with '1'"));
+        expectedException.expectMessage(containsString("Unable to calculate a list from a comprehension list starting with 'a' and ending with '10'"));
 
-        JtwigTemplate.inlineTemplate("{{ ['a'..1] }}").render(JtwigModel.newModel());
+        JtwigTemplate.inlineTemplate("{{ ['a'..10] }}").render(JtwigModel.newModel());
     }
 
     @Test

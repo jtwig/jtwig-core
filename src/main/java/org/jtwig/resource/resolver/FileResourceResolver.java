@@ -32,7 +32,7 @@ public class FileResourceResolver implements ResourceResolver {
 
     private Optional<Resource> resolve(Environment environment, File relativeFile) {
         if (relativeFile.exists()) {
-            return Optional.<Resource>of(new FileResource(environment.resources().getDefaultInputCharset(), relativeFile));
+            return Optional.<Resource>of(new FileResource(environment.getResourceEnvironment().getDefaultInputCharset(), relativeFile));
         } else {
             return Optional.absent();
         }

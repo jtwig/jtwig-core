@@ -3,11 +3,15 @@ package org.jtwig.resource.classpath;
 import org.junit.Test;
 
 import java.io.InputStream;
+import java.net.URL;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class DefaultClasspathResourceLoaderTest {
     private DefaultClasspathResourceLoader underTest = new DefaultClasspathResourceLoader(DefaultClasspathResourceLoaderTest.class.getClassLoader());
@@ -19,6 +23,39 @@ public class DefaultClasspathResourceLoaderTest {
         boolean result = underTest.exists(existentResource);
 
         assertThat(result, is(true));
+    }
+
+    @Test
+    public void httpUrl() throws Exception {
+        ClassLoader classLoader = mock(ClassLoader.class);
+        DefaultClasspathResourceLoader underTest = new DefaultClasspathResourceLoader(classLoader);
+        String resourcePath = "name";
+
+        when(classLoader.getResource(resourcePath)).thenReturn(new URL("http://asdasd"));
+
+        assertFalse(underTest.exists(resourcePath));
+    }
+
+    @Test
+    public void resourceNull() throws Exception {
+        ClassLoader classLoader = mock(ClassLoader.class);
+        DefaultClasspathResourceLoader underTest = new DefaultClasspathResourceLoader(classLoader);
+        String resourcePath = "name";
+
+        when(classLoader.getResource(resourcePath)).thenReturn(null);
+
+        assertFalse(underTest.exists(resourcePath));
+    }
+
+    @Test
+    public void resourceUrl() throws Exception {
+        ClassLoader classLoader = mock(ClassLoader.class);
+        DefaultClasspathResourceLoader underTest = new DefaultClasspathResourceLoader(classLoader);
+        String resourcePath = "name";
+
+        when(classLoader.getResource(resourcePath)).thenReturn(new URL("http://~^@asdasd"));
+
+        assertFalse(underTest.exists(resourcePath));
     }
 
     @Test

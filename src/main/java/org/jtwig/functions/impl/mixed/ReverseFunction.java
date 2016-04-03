@@ -2,7 +2,7 @@ package org.jtwig.functions.impl.mixed;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
-import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
 
 import java.lang.reflect.Array;
@@ -16,10 +16,10 @@ public class ReverseFunction extends SimpleJtwigFunction {
     }
 
     @Override
-    public Object execute(JtwigFunctionRequest request) {
+    public Object execute(FunctionRequest request) {
         request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
 
-        Object input = request.getArgument(0, Object.class);
+        Object input = request.get(0);
         if (input.getClass().isArray()) {
             return reverseArray((Object[]) input);
         } else if (input instanceof Iterable) {
@@ -28,10 +28,11 @@ public class ReverseFunction extends SimpleJtwigFunction {
             while (iterator.hasNext()) {
                 list.add(iterator.next());
             }
-            Lists.reverse(list);
-            return list;
+            return Lists.reverse(list);
+        } else if (input instanceof String) {
+            return StringUtils.reverse((String) input);
         } else {
-            return StringUtils.reverse(request.getArgument(0, String.class));
+            return input;
         }
     }
 
@@ -40,7 +41,7 @@ public class ReverseFunction extends SimpleJtwigFunction {
         Object[] newInstance = (Object[]) Array.newInstance(input.getClass().getComponentType(), array.length);
         for (int i = 0; i < newInstance.length / 2; i++) {
             newInstance[i] = array[newInstance.length - i - 1];
-            newInstance[i - newInstance.length - 1] = array[i];
+            newInstance[newInstance.length - i - 1] = array[i];
         }
         return newInstance;
     }

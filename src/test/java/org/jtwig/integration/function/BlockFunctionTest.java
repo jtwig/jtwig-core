@@ -24,6 +24,14 @@ public class BlockFunctionTest extends AbstractIntegrationTest {
     }
 
     @Test
+    public void blockIfNotFound() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{{ block('one') }}")
+                .render(JtwigModel.newModel());
+
+        assertThat(result, is(""));
+    }
+
+    @Test
     public void blockWithExtends() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% extends 'a' %}{% block one %}a{% endblock %}", configuration()
                 .resources().withResourceResolver(new ResourceResolver() {

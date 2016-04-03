@@ -1,21 +1,23 @@
 package org.jtwig;
 
 import com.google.common.base.Optional;
-import org.jtwig.context.RenderContextFactory;
-import org.jtwig.context.RenderContextHolder;
-import org.jtwig.environment.DefaultEnvironmentConfiguration;
-import org.jtwig.environment.Environment;
-import org.jtwig.environment.EnvironmentConfiguration;
-import org.jtwig.environment.EnvironmentFactory;
+import org.jtwig.environment.*;
 import org.jtwig.model.tree.Node;
-import org.jtwig.render.RenderResult;
-import org.jtwig.render.StreamRenderResult;
-import org.jtwig.render.StringBuilderRenderResult;
+import org.jtwig.render.RenderRequest;
+import org.jtwig.render.context.RenderContextHolder;
+import org.jtwig.render.context.StackedContext;
+import org.jtwig.render.context.model.*;
+import org.jtwig.renderable.RenderResult;
+import org.jtwig.renderable.StreamRenderResult;
+import org.jtwig.renderable.StringBuilderRenderResult;
 import org.jtwig.resource.FileResource;
 import org.jtwig.resource.Resource;
 import org.jtwig.resource.StringResource;
 import org.jtwig.resource.resolver.ClasspathResourceResolver;
-import org.jtwig.util.OptionalUtils;
+import org.jtwig.value.context.IsolateParentValueContext;
+import org.jtwig.value.context.JtwigModelValueContext;
+import org.jtwig.value.context.MapValueContext;
+import org.jtwig.value.context.ValueContext;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -43,13 +45,17 @@ public class JtwigTemplate {
             location = ClasspathResourceResolver.PREFIX + location;
         }
         Environment environment = ENVIRONMENT_FACTORY.create(environmentConfiguration);
-        Optional<Resource> resource = environment.resources().getResourceResolver().resolve(environment, null, location);
-        return new JtwigTemplate(resource.or(OptionalUtils.<Resource>throwException(String.format("Classpath resource '%s' not found", location))), environment);
+        Optional<Resource> resource = environment.getResourceEnvironment().getResourceResolver().resolve(environment, null, location);
+        if (resource.isPresent()) {
+            return new JtwigTemplate(environment, resource.get());
+        } else {
+            throw new IllegalArgumentException(String.format("Classpath resource '%s' not found", location));
+        }
     }
 
     public static JtwigTemplate fileTemplate (File file, EnvironmentConfiguration environmentConfiguration) {
         Environment environment = ENVIRONMENT_FACTORY.create(environmentConfiguration);
-        return new JtwigTemplate(new FileResource(environment.resources().getDefaultInputCharset(), file), environment);
+        return new JtwigTemplate(environment, new FileResource(environment.getResourceEnvironment().getDefaultInputCharset(), file));
     }
 
 
@@ -59,22 +65,15 @@ public class JtwigTemplate {
 
     public static JtwigTemplate fileTemplate (String path, EnvironmentConfiguration environmentConfiguration) {
         Environment environment = ENVIRONMENT_FACTORY.create(environmentConfiguration);
-        return new JtwigTemplate(new FileResource(environment.resources().getDefaultInputCharset(), new File(path)), environment);
+        return new JtwigTemplate(environment, new FileResource(environment.getResourceEnvironment().getDefaultInputCharset(), new File(path)));
     }
 
     public static JtwigTemplate fileTemplate (String path) {
         return fileTemplate(path, new DefaultEnvironmentConfiguration());
     }
 
-    private final RenderContextFactory renderContextFactory = new RenderContextFactory();
     private final Resource resource;
     private final Environment environment;
-
-    @Deprecated
-    public JtwigTemplate(Resource resource, Environment environment) {
-        this.resource = resource;
-        this.environment = environment;
-    }
 
     public JtwigTemplate(Environment environment, Resource resource) {
         this.resource = resource;
@@ -92,12 +91,22 @@ public class JtwigTemplate {
         render(model, result);
     }
 
-    private void render(JtwigModel model, RenderResult result) {
-        Node node = environment.parser().parse(resource);
+    private void render(JtwigModel model, RenderResult renderResult) {
+        StackedContext<ValueContext> valueContextContext = StackedContext.<ValueContext>context(new IsolateParentValueContext(new JtwigModelValueContext(model), MapValueContext.newContext()));
+        StackedContext<EscapeMode> escapeModeContext = StackedContext.context(environment.getRenderEnvironment().getInitialEscapeMode());
+        StackedContext<Resource> resourceContext = StackedContext.context(resource);
+        StackedContext<BlockContext> blockContext = StackedContext.context(BlockContext.newContext());
+        StackedContext<MacroDefinitionContext> macroDefinitionContext = StackedContext.emptyContext();
+        StackedContext<MacroAliasesContext> macroContext = StackedContext.emptyContext();
 
-        RenderContextHolder.set(renderContextFactory.create(model, resource, environment))
-                .nodeRenderer()
-                .render(node)
-                .appendTo(result);
+        RenderContext renderContext = new RenderContext(valueContextContext, escapeModeContext, resourceContext, blockContext, macroDefinitionContext, macroContext);
+
+        EnvironmentHolder.set(environment);
+        RenderContextHolder.set(renderContext);
+
+        Node node = environment.getParser().parse(resource);
+        environment.getRenderEnvironment().getRenderNodeService()
+                .render(new RenderRequest(renderContext, environment), node)
+                .appendTo(renderResult);
     }
 }

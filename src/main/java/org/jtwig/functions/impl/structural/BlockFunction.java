@@ -1,12 +1,10 @@
 package org.jtwig.functions.impl.structural;
 
-import com.google.common.base.Function;
-import org.jtwig.context.RenderContext;
-import org.jtwig.context.RenderContextHolder;
-import org.jtwig.functions.JtwigFunctionRequest;
+import com.google.common.base.Optional;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
-import org.jtwig.render.Renderable;
-import org.jtwig.render.StringBuilderRenderResult;
+import org.jtwig.model.tree.Node;
+import org.jtwig.renderable.StringBuilderRenderResult;
 
 public class BlockFunction extends SimpleJtwigFunction {
     @Override
@@ -15,22 +13,17 @@ public class BlockFunction extends SimpleJtwigFunction {
     }
 
     @Override
-    public Object execute(JtwigFunctionRequest request) {
+    public Object execute(FunctionRequest request) {
         request.minimumNumberOfArguments(1);
         request.maximumNumberOfArguments(1);
-        String name = request.getArgument(0, String.class);
-        return getRenderContext().currentResource()
-                .block(name)
-                .transform(new Function<Renderable, String>() {
-                    @Override
-                    public String apply(Renderable input) {
-                        return input.appendTo(new StringBuilderRenderResult()).content();
-                    }
-                })
-                .or("");
-    }
+        String name = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
 
-    protected RenderContext getRenderContext() {
-        return RenderContextHolder.get();
+        Optional<Node> nodeOptional = request.getRenderContext().getBlockContext().getCurrent().get(name);
+        if (nodeOptional.isPresent()) {
+            return request.getEnvironment().getRenderEnvironment().getRenderNodeService().render(request, nodeOptional.get())
+                    .appendTo(new StringBuilderRenderResult()).content();
+        } else {
+            return "";
+        }
     }
 }

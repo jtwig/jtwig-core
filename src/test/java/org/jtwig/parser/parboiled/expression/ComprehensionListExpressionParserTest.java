@@ -27,6 +27,7 @@ public class ComprehensionListExpressionParserTest extends AbstractParserTest {
         Expression exp = result.valueStack.pop();
         assertThat(exp, instanceOf(ComprehensionListExpression.class));
     }
+
     @Test
     public void missingEndBracketComprehension() throws Exception {
         expectedException.expectCause((Matcher)CoreMatchers.instanceOf(ParseException.class));

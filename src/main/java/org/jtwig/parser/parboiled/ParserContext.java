@@ -1,7 +1,5 @@
 package org.jtwig.parser.parboiled;
 
-import org.jtwig.model.expression.operation.binary.BinaryOperator;
-import org.jtwig.model.expression.operation.unary.UnaryOperator;
 import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.config.SyntaxConfiguration;
 import org.jtwig.parser.parboiled.base.*;
@@ -10,6 +8,8 @@ import org.jtwig.parser.parboiled.expression.operator.BinaryOperatorParser;
 import org.jtwig.parser.parboiled.expression.operator.UnaryOperatorParser;
 import org.jtwig.parser.parboiled.expression.test.*;
 import org.jtwig.parser.parboiled.node.*;
+import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
+import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
 import org.jtwig.resource.Resource;
 import org.parboiled.BaseParser;
 

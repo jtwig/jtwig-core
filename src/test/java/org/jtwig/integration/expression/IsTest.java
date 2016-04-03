@@ -82,7 +82,7 @@ public class IsTest extends AbstractIntegrationTest {
     @Test
     public void isIterableArrayFunction () throws Exception {
         JtwigModel model = new JtwigModel();
-        model.add("value", new Object[0]);
+        model.with("value", new Object[0]);
 
         String result = JtwigTemplate.inlineTemplate("{% if (value is iterable) %}Hi{% endif %}")
                 .render(model);

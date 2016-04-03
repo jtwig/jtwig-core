@@ -1,7 +1,7 @@
 package org.jtwig.parser.parboiled.expression;
 
+import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.FunctionExpression;
-import org.jtwig.model.expression.function.Argument;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.base.BasicParser;
 import org.jtwig.parser.parboiled.base.LexicParser;
@@ -11,7 +11,7 @@ import org.jtwig.parser.parboiled.model.Keyword;
 import org.parboiled.Rule;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import static org.parboiled.Parboiled.createParser;
 
@@ -59,7 +59,7 @@ public class FunctionExpressionParser extends ExpressionParser<FunctionExpressio
         }
     }
 
-    public static class ArgumentsParser extends BasicParser<Collection<Argument>> {
+    public static class ArgumentsParser extends BasicParser<List<Expression>> {
         public ArgumentsParser(ParserContext context) {
             super(ArgumentsParser.class, context);
         }
@@ -67,7 +67,7 @@ public class FunctionExpressionParser extends ExpressionParser<FunctionExpressio
         public Rule Arguments() {
             SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
             return Sequence(
-                    push(new ArrayList<Argument>()),
+                    push(new ArrayList<Expression>()),
                     "(", spacingParser.Spacing(),
                     Optional(
                             ArgumentExpression(),
@@ -86,7 +86,7 @@ public class FunctionExpressionParser extends ExpressionParser<FunctionExpressio
             return Sequence(
                     anyExpressionParser.ExpressionRule(),
                     spacingParser.Spacing(),
-                    peek(1).add(new Argument(anyExpressionParser.pop()))
+                    peek(1).add(anyExpressionParser.pop())
             );
         }
     }

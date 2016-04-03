@@ -2,7 +2,6 @@ package org.jtwig.property;
 
 import com.google.common.base.Optional;
 import org.jtwig.reflection.model.Value;
-import org.jtwig.value.JtwigValue;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -21,7 +20,7 @@ public class MapPropertyResolverTest {
 
     @Test
     public void resolveWhenWithArguments() throws Exception {
-        when(request.getArguments()).thenReturn(asList(mock(JtwigValue.class)));
+        when(request.getArguments()).thenReturn(asList(new Object()));
 
         Optional<Value> result = underTest.resolve(request);
 
@@ -30,7 +29,7 @@ public class MapPropertyResolverTest {
 
     @Test
     public void resolveWhenNoArgumentsButNotAMap() throws Exception {
-        when(request.getArguments()).thenReturn(Collections.<JtwigValue>emptyList());
+        when(request.getArguments()).thenReturn(Collections.emptyList());
         when(request.getEntity()).thenReturn(new Value(1));
 
         Optional<Value> result = underTest.resolve(request);
@@ -40,7 +39,7 @@ public class MapPropertyResolverTest {
 
     @Test
     public void resolveWhenNoArgumentsAndMapButKeyNotFound() throws Exception {
-        when(request.getArguments()).thenReturn(Collections.<JtwigValue>emptyList());
+        when(request.getArguments()).thenReturn(Collections.emptyList());
         when(request.getEntity()).thenReturn(new Value(new HashMap<>()));
         when(request.getPropertyName()).thenReturn("property");
 
@@ -52,7 +51,7 @@ public class MapPropertyResolverTest {
     @Test
     public void resolveWhenNoArgumentsAndMapButKeyFound() throws Exception {
         final String property = "property";
-        when(request.getArguments()).thenReturn(Collections.<JtwigValue>emptyList());
+        when(request.getArguments()).thenReturn(Collections.emptyList());
         when(request.getEntity()).thenReturn(new Value(new HashMap() {{
             put(property, "hello");
         }}));

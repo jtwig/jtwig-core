@@ -1,9 +1,8 @@
 package org.jtwig.functions.impl.map;
 
-import org.jtwig.functions.JtwigFunctionRequest;
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
-
-import java.util.Map;
+import org.jtwig.value.WrappedCollection;
 
 public class KeysFunction extends SimpleJtwigFunction {
     @Override
@@ -12,9 +11,12 @@ public class KeysFunction extends SimpleJtwigFunction {
     }
 
     @Override
-    public Object execute(JtwigFunctionRequest request) {
+    public Object execute(FunctionRequest request) {
         request.maximumNumberOfArguments(1).minimumNumberOfArguments(1);
-        Map map = request.getArgument(0, Map.class);
-        return map.keySet();
+
+        WrappedCollection wrappedCollection = request.getEnvironment().getValueEnvironment().getCollectionConverter().convert(request.get(0))
+                .or(WrappedCollection.empty());
+
+        return wrappedCollection.keys();
     }
 }

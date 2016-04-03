@@ -1,10 +1,9 @@
 package org.jtwig.parser.parboiled.expression;
 
 import org.jtwig.model.expression.*;
-import org.jtwig.model.expression.operation.binary.calculators.MultiplyOperationCalculator;
-import org.jtwig.model.expression.operation.binary.calculators.SubtractOperationCalculator;
-import org.jtwig.model.expression.operation.binary.calculators.SumOperationCalculator;
 import org.jtwig.parser.parboiled.AbstractParserTest;
+import org.jtwig.render.expression.calculator.operation.binary.impl.SubtractOperator;
+import org.jtwig.render.expression.calculator.operation.binary.impl.SumOperator;
 import org.junit.Test;
 import org.parboiled.support.ParsingResult;
 
@@ -40,7 +39,7 @@ public class AnyExpressionParserTest extends AbstractParserTest {
         BinaryOperationExpression exp = (BinaryOperationExpression) expression;
         assertThat(exp.getLeftOperand(), instanceOf(ConstantExpression.class));
         assertThat(exp.getRightOperand(), instanceOf(ConstantExpression.class));
-        assertThat(exp.getCalculator(), instanceOf(SumOperationCalculator.class));
+        assertThat(exp.getBinaryOperator(), instanceOf(SumOperator.class));
     }
 
     @Test
@@ -51,7 +50,7 @@ public class AnyExpressionParserTest extends AbstractParserTest {
         Expression expression = result.valueStack.pop();
         assertThat(expression, instanceOf(BinaryOperationExpression.class));
         BinaryOperationExpression exp = (BinaryOperationExpression) expression;
-        assertThat(exp.getCalculator(), instanceOf(SubtractOperationCalculator.class));
+        assertThat(exp.getBinaryOperator(), instanceOf(SubtractOperator.class));
     }
 
     @Test
@@ -62,7 +61,7 @@ public class AnyExpressionParserTest extends AbstractParserTest {
         Expression expression = result.valueStack.pop();
         assertThat(expression, instanceOf(BinaryOperationExpression.class));
         BinaryOperationExpression exp = (BinaryOperationExpression) expression;
-        assertThat(exp.getCalculator(), instanceOf(SubtractOperationCalculator.class));
+        assertThat(exp.getBinaryOperator(), instanceOf(SubtractOperator.class));
     }
 
     @Test
@@ -73,7 +72,7 @@ public class AnyExpressionParserTest extends AbstractParserTest {
         Expression expression = result.valueStack.pop();
         assertThat(expression, instanceOf(BinaryOperationExpression.class));
         BinaryOperationExpression exp = (BinaryOperationExpression) expression;
-        assertThat(exp.getCalculator(), instanceOf(SumOperationCalculator.class));
+        assertThat(exp.getBinaryOperator(), instanceOf(SumOperator.class));
     }
 
     @Test

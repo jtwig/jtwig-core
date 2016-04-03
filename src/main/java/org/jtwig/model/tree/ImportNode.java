@@ -1,17 +1,8 @@
 package org.jtwig.model.tree;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
-import org.jtwig.context.RenderContext;
-import org.jtwig.context.model.ResourceRenderResult;
-import org.jtwig.environment.Environment;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
-import org.jtwig.render.Renderable;
-import org.jtwig.render.impl.EmptyRenderable;
-import org.jtwig.resource.Resource;
-import org.jtwig.resource.exceptions.ResourceNotFoundException;
 
 public class ImportNode extends Node {
     private final Expression importExpression;
@@ -31,26 +22,4 @@ public class ImportNode extends Node {
         return aliasIdentifier;
     }
 
-    @Override
-    public Renderable render(RenderContext context) {
-        String path = importExpression.calculate(context).asString();
-        Environment environment = context.environment();
-        Optional<Resource> resource = environment.resources().getResourceResolver()
-                .resolve(environment, context.currentResource().resource(), path);
-        ResourceRenderResult resourceRenderResult = context
-                .resourceRenderer()
-                .render(resource.or(throwException(path)));
-        context.valueContext().add(aliasIdentifier.getIdentifier(), resourceRenderResult.context().macro());
-        return EmptyRenderable.instance();
-    }
-
-
-    private Supplier<Resource> throwException (final String path) {
-        return new Supplier<Resource>() {
-            @Override
-            public Resource get() {
-                throw new ResourceNotFoundException(String.format("%s: Resource '%s' not found", getPosition(), path));
-            }
-        };
-    }
 }

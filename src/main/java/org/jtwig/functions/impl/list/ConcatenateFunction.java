@@ -1,7 +1,7 @@
 package org.jtwig.functions.impl.list;
 
+import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.JtwigFunction;
-import org.jtwig.functions.JtwigFunctionRequest;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -18,7 +18,7 @@ public class ConcatenateFunction implements JtwigFunction {
     }
 
     @Override
-    public Object execute(JtwigFunctionRequest request) {
+    public Object execute(FunctionRequest request) {
         request.minimumNumberOfArguments(1);
         StringBuilder builder = new StringBuilder();
         for (Object piece : request.getRemainingArguments(0)) {

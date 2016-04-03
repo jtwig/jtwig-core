@@ -52,12 +52,12 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     @Override
     public EnvironmentConfiguration build() {
         return new EnvironmentConfiguration(
-                valueConfigurationBuilder.build(),
                 resourceConfigurationBuilder.build(),
                 functionResolverConfiguration.build(),
                 propertyResolverConfigurationBuilder.build(),
                 enumerationListStrategyConfigurationBuilder.build(),
                 jtwigParserConfigurationBuilder.build(),
+                valueConfigurationBuilder.build(),
                 renderConfiguration.build(),
                 parameters,
                 extensions);
@@ -83,12 +83,10 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         return propertyResolverConfigurationBuilder;
     }
 
+    public AndValueConfigurationBuilder value () { return valueConfigurationBuilder; }
+
     public AndEnumerationListStrategyConfigurationBuilder listEnumeration() {
         return enumerationListStrategyConfigurationBuilder;
-    }
-
-    public AndValueConfigurationBuilder value () {
-        return valueConfigurationBuilder;
     }
 
     public <T> EnvironmentConfigurationBuilder withParameter (String name, T value) {

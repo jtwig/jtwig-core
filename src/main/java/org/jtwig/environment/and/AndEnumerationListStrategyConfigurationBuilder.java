@@ -1,8 +1,8 @@
 package org.jtwig.environment.and;
 
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
-import org.jtwig.model.expression.lists.EnumerationListStrategyConfiguration;
-import org.jtwig.model.expression.lists.EnumerationListStrategyConfigurationBuilder;
+import org.jtwig.render.expression.calculator.enumerated.config.EnumerationListStrategyConfiguration;
+import org.jtwig.render.expression.calculator.enumerated.config.EnumerationListStrategyConfigurationBuilder;
 
 public class AndEnumerationListStrategyConfigurationBuilder extends EnumerationListStrategyConfigurationBuilder<AndEnumerationListStrategyConfigurationBuilder> implements AndBuilder<EnvironmentConfigurationBuilder> {
     private final EnvironmentConfigurationBuilder environmentConfigurationBuilder;

@@ -5,5 +5,5 @@ import java.util.Collection;
 public interface JtwigFunction {
     String name ();
     Collection<String> aliases ();
-    Object execute (JtwigFunctionRequest request);
+    Object execute (FunctionRequest request);
 }

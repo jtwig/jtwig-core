@@ -1,9 +1,8 @@
 package org.jtwig.property;
 
 import com.google.common.base.Optional;
-import org.jtwig.context.values.SimpleValueContext;
 import org.jtwig.reflection.model.Value;
-import org.jtwig.value.JtwigValue;
+import org.jtwig.value.context.MapValueContext;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -21,7 +20,7 @@ public class ValueContextPropertyResolverTest {
 
     @Test
     public void resolveWithArguments() throws Exception {
-        when(request.getArguments()).thenReturn(asList(mock(JtwigValue.class)));
+        when(request.getArguments()).thenReturn(asList(new Object()));
 
         Optional<Value> result = underTest.resolve(request);
 
@@ -48,9 +47,9 @@ public class ValueContextPropertyResolverTest {
 
     @Test
     public void resolveWhenValueValueContextNotFindValue() throws Exception {
-        HashMap<String, Value> source = new HashMap<>();
-        when(request.getEntity()).thenReturn(new Value(new SimpleValueContext(source)));
+        HashMap<String, Object> source = new HashMap<>();
         when(request.getPropertyName()).thenReturn("test");
+        when(request.getEntity()).thenReturn(new Value(new MapValueContext(source)));
 
         Optional<Value> result = underTest.resolve(request);
 
@@ -59,10 +58,10 @@ public class ValueContextPropertyResolverTest {
 
     @Test
     public void resolveWhenValueValueContextFindValue() throws Exception {
-        HashMap<String, Value> source = new HashMap<>();
-        source.put("test", new Value("value"));
-        when(request.getEntity()).thenReturn(new Value(new SimpleValueContext(source)));
+        HashMap<String, Object> source = new HashMap<>();
+        source.put("test", "value");
         when(request.getPropertyName()).thenReturn("test");
+        when(request.getEntity()).thenReturn(new Value(new MapValueContext(source)));
 
         Optional<Value> result = underTest.resolve(request);
 

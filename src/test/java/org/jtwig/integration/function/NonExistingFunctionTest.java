@@ -19,7 +19,7 @@ public class NonExistingFunctionTest extends AbstractIntegrationTest {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{{ callMeBaby('test', 1) }}");
 
         expectedException.expect(CalculationException.class);
-        expectedException.expectMessage(containsString("Unable to resolve function 'callMeBaby' with arguments [<test> (class java.lang.String), <1> (class java.math.BigDecimal)]"));
+        expectedException.expectMessage(containsString("Unable to resolve function 'callMeBaby' with arguments [test, 1]"));
 
         template.render(JtwigModel.newModel());
     }
