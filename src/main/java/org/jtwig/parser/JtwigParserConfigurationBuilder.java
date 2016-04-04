@@ -1,9 +1,9 @@
 package org.jtwig.parser;
 
+import com.google.common.base.Optional;
 import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.parser.addon.AddonParserProvider;
-import org.jtwig.parser.cache.NoTemplateCacheProvider;
-import org.jtwig.parser.cache.TemplateCacheProvider;
+import org.jtwig.parser.cache.TemplateCache;
 import org.jtwig.parser.config.AndSyntaxConfigurationBuilder;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
 import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
@@ -16,7 +16,7 @@ public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationB
     private Collection<AddonParserProvider> addonParserProviders = new ArrayList<>();
     private Collection<UnaryOperator> unaryOperators = new ArrayList<>();
     private Collection<BinaryOperator> binaryOperators = new ArrayList<>();
-    private TemplateCacheProvider templateCacheProvider = new NoTemplateCacheProvider();
+    private Optional<TemplateCache> templateCache;
 
     public JtwigParserConfigurationBuilder () {
         this.syntaxConfiguration  = new AndSyntaxConfigurationBuilder<>((B) this);
@@ -25,7 +25,7 @@ public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationB
         this.syntaxConfiguration  = new AndSyntaxConfigurationBuilder<>((B) this, prototype.getSyntaxConfiguration());
         this
                 .withAddonParserProviders(prototype.getAddonParserProviders())
-                .withCacheProvider(prototype.getTemplateCacheProvider())
+                .withTemplateCache(prototype.getTemplateCache().orNull())
                 .withBinaryOperators(prototype.getBinaryOperators())
                 .withUnaryOperators(prototype.getUnaryOperators())
         ;
@@ -40,8 +40,12 @@ public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationB
         return self();
     }
 
-    public B withCacheProvider(TemplateCacheProvider templateCacheProvider) {
-        this.templateCacheProvider = templateCacheProvider;
+    public B withTemplateCache(TemplateCache templateCache) {
+        this.templateCache = Optional.fromNullable(templateCache);
+        return self();
+    }
+    public B withoutTemplateCache() {
+        this.templateCache = Optional.absent();
         return self();
     }
 
@@ -76,6 +80,6 @@ public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationB
 
     @Override
     public JtwigParserConfiguration build() {
-        return new JtwigParserConfiguration(syntaxConfiguration.build(), addonParserProviders, unaryOperators, binaryOperators, templateCacheProvider);
+        return new JtwigParserConfiguration(syntaxConfiguration.build(), addonParserProviders, unaryOperators, binaryOperators, templateCache);
     }
 }
