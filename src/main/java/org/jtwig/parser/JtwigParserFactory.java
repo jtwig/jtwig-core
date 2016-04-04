@@ -1,9 +1,11 @@
 package org.jtwig.parser;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 import org.apache.commons.lang3.StringUtils;
 import org.jtwig.model.tree.Node;
+import org.jtwig.parser.cache.TemplateCache;
 import org.jtwig.parser.parboiled.DocumentParser;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.util.ParboiledExceptionMessageExtractor;
@@ -19,7 +21,12 @@ import static org.parboiled.common.FileUtils.readAllText;
 
 public class JtwigParserFactory {
     public JtwigParser create (JtwigParserConfiguration configuration) {
-        return new CachedJtwigParser(configuration.getTemplateCacheProvider().cache(), new ParboiledJtwigParser(configuration));
+        Optional<TemplateCache> templateCache = configuration.getTemplateCache();
+        if (templateCache.isPresent()) {
+            return new CachedJtwigParser(templateCache.get(), new ParboiledJtwigParser(configuration));
+        } else {
+            return new ParboiledJtwigParser(configuration);
+        }
     }
 
     public static class ParboiledJtwigParser implements JtwigParser {

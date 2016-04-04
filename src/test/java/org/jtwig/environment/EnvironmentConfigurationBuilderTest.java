@@ -3,8 +3,6 @@ package org.jtwig.environment;
 import org.jtwig.functions.JtwigFunction;
 import org.jtwig.parser.JtwigParserConfiguration;
 import org.jtwig.parser.addon.AddonParserProvider;
-import org.jtwig.parser.cache.NoTemplateCacheProvider;
-import org.jtwig.parser.cache.TemplateCacheProvider;
 import org.jtwig.property.PropertyResolver;
 import org.jtwig.render.context.model.EscapeMode;
 import org.jtwig.render.expression.calculator.enumerated.EnumerationListStrategy;
@@ -28,8 +26,6 @@ public class EnvironmentConfigurationBuilderTest {
 
     @Test
     public void parserConfiguration() throws Exception {
-        TemplateCacheProvider templateCacheProvider = new NoTemplateCacheProvider();
-
         EnvironmentConfiguration result = new EnvironmentConfigurationBuilder().parser()
                 .syntax()
                 .withStartCode("{%").withEndCode("%}")
@@ -39,7 +35,7 @@ public class EnvironmentConfigurationBuilderTest {
                 .withAddonParserProvider(customAddonParser())
                 .withBinaryOperator(customBinaryOperator())
                 .withUnaryOperator(customUnaryOperator())
-                .withCacheProvider(templateCacheProvider)
+                .withoutTemplateCache()
                 .and()
                 .build();
 
@@ -53,7 +49,7 @@ public class EnvironmentConfigurationBuilderTest {
         assertThat(parser.getAddonParserProviders(), hasItem(addonParserProvider));
         assertThat(parser.getBinaryOperators(), hasItem(binaryOperator));
         assertThat(parser.getUnaryOperators(), hasItem(unaryOperator));
-        assertThat(parser.getTemplateCacheProvider(), is(templateCacheProvider));
+        assertThat(parser.getTemplateCache().isPresent(), is(false));
     }
 
     @Test

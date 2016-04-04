@@ -1,6 +1,7 @@
 package org.jtwig.integration.node;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.Environment;
@@ -9,11 +10,13 @@ import org.jtwig.parser.ParseException;
 import org.jtwig.resource.Resource;
 import org.jtwig.resource.StringResource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
+import org.jtwig.resource.resolver.InMemoryResourceResolver;
 import org.jtwig.resource.resolver.ResourceResolver;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
@@ -125,6 +128,40 @@ public class ExtendsTest extends AbstractIntegrationTest {
 
         JtwigTemplate.inlineTemplate("{% extends 'asdasd' %}{% if (true) %}{% endif %}")
                 .render(JtwigModel.newModel());
+    }
+
+
+    @Test
+    public void extendsInsideFor() throws Exception {
+
+        String result = JtwigTemplate.inlineTemplate("{% extends 'a' %}" +
+                "{% block post %}- {{ item.title }}{% endblock %}", configuration()
+                .resources()
+                .withResourceResolver(new InMemoryResourceResolver(ImmutableMap.<String, Resource>builder()
+                        .put("a", new StringResource("{% for item in posts %}" +
+                                "{% block post %}{{ item.title }}{% endblock %}" +
+                                "{% endfor %}"))
+                        .build()))
+                .and()
+                .build())
+                .render(JtwigModel.newModel().with("posts", asList(
+                        new Item("a"),
+                        new Item("b")
+                )));
+
+        assertThat(result, is("- a- b"));
+    }
+
+    public static class Item {
+        private final String title;
+
+        public Item(String title) {
+            this.title = title;
+        }
+
+        public String getTitle() {
+            return title;
+        }
     }
 
     private ResourceResolver resolvePath(final String path, final String content) {

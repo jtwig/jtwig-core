@@ -1,7 +1,9 @@
 package org.jtwig.parser;
 
+import com.google.common.base.Optional;
 import org.jtwig.parser.addon.AddonParserProvider;
-import org.jtwig.parser.cache.NoTemplateCacheProvider;
+import org.jtwig.parser.cache.InMemoryConcurrentPersistentTemplateCache;
+import org.jtwig.parser.cache.TemplateCache;
 import org.jtwig.parser.config.DefaultSyntaxConfiguration;
 import org.jtwig.render.expression.calculator.operation.binary.impl.*;
 import org.jtwig.render.expression.calculator.operation.unary.impl.NegativeUnaryOperator;
@@ -44,6 +46,6 @@ public class DefaultJtwigParserConfiguration extends JtwigParserConfiguration {
                         new EquivalentOperator(),
                         new DifferentOperator()
                 ),
-                new NoTemplateCacheProvider());
+                Optional.<TemplateCache>of(new InMemoryConcurrentPersistentTemplateCache()));
     }
 }

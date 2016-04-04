@@ -1,7 +1,8 @@
 package org.jtwig.parser;
 
+import com.google.common.base.Optional;
 import org.jtwig.parser.addon.AddonParserProvider;
-import org.jtwig.parser.cache.TemplateCacheProvider;
+import org.jtwig.parser.cache.TemplateCache;
 import org.jtwig.parser.config.SyntaxConfiguration;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
 import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
@@ -13,14 +14,14 @@ public class JtwigParserConfiguration {
     private final Collection<AddonParserProvider> addonParserProviders;
     private final Collection<UnaryOperator> unaryOperators;
     private final Collection<BinaryOperator> binaryOperators;
-    private final TemplateCacheProvider templateCacheProvider;
+    private final Optional<TemplateCache> templateCache;
 
-    public JtwigParserConfiguration(SyntaxConfiguration syntaxConfiguration, Collection<AddonParserProvider> addonParserProviders, Collection<UnaryOperator> unaryOperators, Collection<BinaryOperator> binaryOperators, TemplateCacheProvider templateCacheProvider) {
+    public JtwigParserConfiguration(SyntaxConfiguration syntaxConfiguration, Collection<AddonParserProvider> addonParserProviders, Collection<UnaryOperator> unaryOperators, Collection<BinaryOperator> binaryOperators, Optional<TemplateCache> templateCache) {
         this.syntaxConfiguration = syntaxConfiguration;
         this.addonParserProviders = addonParserProviders;
         this.unaryOperators = unaryOperators;
         this.binaryOperators = binaryOperators;
-        this.templateCacheProvider = templateCacheProvider;
+        this.templateCache = templateCache;
     }
 
     public SyntaxConfiguration getSyntaxConfiguration() {
@@ -31,8 +32,8 @@ public class JtwigParserConfiguration {
         return addonParserProviders;
     }
 
-    public TemplateCacheProvider getTemplateCacheProvider() {
-        return templateCacheProvider;
+    public Optional<TemplateCache> getTemplateCache() {
+        return templateCache;
     }
 
     public Collection<UnaryOperator> getUnaryOperators() {
