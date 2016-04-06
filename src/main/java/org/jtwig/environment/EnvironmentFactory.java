@@ -1,7 +1,7 @@
 package org.jtwig.environment;
 
 import org.jtwig.extension.Extension;
-import org.jtwig.functions.resolver.FunctionResolverFactory;
+import org.jtwig.functions.environment.FunctionResolverFactory;
 import org.jtwig.parser.JtwigParserFactory;
 import org.jtwig.property.PropertyResolverFactory;
 import org.jtwig.render.environment.RenderEnvironmentFactory;
@@ -53,11 +53,11 @@ public class EnvironmentFactory {
                 jtwigParserFactory.create(environmentConfiguration.getJtwigParserConfiguration()),
                 environmentConfiguration.getParameters(),
                 resourceEnvironmentFactory.create(environmentConfiguration.getResourceConfiguration()),
-                functionResolverFactory.create(environmentConfiguration.getFunctionResolverConfiguration()),
-                propertyResolverFactory.create(environmentConfiguration.getPropertyResolverConfiguration()),
+                functionResolverFactory.create(environmentConfiguration.getFunctions()),
+                propertyResolverFactory.create(environmentConfiguration.getPropertyResolvers()),
                 renderEnvironmentFactory.create(environmentConfiguration.getRenderConfiguration()),
                 valueEnvironmentFactory.create(environmentConfiguration.getValueConfiguration()),
-                enumerationListStrategyFactory.create(environmentConfiguration.getEnumerationListConfiguration())
+                enumerationListStrategyFactory.create(environmentConfiguration.getEnumerationStrategies())
         );
     }
 }

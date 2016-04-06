@@ -1,4 +1,4 @@
-package org.jtwig.functions.resolver;
+package org.jtwig.functions.config;
 
 import org.jtwig.functions.JtwigFunction;
 import org.jtwig.functions.impl.control.EscapeFunction;
@@ -14,10 +14,11 @@ import org.jtwig.functions.impl.string.*;
 import org.jtwig.functions.impl.structural.BlockFunction;
 import org.jtwig.util.ClasspathFinder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
-public class DefaultFunctionResolverConfiguration extends FunctionResolverConfiguration {
-    public DefaultFunctionResolverConfiguration() {
+public class DefaultJtwigFunctionList extends ArrayList<JtwigFunction> {
+    public DefaultJtwigFunctionList() {
         super(Arrays.<JtwigFunction>asList(
                 // Logical
                 new DefinedFunction(),

@@ -6,12 +6,13 @@ import org.jtwig.property.method.MethodNameMethodPropertyExtractor;
 import org.jtwig.property.method.MethodPropertyExtractor;
 import org.jtwig.property.method.RetrieveArgumentsService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static java.util.Arrays.asList;
 
-public class DefaultPropertyResolverConfiguration extends PropertyResolverConfiguration {
-    public DefaultPropertyResolverConfiguration() {
+public class DefaultPropertyResolverList extends ArrayList<PropertyResolver> {
+    public DefaultPropertyResolverList() {
         super(asList(
                 new ValueContextPropertyResolver(),
                 new MacroPropertyResolver(new MacroRender()),

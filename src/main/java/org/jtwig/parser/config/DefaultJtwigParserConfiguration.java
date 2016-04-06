@@ -1,10 +1,9 @@
-package org.jtwig.parser;
+package org.jtwig.parser.config;
 
 import com.google.common.base.Optional;
 import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.cache.InMemoryConcurrentPersistentTemplateCache;
 import org.jtwig.parser.cache.TemplateCache;
-import org.jtwig.parser.config.DefaultSyntaxConfiguration;
 import org.jtwig.render.expression.calculator.operation.binary.impl.*;
 import org.jtwig.render.expression.calculator.operation.unary.impl.NegativeUnaryOperator;
 import org.jtwig.render.expression.calculator.operation.unary.impl.NotUnaryOperator;

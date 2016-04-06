@@ -12,33 +12,36 @@ import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
 import org.jtwig.render.expression.calculator.operation.unary.calculators.UnaryOperationCalculator;
 import org.jtwig.render.expression.test.calculator.TestExpressionCalculator;
 import org.jtwig.render.node.renderer.NodeRender;
+import org.jtwig.util.builder.MapBuilder;
 
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> implements Builder<RenderConfiguration> {
     private boolean strictMode;
     private Charset outputCharset;
     private EscapeMode initialEscapeMode;
-    private Map<Class<? extends Node>, NodeRender> renders = new HashMap<>();
-    private Map<Class<? extends Expression>, ExpressionCalculator> calculators = new HashMap<>();
-    private Map<Class<? extends BinaryOperator>, BinaryOperationCalculator> binaryCalculators = new HashMap<>();
-    private Map<Class<? extends UnaryOperator>, UnaryOperationCalculator> unaryCalculators = new HashMap<>();
-    private Map<Class<? extends TestExpression>, TestExpressionCalculator> testExpressionCalculators = new HashMap<>();
+    private final MapBuilder<B, Class<? extends Node>, NodeRender> nodeRenders;
+    private final MapBuilder<B, Class<? extends Expression>, ExpressionCalculator> expressionCalculators;
+    private final MapBuilder<B, Class<? extends BinaryOperator>, BinaryOperationCalculator> binaryExpressionCalculators;
+    private final MapBuilder<B, Class<? extends UnaryOperator>, UnaryOperationCalculator> unaryExpressionCalculators;
+    private final MapBuilder<B, Class<? extends TestExpression>, TestExpressionCalculator> testExpressionCalculators;
 
-    public RenderConfigurationBuilder() {}
+    public RenderConfigurationBuilder() {
+        nodeRenders = new MapBuilder<>(self());
+        this.expressionCalculators = new MapBuilder<>(self());
+        this.binaryExpressionCalculators = new MapBuilder<>(self());
+        this.unaryExpressionCalculators = new MapBuilder<>(self());
+        this.testExpressionCalculators = new MapBuilder<>(self());
+    }
     public RenderConfigurationBuilder(RenderConfiguration prototype) {
-        this
-                .withInitialEscapeMode(prototype.getInitialEscapeMode())
-                .withOutputCharset(prototype.getDefaultOutputCharset())
-                .withStrictMode(prototype.getStrictMode())
-                .withRenders(prototype.getRenders())
-                .withCalculators(prototype.getCalculators())
-                .withBinaryCalculators(prototype.getBinaryCalculators())
-                .withUnaryCalculators(prototype.getUnaryCalculators())
-                .withTestExpressionCalculators(prototype.getTestExpressionCalculators())
-        ;
+        this.strictMode = prototype.getStrictMode();
+        this.outputCharset = prototype.getDefaultOutputCharset();
+        this.initialEscapeMode = prototype.getInitialEscapeMode();
+        this.nodeRenders = new MapBuilder<>(self(), prototype.getNodeRenders());
+        this.expressionCalculators = new MapBuilder<>(self(), prototype.getExpressionCalculators());
+        this.binaryExpressionCalculators = new MapBuilder<>(self(), prototype.getBinaryExpressionCalculators());
+        this.unaryExpressionCalculators = new MapBuilder<>(self(), prototype.getUnaryExpressionCalculators());
+        this.testExpressionCalculators = new MapBuilder<>(self(), prototype.getTestExpressionCalculators());
     }
 
     public B withStrictMode(boolean strictMode) {
@@ -56,54 +59,20 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
         return self();
     }
 
-    public B withRenders(Map<Class<? extends Node>, NodeRender> renders) {
-        this.renders.putAll(renders);
-        return self();
+    public MapBuilder<B, Class<? extends Node>, NodeRender> nodeRenders () {
+        return nodeRenders;
     }
 
-    public B withRender(Class<? extends Node> type, NodeRender render) {
-        this.renders.put(type, render);
-        return self();
+    public MapBuilder<B, Class<? extends Expression>, ExpressionCalculator> expressionCalculators() {
+        return expressionCalculators;
     }
 
-    public B withCalculators(Map<Class<? extends Expression>, ExpressionCalculator> calculators) {
-        this.calculators.putAll(calculators);
-        return self();
+    public MapBuilder<B, Class<? extends BinaryOperator>, BinaryOperationCalculator> binaryExpressionCalculators() {
+        return binaryExpressionCalculators;
     }
 
-    public B withCalculator(Class<? extends Expression> type, ExpressionCalculator calculator) {
-        this.calculators.put(type, calculator);
-        return self();
-    }
-
-    public B withBinaryCalculators(Map<Class<? extends BinaryOperator>, BinaryOperationCalculator> calculators) {
-        this.binaryCalculators.putAll(calculators);
-        return self();
-    }
-
-    public B withBinaryCalculator(Class<? extends BinaryOperator> type, BinaryOperationCalculator calculator) {
-        this.binaryCalculators.put(type, calculator);
-        return self();
-    }
-
-    public B withUnaryCalculators(Map<Class<? extends UnaryOperator>, UnaryOperationCalculator> calculators) {
-        this.unaryCalculators.putAll(calculators);
-        return self();
-    }
-
-    public B withUnaryCalculator(Class<? extends UnaryOperator> type, UnaryOperationCalculator calculator) {
-        this.unaryCalculators.put(type, calculator);
-        return self();
-    }
-
-    public B withTestExpressionCalculators(Map<Class<? extends TestExpression>, TestExpressionCalculator> calculators) {
-        this.testExpressionCalculators.putAll(calculators);
-        return self();
-    }
-
-    public B withTestExpressionCalculator(Class<? extends TestExpression> type, TestExpressionCalculator calculator) {
-        this.testExpressionCalculators.put(type, calculator);
-        return self();
+    public MapBuilder<B, Class<? extends TestExpression>, TestExpressionCalculator> testExpressionCalculators() {
+        return testExpressionCalculators;
     }
 
     protected B self () {
@@ -112,6 +81,10 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
 
     @Override
     public RenderConfiguration build() {
-        return new RenderConfiguration(strictMode, outputCharset, initialEscapeMode, renders, calculators, binaryCalculators, unaryCalculators, testExpressionCalculators);
+        return new RenderConfiguration(strictMode, outputCharset, initialEscapeMode,
+                nodeRenders.build(), expressionCalculators.build(),
+                binaryExpressionCalculators.build(),
+                unaryExpressionCalculators.build(),
+                testExpressionCalculators.build());
     }
 }

@@ -28,7 +28,11 @@ public class ConstantFunction extends SimpleJtwigFunction {
         if (request.getNumberOfArguments() == 1) {
             return getConstant(request, getString(request, 0));
         } else {
-            return getConstant(request, getString(request, 1)).equals(request.get(0));
+
+            Object constantValue = getConstant(request, getString(request, 1));
+            return request.getEnvironment()
+                    .getValueEnvironment().getValueComparator()
+                    .compare(request, constantValue, request.get(0)) == 0;
         }
     }
 

@@ -48,19 +48,19 @@ public class RenderConfiguration {
         return initialEscapeMode;
     }
 
-    public Map<Class<? extends Node>, NodeRender> getRenders() {
+    public Map<Class<? extends Node>, NodeRender> getNodeRenders() {
         return renders;
     }
 
-    public Map<Class<? extends Expression>, ExpressionCalculator> getCalculators() {
+    public Map<Class<? extends Expression>, ExpressionCalculator> getExpressionCalculators() {
         return calculators;
     }
 
-    public Map<Class<? extends BinaryOperator>, BinaryOperationCalculator> getBinaryCalculators() {
+    public Map<Class<? extends BinaryOperator>, BinaryOperationCalculator> getBinaryExpressionCalculators() {
         return binaryCalculators;
     }
 
-    public Map<Class<? extends UnaryOperator>, UnaryOperationCalculator> getUnaryCalculators() {
+    public Map<Class<? extends UnaryOperator>, UnaryOperationCalculator> getUnaryExpressionCalculators() {
         return unaryCalculators;
     }
 

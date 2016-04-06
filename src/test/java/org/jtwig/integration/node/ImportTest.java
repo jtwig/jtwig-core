@@ -43,10 +43,10 @@ public class ImportTest extends AbstractIntegrationTest {
     @Test
     public void nestedImports() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% import 'a' as a %}{{ a.example('hello') }}", configuration()
-                .resources().withResourceResolver(new InMemoryResourceResolver(ImmutableMap.<String, Resource>builder()
+                .resources().resourceResolvers().add(new InMemoryResourceResolver(ImmutableMap.<String, Resource>builder()
                         .put("a", new StringResource("{% import 'b' as b %}{% macro example (input) %}{{ b.example(input) }}{% endmacro %}"))
                         .put("b", new StringResource("{% macro example (input) %}{{ input }}{% endmacro %}"))
-                        .build())).and()
+                        .build())).and().and()
                 .build())
                 .render(JtwigModel.newModel());
 

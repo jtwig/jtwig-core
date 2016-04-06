@@ -1,8 +1,8 @@
 package org.jtwig.environment.and;
 
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
-import org.jtwig.parser.JtwigParserConfiguration;
-import org.jtwig.parser.JtwigParserConfigurationBuilder;
+import org.jtwig.parser.config.JtwigParserConfiguration;
+import org.jtwig.parser.config.JtwigParserConfigurationBuilder;
 
 public class AndJtwigParserConfigurationBuilder extends JtwigParserConfigurationBuilder<AndJtwigParserConfigurationBuilder> implements AndBuilder<EnvironmentConfigurationBuilder> {
     private final EnvironmentConfigurationBuilder environmentConfigurationBuilder;

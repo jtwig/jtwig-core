@@ -29,7 +29,7 @@ public class ExtendsTest extends AbstractIntegrationTest {
     @Test
     public void extendsTest() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% extends 'a' %}{% block c %}a{% endblock %}", configuration()
-                .resources().withResourceResolver(resolvePath("a", "{% block c %}d{% endblock %}")).and()
+                .resources().resourceResolvers().add(resolvePath("a", "{% block c %}d{% endblock %}")).and().and()
                 .build())
                 .render(JtwigModel.newModel());
 
@@ -39,8 +39,8 @@ public class ExtendsTest extends AbstractIntegrationTest {
     @Test
     public void nestedExtendsTest() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% extends 'a' %}{% block c %}a{% endblock %}", configuration()
-                .resources().withResourceResolver(resolvePath("a", "{% extends 'b' %}{% block c %}d{% endblock %}"))
-                .withResourceResolver(resolvePath("b", "{% block c %}e{% endblock %}")).and()
+                .resources().resourceResolvers().add(resolvePath("a", "{% extends 'b' %}{% block c %}d{% endblock %}"))
+                .add(resolvePath("b", "{% block c %}e{% endblock %}")).and().and()
                 .build())
                 .render(JtwigModel.newModel());
 
@@ -50,8 +50,8 @@ public class ExtendsTest extends AbstractIntegrationTest {
     @Test
     public void extendsWithSetTest() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% extends 'a' %}{% set var = 1 %}", configuration()
-                .resources().withResourceResolver(resolvePath("a", "{% extends 'b' %}{% block c %}d{% endblock %}"))
-                .withResourceResolver(resolvePath("b", "{{ var }}")).and()
+                .resources().resourceResolvers().add(resolvePath("a", "{% extends 'b' %}{% block c %}d{% endblock %}"))
+                .add(resolvePath("b", "{{ var }}")).and().and()
                 .build())
                 .render(JtwigModel.newModel());
 
@@ -137,12 +137,12 @@ public class ExtendsTest extends AbstractIntegrationTest {
         String result = JtwigTemplate.inlineTemplate("{% extends 'a' %}" +
                 "{% block post %}- {{ item.title }}{% endblock %}", configuration()
                 .resources()
-                .withResourceResolver(new InMemoryResourceResolver(ImmutableMap.<String, Resource>builder()
+                .resourceResolvers().add(new InMemoryResourceResolver(ImmutableMap.<String, Resource>builder()
                         .put("a", new StringResource("{% for item in posts %}" +
                                 "{% block post %}{{ item.title }}{% endblock %}" +
                                 "{% endfor %}"))
                         .build()))
-                .and()
+                .and().and()
                 .build())
                 .render(JtwigModel.newModel().with("posts", asList(
                         new Item("a"),

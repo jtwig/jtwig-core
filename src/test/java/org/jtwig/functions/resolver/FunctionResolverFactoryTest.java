@@ -2,6 +2,7 @@ package org.jtwig.functions.resolver;
 
 import org.jtwig.exceptions.InvalidFunctionNameException;
 import org.jtwig.functions.JtwigFunction;
+import org.jtwig.functions.environment.FunctionResolverFactory;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -27,6 +28,6 @@ public class FunctionResolverFactoryTest {
         expectedException.expect(InvalidFunctionNameException.class);
         expectedException.expectMessage(containsString(String.format("Function name %s is invalid, it should be an identifier (regular expression: [A-Za-z_$][A-Za-z0-9_$]*)", "~")));
 
-        underTest.create(new FunctionResolverConfiguration(Collections.singleton(jtwigFunction)));
+        underTest.create(Collections.singleton(jtwigFunction));
     }
 }

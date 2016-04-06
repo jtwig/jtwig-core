@@ -6,6 +6,7 @@ import com.google.common.collect.Collections2;
 import org.apache.commons.lang3.StringUtils;
 import org.jtwig.model.tree.Node;
 import org.jtwig.parser.cache.TemplateCache;
+import org.jtwig.parser.config.JtwigParserConfiguration;
 import org.jtwig.parser.parboiled.DocumentParser;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.util.ParboiledExceptionMessageExtractor;
