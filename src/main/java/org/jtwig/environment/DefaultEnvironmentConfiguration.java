@@ -1,11 +1,11 @@
 package org.jtwig.environment;
 
 import org.jtwig.extension.Extension;
-import org.jtwig.functions.resolver.DefaultFunctionResolverConfiguration;
-import org.jtwig.parser.DefaultJtwigParserConfiguration;
-import org.jtwig.property.DefaultPropertyResolverConfiguration;
+import org.jtwig.functions.config.DefaultJtwigFunctionList;
+import org.jtwig.parser.config.DefaultJtwigParserConfiguration;
+import org.jtwig.property.DefaultPropertyResolverList;
 import org.jtwig.render.config.DefaultRenderConfiguration;
-import org.jtwig.render.expression.calculator.enumerated.config.DefaultEnumerationListStrategyConfiguration;
+import org.jtwig.render.expression.calculator.enumerated.config.DefaultEnumerationListStrategyList;
 import org.jtwig.resource.config.DefaultResourceConfiguration;
 import org.jtwig.value.config.DefaultValueConfiguration;
 
@@ -15,12 +15,12 @@ public class DefaultEnvironmentConfiguration extends EnvironmentConfiguration {
     public DefaultEnvironmentConfiguration() {
         super(
                 new DefaultResourceConfiguration(),
-                new DefaultFunctionResolverConfiguration(),
-                new DefaultPropertyResolverConfiguration(),
-                new DefaultEnumerationListStrategyConfiguration(),
+                new DefaultEnumerationListStrategyList(),
                 new DefaultJtwigParserConfiguration(),
                 new DefaultValueConfiguration(),
                 new DefaultRenderConfiguration(),
+                new DefaultPropertyResolverList(),
+                new DefaultJtwigFunctionList(),
                 Collections.<String, Object>emptyMap(),
                 Collections.<Extension>emptyList());
     }

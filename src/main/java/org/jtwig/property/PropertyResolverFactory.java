@@ -1,7 +1,9 @@
 package org.jtwig.property;
 
+import java.util.Collection;
+
 public class PropertyResolverFactory {
-    public PropertyResolver create (PropertyResolverConfiguration configuration) {
-        return new CompositePropertyResolver(configuration.getPropertyResolvers());
+    public PropertyResolver create (Collection<PropertyResolver> propertyResolvers) {
+        return new CompositePropertyResolver(propertyResolvers);
     }
 }

@@ -57,11 +57,13 @@ public class DefaultValueComparatorTest {
     @Test
     public void otherThanNumbersLess() throws Exception {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
-        Object left = "testA";
-        Object right = "testB";
+        Object left = new Object();
+        Object right = new Object();
 
         when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(left)).thenReturn(Converter.Result.<BigDecimal>undefined());
         when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(right)).thenReturn(Converter.Result.<BigDecimal>undefined());
+        when(request.getEnvironment().getValueEnvironment().getStringConverter().convert(left)).thenReturn("testA");
+        when(request.getEnvironment().getValueEnvironment().getStringConverter().convert(right)).thenReturn("testB");
 
         int result = underTest.compare(request, left, right);
 
@@ -71,11 +73,13 @@ public class DefaultValueComparatorTest {
     @Test
     public void otherThanNumbersGreater() throws Exception {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
-        Object left = "testC";
-        Object right = "testB";
+        Object left = new Object();
+        Object right = new Object();
 
         when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(left)).thenReturn(Converter.Result.<BigDecimal>undefined());
         when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(right)).thenReturn(Converter.Result.<BigDecimal>undefined());
+        when(request.getEnvironment().getValueEnvironment().getStringConverter().convert(left)).thenReturn("testC");
+        when(request.getEnvironment().getValueEnvironment().getStringConverter().convert(right)).thenReturn("testB");
 
         int result = underTest.compare(request, left, right);
 
@@ -85,11 +89,13 @@ public class DefaultValueComparatorTest {
     @Test
     public void otherThanNumbersEqual() throws Exception {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
-        Object left = "test";
-        Object right = "test";
+        Object left = new Object();
+        Object right = new Object();
 
         when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(left)).thenReturn(Converter.Result.<BigDecimal>undefined());
         when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(right)).thenReturn(Converter.Result.<BigDecimal>undefined());
+        when(request.getEnvironment().getValueEnvironment().getStringConverter().convert(left)).thenReturn("test");
+        when(request.getEnvironment().getValueEnvironment().getStringConverter().convert(right)).thenReturn("test");
 
         int result = underTest.compare(request, left, right);
 
@@ -99,53 +105,29 @@ public class DefaultValueComparatorTest {
     @Test
     public void compareLeftNumberRightNot() throws Exception {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
-        Object left = "a";
-        Object right = "b";
+        Object left = new Object();
+        Object right = new Object();
 
         when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(left)).thenReturn(Converter.Result.defined(BigDecimal.TEN));
         when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(right)).thenReturn(Converter.Result.<BigDecimal>undefined());
+        when(request.getEnvironment().getValueEnvironment().getStringConverter().convert(left)).thenReturn("a");
+        when(request.getEnvironment().getValueEnvironment().getStringConverter().convert(right)).thenReturn("b");
 
         int result = underTest.compare(request, left, right);
 
         assertEquals(-1, result);
-    }
-
-    @Test
-    public void compareLeftNumberRightNotNull() throws Exception {
-        RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
-        Object left = "a";
-        Object right = null;
-
-        when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(left)).thenReturn(Converter.Result.defined(BigDecimal.TEN));
-        when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(right)).thenReturn(Converter.Result.<BigDecimal>undefined());
-
-        int result = underTest.compare(request, left, right);
-
-        assertEquals(1, result);
     }
 
     @Test
     public void compareLeftNotRightNumber() throws Exception {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
-        Object left = "a";
-        Object right = "b";
+        Object left = new Object();
+        Object right = new Object();
 
         when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(left)).thenReturn(Converter.Result.<BigDecimal>undefined());
         when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(right)).thenReturn(Converter.Result.defined(BigDecimal.TEN));
-
-        int result = underTest.compare(request, left, right);
-
-        assertEquals(-1, result);
-    }
-
-    @Test
-    public void compareLeftNotRightNumberNull() throws Exception {
-        RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
-        Object left = null;
-        Object right = "a";
-
-        when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(left)).thenReturn(Converter.Result.<BigDecimal>undefined());
-        when(request.getEnvironment().getValueEnvironment().getNumberConverter().convert(right)).thenReturn(Converter.Result.defined(BigDecimal.TEN));
+        when(request.getEnvironment().getValueEnvironment().getStringConverter().convert(left)).thenReturn("a");
+        when(request.getEnvironment().getValueEnvironment().getStringConverter().convert(right)).thenReturn("b");
 
         int result = underTest.compare(request, left, right);
 

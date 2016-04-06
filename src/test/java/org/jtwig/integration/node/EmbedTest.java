@@ -26,7 +26,7 @@ public class EmbedTest extends AbstractIntegrationTest {
     @Test
     public void simpleEmbed() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% embed 'a' %}{% block one %}Ola{% endblock %}{% endembed %}", configuration()
-                .resources().withResourceResolver(resolvePath("a", "{% block one %}three{% endblock %}")).and()
+                .resources().resourceResolvers().add(resolvePath("a", "{% block one %}three{% endblock %}")).and().and()
                 .build());
         String result = template.render(JtwigModel.newModel());
         assertThat(result, is("Ola"));

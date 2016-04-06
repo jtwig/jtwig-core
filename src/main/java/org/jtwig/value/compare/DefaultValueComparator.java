@@ -18,10 +18,10 @@ public class DefaultValueComparator implements ValueComparator {
             }
         }
 
-        return getString(left).compareTo(getString(right));
+        return getString(renderRequest, left).compareTo(getString(renderRequest, right));
     }
 
-    private String getString(Object value) {
-        return value == null ? "" : value.toString();
+    private String getString(RenderRequest renderRequest, Object value) {
+        return renderRequest.getEnvironment().getValueEnvironment().getStringConverter().convert(value);
     }
 }

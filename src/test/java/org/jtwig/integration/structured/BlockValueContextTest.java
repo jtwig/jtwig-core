@@ -25,13 +25,12 @@ public class BlockValueContextTest extends AbstractIntegrationTest {
     public void extendLogic() throws Exception {
 
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% extends 'a' %}{% block name %}{{ var }}{% endblock %}", EnvironmentConfigurationBuilder.configuration()
-                .resources()
-                .withResourceResolver(new ResourceResolver() {
+                .resources().resourceResolvers().add(new ResourceResolver() {
                     @Override
                     public Optional<Resource> resolve(Environment environment, Resource resource, String path) {
                         return Optional.of((Resource) new StringResource("{% for a in [1..2] %}{% block name %}this{% endblock %}{% endfor %}"));
                     }
-                })
+                }).and()
                 .and()
                 .build());
 
@@ -43,12 +42,12 @@ public class BlockValueContextTest extends AbstractIntegrationTest {
     @Test
     public void blockInheritance() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% extends 'a' %}{% block a %}a{% endblock %}", EnvironmentConfigurationBuilder.configuration().resources()
-                .withResourceResolver(new InMemoryResourceResolver(
+                .resourceResolvers().add(new InMemoryResourceResolver(
                         ImmutableMap.<String, Resource>builder()
                                 .put("a", new StringResource("{% extends 'b' %}"))
                                 .put("b", new StringResource("{% block a %}b{% endblock %}"))
                                 .build()
-                ))
+                )).and()
                 .and().build());
 
         String result = template.render(newModel());

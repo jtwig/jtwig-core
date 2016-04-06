@@ -1,7 +1,6 @@
 package org.jtwig.parser.config;
 
 import org.jtwig.environment.and.AndBuilder;
-import org.jtwig.parser.JtwigParserConfigurationBuilder;
 
 public class AndSyntaxConfigurationBuilder<Parent extends JtwigParserConfigurationBuilder> extends SyntaxConfigurationBuilder<AndSyntaxConfigurationBuilder<Parent>> implements AndBuilder<Parent> {
     private final Parent parent;

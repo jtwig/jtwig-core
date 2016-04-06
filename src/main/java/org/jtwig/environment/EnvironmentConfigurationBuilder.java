@@ -1,74 +1,75 @@
 package org.jtwig.environment;
 
 import org.apache.commons.lang3.builder.Builder;
-import org.jtwig.environment.and.*;
+import org.jtwig.environment.and.AndJtwigParserConfigurationBuilder;
+import org.jtwig.environment.and.AndRenderConfigurationBuilder;
+import org.jtwig.environment.and.AndResourceConfigurationBuilder;
+import org.jtwig.environment.and.AndValueConfigurationBuilder;
 import org.jtwig.extension.Extension;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import org.jtwig.functions.JtwigFunction;
+import org.jtwig.property.PropertyResolver;
+import org.jtwig.render.expression.calculator.enumerated.EnumerationListStrategy;
+import org.jtwig.util.builder.ListBuilder;
+import org.jtwig.util.builder.MapBuilder;
 
 public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfiguration> {
     public static EnvironmentConfigurationBuilder configuration () {
         return new EnvironmentConfigurationBuilder(new DefaultEnvironmentConfiguration());
     }
 
-    private final Map<String, Object> parameters;
-    private final Collection<Extension> extensions;
-    private final AndFunctionResolverConfigurationBuilder functionResolverConfiguration;
+    private final MapBuilder<EnvironmentConfigurationBuilder, String, Object> parameters;
+    private final ListBuilder<EnvironmentConfigurationBuilder, Extension> extensions;
+    private final ListBuilder<EnvironmentConfigurationBuilder, JtwigFunction> functions;
+    private final ListBuilder<EnvironmentConfigurationBuilder, PropertyResolver> propertyResolvers;
+    private final ListBuilder<EnvironmentConfigurationBuilder, EnumerationListStrategy> enumerationListStrategies;
     private final AndRenderConfigurationBuilder renderConfiguration;
     private final AndJtwigParserConfigurationBuilder jtwigParserConfigurationBuilder;
     private final AndResourceConfigurationBuilder resourceConfigurationBuilder;
-    private final AndPropertyResolverConfigurationBuilder propertyResolverConfigurationBuilder;
-    private final AndEnumerationListStrategyConfigurationBuilder enumerationListStrategyConfigurationBuilder;
     private final AndValueConfigurationBuilder valueConfigurationBuilder;
 
     public EnvironmentConfigurationBuilder () {
-        functionResolverConfiguration  = new AndFunctionResolverConfigurationBuilder(this);
+        functions  = new ListBuilder<>(this);
         renderConfiguration = new AndRenderConfigurationBuilder(this);
         jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(this);
         resourceConfigurationBuilder = new AndResourceConfigurationBuilder(this);
-        propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(this);
-        enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(this);
+        propertyResolvers = new ListBuilder<>(this);
+        enumerationListStrategies = new ListBuilder<>(this);
         valueConfigurationBuilder = new AndValueConfigurationBuilder(this);
-        extensions = new ArrayList<>();
-        parameters = new HashMap<>();
+        extensions = new ListBuilder<>(this);
+        parameters = new MapBuilder<>(this);
     }
     public EnvironmentConfigurationBuilder (EnvironmentConfiguration prototype) {
-        functionResolverConfiguration  = new AndFunctionResolverConfigurationBuilder(prototype.getFunctionResolverConfiguration(), this);
+        functions = new ListBuilder<>(this, prototype.getFunctions());
         renderConfiguration = new AndRenderConfigurationBuilder(prototype.getRenderConfiguration(), this);
         jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(prototype.getJtwigParserConfiguration(), this);
         resourceConfigurationBuilder = new AndResourceConfigurationBuilder(prototype.getResourceConfiguration(), this);
-        propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(prototype.getPropertyResolverConfiguration(), this);
-        enumerationListStrategyConfigurationBuilder = new AndEnumerationListStrategyConfigurationBuilder(prototype.getEnumerationListConfiguration(), this);
+        propertyResolvers = new ListBuilder<>(this, prototype.getPropertyResolvers());
+        enumerationListStrategies = new ListBuilder<>(this, prototype.getEnumerationStrategies());
         valueConfigurationBuilder = new AndValueConfigurationBuilder(prototype.getValueConfiguration(), this);
-        extensions = new ArrayList<>();
-        extensions.addAll(prototype.getExtensions());
-        parameters = new HashMap<>();
-        parameters.putAll(prototype.getParameters());
+        extensions = new ListBuilder<>(this, prototype.getExtensions());
+        parameters = new MapBuilder<>(this, prototype.getParameters());
     }
 
     @Override
     public EnvironmentConfiguration build() {
         return new EnvironmentConfiguration(
                 resourceConfigurationBuilder.build(),
-                functionResolverConfiguration.build(),
-                propertyResolverConfigurationBuilder.build(),
-                enumerationListStrategyConfigurationBuilder.build(),
+                enumerationListStrategies.build(),
                 jtwigParserConfigurationBuilder.build(),
                 valueConfigurationBuilder.build(),
                 renderConfiguration.build(),
-                parameters,
-                extensions);
+                propertyResolvers.build(),
+                functions.build(),
+                parameters.build(),
+                extensions.build());
     }
 
     public AndJtwigParserConfigurationBuilder parser () {
         return jtwigParserConfigurationBuilder;
     }
 
-    public AndFunctionResolverConfigurationBuilder functions () {
-        return functionResolverConfiguration;
+    public ListBuilder<EnvironmentConfigurationBuilder, JtwigFunction> functions () {
+        return functions;
     }
 
     public AndRenderConfigurationBuilder render () {
@@ -79,23 +80,21 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         return resourceConfigurationBuilder;
     }
 
-    public AndPropertyResolverConfigurationBuilder propertyResolver() {
-        return propertyResolverConfigurationBuilder;
+    public ListBuilder<EnvironmentConfigurationBuilder, PropertyResolver> propertyResolver() {
+        return propertyResolvers;
     }
 
     public AndValueConfigurationBuilder value () { return valueConfigurationBuilder; }
 
-    public AndEnumerationListStrategyConfigurationBuilder listEnumeration() {
-        return enumerationListStrategyConfigurationBuilder;
+    public ListBuilder<EnvironmentConfigurationBuilder, EnumerationListStrategy> enumerationStrategies() {
+        return enumerationListStrategies;
     }
 
-    public <T> EnvironmentConfigurationBuilder withParameter (String name, T value) {
-        this.parameters.put(name, value);
-        return this;
+    public MapBuilder<EnvironmentConfigurationBuilder, String, Object> parameters () {
+        return parameters;
     }
 
-    public <T extends Extension> EnvironmentConfigurationBuilder withExtension(T extension) {
-        extensions.add(extension);
-        return this;
+    public ListBuilder<EnvironmentConfigurationBuilder, Extension> extensions () {
+        return extensions;
     }
 }

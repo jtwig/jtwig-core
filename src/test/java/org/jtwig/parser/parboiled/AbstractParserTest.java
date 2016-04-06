@@ -1,12 +1,11 @@
 package org.jtwig.parser.parboiled;
 
-import org.jtwig.parser.DefaultJtwigParserConfiguration;
-import org.jtwig.parser.JtwigParserConfiguration;
+import org.jtwig.parser.config.DefaultJtwigParserConfiguration;
+import org.jtwig.parser.config.JtwigParserConfiguration;
 import org.jtwig.resource.StringResource;
 import org.parboiled.Rule;
 import org.parboiled.parserunners.BasicParseRunner;
 import org.parboiled.parserunners.ParseRunner;
-import org.parboiled.parserunners.TracingParseRunner;
 import org.parboiled.support.ParsingResult;
 
 public abstract class AbstractParserTest {

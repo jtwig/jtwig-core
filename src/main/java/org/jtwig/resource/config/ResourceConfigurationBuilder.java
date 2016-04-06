@@ -2,19 +2,20 @@ package org.jtwig.resource.config;
 
 import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.resource.resolver.ResourceResolver;
+import org.jtwig.util.builder.ListBuilder;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class ResourceConfigurationBuilder<B extends ResourceConfigurationBuilder> implements Builder<ResourceConfiguration> {
-    private final Collection<ResourceResolver> resourceResolvers = new ArrayList<>();
+    private final ListBuilder<B, ResourceResolver> resourceResolvers;
     private Charset defaultInputCharset;
 
-    public ResourceConfigurationBuilder() {}
+    public ResourceConfigurationBuilder() {
+        this.resourceResolvers = new ListBuilder<>(self());
+    }
 
     public ResourceConfigurationBuilder(ResourceConfiguration prototype) {
-        this.resourceResolvers.addAll(prototype.getResourceResolvers());
+        this.resourceResolvers = new ListBuilder<>(self());
         this.defaultInputCharset = prototype.getDefaultCharset();
     }
 
@@ -23,14 +24,8 @@ public class ResourceConfigurationBuilder<B extends ResourceConfigurationBuilder
         return self();
     }
 
-    public B withResourceResolver(ResourceResolver resourceResolver) {
-        this.resourceResolvers.add(resourceResolver);
-        return self();
-    }
-
-    public B withResourceResolvers(Collection<ResourceResolver> resourceResolvers) {
-        this.resourceResolvers.addAll(resourceResolvers);
-        return self();
+    public ListBuilder<B, ResourceResolver> resourceResolvers() {
+        return resourceResolvers;
     }
 
     private B self() {
@@ -39,6 +34,6 @@ public class ResourceConfigurationBuilder<B extends ResourceConfigurationBuilder
 
     @Override
     public ResourceConfiguration build() {
-        return new ResourceConfiguration(resourceResolvers, defaultInputCharset);
+        return new ResourceConfiguration(resourceResolvers.build(), defaultInputCharset);
     }
 }

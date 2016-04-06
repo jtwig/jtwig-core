@@ -16,7 +16,7 @@ public class EnvironmentFactoryTest {
     public void createWithExtension() throws Exception {
         Extension extension = mock(Extension.class);
 
-        EnvironmentConfigurationBuilder builder = configuration().withExtension(extension);
+        EnvironmentConfigurationBuilder builder = configuration().extensions().add(extension).and();
         underTest.create(builder.build());
 
         verify(extension).configure(argThat(theSame(builder)));

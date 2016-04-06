@@ -1,8 +1,8 @@
 package org.jtwig.environment;
 
 import org.jtwig.functions.JtwigFunction;
-import org.jtwig.parser.JtwigParserConfiguration;
 import org.jtwig.parser.addon.AddonParserProvider;
+import org.jtwig.parser.config.JtwigParserConfiguration;
 import org.jtwig.property.PropertyResolver;
 import org.jtwig.render.context.model.EscapeMode;
 import org.jtwig.render.expression.calculator.enumerated.EnumerationListStrategy;
@@ -32,9 +32,9 @@ public class EnvironmentConfigurationBuilderTest {
                 .withStartOutput("{{").withEndOutput("}}")
                 .withStartComment("{#").withEndComment("#}")
                 .and()
-                .withAddonParserProvider(customAddonParser())
-                .withBinaryOperator(customBinaryOperator())
-                .withUnaryOperator(customUnaryOperator())
+                .addonParserProviders().add(customAddonParser()).and()
+                .binaryOperators().add(customBinaryOperator()).and()
+                .unaryOperators().add(customUnaryOperator()).and()
                 .withoutTemplateCache()
                 .and()
                 .build();
@@ -57,11 +57,11 @@ public class EnvironmentConfigurationBuilderTest {
         JtwigFunction jtwigFunction = mock(JtwigFunction.class);
 
         EnvironmentConfiguration result = new EnvironmentConfigurationBuilder().functions()
-                .withFunction(jtwigFunction)
+                .add(jtwigFunction)
                 .and()
                 .build();
 
-        assertThat(result.getFunctionResolverConfiguration().getFunctions(), hasItem(jtwigFunction));
+        assertThat(result.getFunctions(), hasItem(jtwigFunction));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class EnvironmentConfigurationBuilderTest {
         ResourceResolver resourceResolver = mock(ResourceResolver.class);
 
         EnvironmentConfiguration result = new EnvironmentConfigurationBuilder().resources()
-                .withResourceResolver(resourceResolver)
+                .resourceResolvers().add(resourceResolver).and()
                 .and()
                 .build();
 
@@ -100,10 +100,10 @@ public class EnvironmentConfigurationBuilderTest {
 
         EnvironmentConfiguration result = new EnvironmentConfigurationBuilder()
                 .propertyResolver()
-                    .withPropertyResolver(propertyResolver)
+                    .add(propertyResolver)
                 .and().build();
 
-        assertThat(result.getPropertyResolverConfiguration().getPropertyResolvers(), hasItem(propertyResolver));
+        assertThat(result.getPropertyResolvers(), hasItem(propertyResolver));
     }
 
     @Test
@@ -111,11 +111,11 @@ public class EnvironmentConfigurationBuilderTest {
         EnumerationListStrategy enumerationListStrategy = mock(EnumerationListStrategy.class);
 
         EnvironmentConfiguration result = new EnvironmentConfigurationBuilder()
-                .listEnumeration()
-                    .withEnumerationListStrategy(enumerationListStrategy)
+                .enumerationStrategies()
+                    .add(enumerationListStrategy)
                 .and().build();
 
-        assertThat(result.getEnumerationListConfiguration().getStrategies(), hasItem(enumerationListStrategy));
+        assertThat(result.getEnumerationStrategies(), hasItem(enumerationListStrategy));
     }
 
     private UnaryOperator customUnaryOperator() {

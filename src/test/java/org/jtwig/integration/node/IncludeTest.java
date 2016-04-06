@@ -36,7 +36,7 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeWithoutExportingModel() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' only %}", configuration()
-                .resources().withResourceResolver(new ResourceResolver() {
+                .resources().resourceResolvers().add(new ResourceResolver() {
                     @Override
                     public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
                         if ("a".equals(relativePath)) {
@@ -44,7 +44,7 @@ public class IncludeTest extends AbstractIntegrationTest {
                         }
                         return Optional.absent();
                     }
-                }).and()
+                }).and().and()
                 .build());
 
         String result = template.render(newModel().with("name", "Hello"));
@@ -55,7 +55,7 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeWithoutExportingModelButIncluding() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' with { name: 'Joao' } only %}", configuration()
-                .resources().withResourceResolver(new ResourceResolver() {
+                .resources().resourceResolvers().add(new ResourceResolver() {
                     @Override
                     public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
                         if ("a".equals(relativePath)) {
@@ -63,7 +63,7 @@ public class IncludeTest extends AbstractIntegrationTest {
                         }
                         return Optional.absent();
                     }
-                }).and()
+                }).and().and()
                 .build());
 
         String result = template.render(newModel().with("name", "Hello"));
@@ -74,7 +74,7 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeShouldExportModel() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' %}", configuration()
-                .resources().withResourceResolver(new ResourceResolver() {
+                .resources().resourceResolvers().add(new ResourceResolver() {
                     @Override
                     public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
                         if ("a".equals(relativePath)) {
@@ -82,7 +82,7 @@ public class IncludeTest extends AbstractIntegrationTest {
                         }
                         return Optional.absent();
                     }
-                }).and()
+                }).and().and()
                 .build());
 
         String result = template.render(newModel().with("name", "Hello"));
@@ -93,7 +93,7 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeShouldExportModelAndExtraData() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' with { joao: 'Melo' } %}", configuration()
-                .resources().withResourceResolver(new ResourceResolver() {
+                .resources().resourceResolvers().add(new ResourceResolver() {
                     @Override
                     public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
                         if ("a".equals(relativePath)) {
@@ -101,7 +101,7 @@ public class IncludeTest extends AbstractIntegrationTest {
                         }
                         return Optional.absent();
                     }
-                }).and()
+                }).and().and()
                 .build());
 
         String result = template.render(newModel().with("name", "Hello"));
@@ -112,7 +112,7 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeShouldNotRedefineModelVariable() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' %}{{ name }}", configuration()
-                .resources().withResourceResolver(new ResourceResolver() {
+                .resources().resourceResolvers().add(new ResourceResolver() {
                     @Override
                     public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
                         if ("a".equals(relativePath)) {
@@ -120,7 +120,7 @@ public class IncludeTest extends AbstractIntegrationTest {
                         }
                         return Optional.absent();
                     }
-                }).and()
+                }).and().and()
                 .build());
 
         String result = template.render(newModel().with("name", "Hello"));
@@ -131,7 +131,7 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeShouldNotExposeNewModelVariable() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' %}{{ var }}", configuration()
-                .resources().withResourceResolver(new ResourceResolver() {
+                .resources().resourceResolvers().add(new ResourceResolver() {
                     @Override
                     public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
                         if ("a".equals(relativePath)) {
@@ -139,7 +139,7 @@ public class IncludeTest extends AbstractIntegrationTest {
                         }
                         return Optional.absent();
                     }
-                }).and()
+                }).and().and()
                 .build());
 
         String result = template.render(newModel());

@@ -15,13 +15,13 @@ import org.jtwig.render.node.RenderNodeService;
 
 public class RenderEnvironmentFactory {
     public RenderEnvironment create (RenderConfiguration renderConfiguration) {
-        NodeRenderSelector nodeRenderSelector = new NodeRenderSelector(renderConfiguration.getRenders());
+        NodeRenderSelector nodeRenderSelector = new NodeRenderSelector(renderConfiguration.getNodeRenders());
         RenderNodeService renderNodeService = new RenderNodeService(nodeRenderSelector);
         RenderResourceService renderResourceService = new RenderResourceService();
-        ExpressionCalculatorSelector calculatorSelector = new ExpressionCalculatorSelector(renderConfiguration.getCalculators());
+        ExpressionCalculatorSelector calculatorSelector = new ExpressionCalculatorSelector(renderConfiguration.getExpressionCalculators());
         CalculateExpressionService calculateExpressionService = new CalculateExpressionService(calculatorSelector);
-        BinaryOperationService binaryOperationService = new BinaryOperationService(new BinaryOperationCalculatorSelector(renderConfiguration.getBinaryCalculators()));
-        UnaryOperationService unaryOperationService = new UnaryOperationService(new UnaryOperationCalculatorSelector(renderConfiguration.getUnaryCalculators()));
+        BinaryOperationService binaryOperationService = new BinaryOperationService(new BinaryOperationCalculatorSelector(renderConfiguration.getBinaryExpressionCalculators()));
+        UnaryOperationService unaryOperationService = new UnaryOperationService(new UnaryOperationCalculatorSelector(renderConfiguration.getUnaryExpressionCalculators()));
         CalculateTestExpressionService calculateTestExpressionService = new CalculateTestExpressionService(new TestExpressionCalculatorSelector(renderConfiguration.getTestExpressionCalculators()));
         return new RenderEnvironment(renderConfiguration.getStrictMode(), renderConfiguration.getDefaultOutputCharset(), renderConfiguration.getInitialEscapeMode(),
                 renderResourceService, renderNodeService, calculateExpressionService, binaryOperationService, unaryOperationService, calculateTestExpressionService);
