@@ -71,6 +71,10 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
         return binaryExpressionCalculators;
     }
 
+    public MapBuilder<B, Class<? extends UnaryOperator>, UnaryOperationCalculator> unaryExpressionCalculators() {
+        return unaryExpressionCalculators;
+    }
+
     public MapBuilder<B, Class<? extends TestExpression>, TestExpressionCalculator> testExpressionCalculators() {
         return testExpressionCalculators;
     }
