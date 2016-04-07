@@ -80,7 +80,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         return resourceConfigurationBuilder;
     }
 
-    public ListBuilder<EnvironmentConfigurationBuilder, PropertyResolver> propertyResolver() {
+    public ListBuilder<EnvironmentConfigurationBuilder, PropertyResolver> propertyResolvers() {
         return propertyResolvers;
     }
 

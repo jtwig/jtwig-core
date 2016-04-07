@@ -22,9 +22,9 @@ public class EnvironmentConfiguration {
     private final Collection<PropertyResolver> propertyResolvers;
     private final Collection<JtwigFunction> functions;
     private final Map<String, Object> parameters = new HashMap<>();
-    private final Collection<? extends Extension> extensions;
+    private final Collection<Extension> extensions;
 
-    public EnvironmentConfiguration(ResourceConfiguration resourceConfiguration, Collection<EnumerationListStrategy> enumerationStrategies, JtwigParserConfiguration jtwigParserConfiguration, ValueConfiguration valueConfiguration, RenderConfiguration renderConfiguration, Collection<PropertyResolver> propertyResolvers, Collection<JtwigFunction> functions, Map<String, Object> parameters, Collection<? extends Extension> extensions) {
+    public EnvironmentConfiguration(ResourceConfiguration resourceConfiguration, Collection<EnumerationListStrategy> enumerationStrategies, JtwigParserConfiguration jtwigParserConfiguration, ValueConfiguration valueConfiguration, RenderConfiguration renderConfiguration, Collection<PropertyResolver> propertyResolvers, Collection<JtwigFunction> functions, Map<String, Object> parameters, Collection<Extension> extensions) {
         this.resourceConfiguration = resourceConfiguration;
         this.propertyResolvers = propertyResolvers;
         this.enumerationStrategies = enumerationStrategies;
@@ -68,7 +68,7 @@ public class EnvironmentConfiguration {
         return renderConfiguration;
     }
 
-    public Collection<? extends Extension> getExtensions() {
+    public Collection<Extension> getExtensions() {
         return extensions;
     }
 }
