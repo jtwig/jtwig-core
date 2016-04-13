@@ -34,9 +34,9 @@ public class NumberFormatFunctionTest {
     }
     @Test
     public void numberFormatScaleSignalEmpty() throws Exception {
-        String result = JtwigTemplate.inlineTemplate("{{ number_format(1234.567, 2, '') }}").render(JtwigModel.newModel());
+        String result = JtwigTemplate.inlineTemplate("{{ number_format(11000.136, 2, '.', ' ') }}").render(JtwigModel.newModel());
 
-        assertThat(result, is("1234.57"));
+        assertThat(result, is("11 000.14"));
     }
     @Test
     public void numberFormatScaleSignalThousandsEmpty() throws Exception {

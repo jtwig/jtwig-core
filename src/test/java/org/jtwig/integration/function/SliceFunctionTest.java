@@ -16,9 +16,9 @@ public class SliceFunctionTest {
 
     @Test
     public void simpleSlice() throws Exception {
-        String result = JtwigTemplate.inlineTemplate("{{ [1,2,3,4,5] | slice(2,3) }}").render(JtwigModel.newModel());
+        String result = JtwigTemplate.inlineTemplate("{{ [1,2,3] | slice(0,2) }}").render(JtwigModel.newModel());
 
-        assertThat(result, is("[3, 4, 5]"));
+        assertThat(result, is("[1, 2]"));
     }
 
     @Test
@@ -37,9 +37,9 @@ public class SliceFunctionTest {
 
     @Test
     public void simpleSliceString() throws Exception {
-        String result = JtwigTemplate.inlineTemplate("{{ '12345' | slice(2,3) }}").render(JtwigModel.newModel());
+        String result = JtwigTemplate.inlineTemplate("{{ '123' | slice(1,1) }}").render(JtwigModel.newModel());
 
-        assertThat(result, is("345"));
+        assertThat(result, is("2"));
     }
 
     @Test
@@ -47,6 +47,13 @@ public class SliceFunctionTest {
         String result = JtwigTemplate.inlineTemplate("{{ '12345' | slice(10,3) }}").render(JtwigModel.newModel());
 
         assertThat(result, is(""));
+    }
+
+    @Test
+    public void stringSliceIncomplete() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{{ slice('123', 2, 3) }}").render(JtwigModel.newModel());
+
+        assertThat(result, is("3"));
     }
 
     @Test

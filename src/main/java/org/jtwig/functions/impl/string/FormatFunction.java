@@ -18,6 +18,7 @@ public class FormatFunction extends SimpleJtwigFunction {
 
 
     private String getString(FunctionRequest request, int index) {
-        return request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(index));
+        return request.getEnvironment().getValueEnvironment()
+                .getStringConverter().convert(request.get(index));
     }
 }

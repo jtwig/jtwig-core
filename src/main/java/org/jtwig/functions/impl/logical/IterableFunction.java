@@ -3,8 +3,6 @@ package org.jtwig.functions.impl.logical;
 import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
 
-import java.util.Map;
-
 public class IterableFunction extends SimpleJtwigFunction {
     @Override
     public String name() {
@@ -17,8 +15,8 @@ public class IterableFunction extends SimpleJtwigFunction {
                 .minimumNumberOfArguments(1)
                 .get(0);
 
-        return input instanceof Iterable
-                || input.getClass().isArray()
-                || input instanceof Map;
+        return request.getEnvironment().getValueEnvironment()
+                .getCollectionConverter().convert(input)
+                .isDefined();
     }
 }

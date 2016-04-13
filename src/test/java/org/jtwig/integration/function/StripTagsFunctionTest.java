@@ -16,8 +16,8 @@ public class StripTagsFunctionTest {
     }
     @Test
     public void simpleStripTagsWithIgnore() throws Exception {
-        String result = JtwigTemplate.inlineTemplate("{{ striptags('<a>jtwig</a>', 'a') }}").render(JtwigModel.newModel());
+        String result = JtwigTemplate.inlineTemplate("{{ striptags('<a>jtwig</a><button>Submit</button>', '<a>') }}").render(JtwigModel.newModel());
 
-        assertThat(result, is("<a>jtwig</a>"));
+        assertThat(result, is("<a>jtwig</a>Submit"));
     }
 }

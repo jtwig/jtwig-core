@@ -16,4 +16,12 @@ public class MapSelectionTest extends AbstractIntegrationTest {
 
         assertThat(result, is("1"));
     }
+
+    @Test
+    public void mapSelectionUndefined() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{% if (defined([1, 2][5])) %}KO{% else %}OK{% endif %}")
+                .render(JtwigModel.newModel());
+
+        assertThat(result, is("OK"));
+    }
 }

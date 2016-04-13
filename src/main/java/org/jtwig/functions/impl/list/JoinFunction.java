@@ -3,6 +3,7 @@ package org.jtwig.functions.impl.list;
 import org.apache.commons.lang3.StringUtils;
 import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
+import org.jtwig.value.Undefined;
 import org.jtwig.value.WrappedCollection;
 import org.jtwig.value.convert.Converter;
 
@@ -28,7 +29,11 @@ public class JoinFunction extends SimpleJtwigFunction {
     }
 
     private String getString(FunctionRequest request, int index) {
-        return request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(index));
+        return getString(request, request.get(index));
+    }
+
+    private String getString(FunctionRequest request, Object value) {
+        return request.getEnvironment().getValueEnvironment().getStringConverter().convert(value);
     }
 
     private String join(FunctionRequest request, Object input, String separator) {
@@ -37,8 +42,8 @@ public class JoinFunction extends SimpleJtwigFunction {
 
         WrappedCollection objects = collectionConverter.convert(input).or(WrappedCollection.singleton(input));
         for (Map.Entry<String, Object> entry : objects) {
-            if (entry.getValue() != null) {
-                pieces.add(entry.getValue().toString());
+            if (entry.getValue() != null && entry.getValue() != Undefined.UNDEFINED) {
+                pieces.add(getString(request, entry.getValue()));
             }
         }
         return StringUtils.join(pieces, separator);

@@ -3,6 +3,8 @@ package org.jtwig.value.convert.bool;
 import org.jtwig.value.Undefined;
 import org.jtwig.value.convert.Converter;
 
+import java.util.Map;
+
 public class BooleanConverter implements Converter<Boolean> {
     public static final String TRUE = "true";
     public static final String FALSE = "false";
@@ -24,10 +26,10 @@ public class BooleanConverter implements Converter<Boolean> {
             return Result.defined(((Object[]) object).length > 0);
         } else if (object instanceof Iterable) {
             return Result.defined(((Iterable) object).iterator().hasNext());
+        } else if (object instanceof Map) {
+            return Result.defined(((Map) object).size() > 0);
         } else if (object instanceof Number) {
             return Result.defined(((Number) object).intValue() != 0);
-        } else if (object instanceof String) {
-            return Result.defined(!((String) object).isEmpty());
         }
 
         return Result.undefined();

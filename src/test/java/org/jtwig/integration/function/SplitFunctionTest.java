@@ -11,7 +11,7 @@ public class SplitFunctionTest {
     @Test
     public void simpleSplit() throws Exception {
 
-        String result = JtwigTemplate.inlineTemplate("{{ split('jtwig,2',',') }}").render(JtwigModel.newModel());
+        String result = JtwigTemplate.inlineTemplate("{{ split('jtwig-2','-') }}").render(JtwigModel.newModel());
 
         assertThat(result, is("[jtwig, 2]"));
 
