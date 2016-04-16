@@ -1,6 +1,6 @@
 package org.jtwig.renderable.impl;
 
-import org.jtwig.render.escape.EscapeEngine;
+import org.jtwig.escape.EscapeEngine;
 import org.jtwig.renderable.RenderResult;
 import org.jtwig.renderable.Renderable;
 

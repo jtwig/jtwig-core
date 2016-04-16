@@ -1,4 +1,4 @@
-package org.jtwig.render.escape;
+package org.jtwig.escape;
 
 public interface EscapeEngine {
     String escape (String input);

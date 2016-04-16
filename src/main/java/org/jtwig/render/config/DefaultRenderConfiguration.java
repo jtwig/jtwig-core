@@ -4,10 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import org.jtwig.model.expression.*;
 import org.jtwig.model.expression.test.*;
 import org.jtwig.model.tree.*;
-import org.jtwig.render.escape.EscapeEngine;
-import org.jtwig.render.escape.HtmlEscapeEngine;
-import org.jtwig.render.escape.JavascriptEscapeEngine;
-import org.jtwig.render.escape.NoneEscapeEngine;
 import org.jtwig.render.expression.calculator.*;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
 import org.jtwig.render.expression.calculator.operation.binary.calculators.*;
@@ -27,19 +23,9 @@ import org.jtwig.render.node.renderer.*;
 import java.nio.charset.Charset;
 
 public class DefaultRenderConfiguration extends RenderConfiguration {
-    private static final String DEFAULT_ESCAPE_ENGINE = "html";
-
     public DefaultRenderConfiguration() {
         super(false,
                 Charset.defaultCharset(),
-                NoneEscapeEngine.instance(),
-                DEFAULT_ESCAPE_ENGINE,
-                ImmutableMap.<String, EscapeEngine>builder()
-                        .put("none", NoneEscapeEngine.instance())
-                        .put("html", HtmlEscapeEngine.instance())
-                        .put("js", JavascriptEscapeEngine.instance())
-                        .put("javascript", JavascriptEscapeEngine.instance())
-                        .build(),
                 ImmutableMap.<Class<? extends Node>, NodeRender>builder()
                         .put(AutoEscapeNode.class, new AutoEscapeNodeRender())
                         .put(BlockNode.class, new BlockNodeRender())
@@ -111,7 +97,8 @@ public class DefaultRenderConfiguration extends RenderConfiguration {
                         .put(DivisibleByTestExpression.class, new DivisibleByTestExpressionCalculator())
                         .put(NullTestExpression.class, new NullTestExpressionCalculator())
                         .put(SameAsTestExpression.class, new SameAsTestExpressionCalculator())
-                        .build());
+                        .build()
+        );
     }
 
 

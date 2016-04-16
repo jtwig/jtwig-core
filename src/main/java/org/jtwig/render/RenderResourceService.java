@@ -1,9 +1,9 @@
 package org.jtwig.render;
 
+import org.jtwig.escape.EscapeEngine;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.context.StackedContext;
 import org.jtwig.render.context.model.BlockContext;
-import org.jtwig.render.escape.EscapeEngine;
 import org.jtwig.render.node.RenderNodeService;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.resource.Resource;
@@ -35,7 +35,7 @@ public class RenderResourceService {
         }
 
         resourceContext.start(renderResourceRequest.getResource());
-        escapeEngineContext.start(request.getEnvironment().getRenderEnvironment().getInitialEscapeEngine());
+        escapeEngineContext.start(request.getEnvironment().getEscapeEnvironment().getInitialEscapeEngine());
 
         Iterator<Map.Entry<String, Object>> iterator = renderResourceRequest.getIncludeModel().iterator();
         ValueContext valueContextCurrent = valueContext.getCurrent();

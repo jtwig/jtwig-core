@@ -1,10 +1,10 @@
 package org.jtwig.render.node;
 
 import com.google.common.base.Optional;
+import org.jtwig.escape.EscapeEngine;
+import org.jtwig.escape.HtmlEscapeEngine;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.escape.EscapeEngine;
-import org.jtwig.render.escape.HtmlEscapeEngine;
 import org.jtwig.render.node.renderer.NodeRender;
 import org.jtwig.renderable.Renderable;
 import org.junit.Rule;

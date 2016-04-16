@@ -1,13 +1,13 @@
 package org.jtwig.render.node.renderer;
 
 import com.google.common.base.Optional;
+import org.jtwig.escape.EscapeEngine;
+import org.jtwig.escape.HtmlEscapeEngine;
+import org.jtwig.escape.JavascriptEscapeEngine;
 import org.jtwig.model.tree.AutoEscapeNode;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
 import org.jtwig.render.context.StackedContext;
-import org.jtwig.render.escape.EscapeEngine;
-import org.jtwig.render.escape.HtmlEscapeEngine;
-import org.jtwig.render.escape.JavascriptEscapeEngine;
 import org.jtwig.renderable.Renderable;
 import org.junit.Test;
 
@@ -28,8 +28,8 @@ public class AutoEscapeNodeRenderTest {
 
         when(node.getContent()).thenReturn(content);
         when(node.getEscapeEngineName()).thenReturn(Optional.<String>absent());
-        when(request.getEnvironment().getRenderEnvironment().getEscapeEngineSelector().escapeEngineFor("default")).thenReturn(Optional.of(escapeEngine));
-        when(request.getEnvironment().getRenderEnvironment().getDefaultEscapeEngineName()).thenReturn("default");
+        when(request.getEnvironment().getEscapeEnvironment().getEscapeEngineSelector().escapeEngineFor("default")).thenReturn(Optional.of(escapeEngine));
+        when(request.getEnvironment().getEscapeEnvironment().getDefaultEscapeEngine()).thenReturn("default");
         when(request.getEnvironment().getRenderEnvironment().getRenderNodeService().render(request, content)).thenReturn(renderable);
         when(request.getRenderContext().getEscapeEngineContext()).thenReturn(stackedContext);
 
@@ -50,8 +50,8 @@ public class AutoEscapeNodeRenderTest {
 
         when(node.getContent()).thenReturn(content);
         when(node.getEscapeEngineName()).thenReturn(Optional.of("js"));
-        when(request.getEnvironment().getRenderEnvironment().getEscapeEngineSelector().escapeEngineFor("js")).thenReturn(Optional.of(escapeMode));
-        when(request.getEnvironment().getRenderEnvironment().getDefaultEscapeEngineName()).thenReturn("default");
+        when(request.getEnvironment().getEscapeEnvironment().getEscapeEngineSelector().escapeEngineFor("js")).thenReturn(Optional.of(escapeMode));
+        when(request.getEnvironment().getEscapeEnvironment().getDefaultEscapeEngine()).thenReturn("default");
         when(request.getEnvironment().getRenderEnvironment().getRenderNodeService().render(request, content)).thenReturn(renderable);
         when(request.getRenderContext().getEscapeEngineContext()).thenReturn(stackedContext);
 

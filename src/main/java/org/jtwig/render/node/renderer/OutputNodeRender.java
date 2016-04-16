@@ -1,8 +1,8 @@
 package org.jtwig.render.node.renderer;
 
+import org.jtwig.escape.EscapeEngine;
 import org.jtwig.model.tree.OutputNode;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.escape.EscapeEngine;
 import org.jtwig.render.expression.CalculateExpressionService;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.StringRenderable;

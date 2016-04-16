@@ -1,7 +1,7 @@
 package org.jtwig.render.context.model;
 
+import org.jtwig.escape.EscapeEngine;
 import org.jtwig.render.context.StackedContext;
-import org.jtwig.render.escape.EscapeEngine;
 import org.jtwig.resource.Resource;
 import org.jtwig.value.context.ValueContext;
 

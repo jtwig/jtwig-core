@@ -1,11 +1,11 @@
 package org.jtwig.render;
 
+import org.jtwig.escape.EscapeEngine;
+import org.jtwig.escape.HtmlEscapeEngine;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.context.StackedContext;
 import org.jtwig.render.context.model.BlockContext;
 import org.jtwig.render.context.model.MacroDefinitionContext;
-import org.jtwig.render.escape.EscapeEngine;
-import org.jtwig.render.escape.HtmlEscapeEngine;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.resource.Resource;
 import org.jtwig.value.WrappedCollection;
@@ -32,7 +32,7 @@ public class RenderResourceServiceTest {
         RenderResourceRequest renderResourceRequest = mock(RenderResourceRequest.class, RETURNS_DEEP_STUBS);
 
         when(renderRequest.getEnvironment().getParser().parse(resource)).thenReturn(node);
-        when(renderRequest.getEnvironment().getRenderEnvironment().getInitialEscapeEngine()).thenReturn(initialEscapeMode);
+        when(renderRequest.getEnvironment().getEscapeEnvironment().getInitialEscapeEngine()).thenReturn(initialEscapeMode);
         when(renderResourceRequest.getResource()).thenReturn(resource);
         when(renderResourceRequest.isNewBlockContext()).thenReturn(false);
         when(renderResourceRequest.isNewValueContext()).thenReturn(true);
@@ -68,7 +68,7 @@ public class RenderResourceServiceTest {
         RenderResourceRequest renderResourceRequest = mock(RenderResourceRequest.class, RETURNS_DEEP_STUBS);
 
         when(renderRequest.getEnvironment().getParser().parse(resource)).thenReturn(node);
-        when(renderRequest.getEnvironment().getRenderEnvironment().getInitialEscapeEngine()).thenReturn(initialEscapeMode);
+        when(renderRequest.getEnvironment().getEscapeEnvironment().getInitialEscapeEngine()).thenReturn(initialEscapeMode);
         when(renderResourceRequest.getResource()).thenReturn(resource);
         when(renderResourceRequest.isNewBlockContext()).thenReturn(true);
         when(renderResourceRequest.isNewValueContext()).thenReturn(true);
@@ -104,7 +104,7 @@ public class RenderResourceServiceTest {
 
         when(renderRequest.getRenderContext().getValueContext().getCurrent()).thenReturn(valueContext);
         when(renderRequest.getEnvironment().getParser().parse(resource)).thenReturn(node);
-        when(renderRequest.getEnvironment().getRenderEnvironment().getInitialEscapeEngine()).thenReturn(initialEscapeMode);
+        when(renderRequest.getEnvironment().getEscapeEnvironment().getInitialEscapeEngine()).thenReturn(initialEscapeMode);
         when(renderResourceRequest.getResource()).thenReturn(resource);
         when(renderResourceRequest.isNewBlockContext()).thenReturn(true);
         when(renderResourceRequest.isNewValueContext()).thenReturn(false);

@@ -1,6 +1,8 @@
 package org.jtwig.render.node.renderer;
 
 import org.hamcrest.Matcher;
+import org.jtwig.escape.EscapeEngine;
+import org.jtwig.escape.NoneEscapeEngine;
 import org.jtwig.model.expression.ConstantExpression;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.InjectableExpression;
@@ -8,8 +10,6 @@ import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.FilterNode;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.escape.EscapeEngine;
-import org.jtwig.render.escape.NoneEscapeEngine;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.StringRenderable;
 import org.junit.Test;

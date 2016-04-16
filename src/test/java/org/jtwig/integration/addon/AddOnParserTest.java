@@ -2,6 +2,7 @@ package org.jtwig.integration.addon;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
+import org.jtwig.escape.NoneEscapeEngine;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.Node;
@@ -12,7 +13,6 @@ import org.jtwig.parser.parboiled.base.PositionTrackerParser;
 import org.jtwig.parser.parboiled.base.SpacingParser;
 import org.jtwig.parser.parboiled.node.AddonParser;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.escape.NoneEscapeEngine;
 import org.jtwig.render.node.renderer.NodeRender;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.StringRenderable;

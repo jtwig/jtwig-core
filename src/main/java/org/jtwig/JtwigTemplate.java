@@ -2,6 +2,7 @@ package org.jtwig;
 
 import com.google.common.base.Optional;
 import org.jtwig.environment.*;
+import org.jtwig.escape.EscapeEngine;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
 import org.jtwig.render.context.RenderContextHolder;
@@ -10,7 +11,6 @@ import org.jtwig.render.context.model.BlockContext;
 import org.jtwig.render.context.model.MacroAliasesContext;
 import org.jtwig.render.context.model.MacroDefinitionContext;
 import org.jtwig.render.context.model.RenderContext;
-import org.jtwig.render.escape.EscapeEngine;
 import org.jtwig.renderable.RenderResult;
 import org.jtwig.renderable.StreamRenderResult;
 import org.jtwig.renderable.StringBuilderRenderResult;
@@ -97,7 +97,7 @@ public class JtwigTemplate {
 
     private void render(JtwigModel model, RenderResult renderResult) {
         StackedContext<ValueContext> valueContextContext = StackedContext.<ValueContext>context(new IsolateParentValueContext(new JtwigModelValueContext(model), MapValueContext.newContext()));
-        StackedContext<EscapeEngine> escapeEngineContext = StackedContext.context(environment.getRenderEnvironment().getInitialEscapeEngine());
+        StackedContext<EscapeEngine> escapeEngineContext = StackedContext.context(environment.getEscapeEnvironment().getInitialEscapeEngine());
         StackedContext<Resource> resourceContext = StackedContext.context(resource);
         StackedContext<BlockContext> blockContext = StackedContext.context(BlockContext.newContext());
         StackedContext<MacroDefinitionContext> macroDefinitionContext = StackedContext.emptyContext();

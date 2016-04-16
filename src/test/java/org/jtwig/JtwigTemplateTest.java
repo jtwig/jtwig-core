@@ -2,11 +2,11 @@ package org.jtwig;
 
 import org.apache.commons.io.FileUtils;
 import org.jtwig.environment.Environment;
+import org.jtwig.escape.EscapeEngine;
+import org.jtwig.escape.HtmlEscapeEngine;
+import org.jtwig.escape.NoneEscapeEngine;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.escape.EscapeEngine;
-import org.jtwig.render.escape.HtmlEscapeEngine;
-import org.jtwig.render.escape.NoneEscapeEngine;
 import org.jtwig.renderable.impl.StringRenderable;
 import org.jtwig.resource.Resource;
 import org.junit.Rule;
@@ -41,7 +41,7 @@ public class JtwigTemplateTest {
         Node node = mock(Node.class);
 
         when(environment.getParser().parse(resource)).thenReturn(node);
-        when(environment.getRenderEnvironment().getInitialEscapeEngine()).thenReturn(HtmlEscapeEngine.instance());
+        when(environment.getEscapeEnvironment().getInitialEscapeEngine()).thenReturn(HtmlEscapeEngine.instance());
         when(environment.getRenderEnvironment().getRenderNodeService().render(renderRequestArgumentCaptor.capture(), eq(node))).thenReturn(new StringRenderable(exampleOut, NoneEscapeEngine.instance()));
 
         String result = underTest.render(model);

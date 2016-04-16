@@ -1,8 +1,6 @@
 package org.jtwig.render.environment;
 
 import org.jtwig.render.RenderResourceService;
-import org.jtwig.render.escape.EscapeEngine;
-import org.jtwig.render.escape.EscapeEngineSelector;
 import org.jtwig.render.expression.CalculateExpressionService;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperationService;
 import org.jtwig.render.expression.calculator.operation.unary.UnaryOperationService;
@@ -14,9 +12,6 @@ import java.nio.charset.Charset;
 public class RenderEnvironment {
     private final boolean strictMode;
     private final Charset defaultOutputCharset;
-    private final EscapeEngine initialEscapeEngine;
-    private final String defaultEscapeEngineName;
-    private final EscapeEngineSelector escapeEngineSelector;
     private final RenderResourceService renderResourceService;
     private final RenderNodeService renderNodeService;
     private final CalculateExpressionService calculateExpressionService;
@@ -24,12 +19,9 @@ public class RenderEnvironment {
     private final UnaryOperationService unaryOperationService;
     private final CalculateTestExpressionService calculateTestExpressionService;
 
-    public RenderEnvironment(boolean strictMode, Charset defaultOutputCharset, EscapeEngine initialEscapeEngine, String defaultEscapeEngineName, EscapeEngineSelector escapeEngineSelector, RenderResourceService renderResourceService, RenderNodeService renderNodeService, CalculateExpressionService calculateExpressionService, BinaryOperationService binaryOperationService, UnaryOperationService unaryOperationService, CalculateTestExpressionService calculateTestExpressionService) {
+    public RenderEnvironment(boolean strictMode, Charset defaultOutputCharset, RenderResourceService renderResourceService, RenderNodeService renderNodeService, CalculateExpressionService calculateExpressionService, BinaryOperationService binaryOperationService, UnaryOperationService unaryOperationService, CalculateTestExpressionService calculateTestExpressionService) {
         this.strictMode = strictMode;
         this.defaultOutputCharset = defaultOutputCharset;
-        this.initialEscapeEngine = initialEscapeEngine;
-        this.defaultEscapeEngineName = defaultEscapeEngineName;
-        this.escapeEngineSelector = escapeEngineSelector;
         this.renderResourceService = renderResourceService;
         this.renderNodeService = renderNodeService;
         this.calculateExpressionService = calculateExpressionService;
@@ -44,10 +36,6 @@ public class RenderEnvironment {
 
     public Charset getDefaultOutputCharset() {
         return defaultOutputCharset;
-    }
-
-    public EscapeEngine getInitialEscapeEngine() {
-        return initialEscapeEngine;
     }
 
     public RenderResourceService getRenderResourceService() {
@@ -72,13 +60,5 @@ public class RenderEnvironment {
 
     public CalculateTestExpressionService getCalculateTestExpressionService() {
         return calculateTestExpressionService;
-    }
-
-    public EscapeEngineSelector getEscapeEngineSelector() {
-        return escapeEngineSelector;
-    }
-
-    public String getDefaultEscapeEngineName() {
-        return defaultEscapeEngineName;
     }
 }

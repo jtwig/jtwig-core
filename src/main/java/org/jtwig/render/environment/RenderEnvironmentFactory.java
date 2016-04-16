@@ -2,7 +2,6 @@ package org.jtwig.render.environment;
 
 import org.jtwig.render.RenderResourceService;
 import org.jtwig.render.config.RenderConfiguration;
-import org.jtwig.render.escape.EscapeEngineSelector;
 import org.jtwig.render.expression.CalculateExpressionService;
 import org.jtwig.render.expression.ExpressionCalculatorSelector;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperationCalculatorSelector;
@@ -24,11 +23,9 @@ public class RenderEnvironmentFactory {
         BinaryOperationService binaryOperationService = new BinaryOperationService(new BinaryOperationCalculatorSelector(renderConfiguration.getBinaryExpressionCalculators()));
         UnaryOperationService unaryOperationService = new UnaryOperationService(new UnaryOperationCalculatorSelector(renderConfiguration.getUnaryExpressionCalculators()));
         CalculateTestExpressionService calculateTestExpressionService = new CalculateTestExpressionService(new TestExpressionCalculatorSelector(renderConfiguration.getTestExpressionCalculators()));
-        EscapeEngineSelector escapeEngineSelector = EscapeEngineSelector.newInstance(renderConfiguration.getEscapeEngines());
-        return new RenderEnvironment(renderConfiguration.getStrictMode(), renderConfiguration.getDefaultOutputCharset(),
-                renderConfiguration.getInitialEscapeEngine(),
-                renderConfiguration.getDefaultEscapeEngineName(),
-                escapeEngineSelector, renderResourceService, renderNodeService,
+        return new RenderEnvironment(renderConfiguration.getStrictMode(),
+                renderConfiguration.getDefaultOutputCharset(),
+                renderResourceService, renderNodeService,
                 calculateExpressionService, binaryOperationService, unaryOperationService,
                 calculateTestExpressionService);
     }

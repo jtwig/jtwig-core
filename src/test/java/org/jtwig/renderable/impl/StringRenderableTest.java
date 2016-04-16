@@ -1,6 +1,6 @@
 package org.jtwig.renderable.impl;
 
-import org.jtwig.render.escape.NoneEscapeEngine;
+import org.jtwig.escape.NoneEscapeEngine;
 import org.jtwig.renderable.RenderResult;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package org.jtwig.render.escape;
+package org.jtwig.escape;
 
 import com.google.common.base.Optional;
 import org.apache.commons.lang3.StringUtils;

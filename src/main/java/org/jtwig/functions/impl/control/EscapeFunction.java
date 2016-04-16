@@ -1,11 +1,11 @@
 package org.jtwig.functions.impl.control;
 
 import com.google.common.base.Optional;
+import org.jtwig.escape.EscapeEngine;
+import org.jtwig.escape.HtmlEscapeEngine;
+import org.jtwig.escape.NoneEscapeEngine;
 import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
-import org.jtwig.render.escape.EscapeEngine;
-import org.jtwig.render.escape.HtmlEscapeEngine;
-import org.jtwig.render.escape.NoneEscapeEngine;
 
 public class EscapeFunction extends SimpleJtwigFunction {
     @Override
@@ -26,11 +26,11 @@ public class EscapeFunction extends SimpleJtwigFunction {
                 }
             } else {
                 String requestedEscapeMode = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(1));
-                Optional<EscapeEngine> optionalEscapeEngine = request.getEnvironment().getRenderEnvironment().getEscapeEngineSelector().escapeEngineFor(requestedEscapeMode);
+                Optional<EscapeEngine> optionalEscapeEngine = request.getEnvironment().getEscapeEnvironment().getEscapeEngineSelector().escapeEngineFor(requestedEscapeMode);
                 if (optionalEscapeEngine.isPresent()) {
                     escapeEngine = optionalEscapeEngine.get();
                 } else {
-                    throw request.exception(String.format("Invalid escape engine requested '%s'. Only supporting %s", requestedEscapeMode, request.getEnvironment().getRenderEnvironment().getEscapeEngineSelector().availableEscapeEngines()));
+                    throw request.exception(String.format("Invalid escape engine requested '%s'. Only supporting %s", requestedEscapeMode, request.getEnvironment().getEscapeEnvironment().getEscapeEngineSelector().availableEscapeEngines()));
                 }
             }
         }
