@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.core.AnyOf.anyOf;
 import static org.hamcrest.core.Is.is;
 
 public class UrlEncodeFunctionTest {
@@ -14,7 +13,7 @@ public class UrlEncodeFunctionTest {
     public void simpleUrl() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ url_encode({id: 1, special: '&'}) }}").render(JtwigModel.newModel());
 
-        assertThat(result, anyOf(equalTo("id=1&special=%26"), equalTo("special=%26&id=1")));
+        assertThat(result, equalTo("id=1&special=%26"));
     }
     @Test
     public void urlString() throws Exception {

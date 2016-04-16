@@ -1,10 +1,7 @@
 package org.jtwig.environment;
 
 import org.apache.commons.lang3.builder.Builder;
-import org.jtwig.environment.and.AndJtwigParserConfigurationBuilder;
-import org.jtwig.environment.and.AndRenderConfigurationBuilder;
-import org.jtwig.environment.and.AndResourceConfigurationBuilder;
-import org.jtwig.environment.and.AndValueConfigurationBuilder;
+import org.jtwig.environment.and.*;
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.JtwigFunction;
 import org.jtwig.property.PropertyResolver;
@@ -26,12 +23,14 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     private final AndJtwigParserConfigurationBuilder jtwigParserConfigurationBuilder;
     private final AndResourceConfigurationBuilder resourceConfigurationBuilder;
     private final AndValueConfigurationBuilder valueConfigurationBuilder;
+    private final AndEscapeEngineConfigurationBuilder escapeEngineConfigurationBuilder;
 
     public EnvironmentConfigurationBuilder () {
         functions  = new ListBuilder<>(this);
         renderConfiguration = new AndRenderConfigurationBuilder(this);
         jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(this);
         resourceConfigurationBuilder = new AndResourceConfigurationBuilder(this);
+        escapeEngineConfigurationBuilder = new AndEscapeEngineConfigurationBuilder(this);
         propertyResolvers = new ListBuilder<>(this);
         enumerationListStrategies = new ListBuilder<>(this);
         valueConfigurationBuilder = new AndValueConfigurationBuilder(this);
@@ -43,6 +42,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         renderConfiguration = new AndRenderConfigurationBuilder(prototype.getRenderConfiguration(), this);
         jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(prototype.getJtwigParserConfiguration(), this);
         resourceConfigurationBuilder = new AndResourceConfigurationBuilder(prototype.getResourceConfiguration(), this);
+        escapeEngineConfigurationBuilder = new AndEscapeEngineConfigurationBuilder(prototype.getEscapeConfiguration(), this);
         propertyResolvers = new ListBuilder<>(this, prototype.getPropertyResolvers());
         enumerationListStrategies = new ListBuilder<>(this, prototype.getEnumerationStrategies());
         valueConfigurationBuilder = new AndValueConfigurationBuilder(prototype.getValueConfiguration(), this);
@@ -58,6 +58,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
                 jtwigParserConfigurationBuilder.build(),
                 valueConfigurationBuilder.build(),
                 renderConfiguration.build(),
+                escapeEngineConfigurationBuilder.build(),
                 propertyResolvers.build(),
                 functions.build(),
                 parameters.build(),
@@ -85,6 +86,10 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     }
 
     public AndValueConfigurationBuilder value () { return valueConfigurationBuilder; }
+
+    public AndEscapeEngineConfigurationBuilder escape () {
+        return escapeEngineConfigurationBuilder;
+    }
 
     public ListBuilder<EnvironmentConfigurationBuilder, EnumerationListStrategy> enumerationStrategies() {
         return enumerationListStrategies;

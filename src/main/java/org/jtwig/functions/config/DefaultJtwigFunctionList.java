@@ -22,7 +22,6 @@ public class DefaultJtwigFunctionList extends ArrayList<JtwigFunction> {
         super(Arrays.<JtwigFunction>asList(
                 // Logical
                 new DefinedFunction(),
-                new NullFunction(),
                 new EvenFunction(),
                 new OddFunction(),
                 new IterableFunction(),

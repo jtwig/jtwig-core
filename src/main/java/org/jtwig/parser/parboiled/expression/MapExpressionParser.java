@@ -8,7 +8,7 @@ import org.jtwig.parser.parboiled.base.PositionTrackerParser;
 import org.jtwig.parser.parboiled.base.SpacingParser;
 import org.parboiled.Rule;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.parboiled.Parboiled.createParser;
@@ -45,7 +45,7 @@ public class MapExpressionParser extends ExpressionParser<MapExpression> {
             StringOrIdentifierParser stringOrIdentifierParser = parserContext().parser(StringOrIdentifierParser.class);
             SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
             return Sequence(
-                    push(new HashMap<String, Expression>()),
+                    push(new LinkedHashMap<String, Expression>()),
                     Optional(
                             stringOrIdentifierParser.Expression(),
                             spacingParser.Spacing(),

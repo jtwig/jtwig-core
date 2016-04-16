@@ -32,7 +32,7 @@ public class SortFunction extends SimpleJtwigFunction {
             if (result.get(0) instanceof Comparable) {
                 Collections.sort((List) result);
             } else {
-                throw request.exception("Cannot sort list of uncomparable items");
+                throw request.exception(String.format("Sort function only works over collections of items, where items implement the %s interface", Comparable.class));
             }
         }
 

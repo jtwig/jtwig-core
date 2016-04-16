@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import org.jtwig.model.expression.*;
 import org.jtwig.model.expression.test.*;
 import org.jtwig.model.tree.*;
-import org.jtwig.render.context.model.EscapeMode;
 import org.jtwig.render.expression.calculator.*;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
 import org.jtwig.render.expression.calculator.operation.binary.calculators.*;
@@ -25,7 +24,8 @@ import java.nio.charset.Charset;
 
 public class DefaultRenderConfiguration extends RenderConfiguration {
     public DefaultRenderConfiguration() {
-        super(false, Charset.defaultCharset(), EscapeMode.NONE,
+        super(false,
+                Charset.defaultCharset(),
                 ImmutableMap.<Class<? extends Node>, NodeRender>builder()
                         .put(AutoEscapeNode.class, new AutoEscapeNodeRender())
                         .put(BlockNode.class, new BlockNodeRender())
@@ -97,7 +97,8 @@ public class DefaultRenderConfiguration extends RenderConfiguration {
                         .put(DivisibleByTestExpression.class, new DivisibleByTestExpressionCalculator())
                         .put(NullTestExpression.class, new NullTestExpressionCalculator())
                         .put(SameAsTestExpression.class, new SameAsTestExpressionCalculator())
-                        .build());
+                        .build()
+        );
     }
 
 

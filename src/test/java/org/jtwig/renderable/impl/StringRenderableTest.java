@@ -1,6 +1,6 @@
 package org.jtwig.renderable.impl;
 
-import org.jtwig.render.context.model.EscapeMode;
+import org.jtwig.escape.NoneEscapeEngine;
 import org.jtwig.renderable.RenderResult;
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class StringRenderableTest {
 
     @Test
     public void acceptWithNoneEscapeMode() throws Exception {
-        underTest = new StringRenderable(CONTENT, EscapeMode.NONE);
+        underTest = new StringRenderable(CONTENT, NoneEscapeEngine.instance());
 
         underTest.appendTo(renderResult);
 

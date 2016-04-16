@@ -4,10 +4,11 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
+import org.jtwig.value.WrappedCollection;
+import org.jtwig.value.convert.Converter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collection;
 
 public class ReverseFunction extends SimpleJtwigFunction {
     @Override
@@ -20,15 +21,12 @@ public class ReverseFunction extends SimpleJtwigFunction {
         request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
 
         Object input = request.get(0);
-        if (input.getClass().isArray()) {
-            return reverseArray((Object[]) input);
-        } else if (input instanceof Iterable) {
-            Iterator iterator = ((Iterable) input).iterator();
-            ArrayList<Object> list = new ArrayList<>();
-            while (iterator.hasNext()) {
-                list.add(iterator.next());
-            }
-            return Lists.reverse(list);
+        Converter.Result<WrappedCollection> collectionResult = request.getEnvironment()
+                .getValueEnvironment().getCollectionConverter()
+                .convert(input);
+
+        if (collectionResult.isDefined()) {
+            return reverse(collectionResult.get().values());
         } else if (input instanceof String) {
             return StringUtils.reverse((String) input);
         } else {
@@ -36,13 +34,8 @@ public class ReverseFunction extends SimpleJtwigFunction {
         }
     }
 
-    private Object reverseArray(Object[] input) {
-        Object[] array = input;
-        Object[] newInstance = (Object[]) Array.newInstance(input.getClass().getComponentType(), array.length);
-        for (int i = 0; i < newInstance.length / 2; i++) {
-            newInstance[i] = array[newInstance.length - i - 1];
-            newInstance[newInstance.length - i - 1] = array[i];
-        }
-        return newInstance;
+    private Collection<Object> reverse(Collection<Object> values) {
+        return Lists.reverse(new ArrayList<>(values));
     }
+
 }

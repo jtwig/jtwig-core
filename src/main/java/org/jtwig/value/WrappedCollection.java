@@ -41,7 +41,11 @@ public class WrappedCollection implements Iterable<Map.Entry<String, Object>> {
     }
 
     public Object getValue(String key) {
-        return store.get(key);
+        if (store.containsKey(key)) {
+            return store.get(key);
+        } else {
+            return Undefined.UNDEFINED;
+        }
     }
 
     public Collection<Object> values() {

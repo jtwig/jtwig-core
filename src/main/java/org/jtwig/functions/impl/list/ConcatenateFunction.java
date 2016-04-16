@@ -22,9 +22,7 @@ public class ConcatenateFunction implements JtwigFunction {
         request.minimumNumberOfArguments(1);
         StringBuilder builder = new StringBuilder();
         for (Object piece : request.getRemainingArguments(0)) {
-            if (piece != null)
-                builder.append(piece);
-
+            builder.append(request.getEnvironment().getValueEnvironment().getStringConverter().convert(piece));
         }
         return builder.toString();
     }

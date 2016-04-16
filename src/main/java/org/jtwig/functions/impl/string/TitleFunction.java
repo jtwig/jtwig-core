@@ -13,7 +13,9 @@ public class TitleFunction extends SimpleJtwigFunction {
     @Override
     public Object execute(FunctionRequest request) {
         request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
-        String input = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(0));
+        String input = request.getEnvironment().getValueEnvironment()
+                .getStringConverter()
+                .convert(request.get(0));
         return WordUtils.capitalize(input);
     }
 }

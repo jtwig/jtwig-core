@@ -12,7 +12,7 @@ import static org.junit.Assert.assertSame;
 
 public class EnvironmentTest {
     private final HashMap<String, Object> parameters = new HashMap<>();
-    private Environment underTest = new Environment(null, parameters, null, null, null, null, null, null);
+    private Environment underTest = new Environment(null, parameters, null, null, null, null, null, null, null);
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();

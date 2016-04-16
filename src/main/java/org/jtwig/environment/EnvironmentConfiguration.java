@@ -1,5 +1,6 @@
 package org.jtwig.environment;
 
+import org.jtwig.escape.config.EscapeEngineConfiguration;
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.JtwigFunction;
 import org.jtwig.parser.config.JtwigParserConfiguration;
@@ -18,14 +19,16 @@ public class EnvironmentConfiguration {
     private final JtwigParserConfiguration jtwigParserConfiguration;
     private final RenderConfiguration renderConfiguration;
     private final ValueConfiguration valueConfiguration;
+    private final EscapeEngineConfiguration escapeConfiguration;
     private final Collection<EnumerationListStrategy> enumerationStrategies;
     private final Collection<PropertyResolver> propertyResolvers;
     private final Collection<JtwigFunction> functions;
     private final Map<String, Object> parameters = new HashMap<>();
     private final Collection<Extension> extensions;
 
-    public EnvironmentConfiguration(ResourceConfiguration resourceConfiguration, Collection<EnumerationListStrategy> enumerationStrategies, JtwigParserConfiguration jtwigParserConfiguration, ValueConfiguration valueConfiguration, RenderConfiguration renderConfiguration, Collection<PropertyResolver> propertyResolvers, Collection<JtwigFunction> functions, Map<String, Object> parameters, Collection<Extension> extensions) {
+    public EnvironmentConfiguration(ResourceConfiguration resourceConfiguration, Collection<EnumerationListStrategy> enumerationStrategies, JtwigParserConfiguration jtwigParserConfiguration, ValueConfiguration valueConfiguration, RenderConfiguration renderConfiguration, EscapeEngineConfiguration escapeConfiguration, Collection<PropertyResolver> propertyResolvers, Collection<JtwigFunction> functions, Map<String, Object> parameters, Collection<Extension> extensions) {
         this.resourceConfiguration = resourceConfiguration;
+        this.escapeConfiguration = escapeConfiguration;
         this.propertyResolvers = propertyResolvers;
         this.enumerationStrategies = enumerationStrategies;
         this.jtwigParserConfiguration = jtwigParserConfiguration;
@@ -70,5 +73,9 @@ public class EnvironmentConfiguration {
 
     public Collection<Extension> getExtensions() {
         return extensions;
+    }
+
+    public EscapeEngineConfiguration getEscapeConfiguration() {
+        return escapeConfiguration;
     }
 }

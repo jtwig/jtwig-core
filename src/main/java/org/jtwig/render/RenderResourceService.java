@@ -1,9 +1,9 @@
 package org.jtwig.render;
 
+import org.jtwig.escape.EscapeEngine;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.context.StackedContext;
 import org.jtwig.render.context.model.BlockContext;
-import org.jtwig.render.context.model.EscapeMode;
 import org.jtwig.render.node.RenderNodeService;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.resource.Resource;
@@ -22,7 +22,7 @@ public class RenderResourceService {
         StackedContext<BlockContext> blockContext = request.getRenderContext().getBlockContext();
         StackedContext<ValueContext> valueContext = request.getRenderContext().getValueContext();
         StackedContext<Resource> resourceContext = request.getRenderContext().getResourceContext();
-        StackedContext<EscapeMode> escapeModeContext = request.getRenderContext().getEscapeModeContext();
+        StackedContext<EscapeEngine> escapeEngineContext = request.getRenderContext().getEscapeEngineContext();
 
         if (renderResourceRequest.isNewBlockContext()) {
             blockContext.start(BlockContext.newContext());
@@ -35,7 +35,7 @@ public class RenderResourceService {
         }
 
         resourceContext.start(renderResourceRequest.getResource());
-        escapeModeContext.start(request.getEnvironment().getRenderEnvironment().getInitialEscapeMode());
+        escapeEngineContext.start(request.getEnvironment().getEscapeEnvironment().getInitialEscapeEngine());
 
         Iterator<Map.Entry<String, Object>> iterator = renderResourceRequest.getIncludeModel().iterator();
         ValueContext valueContextCurrent = valueContext.getCurrent();
@@ -52,7 +52,7 @@ public class RenderResourceService {
         }
         resourceContext.end();
         valueContext.end();
-        escapeModeContext.end();
+        escapeEngineContext.end();
 
         return renderable;
     }

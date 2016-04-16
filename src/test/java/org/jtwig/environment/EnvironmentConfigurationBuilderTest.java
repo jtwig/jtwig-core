@@ -1,5 +1,7 @@
 package org.jtwig.environment;
 
+import org.jtwig.escape.EscapeEngine;
+import org.jtwig.escape.NoneEscapeEngine;
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.JtwigFunction;
 import org.jtwig.model.expression.Expression;
@@ -9,7 +11,6 @@ import org.jtwig.model.tree.Node;
 import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.config.JtwigParserConfiguration;
 import org.jtwig.property.PropertyResolver;
-import org.jtwig.render.context.model.EscapeMode;
 import org.jtwig.render.expression.calculator.ExpressionCalculator;
 import org.jtwig.render.expression.calculator.enumerated.EnumerationListStrategy;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
@@ -32,8 +33,7 @@ import java.nio.charset.Charset;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class EnvironmentConfigurationBuilderTest {
@@ -102,7 +102,7 @@ public class EnvironmentConfigurationBuilderTest {
 
     @Test
     public void renderConfig() throws Exception {
-        EscapeMode initialEscapeMode = EscapeMode.NONE;
+        EscapeEngine initialEscapeMode = NoneEscapeEngine.instance();
         boolean strictMode = false;
         Charset outputCharset = Charset.defaultCharset();
         NodeRender nodeRender = mock(NodeRender.class);
@@ -115,7 +115,6 @@ public class EnvironmentConfigurationBuilderTest {
                 .configuration()
                     .render()
                         .withStrictMode(strictMode)
-                        .withInitialEscapeMode(initialEscapeMode)
                         .withOutputCharset(outputCharset)
                         .nodeRenders().add(CustomNode.class, nodeRender).and()
                         .expressionCalculators()
@@ -129,7 +128,6 @@ public class EnvironmentConfigurationBuilderTest {
                     .and()
                 .build();
 
-        assertThat(result.getRenderConfiguration().getInitialEscapeMode(), is(initialEscapeMode));
         assertThat(result.getRenderConfiguration().getDefaultOutputCharset(), is(outputCharset));
         assertThat(result.getRenderConfiguration().getStrictMode(), is(strictMode));
         assertThat(result.getRenderConfiguration().getNodeRenders().get(CustomNode.class), is(nodeRender));
@@ -205,6 +203,30 @@ public class EnvironmentConfigurationBuilderTest {
                 .build();
 
         assertThat(configuration.getEnumerationStrategies(), hasItem(enumerationListStrategy));
+    }
+
+    @Test
+    public void escapeConfig() throws Exception {
+        EscapeEngine customEscapeEngine = mock(EscapeEngine.class);
+
+        EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
+                .configuration()
+                    .escape()
+                        .withInitialEngine("none")
+                        .withDefaultEngine("custom")
+                        .engines()
+                            .add("custom", customEscapeEngine)
+                        .and()
+                    .and()
+                .build();
+
+        assertThat(configuration.getEscapeConfiguration().getDefaultEngine(), is("custom"));
+        assertThat(configuration.getEscapeConfiguration().getInitialEngine(), is("none"));
+        assertTrue(configuration.getEscapeConfiguration().getEscapeEngineMap().containsKey("custom"));
+        assertTrue(configuration.getEscapeConfiguration().getEscapeEngineMap().containsKey("none"));
+        assertTrue(configuration.getEscapeConfiguration().getEscapeEngineMap().containsKey("html"));
+        assertTrue(configuration.getEscapeConfiguration().getEscapeEngineMap().containsKey("js"));
+        assertTrue(configuration.getEscapeConfiguration().getEscapeEngineMap().containsKey("javascript"));
     }
 
     @Test

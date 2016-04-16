@@ -23,7 +23,10 @@ public class RenderEnvironmentFactory {
         BinaryOperationService binaryOperationService = new BinaryOperationService(new BinaryOperationCalculatorSelector(renderConfiguration.getBinaryExpressionCalculators()));
         UnaryOperationService unaryOperationService = new UnaryOperationService(new UnaryOperationCalculatorSelector(renderConfiguration.getUnaryExpressionCalculators()));
         CalculateTestExpressionService calculateTestExpressionService = new CalculateTestExpressionService(new TestExpressionCalculatorSelector(renderConfiguration.getTestExpressionCalculators()));
-        return new RenderEnvironment(renderConfiguration.getStrictMode(), renderConfiguration.getDefaultOutputCharset(), renderConfiguration.getInitialEscapeMode(),
-                renderResourceService, renderNodeService, calculateExpressionService, binaryOperationService, unaryOperationService, calculateTestExpressionService);
+        return new RenderEnvironment(renderConfiguration.getStrictMode(),
+                renderConfiguration.getDefaultOutputCharset(),
+                renderResourceService, renderNodeService,
+                calculateExpressionService, binaryOperationService, unaryOperationService,
+                calculateTestExpressionService);
     }
 }

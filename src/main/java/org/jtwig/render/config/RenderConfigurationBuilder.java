@@ -4,7 +4,6 @@ import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.test.TestExpression;
 import org.jtwig.model.tree.Node;
-import org.jtwig.render.context.model.EscapeMode;
 import org.jtwig.render.expression.calculator.ExpressionCalculator;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
 import org.jtwig.render.expression.calculator.operation.binary.calculators.BinaryOperationCalculator;
@@ -19,7 +18,6 @@ import java.nio.charset.Charset;
 public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> implements Builder<RenderConfiguration> {
     private boolean strictMode;
     private Charset outputCharset;
-    private EscapeMode initialEscapeMode;
     private final MapBuilder<B, Class<? extends Node>, NodeRender> nodeRenders;
     private final MapBuilder<B, Class<? extends Expression>, ExpressionCalculator> expressionCalculators;
     private final MapBuilder<B, Class<? extends BinaryOperator>, BinaryOperationCalculator> binaryExpressionCalculators;
@@ -36,7 +34,6 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
     public RenderConfigurationBuilder(RenderConfiguration prototype) {
         this.strictMode = prototype.getStrictMode();
         this.outputCharset = prototype.getDefaultOutputCharset();
-        this.initialEscapeMode = prototype.getInitialEscapeMode();
         this.nodeRenders = new MapBuilder<>(self(), prototype.getNodeRenders());
         this.expressionCalculators = new MapBuilder<>(self(), prototype.getExpressionCalculators());
         this.binaryExpressionCalculators = new MapBuilder<>(self(), prototype.getBinaryExpressionCalculators());
@@ -51,11 +48,6 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
 
     public B withOutputCharset(Charset outputCharset) {
         this.outputCharset = outputCharset;
-        return self();
-    }
-
-    public B withInitialEscapeMode(EscapeMode initialEscapeMode) {
-        this.initialEscapeMode = initialEscapeMode;
         return self();
     }
 
@@ -85,8 +77,9 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
 
     @Override
     public RenderConfiguration build() {
-        return new RenderConfiguration(strictMode, outputCharset, initialEscapeMode,
-                nodeRenders.build(), expressionCalculators.build(),
+        return new RenderConfiguration(strictMode, outputCharset,
+                nodeRenders.build(),
+                expressionCalculators.build(),
                 binaryExpressionCalculators.build(),
                 unaryExpressionCalculators.build(),
                 testExpressionCalculators.build());

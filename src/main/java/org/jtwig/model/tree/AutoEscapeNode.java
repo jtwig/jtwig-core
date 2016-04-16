@@ -2,17 +2,16 @@ package org.jtwig.model.tree;
 
 import com.google.common.base.Optional;
 import org.jtwig.model.position.Position;
-import org.jtwig.render.context.model.EscapeMode;
 
 public class AutoEscapeNode extends ContentNode {
-    private final Optional<EscapeMode> escapeMode;
+    private final Optional<String> escapeEngineName;
 
-    public AutoEscapeNode(Position position, Node content, Optional<EscapeMode> escapeMode) {
+    public AutoEscapeNode(Position position, Node content, Optional<String> escapeEngineName) {
         super(position, content);
-        this.escapeMode = escapeMode;
+        this.escapeEngineName = escapeEngineName;
     }
 
-    public Optional<EscapeMode> getEscapeMode() {
-        return escapeMode;
+    public Optional<String> getEscapeEngineName() {
+        return escapeEngineName;
     }
 }

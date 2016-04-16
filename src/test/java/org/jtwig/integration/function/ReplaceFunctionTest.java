@@ -10,8 +10,8 @@ import static org.hamcrest.core.Is.is;
 public class ReplaceFunctionTest {
     @Test
     public void simpleReplace() throws Exception {
-        String result = JtwigTemplate.inlineTemplate("{{ replace('one two', {two:'three'}) }}").render(JtwigModel.newModel());
+        String result = JtwigTemplate.inlineTemplate("{{ replace('Hello %name%', { '%name%': 'world' }) }}").render(JtwigModel.newModel());
 
-        assertThat(result, is("one three"));
+        assertThat(result, is("Hello world"));
     }
 }

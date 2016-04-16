@@ -8,6 +8,6 @@ import org.jtwig.renderable.impl.StringRenderable;
 public class VerbatimNodeRender implements NodeRender<VerbatimNode> {
     @Override
     public Renderable render(RenderRequest renderRequest, VerbatimNode node) {
-        return new StringRenderable(node.getContent(), renderRequest.getRenderContext().getEscapeModeContext().getCurrent());
+        return new StringRenderable(node.getContent(), renderRequest.getRenderContext().getEscapeEngineContext().getCurrent());
     }
 }

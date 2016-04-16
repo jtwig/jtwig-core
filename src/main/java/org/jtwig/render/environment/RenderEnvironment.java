@@ -1,7 +1,6 @@
 package org.jtwig.render.environment;
 
 import org.jtwig.render.RenderResourceService;
-import org.jtwig.render.context.model.EscapeMode;
 import org.jtwig.render.expression.CalculateExpressionService;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperationService;
 import org.jtwig.render.expression.calculator.operation.unary.UnaryOperationService;
@@ -13,7 +12,6 @@ import java.nio.charset.Charset;
 public class RenderEnvironment {
     private final boolean strictMode;
     private final Charset defaultOutputCharset;
-    private final EscapeMode initialEscapeMode;
     private final RenderResourceService renderResourceService;
     private final RenderNodeService renderNodeService;
     private final CalculateExpressionService calculateExpressionService;
@@ -21,10 +19,9 @@ public class RenderEnvironment {
     private final UnaryOperationService unaryOperationService;
     private final CalculateTestExpressionService calculateTestExpressionService;
 
-    public RenderEnvironment(boolean strictMode, Charset defaultOutputCharset, EscapeMode initialEscapeMode, RenderResourceService renderResourceService, RenderNodeService renderNodeService, CalculateExpressionService calculateExpressionService, BinaryOperationService binaryOperationService, UnaryOperationService unaryOperationService, CalculateTestExpressionService calculateTestExpressionService) {
+    public RenderEnvironment(boolean strictMode, Charset defaultOutputCharset, RenderResourceService renderResourceService, RenderNodeService renderNodeService, CalculateExpressionService calculateExpressionService, BinaryOperationService binaryOperationService, UnaryOperationService unaryOperationService, CalculateTestExpressionService calculateTestExpressionService) {
         this.strictMode = strictMode;
         this.defaultOutputCharset = defaultOutputCharset;
-        this.initialEscapeMode = initialEscapeMode;
         this.renderResourceService = renderResourceService;
         this.renderNodeService = renderNodeService;
         this.calculateExpressionService = calculateExpressionService;
@@ -39,10 +36,6 @@ public class RenderEnvironment {
 
     public Charset getDefaultOutputCharset() {
         return defaultOutputCharset;
-    }
-
-    public EscapeMode getInitialEscapeMode() {
-        return initialEscapeMode;
     }
 
     public RenderResourceService getRenderResourceService() {

@@ -1,6 +1,7 @@
 package org.jtwig.environment;
 
 import com.google.common.base.Optional;
+import org.jtwig.escape.environment.EscapeEnvironment;
 import org.jtwig.functions.resolver.FunctionResolver;
 import org.jtwig.parser.JtwigParser;
 import org.jtwig.property.PropertyResolver;
@@ -23,10 +24,13 @@ public class Environment {
     private final RenderEnvironment renderEnvironment;
     private final ValueEnvironment valueEnvironment;
     private final EnumerationListStrategy enumerationStrategy;
+    private final EscapeEnvironment escapeEnvironment;
 
     public Environment(JtwigParser parser, Map<String, Object> parameters,
                        ResourceEnvironment resourceEnvironment, FunctionResolver functionResolver,
-                       PropertyResolver propertyResolver, RenderEnvironment renderEnvironment, ValueEnvironment valueEnvironment, EnumerationListStrategy enumerationStrategy) {
+                       PropertyResolver propertyResolver, RenderEnvironment renderEnvironment,
+                       ValueEnvironment valueEnvironment, EnumerationListStrategy enumerationStrategy,
+                       EscapeEnvironment escapeEnvironment) {
         this.parser = parser;
         this.parameters = parameters;
         this.resourceEnvironment = resourceEnvironment;
@@ -35,6 +39,7 @@ public class Environment {
         this.renderEnvironment = renderEnvironment;
         this.valueEnvironment = valueEnvironment;
         this.enumerationStrategy = enumerationStrategy;
+        this.escapeEnvironment = escapeEnvironment;
     }
 
     public JtwigParser getParser() {
@@ -55,6 +60,10 @@ public class Environment {
 
     public RenderEnvironment getRenderEnvironment() {
         return renderEnvironment;
+    }
+
+    public EscapeEnvironment getEscapeEnvironment() {
+        return escapeEnvironment;
     }
 
     public <T> T parameter(String name, T defaultValue) {

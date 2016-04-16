@@ -1,8 +1,9 @@
 package org.jtwig.render.node.renderer;
 
+import org.jtwig.escape.EscapeEngine;
+import org.jtwig.escape.HtmlEscapeEngine;
 import org.jtwig.model.tree.VerbatimNode;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.context.model.EscapeMode;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.StringRenderable;
 import org.jtwig.support.MatcherUtils;
@@ -18,12 +19,12 @@ public class VerbatimNodeRenderTest {
     @Test
     public void render() throws Exception {
         String content = "content";
-        EscapeMode escapeMode = EscapeMode.HTML;
+        EscapeEngine escapeMode = HtmlEscapeEngine.instance();
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         VerbatimNode verbatimNode = mock(VerbatimNode.class);
 
         when(verbatimNode.getContent()).thenReturn(content);
-        when(request.getRenderContext().getEscapeModeContext().getCurrent()).thenReturn(escapeMode);
+        when(request.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
 
         Renderable result = underTest.render(request, verbatimNode);
 

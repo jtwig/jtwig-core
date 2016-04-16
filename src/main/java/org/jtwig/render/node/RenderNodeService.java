@@ -17,9 +17,9 @@ public class RenderNodeService {
     public Renderable render(RenderRequest request, Node node) {
         Optional<NodeRender> nodeRenderOptional = nodeRenderSelector.renderFor(node);
         if (nodeRenderOptional.isPresent()) {
-            request.getRenderContext().getEscapeModeContext().start(request.getRenderContext().getEscapeModeContext().getCurrent());
+            request.getRenderContext().getEscapeEngineContext().start(request.getRenderContext().getEscapeEngineContext().getCurrent());
             Renderable renderable = nodeRenderOptional.get().render(request, node);
-            request.getRenderContext().getEscapeModeContext().end();
+            request.getRenderContext().getEscapeEngineContext().end();
             return renderable;
         } else {
             throw new IllegalArgumentException(ErrorMessageFormatter.errorMessage(node.getPosition(), String.format("No render found for %s", node.getClass())));

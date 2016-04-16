@@ -40,8 +40,8 @@ public class SortFunctionTest {
     }
 
     @Test
-    public void sortUnComparable() throws Exception {
-        expectedException.expectMessage(containsString("Function sort error: Cannot sort list of uncomparable items"));
+    public void sortIncomparable() throws Exception {
+        expectedException.expectMessage(containsString("Sort function only works over collections of items, where items implement the interface java.lang.Comparable interface"));
 
         JtwigTemplate.inlineTemplate("{{ var | sort }}")
                 .render(JtwigModel.newModel().with("var", asList(new Object(), new Object())));

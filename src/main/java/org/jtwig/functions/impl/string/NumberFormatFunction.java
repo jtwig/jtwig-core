@@ -17,7 +17,7 @@ public class NumberFormatFunction extends SimpleJtwigFunction {
     public Object execute(FunctionRequest request) {
         request.minimumNumberOfArguments(1).maximumNumberOfArguments(4);
 
-        Object number = request.get(0);
+        Object number = getNumber(request, 0);
 
         switch (request.getNumberOfArguments()) {
             case 2:
