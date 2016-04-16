@@ -32,6 +32,11 @@ public class InMemoryConcurrentPersistentTemplateCacheTest {
                 @Override
                 public void run() {
                     countDownLatch.countDown();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     Node result = underTest.get(resource, jtwigParser);
                     assertSame(result, node);
                 }
@@ -39,10 +44,12 @@ public class InMemoryConcurrentPersistentTemplateCacheTest {
         }
 
         countDownLatch.await();
+        assertThat(counter.get(), equalTo(0));
+
+        Thread.sleep(2000);
         semaphore.release(parties);
 
         executorService.shutdown();
-        assertThat(counter.get(), equalTo(1));
 
         Node result = underTest.get(resource, jtwigParser);
 
