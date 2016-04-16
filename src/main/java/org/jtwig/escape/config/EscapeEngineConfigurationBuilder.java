@@ -7,16 +7,16 @@ import org.jtwig.util.builder.MapBuilder;
 public class EscapeEngineConfigurationBuilder<B extends EscapeEngineConfigurationBuilder> implements Builder<EscapeEngineConfiguration> {
     private String initialEngine;
     private String defaultEngine;
-    private MapBuilder<EscapeEngineConfigurationBuilder<B>, String, EscapeEngine> escapeEngineMap;
+    private MapBuilder<B, String, EscapeEngine> escapeEngineMap;
 
     public EscapeEngineConfigurationBuilder(EscapeEngineConfiguration prototype) {
-        this.escapeEngineMap = new MapBuilder<>(this, prototype.getEscapeEngineMap());
+        this.escapeEngineMap = new MapBuilder<>(self(), prototype.getEscapeEngineMap());
         this.initialEngine = prototype.getInitialEngine();
         this.defaultEngine = prototype.getDefaultEngine();
     }
 
     public EscapeEngineConfigurationBuilder() {
-        this.escapeEngineMap = new MapBuilder<>(this);
+        this.escapeEngineMap = new MapBuilder<>(self());
     }
 
     public B withInitialEngine(String initialEngine) {
@@ -33,7 +33,7 @@ public class EscapeEngineConfigurationBuilder<B extends EscapeEngineConfiguratio
         return (B) this;
     }
 
-    public MapBuilder<EscapeEngineConfigurationBuilder<B>, String, EscapeEngine> engines() {
+    public MapBuilder<B, String, EscapeEngine> engines() {
         return escapeEngineMap;
     }
 
