@@ -4,7 +4,7 @@ import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.test.TestExpression;
 import org.jtwig.model.tree.Node;
-import org.jtwig.render.context.model.EscapeMode;
+import org.jtwig.render.escape.EscapeEngine;
 import org.jtwig.render.expression.calculator.ExpressionCalculator;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
 import org.jtwig.render.expression.calculator.operation.binary.calculators.BinaryOperationCalculator;
@@ -19,7 +19,9 @@ import java.nio.charset.Charset;
 public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> implements Builder<RenderConfiguration> {
     private boolean strictMode;
     private Charset outputCharset;
-    private EscapeMode initialEscapeMode;
+    private EscapeEngine initialEscapeEngine;
+    private String defaultEscapeEngineName;
+    private final MapBuilder<B, String, EscapeEngine> escapeEngines;
     private final MapBuilder<B, Class<? extends Node>, NodeRender> nodeRenders;
     private final MapBuilder<B, Class<? extends Expression>, ExpressionCalculator> expressionCalculators;
     private final MapBuilder<B, Class<? extends BinaryOperator>, BinaryOperationCalculator> binaryExpressionCalculators;
@@ -28,6 +30,7 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
 
     public RenderConfigurationBuilder() {
         nodeRenders = new MapBuilder<>(self());
+        this.escapeEngines = new MapBuilder<>(self());
         this.expressionCalculators = new MapBuilder<>(self());
         this.binaryExpressionCalculators = new MapBuilder<>(self());
         this.unaryExpressionCalculators = new MapBuilder<>(self());
@@ -36,7 +39,9 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
     public RenderConfigurationBuilder(RenderConfiguration prototype) {
         this.strictMode = prototype.getStrictMode();
         this.outputCharset = prototype.getDefaultOutputCharset();
-        this.initialEscapeMode = prototype.getInitialEscapeMode();
+        this.initialEscapeEngine = prototype.getInitialEscapeEngine();
+        this.defaultEscapeEngineName = prototype.getDefaultEscapeEngineName();
+        this.escapeEngines = new MapBuilder<>(self(), prototype.getEscapeEngines());
         this.nodeRenders = new MapBuilder<>(self(), prototype.getNodeRenders());
         this.expressionCalculators = new MapBuilder<>(self(), prototype.getExpressionCalculators());
         this.binaryExpressionCalculators = new MapBuilder<>(self(), prototype.getBinaryExpressionCalculators());
@@ -54,8 +59,13 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
         return self();
     }
 
-    public B withInitialEscapeMode(EscapeMode initialEscapeMode) {
-        this.initialEscapeMode = initialEscapeMode;
+    public B withInitialEscapeMode(EscapeEngine initialEscapeEngine) {
+        this.initialEscapeEngine = initialEscapeEngine;
+        return self();
+    }
+
+    public B withDefaultEscapeMode(String defaultEscapeMode) {
+        this.defaultEscapeEngineName = defaultEscapeMode;
         return self();
     }
 
@@ -79,14 +89,21 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
         return testExpressionCalculators;
     }
 
+    public MapBuilder<B, String, EscapeEngine> escapeEngines () {
+        return escapeEngines;
+    }
+
     protected B self () {
         return (B) this;
     }
 
     @Override
     public RenderConfiguration build() {
-        return new RenderConfiguration(strictMode, outputCharset, initialEscapeMode,
-                nodeRenders.build(), expressionCalculators.build(),
+        return new RenderConfiguration(strictMode, outputCharset, initialEscapeEngine,
+                defaultEscapeEngineName,
+                escapeEngines.build(),
+                nodeRenders.build(),
+                expressionCalculators.build(),
                 binaryExpressionCalculators.build(),
                 unaryExpressionCalculators.build(),
                 testExpressionCalculators.build());

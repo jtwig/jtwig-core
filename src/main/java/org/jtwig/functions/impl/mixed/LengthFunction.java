@@ -26,6 +26,8 @@ public class LengthFunction extends SimpleJtwigFunction {
 
             if (collectionResult.isDefined()) {
                 return collectionResult.get().size();
+            } else if (input instanceof String) {
+                return ((String) input).length();
             } else {
                 return 1;
             }

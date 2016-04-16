@@ -1,13 +1,11 @@
 package org.jtwig.functions.impl.control;
 
 import com.google.common.base.Optional;
-import org.apache.commons.lang3.StringUtils;
 import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
-import org.jtwig.render.context.model.EscapeMode;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.jtwig.render.escape.EscapeEngine;
+import org.jtwig.render.escape.HtmlEscapeEngine;
+import org.jtwig.render.escape.NoneEscapeEngine;
 
 public class EscapeFunction extends SimpleJtwigFunction {
     @Override
@@ -20,33 +18,24 @@ public class EscapeFunction extends SimpleJtwigFunction {
         request.minimumNumberOfArguments(1);
         request.maximumNumberOfArguments(2);
 
-        EscapeMode escapeMode = EscapeMode.HTML;
+        EscapeEngine escapeEngine = HtmlEscapeEngine.instance();
         if (request.getNumberOfArguments() == 2) {
             if (request.get(1) instanceof Boolean) {
                 if (!(boolean) request.get(1)) {
-                    escapeMode = EscapeMode.NONE;
+                    escapeEngine = NoneEscapeEngine.instance();
                 }
             } else {
                 String requestedEscapeMode = request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(1));
-                Optional<EscapeMode> escapeModeOptional = EscapeMode.fromString(requestedEscapeMode.toUpperCase());
-                if (escapeModeOptional.isPresent()) {
-                    escapeMode = escapeModeOptional.get();
+                Optional<EscapeEngine> optionalEscapeEngine = request.getEnvironment().getRenderEnvironment().getEscapeEngineSelector().escapeEngineFor(requestedEscapeMode);
+                if (optionalEscapeEngine.isPresent()) {
+                    escapeEngine = optionalEscapeEngine.get();
                 } else {
-                    String possibleEscapeModes = possibleEscapeModes();
-                    throw request.exception(String.format("Invalid escape mode requested '%s'. Only supporting [%s]", requestedEscapeMode, possibleEscapeModes));
+                    throw request.exception(String.format("Invalid escape engine requested '%s'. Only supporting %s", requestedEscapeMode, request.getEnvironment().getRenderEnvironment().getEscapeEngineSelector().availableEscapeEngines()));
                 }
             }
         }
 
-        request.getRenderContext().getEscapeModeContext().set(escapeMode);
+        request.getRenderContext().getEscapeEngineContext().set(escapeEngine);
         return request.get(0);
-    }
-
-    private String possibleEscapeModes() {
-        List<String> escapeModes = new ArrayList<>();
-        for (EscapeMode escapeMode : EscapeMode.values()) {
-            escapeModes.add(escapeMode.toString());
-        }
-        return StringUtils.join(escapeModes, ", ");
     }
 }

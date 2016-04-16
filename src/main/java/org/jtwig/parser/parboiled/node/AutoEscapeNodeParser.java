@@ -6,7 +6,6 @@ import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.base.*;
 import org.jtwig.parser.parboiled.expression.StringExpressionParser;
 import org.jtwig.parser.parboiled.model.Keyword;
-import org.jtwig.render.context.model.EscapeMode;
 import org.parboiled.Rule;
 import org.parboiled.annotations.Label;
 
@@ -61,7 +60,7 @@ public class AutoEscapeNodeParser extends NodeParser<AutoEscapeNode> {
         );
     }
 
-    public static class EscapeModeParser extends BasicParser<EscapeMode> {
+    public static class EscapeModeParser extends BasicParser<String> {
         public EscapeModeParser(ParserContext context) {
             super(EscapeModeParser.class, context);
         }
@@ -71,11 +70,11 @@ public class AutoEscapeNodeParser extends NodeParser<AutoEscapeNode> {
             return FirstOf(
                     Sequence(
                             parser.ExpressionRule(),
-                            push(EscapeMode.valueOf(parser.pop().getConstantValue().toString().toUpperCase()))
+                            push(parser.pop().getConstantValue().toString().toUpperCase())
                     ),
                     Sequence(
                             String("false"),
-                            push(EscapeMode.NONE)
+                            push("none")
                     ),
                     push(null)
             );

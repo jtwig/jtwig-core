@@ -38,7 +38,7 @@ public class EscapeRawTest extends AbstractIntegrationTest {
 
     @Test
     public void escapeInvalid() throws Exception {
-        expectedException.expectMessage(containsString("Function escape error: Invalid escape mode requested 'blah'. Only supporting [NONE, HTML, JS, JAVASCRIPT]"));
+        expectedException.expectMessage(containsString("Invalid escape engine requested 'blah'. Only supporting [javascript, js, none, html]"));
 
         JtwigTemplate.inlineTemplate("{{ '&' | escape('blah') }}").render(JtwigModel.newModel());
     }

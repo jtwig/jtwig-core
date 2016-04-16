@@ -3,7 +3,8 @@ package org.jtwig.integration.node;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
-import org.jtwig.render.context.model.EscapeMode;
+import org.jtwig.render.escape.HtmlEscapeEngine;
+import org.jtwig.render.escape.JavascriptEscapeEngine;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,7 +43,7 @@ public class TextTest extends AbstractIntegrationTest {
     @Test
     public void textWithEscapeJs() throws Exception {
         String result = JtwigTemplate.inlineTemplate("'one time', \"Stop!\"", configuration()
-                .render().withInitialEscapeMode(EscapeMode.JS).and().build())
+                .render().withInitialEscapeMode(JavascriptEscapeEngine.instance()).and().build())
                 .render(JtwigModel.newModel());
 
         assertThat(result, is("\\'one time\\', \\\"Stop!\\\""));
@@ -51,7 +52,7 @@ public class TextTest extends AbstractIntegrationTest {
     @Test
     public void textWithEscapeJavascript() throws Exception {
         String result = JtwigTemplate.inlineTemplate("'one time', \"Stop!\"", configuration()
-                .render().withInitialEscapeMode(EscapeMode.JAVASCRIPT).and().build())
+                .render().withInitialEscapeMode(JavascriptEscapeEngine.instance()).and().build())
                 .render(JtwigModel.newModel());
 
         assertThat(result, is("\\'one time\\', \\\"Stop!\\\""));
@@ -60,7 +61,7 @@ public class TextTest extends AbstractIntegrationTest {
     @Test
     public void textWithEscapeHtml() throws Exception {
         String result = JtwigTemplate.inlineTemplate("\"bread\" & \"butter\"", configuration()
-                .render().withInitialEscapeMode(EscapeMode.HTML).and().build())
+                .render().withInitialEscapeMode(HtmlEscapeEngine.instance()).and().build())
                 .render(JtwigModel.newModel());
 
         assertThat(result, is("&quot;bread&quot; &amp; &quot;butter&quot;"));

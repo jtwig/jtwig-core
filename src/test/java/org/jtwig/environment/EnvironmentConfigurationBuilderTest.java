@@ -9,7 +9,8 @@ import org.jtwig.model.tree.Node;
 import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.config.JtwigParserConfiguration;
 import org.jtwig.property.PropertyResolver;
-import org.jtwig.render.context.model.EscapeMode;
+import org.jtwig.render.escape.EscapeEngine;
+import org.jtwig.render.escape.NoneEscapeEngine;
 import org.jtwig.render.expression.calculator.ExpressionCalculator;
 import org.jtwig.render.expression.calculator.enumerated.EnumerationListStrategy;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
@@ -102,7 +103,7 @@ public class EnvironmentConfigurationBuilderTest {
 
     @Test
     public void renderConfig() throws Exception {
-        EscapeMode initialEscapeMode = EscapeMode.NONE;
+        EscapeEngine initialEscapeMode = NoneEscapeEngine.instance();
         boolean strictMode = false;
         Charset outputCharset = Charset.defaultCharset();
         NodeRender nodeRender = mock(NodeRender.class);
@@ -129,7 +130,7 @@ public class EnvironmentConfigurationBuilderTest {
                     .and()
                 .build();
 
-        assertThat(result.getRenderConfiguration().getInitialEscapeMode(), is(initialEscapeMode));
+        assertThat(result.getRenderConfiguration().getInitialEscapeEngine(), is(initialEscapeMode));
         assertThat(result.getRenderConfiguration().getDefaultOutputCharset(), is(outputCharset));
         assertThat(result.getRenderConfiguration().getStrictMode(), is(strictMode));
         assertThat(result.getRenderConfiguration().getNodeRenders().get(CustomNode.class), is(nodeRender));

@@ -2,7 +2,8 @@ package org.jtwig.render.node.renderer;
 
 import org.jtwig.model.tree.TextNode;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.context.model.EscapeMode;
+import org.jtwig.render.escape.EscapeEngine;
+import org.jtwig.render.escape.HtmlEscapeEngine;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.StringRenderable;
 import org.jtwig.support.MatcherUtils;
@@ -18,14 +19,14 @@ public class TextNodeRenderTest {
     @Test
     public void renderNoTrimming() throws Exception {
         String content = " content ";
-        EscapeMode escapeMode = EscapeMode.HTML;
+        EscapeEngine escapeMode = HtmlEscapeEngine.instance();
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         TextNode textNode = mock(TextNode.class, RETURNS_DEEP_STUBS);
 
         when(textNode.getConfiguration().isTrimLeft()).thenReturn(false);
         when(textNode.getConfiguration().isTrimRight()).thenReturn(false);
         when(textNode.getText()).thenReturn(content);
-        when(request.getRenderContext().getEscapeModeContext().getCurrent()).thenReturn(escapeMode);
+        when(request.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
 
         Renderable result = underTest.render(request, textNode);
 
@@ -35,14 +36,14 @@ public class TextNodeRenderTest {
     @Test
     public void renderWithLeftTrim() throws Exception {
         String content = " content ";
-        EscapeMode escapeMode = EscapeMode.HTML;
+        EscapeEngine escapeMode = HtmlEscapeEngine.instance();
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         TextNode textNode = mock(TextNode.class, RETURNS_DEEP_STUBS);
 
         when(textNode.getConfiguration().isTrimLeft()).thenReturn(true);
         when(textNode.getConfiguration().isTrimRight()).thenReturn(false);
         when(textNode.getText()).thenReturn(content);
-        when(request.getRenderContext().getEscapeModeContext().getCurrent()).thenReturn(escapeMode);
+        when(request.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
 
         Renderable result = underTest.render(request, textNode);
 
@@ -52,14 +53,14 @@ public class TextNodeRenderTest {
     @Test
     public void renderWithRightTrim() throws Exception {
         String content = " content ";
-        EscapeMode escapeMode = EscapeMode.HTML;
+        EscapeEngine escapeMode = HtmlEscapeEngine.instance();
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         TextNode textNode = mock(TextNode.class, RETURNS_DEEP_STUBS);
 
         when(textNode.getConfiguration().isTrimLeft()).thenReturn(false);
         when(textNode.getConfiguration().isTrimRight()).thenReturn(true);
         when(textNode.getText()).thenReturn(content);
-        when(request.getRenderContext().getEscapeModeContext().getCurrent()).thenReturn(escapeMode);
+        when(request.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
 
         Renderable result = underTest.render(request, textNode);
 
@@ -69,14 +70,14 @@ public class TextNodeRenderTest {
     @Test
     public void renderWithLeftAndRightTrim() throws Exception {
         String content = " content ";
-        EscapeMode escapeMode = EscapeMode.HTML;
+        EscapeEngine escapeMode = HtmlEscapeEngine.instance();
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         TextNode textNode = mock(TextNode.class, RETURNS_DEEP_STUBS);
 
         when(textNode.getConfiguration().isTrimLeft()).thenReturn(true);
         when(textNode.getConfiguration().isTrimRight()).thenReturn(true);
         when(textNode.getText()).thenReturn(content);
-        when(request.getRenderContext().getEscapeModeContext().getCurrent()).thenReturn(escapeMode);
+        when(request.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
 
         Renderable result = underTest.render(request, textNode);
 

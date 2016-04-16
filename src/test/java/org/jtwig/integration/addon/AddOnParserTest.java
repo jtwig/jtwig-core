@@ -12,7 +12,7 @@ import org.jtwig.parser.parboiled.base.PositionTrackerParser;
 import org.jtwig.parser.parboiled.base.SpacingParser;
 import org.jtwig.parser.parboiled.node.AddonParser;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.context.model.EscapeMode;
+import org.jtwig.render.escape.NoneEscapeEngine;
 import org.jtwig.render.node.renderer.NodeRender;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.StringRenderable;
@@ -51,7 +51,7 @@ public class AddOnParserTest extends AbstractIntegrationTest {
 
         @Override
         public Renderable render(RenderRequest renderRequest, SimpleAddOn node) {
-            return new StringRenderable("Hello World!", EscapeMode.NONE);
+            return new StringRenderable("Hello World!", NoneEscapeEngine.instance());
         }
     }
 

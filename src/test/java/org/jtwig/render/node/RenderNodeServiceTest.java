@@ -3,7 +3,8 @@ package org.jtwig.render.node;
 import com.google.common.base.Optional;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.context.model.EscapeMode;
+import org.jtwig.render.escape.EscapeEngine;
+import org.jtwig.render.escape.HtmlEscapeEngine;
 import org.jtwig.render.node.renderer.NodeRender;
 import org.jtwig.renderable.Renderable;
 import org.junit.Rule;
@@ -36,20 +37,20 @@ public class RenderNodeServiceTest {
 
     @Test
     public void render() throws Exception {
-        EscapeMode escapeMode = EscapeMode.HTML;
+        EscapeEngine escapeMode = HtmlEscapeEngine.instance();
         Node node = mock(Node.class);
         RenderRequest renderRequest = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         NodeRender nodeRender = mock(NodeRender.class);
         Renderable renderable = mock(Renderable.class);
 
-        when(renderRequest.getRenderContext().getEscapeModeContext().getCurrent()).thenReturn(escapeMode);
+        when(renderRequest.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
         when(nodeRenderSelector.renderFor(node)).thenReturn(Optional.of(nodeRender));
         when(nodeRender.render(renderRequest, node)).thenReturn(renderable);
 
         Renderable result = underTest.render(renderRequest, node);
 
         assertSame(renderable, result);
-        verify(renderRequest.getRenderContext().getEscapeModeContext()).start(escapeMode);
-        verify(renderRequest.getRenderContext().getEscapeModeContext()).end();
+        verify(renderRequest.getRenderContext().getEscapeEngineContext()).start(escapeMode);
+        verify(renderRequest.getRenderContext().getEscapeEngineContext()).end();
     }
 }

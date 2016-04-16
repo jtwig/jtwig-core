@@ -43,14 +43,14 @@ public class BooleanConverterTest {
     public void convertStringEmpty() throws Exception {
         Converter.Result<Boolean> result = underTest.convert("");
 
-        assertEquals(false, result.get());
+        assertEquals(false, result.isDefined());
     }
 
     @Test
     public void convertStringNotEmpty() throws Exception {
         Converter.Result<Boolean> result = underTest.convert("asdsad");
 
-        assertEquals(true, result.get());
+        assertEquals(false, result.isDefined());
     }
 
     @Test
