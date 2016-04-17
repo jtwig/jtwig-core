@@ -33,6 +33,7 @@ import java.nio.charset.Charset;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static org.jtwig.support.MatcherUtils.theSameBean;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
@@ -43,20 +44,30 @@ public class EnvironmentConfigurationBuilderTest {
     private final AddonParserProvider addonParserProvider = mock(AddonParserProvider.class);
 
     @Test
+    public void cloneConstructor() throws Exception {
+        EnvironmentConfiguration prototype = new DefaultEnvironmentConfiguration();
+
+        EnvironmentConfiguration result = new EnvironmentConfigurationBuilder(prototype)
+                .build();
+
+        assertThat(result, theSameBean(prototype));
+    }
+
+    @Test
     public void parserConfiguration() throws Exception {
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
-                    .parser()
-                        .syntax()
-                            .withStartCode("{%").withEndCode("%}")
-                            .withStartOutput("{{").withEndOutput("}}")
-                            .withStartComment("{#").withEndComment("#}")
-                        .and()
-                        .addonParserProviders().add(customAddonParser()).and()
-                        .binaryOperators().add(customBinaryOperator()).and()
-                        .unaryOperators().add(customUnaryOperator()).and()
-                        .withoutTemplateCache()
-                    .and()
+                .parser()
+                .syntax()
+                .withStartCode("{%").withEndCode("%}")
+                .withStartOutput("{{").withEndOutput("}}")
+                .withStartComment("{#").withEndComment("#}")
+                .and()
+                .addonParserProviders().add(customAddonParser()).and()
+                .binaryOperators().add(customBinaryOperator()).and()
+                .unaryOperators().add(customUnaryOperator()).and()
+                .withoutTemplateCache()
+                .and()
                 .build();
 
         JtwigParserConfiguration parser = configuration.getJtwigParserConfiguration();
@@ -78,9 +89,9 @@ public class EnvironmentConfigurationBuilderTest {
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
-                    .functions()
-                        .add(jtwigFunction)
-                    .and()
+                .functions()
+                .add(jtwigFunction)
+                .and()
                 .build();
 
         assertThat(configuration.getFunctions(), hasItem(jtwigFunction));
@@ -92,9 +103,9 @@ public class EnvironmentConfigurationBuilderTest {
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
-                    .resources()
-                        .resourceResolvers().add(resourceResolver).and()
-                    .and()
+                .resources()
+                .resourceResolvers().add(resourceResolver).and()
+                .and()
                 .build();
 
         assertThat(configuration.getResourceConfiguration().getResourceResolvers(), hasItem(resourceResolver));
@@ -113,19 +124,19 @@ public class EnvironmentConfigurationBuilderTest {
 
         EnvironmentConfiguration result = EnvironmentConfigurationBuilder
                 .configuration()
-                    .render()
-                        .withStrictMode(strictMode)
-                        .withOutputCharset(outputCharset)
-                        .nodeRenders().add(CustomNode.class, nodeRender).and()
-                        .expressionCalculators()
-                            .add(CustomExpression.class, expCalculator).and()
-                        .binaryExpressionCalculators()
-                            .add(CustomBinaryOperator.class, binOpCalc).and()
-                        .unaryExpressionCalculators()
-                            .add(CustomUnaryOperator.class, unaryOpCalc).and()
-                        .testExpressionCalculators()
-                            .add(CustomTestExpression.class, testCalc).and()
-                    .and()
+                .render()
+                .withStrictMode(strictMode)
+                .withOutputCharset(outputCharset)
+                .nodeRenders().add(CustomNode.class, nodeRender).and()
+                .expressionCalculators()
+                .add(CustomExpression.class, expCalculator).and()
+                .binaryExpressionCalculators()
+                .add(CustomBinaryOperator.class, binOpCalc).and()
+                .unaryExpressionCalculators()
+                .add(CustomUnaryOperator.class, unaryOpCalc).and()
+                .testExpressionCalculators()
+                .add(CustomTestExpression.class, testCalc).and()
+                .and()
                 .build();
 
         assertThat(result.getRenderConfiguration().getDefaultOutputCharset(), is(outputCharset));
@@ -183,9 +194,9 @@ public class EnvironmentConfigurationBuilderTest {
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
-                    .propertyResolvers()
-                        .add(propertyResolver)
-                    .and()
+                .propertyResolvers()
+                .add(propertyResolver)
+                .and()
                 .build();
 
         assertThat(configuration.getPropertyResolvers(), hasItem(propertyResolver));
@@ -197,9 +208,9 @@ public class EnvironmentConfigurationBuilderTest {
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
-                    .enumerationStrategies()
-                        .add(enumerationListStrategy)
-                    .and()
+                .enumerationStrategies()
+                .add(enumerationListStrategy)
+                .and()
                 .build();
 
         assertThat(configuration.getEnumerationStrategies(), hasItem(enumerationListStrategy));
@@ -211,13 +222,13 @@ public class EnvironmentConfigurationBuilderTest {
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
-                    .escape()
-                        .withInitialEngine("none")
-                        .withDefaultEngine("custom")
-                        .engines()
-                            .add("custom", customEscapeEngine)
-                        .and()
-                    .and()
+                .escape()
+                .withInitialEngine("none")
+                .withDefaultEngine("custom")
+                .engines()
+                .add("custom", customEscapeEngine)
+                .and()
+                .and()
                 .build();
 
         assertThat(configuration.getEscapeConfiguration().getDefaultEngine(), is("custom"));
@@ -242,16 +253,16 @@ public class EnvironmentConfigurationBuilderTest {
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
-                    .value()
-                        .withMathContext(mathContext)
-                        .withRoundingMode(roundingMode)
-                        .withValueComparator(valueComparator)
-                        .withStringConverter(stringConverter)
-                        .numberConverters().add(numberConverter).and()
-                        .booleanConverters().add(booleanConverter).and()
-                        .charConverters().add(charConverter).and()
-                        .collectionConverters().add(collectionConverter).and()
-                    .and()
+                .value()
+                .withMathContext(mathContext)
+                .withRoundingMode(roundingMode)
+                .withValueComparator(valueComparator)
+                .withStringConverter(stringConverter)
+                .numberConverters().add(numberConverter).and()
+                .booleanConverters().add(booleanConverter).and()
+                .charConverters().add(charConverter).and()
+                .collectionConverters().add(collectionConverter).and()
+                .and()
                 .build();
 
         assertSame(configuration.getValueConfiguration().getMathContext(), mathContext);
@@ -271,10 +282,10 @@ public class EnvironmentConfigurationBuilderTest {
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
-                    .extensions()
-                        .add(customExtension1)
-                        .add(customExtension2)
-                    .and()
+                .extensions()
+                .add(customExtension1)
+                .add(customExtension2)
+                .and()
                 .build();
 
 
@@ -291,10 +302,10 @@ public class EnvironmentConfigurationBuilderTest {
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
-                    .parameters()
-                        .add(parameter1, value1)
-                        .add(parameter2, value2)
-                    .and()
+                .parameters()
+                .add(parameter1, value1)
+                .add(parameter2, value2)
+                .and()
                 .build();
 
         assertSame(configuration.getParameters().get(parameter1), value1);
