@@ -15,7 +15,7 @@ public class ResourceConfigurationBuilder<B extends ResourceConfigurationBuilder
     }
 
     public ResourceConfigurationBuilder(ResourceConfiguration prototype) {
-        this.resourceResolvers = new ListBuilder<>(self());
+        this.resourceResolvers = new ListBuilder<>(self(), prototype.getResourceResolvers());
         this.defaultInputCharset = prototype.getDefaultCharset();
     }
 
