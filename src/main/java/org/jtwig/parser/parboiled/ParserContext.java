@@ -10,7 +10,7 @@ import org.jtwig.parser.parboiled.expression.test.*;
 import org.jtwig.parser.parboiled.node.*;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
 import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
-import org.jtwig.resource.Resource;
+import org.jtwig.resource.reference.ResourceReference;
 import org.parboiled.BaseParser;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import static org.parboiled.Parboiled.createParser;
 
 public class ParserContext {
 
-    public static ParserContext instance (Resource resource, SyntaxConfiguration configuration,
+    public static ParserContext instance (ResourceReference resource, SyntaxConfiguration configuration,
                                           Collection<AddonParserProvider> addOnParsers,
                                           Collection<UnaryOperator> unaryOperators,
                                           Collection<BinaryOperator> binaryOperators) {
@@ -101,12 +101,12 @@ public class ParserContext {
         return result;
     }
 
-    private final Resource resource;
+    private final ResourceReference resource;
     private final SyntaxConfiguration syntaxConfiguration;
     private final Map<Class, BaseParser> parsers;
     private final Collection<AddonParserProvider> addOnParsers;
 
-    public ParserContext(Resource resource, SyntaxConfiguration syntaxConfiguration, Collection<AddonParserProvider> addOnParsers) {
+    public ParserContext(ResourceReference resource, SyntaxConfiguration syntaxConfiguration, Collection<AddonParserProvider> addOnParsers) {
         this.resource = resource;
         this.syntaxConfiguration = syntaxConfiguration;
         this.parsers = new HashMap<>();
@@ -130,7 +130,7 @@ public class ParserContext {
         return syntaxConfiguration;
     }
 
-    public Resource resource() {
+    public ResourceReference resource() {
         return resource;
     }
 }

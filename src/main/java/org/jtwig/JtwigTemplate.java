@@ -1,6 +1,5 @@
 package org.jtwig;
 
-import com.google.common.base.Optional;
 import org.jtwig.environment.*;
 import org.jtwig.escape.EscapeEngine;
 import org.jtwig.model.tree.Node;
@@ -14,10 +13,7 @@ import org.jtwig.render.context.model.RenderContext;
 import org.jtwig.renderable.RenderResult;
 import org.jtwig.renderable.StreamRenderResult;
 import org.jtwig.renderable.StringBuilderRenderResult;
-import org.jtwig.resource.FileResource;
-import org.jtwig.resource.Resource;
-import org.jtwig.resource.StringResource;
-import org.jtwig.resource.resolver.ClasspathResourceResolver;
+import org.jtwig.resource.reference.ResourceReference;
 import org.jtwig.value.context.IsolateParentValueContext;
 import org.jtwig.value.context.JtwigModelValueContext;
 import org.jtwig.value.context.MapValueContext;
@@ -25,7 +21,8 @@ import org.jtwig.value.context.ValueContext;
 
 import java.io.File;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
+
+import static org.jtwig.resource.reference.ResourceReference.*;
 
 public class JtwigTemplate {
     public static final EnvironmentFactory ENVIRONMENT_FACTORY = new EnvironmentFactory();
@@ -34,10 +31,7 @@ public class JtwigTemplate {
         return inlineTemplate(template, new DefaultEnvironmentConfiguration());
     }
     public static JtwigTemplate inlineTemplate (String template, EnvironmentConfiguration configuration) {
-        return new JtwigTemplate(ENVIRONMENT_FACTORY.create(configuration), new StringResource(template));
-    }
-    public static JtwigTemplate inlineTemplate (Charset charset, String template, EnvironmentConfiguration configuration) {
-        return new JtwigTemplate(ENVIRONMENT_FACTORY.create(configuration), new StringResource(charset, template));
+        return new JtwigTemplate(ENVIRONMENT_FACTORY.create(configuration), new ResourceReference(STRING, template));
     }
 
     public static JtwigTemplate classpathTemplate(String location) {
@@ -45,41 +39,34 @@ public class JtwigTemplate {
     }
 
     public static JtwigTemplate classpathTemplate(String location, EnvironmentConfiguration environmentConfiguration) {
-        if (!location.startsWith(ClasspathResourceResolver.PREFIX)) {
-            location = ClasspathResourceResolver.PREFIX + location;
-        }
+        ResourceReference resourceReference = new ResourceReference(CLASSPATH, location);
         Environment environment = ENVIRONMENT_FACTORY.create(environmentConfiguration);
-        Optional<Resource> resource = environment.getResourceEnvironment().getResourceResolver().resolve(environment, null, location);
-        if (resource.isPresent()) {
-            return new JtwigTemplate(environment, resource.get());
-        } else {
-            throw new IllegalArgumentException(String.format("Classpath resource '%s' not found", location));
-        }
+        return new JtwigTemplate(environment, resourceReference);
     }
 
-    public static JtwigTemplate fileTemplate (File file, EnvironmentConfiguration environmentConfiguration) {
+    public static JtwigTemplate fileTemplate (String filename, EnvironmentConfiguration environmentConfiguration) {
         Environment environment = ENVIRONMENT_FACTORY.create(environmentConfiguration);
-        return new JtwigTemplate(environment, new FileResource(environment.getResourceEnvironment().getDefaultInputCharset(), file));
+        ResourceReference resourceReference = new ResourceReference(FILE, filename);
+        return new JtwigTemplate(environment, resourceReference);
     }
 
 
-    public static JtwigTemplate fileTemplate (File file) {
-        return fileTemplate(file, new DefaultEnvironmentConfiguration());
+    public static JtwigTemplate fileTemplate (String filename) {
+        return fileTemplate(filename, new DefaultEnvironmentConfiguration());
     }
 
-    public static JtwigTemplate fileTemplate (String path, EnvironmentConfiguration environmentConfiguration) {
-        Environment environment = ENVIRONMENT_FACTORY.create(environmentConfiguration);
-        return new JtwigTemplate(environment, new FileResource(environment.getResourceEnvironment().getDefaultInputCharset(), new File(path)));
+    public static JtwigTemplate fileTemplate (File path, EnvironmentConfiguration environmentConfiguration) {
+        return fileTemplate(path.getAbsolutePath(), environmentConfiguration);
     }
 
-    public static JtwigTemplate fileTemplate (String path) {
+    public static JtwigTemplate fileTemplate (File path) {
         return fileTemplate(path, new DefaultEnvironmentConfiguration());
     }
 
-    private final Resource resource;
+    private final ResourceReference resource;
     private final Environment environment;
 
-    public JtwigTemplate(Environment environment, Resource resource) {
+    public JtwigTemplate(Environment environment, ResourceReference resource) {
         this.resource = resource;
         this.environment = environment;
     }
@@ -98,7 +85,7 @@ public class JtwigTemplate {
     private void render(JtwigModel model, RenderResult renderResult) {
         StackedContext<ValueContext> valueContextContext = StackedContext.<ValueContext>context(new IsolateParentValueContext(new JtwigModelValueContext(model), MapValueContext.newContext()));
         StackedContext<EscapeEngine> escapeEngineContext = StackedContext.context(environment.getEscapeEnvironment().getInitialEscapeEngine());
-        StackedContext<Resource> resourceContext = StackedContext.context(resource);
+        StackedContext<ResourceReference> resourceContext = StackedContext.context(resource);
         StackedContext<BlockContext> blockContext = StackedContext.context(BlockContext.newContext());
         StackedContext<MacroDefinitionContext> macroDefinitionContext = StackedContext.emptyContext();
         StackedContext<MacroAliasesContext> macroContext = StackedContext.emptyContext();
@@ -108,7 +95,7 @@ public class JtwigTemplate {
         EnvironmentHolder.set(environment);
         RenderContextHolder.set(renderContext);
 
-        Node node = environment.getParser().parse(resource);
+        Node node = environment.getParser().parse(environment, resource);
         environment.getRenderEnvironment().getRenderNodeService()
                 .render(new RenderRequest(renderContext, environment), node)
                 .appendTo(renderResult);

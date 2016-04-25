@@ -1,10 +1,14 @@
 package org.jtwig.resource.environment;
 
+import org.jtwig.resource.ResourceService;
 import org.jtwig.resource.config.ResourceConfiguration;
-import org.jtwig.resource.resolver.CompositeResourceResolver;
 
 public class ResourceEnvironmentFactory {
     public ResourceEnvironment create(ResourceConfiguration resourceConfiguration) {
-        return new ResourceEnvironment(new CompositeResourceResolver(resourceConfiguration.getResourceResolvers()), resourceConfiguration.getDefaultCharset());
+        ResourceService resourceService = new ResourceService(resourceConfiguration.getResourceLoaders(),
+                resourceConfiguration.getAbsoluteResourceTypes(),
+                resourceConfiguration.getRelativeResourceResolvers(),
+                resourceConfiguration.getResourceReferenceExtractor());
+        return new ResourceEnvironment(resourceConfiguration.getDefaultCharset(), resourceService);
     }
 }

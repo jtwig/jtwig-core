@@ -1,6 +1,6 @@
 package org.jtwig.render.node.renderer;
 
-import com.google.common.base.Optional;
+import org.jtwig.environment.Environment;
 import org.jtwig.model.tree.EmbedNode;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
@@ -11,8 +11,10 @@ import org.jtwig.render.expression.CalculateExpressionService;
 import org.jtwig.render.node.RenderNodeService;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.EmptyRenderable;
-import org.jtwig.resource.Resource;
+import org.jtwig.resource.ResourceService;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
+import org.jtwig.resource.metadata.ResourceMetadata;
+import org.jtwig.resource.reference.ResourceReference;
 import org.jtwig.util.ErrorMessageFormatter;
 import org.jtwig.value.WrappedCollection;
 import org.jtwig.value.convert.Converter;
@@ -20,15 +22,18 @@ import org.jtwig.value.convert.Converter;
 public class EmbedNodeRender implements NodeRender<EmbedNode> {
     @Override
     public Renderable render(RenderRequest renderRequest, EmbedNode node) {
-        CalculateExpressionService calculateExpressionService = renderRequest.getEnvironment().getRenderEnvironment().getCalculateExpressionService();
+        Environment environment = renderRequest.getEnvironment();
+        CalculateExpressionService calculateExpressionService = environment.getRenderEnvironment().getCalculateExpressionService();
         Object path = calculateExpressionService.calculate(renderRequest, node.getResourceExpression());
-        Resource current = renderRequest.getRenderContext().getResourceContext().getCurrent();
-        Optional<Resource> resource = renderRequest.getEnvironment().getResourceEnvironment().getResourceResolver().resolve(renderRequest.getEnvironment(), current, getString(renderRequest, path));
+        ResourceReference current = renderRequest.getRenderContext().getResourceContext().getCurrent();
+        ResourceService resourceService = environment.getResourceEnvironment().getResourceService();
+        ResourceReference newReference = resourceService.resolve(current, getString(renderRequest, path));
+        ResourceMetadata resourceMetadata = resourceService.loadMetadata(newReference);
 
-        if (resource.isPresent()) {
-            Converter<WrappedCollection> collectionConverter = renderRequest.getEnvironment().getValueEnvironment().getCollectionConverter();
-            RenderNodeService renderNodeService = renderRequest.getEnvironment().getRenderEnvironment().getRenderNodeService();
-            RenderResourceService renderResourceService = renderRequest.getEnvironment().getRenderEnvironment().getRenderResourceService();
+        if (resourceMetadata.exists()) {
+            Converter<WrappedCollection> collectionConverter = environment.getValueEnvironment().getCollectionConverter();
+            RenderNodeService renderNodeService = environment.getRenderEnvironment().getRenderNodeService();
+            RenderResourceService renderResourceService = environment.getRenderEnvironment().getRenderResourceService();
 
             Object mapValue = calculateExpressionService.calculate(renderRequest, node.getMapExpression());
             WrappedCollection includeModel = collectionConverter.convert(mapValue).or(WrappedCollection.empty());
@@ -38,7 +43,7 @@ public class EmbedNodeRender implements NodeRender<EmbedNode> {
                 renderNodeService.render(renderRequest, subNode);
             }
 
-            Renderable renderable = renderResourceService.render(renderRequest, new RenderResourceRequest(resource.get(), false, !node.isInheritModel(), includeModel));
+            Renderable renderable = renderResourceService.render(renderRequest, new RenderResourceRequest(newReference, false, !node.isInheritModel(), includeModel));
 
             renderRequest.getRenderContext().getBlockContext().end();
             return renderable;

@@ -18,7 +18,7 @@ public class Issue210Test {
         model.with("text", "tête de bou  간편한 설치 및 사용");
 
         String result = JtwigTemplate
-                .inlineTemplate(Charset.forName("UTF-8"), "{{ text }}", configuration()
+                .inlineTemplate("{{ text }}", configuration()
                         .render().withOutputCharset(Charset.forName("UTF-8")).and()
                         .build())
                 .render(model);

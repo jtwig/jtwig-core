@@ -1,11 +1,11 @@
 package org.jtwig.value.convert.bool;
 
+import com.google.common.collect.ImmutableMap;
 import org.jtwig.value.Undefined;
 import org.jtwig.value.convert.Converter;
 import org.junit.Test;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
+import static java.util.Collections.*;
 import static org.junit.Assert.assertEquals;
 
 public class BooleanConverterTest {
@@ -72,6 +72,20 @@ public class BooleanConverterTest {
         Converter.Result<Boolean> result = underTest.convert(emptyList());
 
         assertEquals(false, result.get());
+    }
+
+    @Test
+    public void convertEmptyMap() throws Exception {
+        Converter.Result<Boolean> result = underTest.convert(emptyMap());
+
+        assertEquals(false, result.get());
+    }
+
+    @Test
+    public void convertMap() throws Exception {
+        Converter.Result<Boolean> result = underTest.convert(ImmutableMap.of("String", "asd"));
+
+        assertEquals(true, result.get());
     }
 
     @Test

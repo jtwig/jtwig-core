@@ -1,15 +1,8 @@
 package org.jtwig.integration.structured;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
 import org.jtwig.JtwigTemplate;
-import org.jtwig.environment.Environment;
-import org.jtwig.environment.EnvironmentConfigurationBuilder;
 import org.jtwig.integration.AbstractIntegrationTest;
-import org.jtwig.resource.Resource;
-import org.jtwig.resource.StringResource;
-import org.jtwig.resource.resolver.InMemoryResourceResolver;
-import org.jtwig.resource.resolver.ResourceResolver;
+import org.jtwig.resource.loader.InMemoryResourceLoader;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -19,20 +12,20 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.jtwig.JtwigModel.newModel;
+import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuration;
+import static org.jtwig.resource.reference.ResourceReference.MEMORY;
 
 public class BlockValueContextTest extends AbstractIntegrationTest {
     @Test
     public void extendLogic() throws Exception {
 
-        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% extends 'a' %}{% block name %}{{ var }}{% endblock %}", EnvironmentConfigurationBuilder.configuration()
-                .resources().resourceResolvers().add(new ResourceResolver() {
-                    @Override
-                    public Optional<Resource> resolve(Environment environment, Resource resource, String path) {
-                        return Optional.of((Resource) new StringResource("{% for a in [1..2] %}{% block name %}this{% endblock %}{% endfor %}"));
-                    }
-                }).and()
-                .and()
-                .build());
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% extends 'memory:a' %}{% block name %}{{ var }}{% endblock %}",
+                configuration()
+                        .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .withResource("a", "{% for a in [1..2] %}{% block name %}this{% endblock %}{% endfor %}")
+                        .build()).and().and()
+                        .build()
+        );
 
         String result = template.render(newModel().with("var", "hello"));
 
@@ -41,14 +34,14 @@ public class BlockValueContextTest extends AbstractIntegrationTest {
 
     @Test
     public void blockInheritance() throws Exception {
-        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% extends 'a' %}{% block a %}a{% endblock %}", EnvironmentConfigurationBuilder.configuration().resources()
-                .resourceResolvers().add(new InMemoryResourceResolver(
-                        ImmutableMap.<String, Resource>builder()
-                                .put("a", new StringResource("{% extends 'b' %}"))
-                                .put("b", new StringResource("{% block a %}b{% endblock %}"))
-                                .build()
-                )).and()
-                .and().build());
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% extends 'memory:a' %}{% block a %}a{% endblock %}",
+                configuration()
+                        .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .withResource("a", "{% extends 'memory:b' %}")
+                        .withResource("b", "{% block a %}b{% endblock %}")
+                        .build()).and().and()
+                        .build()
+        );
 
         String result = template.render(newModel());
 

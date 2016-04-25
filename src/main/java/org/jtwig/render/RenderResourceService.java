@@ -1,12 +1,13 @@
 package org.jtwig.render;
 
+import org.jtwig.environment.Environment;
 import org.jtwig.escape.EscapeEngine;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.context.StackedContext;
 import org.jtwig.render.context.model.BlockContext;
 import org.jtwig.render.node.RenderNodeService;
 import org.jtwig.renderable.Renderable;
-import org.jtwig.resource.Resource;
+import org.jtwig.resource.reference.ResourceReference;
 import org.jtwig.value.context.IsolateParentValueContext;
 import org.jtwig.value.context.MapValueContext;
 import org.jtwig.value.context.ValueContext;
@@ -16,12 +17,14 @@ import java.util.Map;
 
 public class RenderResourceService {
     public Renderable render(RenderRequest request, RenderResourceRequest renderResourceRequest) {
-        RenderNodeService renderNodeService = request.getEnvironment().getRenderEnvironment().getRenderNodeService();
-        Node node = request.getEnvironment().getParser().parse(renderResourceRequest.getResource());
+        Environment environment = request.getEnvironment();
+
+        RenderNodeService renderNodeService = environment.getRenderEnvironment().getRenderNodeService();
+        Node node = environment.getParser().parse(environment, renderResourceRequest.getResource());
 
         StackedContext<BlockContext> blockContext = request.getRenderContext().getBlockContext();
         StackedContext<ValueContext> valueContext = request.getRenderContext().getValueContext();
-        StackedContext<Resource> resourceContext = request.getRenderContext().getResourceContext();
+        StackedContext<ResourceReference> resourceContext = request.getRenderContext().getResourceContext();
         StackedContext<EscapeEngine> escapeEngineContext = request.getRenderContext().getEscapeEngineContext();
 
         if (renderResourceRequest.isNewBlockContext()) {
@@ -35,7 +38,7 @@ public class RenderResourceService {
         }
 
         resourceContext.start(renderResourceRequest.getResource());
-        escapeEngineContext.start(request.getEnvironment().getEscapeEnvironment().getInitialEscapeEngine());
+        escapeEngineContext.start(environment.getEscapeEnvironment().getInitialEscapeEngine());
 
         Iterator<Map.Entry<String, Object>> iterator = renderResourceRequest.getIncludeModel().iterator();
         ValueContext valueContextCurrent = valueContext.getCurrent();
