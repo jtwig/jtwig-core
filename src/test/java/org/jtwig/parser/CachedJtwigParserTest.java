@@ -1,8 +1,9 @@
 package org.jtwig.parser;
 
+import org.jtwig.environment.Environment;
 import org.jtwig.model.tree.Node;
 import org.jtwig.parser.cache.TemplateCache;
-import org.jtwig.resource.Resource;
+import org.jtwig.resource.reference.ResourceReference;
 import org.junit.Test;
 
 import static org.junit.Assert.assertSame;
@@ -16,12 +17,13 @@ public class CachedJtwigParserTest {
 
     @Test
     public void parse() throws Exception {
-        Resource resource = mock(Resource.class);
+        Environment environment = mock(Environment.class);
+        ResourceReference resource = mock(ResourceReference.class);
         Node node = mock(Node.class);
-        when(delegate.parse(resource)).thenReturn(node);
-        when(cache.get(resource, delegate)).thenReturn(node);
+        when(delegate.parse(environment, resource)).thenReturn(node);
+        when(cache.get(delegate, environment, resource)).thenReturn(node);
 
-        Node result = underTest.parse(resource);
+        Node result = underTest.parse(environment, resource);
 
         assertSame(result, node);
     }

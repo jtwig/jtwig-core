@@ -1,6 +1,5 @@
 package org.jtwig.render.node.renderer;
 
-import com.google.common.base.Optional;
 import org.jtwig.environment.Environment;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.tree.ExtendsNode;
@@ -8,8 +7,9 @@ import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
 import org.jtwig.render.RenderResourceRequest;
 import org.jtwig.renderable.Renderable;
-import org.jtwig.resource.Resource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
+import org.jtwig.resource.metadata.ResourceMetadata;
+import org.jtwig.resource.reference.ResourceReference;
 import org.jtwig.value.WrappedCollection;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,14 +37,19 @@ public class ExtendsNodeRenderTest {
         Expression expression = mock(Expression.class);
         Object pathValue = mock(Object.class);
         Environment environment = mock(Environment.class, RETURNS_DEEP_STUBS);
-        Resource parentResource = mock(Resource.class);
+        ResourceReference parentResource = mock(ResourceReference.class);
+        ResourceReference newResource = mock(ResourceReference.class, "reference");
+        ResourceMetadata resourceMetadata = mock(ResourceMetadata.class);
 
         when(request.getEnvironment()).thenReturn(environment);
         when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(parentResource);
         when(node.getExtendsExpression()).thenReturn(expression);
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, expression)).thenReturn(pathValue);
         when(environment.getValueEnvironment().getStringConverter().convert(pathValue)).thenReturn(path);
-        when(environment.getResourceEnvironment().getResourceResolver().resolve(environment, parentResource, path)).thenReturn(Optional.<Resource>absent());
+        when(environment.getResourceEnvironment().getResourceService().resolve(parentResource, path)).thenReturn(newResource);
+        when(environment.getResourceEnvironment().getResourceService().loadMetadata(newResource)).thenReturn(resourceMetadata);
+        when(resourceMetadata.exists()).thenReturn(false);
+        when(newResource.getPath()).thenReturn("path");
 
         expectedException.expect(ResourceNotFoundException.class);
         expectedException.expectMessage(containsString("Resource 'path' not found"));
@@ -60,8 +65,9 @@ public class ExtendsNodeRenderTest {
         Expression expression = mock(Expression.class);
         Object pathValue = new Object();
         Environment environment = mock(Environment.class, RETURNS_DEEP_STUBS);
-        Resource parentResource = mock(Resource.class);
-        Resource newResource = mock(Resource.class);
+        ResourceReference parentResource = mock(ResourceReference.class);
+        ResourceReference newResource = mock(ResourceReference.class);
+        ResourceMetadata resourceMetadata = mock(ResourceMetadata.class);
         Renderable renderable = mock(Renderable.class);
         Node node1 = mock(Node.class);
         Node node2 = mock(Node.class);
@@ -72,9 +78,10 @@ public class ExtendsNodeRenderTest {
         when(node.getNodes()).thenReturn(asList(node1, node2));
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, expression)).thenReturn(pathValue);
         when(environment.getValueEnvironment().getStringConverter().convert(pathValue)).thenReturn(path);
-        when(environment.getResourceEnvironment().getResourceResolver().resolve(environment, parentResource, path)).thenReturn(Optional.of(newResource));
+        when(environment.getResourceEnvironment().getResourceService().resolve(parentResource, path)).thenReturn(newResource);
         when(environment.getRenderEnvironment().getRenderResourceService().render(eq(request), argThat(theSame(new RenderResourceRequest(newResource, false, false, WrappedCollection.empty()))))).thenReturn(renderable);
-
+        when(environment.getResourceEnvironment().getResourceService().loadMetadata(newResource)).thenReturn(resourceMetadata);
+        when(resourceMetadata.exists()).thenReturn(true);
 
         Renderable result = underTest.render(request, node);
 

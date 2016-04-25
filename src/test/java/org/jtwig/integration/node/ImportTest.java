@@ -1,14 +1,11 @@
 package org.jtwig.integration.node;
 
-import com.google.common.collect.ImmutableMap;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
-import org.jtwig.resource.Resource;
-import org.jtwig.resource.StringResource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
-import org.jtwig.resource.resolver.InMemoryResourceResolver;
+import org.jtwig.resource.loader.InMemoryResourceLoader;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -17,6 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuration;
+import static org.jtwig.resource.reference.ResourceReference.MEMORY;
 
 public class ImportTest extends AbstractIntegrationTest {
     @Rule
@@ -42,12 +40,13 @@ public class ImportTest extends AbstractIntegrationTest {
 
     @Test
     public void nestedImports() throws Exception {
-        String result = JtwigTemplate.inlineTemplate("{% import 'a' as a %}{{ a.example('hello') }}", configuration()
-                .resources().resourceResolvers().add(new InMemoryResourceResolver(ImmutableMap.<String, Resource>builder()
-                        .put("a", new StringResource("{% import 'b' as b %}{% macro example (input) %}{{ b.example(input) }}{% endmacro %}"))
-                        .put("b", new StringResource("{% macro example (input) %}{{ input }}{% endmacro %}"))
-                        .build())).and().and()
-                .build())
+        String result = JtwigTemplate.inlineTemplate("{% import 'memory:a' as a %}{{ a.example('hello') }}",
+                configuration()
+                        .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .withResource("a", "{% import 'memory:b' as b %}{% macro example (input) %}{{ b.example(input) }}{% endmacro %}")
+                        .withResource("b", "{% macro example (input) %}{{ input }}{% endmacro %}")
+                        .build()).and().and()
+                        .build())
                 .render(JtwigModel.newModel());
 
         assertThat(result, is("hello"));

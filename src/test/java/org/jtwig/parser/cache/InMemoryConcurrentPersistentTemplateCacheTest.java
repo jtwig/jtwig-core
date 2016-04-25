@@ -1,8 +1,9 @@
 package org.jtwig.parser.cache;
 
+import org.jtwig.environment.Environment;
 import org.jtwig.model.tree.Node;
 import org.jtwig.parser.JtwigParser;
-import org.jtwig.resource.Resource;
+import org.jtwig.resource.reference.ResourceReference;
 import org.junit.Test;
 
 import java.util.concurrent.*;
@@ -20,12 +21,13 @@ public class InMemoryConcurrentPersistentTemplateCacheTest {
     public void multipleRequestsRetrievingBeforeCompleteParse() throws Exception {
         int parties = 100;
         final Node node = mock(Node.class);
+        final Environment environment = mock(Environment.class);
         Semaphore semaphore = new Semaphore(0);
         ExecutorService executorService = new ThreadPoolExecutor(parties, parties, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
         final CountDownLatch countDownLatch = new CountDownLatch(parties);
         AtomicInteger counter = new AtomicInteger(0);
         final JtwigParser jtwigParser = new ThreadedJtwigParser(counter, semaphore, node);
-        final Resource resource = mock(Resource.class);
+        final ResourceReference resource = mock(ResourceReference.class);
 
         for (int i = 0; i < parties; i++) {
             executorService.submit(new NamedRunnable(String.valueOf(i), new Runnable() {
@@ -37,7 +39,7 @@ public class InMemoryConcurrentPersistentTemplateCacheTest {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Node result = underTest.get(resource, jtwigParser);
+                    Node result = underTest.get(jtwigParser, environment, resource);
                     assertSame(result, node);
                 }
             }));
@@ -51,7 +53,7 @@ public class InMemoryConcurrentPersistentTemplateCacheTest {
 
         executorService.shutdown();
 
-        Node result = underTest.get(resource, jtwigParser);
+        Node result = underTest.get(jtwigParser, environment, resource);
 
         assertSame(result, node);
         assertThat(counter.get(), equalTo(1));
@@ -84,7 +86,7 @@ public class InMemoryConcurrentPersistentTemplateCacheTest {
         }
 
         @Override
-        public Node parse(Resource resource) {
+        public Node parse(Environment environment, ResourceReference resource) {
             try {
                 semaphore.acquire();
                 counter.incrementAndGet();

@@ -1,6 +1,6 @@
 package org.jtwig.render.node.renderer;
 
-import com.google.common.base.Optional;
+import org.jtwig.environment.Environment;
 import org.jtwig.model.tree.ImportNode;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
@@ -11,34 +11,37 @@ import org.jtwig.render.expression.CalculateExpressionService;
 import org.jtwig.render.node.RenderNodeService;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.EmptyRenderable;
-import org.jtwig.resource.Resource;
+import org.jtwig.resource.ResourceService;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
-import org.jtwig.resource.resolver.ResourceResolver;
+import org.jtwig.resource.metadata.ResourceMetadata;
+import org.jtwig.resource.reference.ResourceReference;
 import org.jtwig.util.ErrorMessageFormatter;
 
 public class ImportNodeRender implements NodeRender<ImportNode> {
     @Override
     public Renderable render(RenderRequest renderRequest, ImportNode node) {
-        CalculateExpressionService calculateExpressionService = renderRequest.getEnvironment().getRenderEnvironment().getCalculateExpressionService();
-        ResourceResolver resourceResolver = renderRequest.getEnvironment().getResourceEnvironment().getResourceResolver();
-        RenderNodeService renderNodeService = renderRequest.getEnvironment().getRenderEnvironment().getRenderNodeService();
+        Environment environment = renderRequest.getEnvironment();
+        CalculateExpressionService calculateExpressionService = environment.getRenderEnvironment().getCalculateExpressionService();
+        ResourceService resourceService = environment.getResourceEnvironment().getResourceService();
+        RenderNodeService renderNodeService = environment.getRenderEnvironment().getRenderNodeService();
 
         String macroIdentifier = node.getAliasIdentifier().getIdentifier();
         MacroDefinitionContext macroDefinitionContext = MacroDefinitionContext.newContext();
         renderRequest.getRenderContext().getMacroDefinitionContext().start(macroDefinitionContext);
 
         Object objectPath = calculateExpressionService.calculate(renderRequest, node.getImportExpression());
-        String path = renderRequest.getEnvironment().getValueEnvironment().getStringConverter().convert(objectPath);
-        Resource current = renderRequest.getRenderContext().getResourceContext().getCurrent();
-        Optional<Resource> resolve = resourceResolver.resolve(renderRequest.getEnvironment(), current, path);
+        String path = environment.getValueEnvironment().getStringConverter().convert(objectPath);
+        ResourceReference current = renderRequest.getRenderContext().getResourceContext().getCurrent();
+        ResourceReference newReference = resourceService.resolve(current, path);
+        ResourceMetadata resourceMetadata = resourceService.loadMetadata(newReference);
 
-        if (resolve.isPresent()) {
+        if (resourceMetadata.exists()) {
             StackedContext<MacroAliasesContext> macroAliasesContext = renderRequest.getRenderContext().getMacroAliasesContext();
             if (macroAliasesContext.hasCurrent()) {
                 macroAliasesContext.getCurrent().with(macroIdentifier, macroDefinitionContext);
             }
             macroAliasesContext.start(MacroAliasesContext.newContext());
-            Node content = renderRequest.getEnvironment().getParser().parse(resolve.get());
+            Node content = environment.getParser().parse(environment, newReference);
             renderNodeService.render(renderRequest, content);
             renderRequest.getRenderContext().getValueContext().getCurrent().with(macroIdentifier, macroDefinitionContext);
             macroAliasesContext.end();

@@ -1,23 +1,23 @@
 package org.jtwig.resource.environment;
 
-import org.jtwig.resource.resolver.ResourceResolver;
+import org.jtwig.resource.ResourceService;
 
 import java.nio.charset.Charset;
 
 public class ResourceEnvironment {
-    private final ResourceResolver resourceResolver;
     private final Charset defaultInputCharset;
+    private final ResourceService resourceService;
 
-    public ResourceEnvironment(ResourceResolver resourceResolver, Charset defaultInputCharset) {
-        this.resourceResolver = resourceResolver;
+    public ResourceEnvironment(Charset defaultInputCharset, ResourceService resourceService) {
         this.defaultInputCharset = defaultInputCharset;
-    }
-
-    public ResourceResolver getResourceResolver() {
-        return resourceResolver;
+        this.resourceService = resourceService;
     }
 
     public Charset getDefaultInputCharset() {
         return defaultInputCharset;
+    }
+
+    public ResourceService getResourceService() {
+        return resourceService;
     }
 }

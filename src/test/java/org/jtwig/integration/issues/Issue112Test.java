@@ -246,7 +246,7 @@ public class Issue112Test {
     @Test
     public void exceptionShouldDisplayFilename() throws Exception {
         expectedException.expect(ParseException.class);
-        expectedException.expectMessage(containsString("(Classpath) /example/classpath-error.twig"));
+        expectedException.expectMessage(containsString("classpath:/example/classpath-error.twig"));
 
         JtwigTemplate.classpathTemplate("/example/classpath-error.twig")
                 .render(JtwigModel.newModel());

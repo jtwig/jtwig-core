@@ -1,22 +1,22 @@
 package org.jtwig.render;
 
-import org.jtwig.resource.Resource;
+import org.jtwig.resource.reference.ResourceReference;
 import org.jtwig.value.WrappedCollection;
 
 public class RenderResourceRequest {
-    private final Resource resource;
+    private final ResourceReference resource;
     private final boolean newBlockContext;
     private final boolean newValueContext;
     private final WrappedCollection includeModel;
 
-    public RenderResourceRequest(Resource resource, boolean newBlockContext, boolean newValueContext, WrappedCollection includeModel) {
+    public RenderResourceRequest(ResourceReference resource, boolean newBlockContext, boolean newValueContext, WrappedCollection includeModel) {
         this.resource = resource;
         this.newBlockContext = newBlockContext;
         this.newValueContext = newValueContext;
         this.includeModel = includeModel;
     }
 
-    public Resource getResource() {
+    public ResourceReference getResource() {
         return resource;
     }
 

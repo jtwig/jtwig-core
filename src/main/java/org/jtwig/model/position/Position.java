@@ -1,13 +1,13 @@
 package org.jtwig.model.position;
 
-import org.jtwig.resource.Resource;
+import org.jtwig.resource.reference.ResourceReference;
 
 public class Position {
-    private final Resource resource;
+    private final ResourceReference resource;
     private final int line;
     private final int column;
 
-    public Position(Resource resource, int line, int column) {
+    public Position(ResourceReference resource, int line, int column) {
         this.resource = resource;
         this.line = line;
         this.column = column;

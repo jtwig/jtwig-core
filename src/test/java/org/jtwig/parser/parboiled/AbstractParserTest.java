@@ -2,7 +2,7 @@ package org.jtwig.parser.parboiled;
 
 import org.jtwig.parser.config.DefaultJtwigParserConfiguration;
 import org.jtwig.parser.config.JtwigParserConfiguration;
-import org.jtwig.resource.StringResource;
+import org.jtwig.resource.reference.ResourceReference;
 import org.parboiled.Rule;
 import org.parboiled.parserunners.BasicParseRunner;
 import org.parboiled.parserunners.ParseRunner;
@@ -10,7 +10,7 @@ import org.parboiled.support.ParsingResult;
 
 public abstract class AbstractParserTest {
     private JtwigParserConfiguration parserConfiguration = new DefaultJtwigParserConfiguration();
-    protected final ParserContext context = ParserContext.instance(new StringResource(""),
+    protected final ParserContext context = ParserContext.instance(new ResourceReference(ResourceReference.STRING, ""),
             parserConfiguration.getSyntaxConfiguration(),
             parserConfiguration.getAddonParserProviders(),
             parserConfiguration.getUnaryOperators(),

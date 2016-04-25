@@ -1,6 +1,5 @@
 package org.jtwig.render.node.renderer;
 
-import com.google.common.base.Optional;
 import org.jtwig.environment.Environment;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.tree.EmbedNode;
@@ -11,8 +10,9 @@ import org.jtwig.render.context.model.BlockContext;
 import org.jtwig.render.expression.CalculateExpressionService;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.EmptyRenderable;
-import org.jtwig.resource.Resource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
+import org.jtwig.resource.metadata.ResourceMetadata;
+import org.jtwig.resource.reference.ResourceReference;
 import org.jtwig.support.MatcherUtils;
 import org.jtwig.value.WrappedCollection;
 import org.jtwig.value.convert.Converter;
@@ -42,7 +42,8 @@ public class EmbedNodeRenderTest {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         EmbedNode node = mock(EmbedNode.class);
         Expression pathExpression = mock(Expression.class);
-        Resource resource = mock(Resource.class);
+        ResourceReference resource = mock(ResourceReference.class);
+        ResourceReference newReference = mock(ResourceReference.class);
         CalculateExpressionService calculateExpressionService = mock(CalculateExpressionService.class);
         Environment environment = mock(Environment.class, RETURNS_DEEP_STUBS);
         Object pathExpressionValue = "path";
@@ -52,7 +53,7 @@ public class EmbedNodeRenderTest {
         when(request.getEnvironment()).thenReturn(environment);
         when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(resource);
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
-        when(environment.getResourceEnvironment().getResourceResolver().resolve(environment, resource, pathExpressionValueAsString)).thenReturn(Optional.<Resource>absent());
+        when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newReference);
         when(calculateExpressionService.calculate(request, pathExpression)).thenReturn(pathExpressionValue);
         when(environment.getValueEnvironment().getStringConverter().convert(pathExpressionValue)).thenReturn(pathExpressionValueAsString);
 
@@ -68,7 +69,8 @@ public class EmbedNodeRenderTest {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         EmbedNode node = mock(EmbedNode.class);
         Expression pathExpression = mock(Expression.class);
-        Resource resource = mock(Resource.class);
+        ResourceReference resource = mock(ResourceReference.class);
+        ResourceReference newReference = mock(ResourceReference.class);
         CalculateExpressionService calculateExpressionService = mock(CalculateExpressionService.class);
         Environment environment = mock(Environment.class, RETURNS_DEEP_STUBS);
         Object pathExpressionValue = new Object();
@@ -79,7 +81,7 @@ public class EmbedNodeRenderTest {
         when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(resource);
         when(environment.getValueEnvironment().getStringConverter().convert(pathExpressionValue)).thenReturn(pathExpressionValueAsString);
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
-        when(environment.getResourceEnvironment().getResourceResolver().resolve(environment, resource, pathExpressionValueAsString)).thenReturn(Optional.<Resource>absent());
+        when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newReference);
         when(calculateExpressionService.calculate(request, pathExpression)).thenReturn(pathExpressionValue);
 
         Renderable result = underTest.render(request, node);
@@ -95,11 +97,12 @@ public class EmbedNodeRenderTest {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         EmbedNode node = mock(EmbedNode.class);
         Expression pathExpression = mock(Expression.class, "pathExpression");
-        Resource resource = mock(Resource.class, "parentResource");
+        ResourceReference resource = mock(ResourceReference.class, "parentResource");
         CalculateExpressionService calculateExpressionService = mock(CalculateExpressionService.class);
         Environment environment = mock(Environment.class, RETURNS_DEEP_STUBS);
         Object pathExpressionValue = new Object();
-        Resource newResource = mock(Resource.class, "new");
+        ResourceReference newResource = mock(ResourceReference.class, "new");
+        ResourceMetadata resourceMetadata = mock(ResourceMetadata.class);
         Expression mapExpression = mock(Expression.class, "map");
         WrappedCollection wrappedCollection = mock(WrappedCollection.class, "collection");
         OverrideBlockNode node1 = mock(OverrideBlockNode.class, "node1");
@@ -115,12 +118,14 @@ public class EmbedNodeRenderTest {
         when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(resource);
         when(environment.getValueEnvironment().getStringConverter().convert(pathExpressionValue)).thenReturn(pathExpressionValueAsString);
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
-        when(environment.getResourceEnvironment().getResourceResolver().resolve(environment, resource, pathExpressionValueAsString)).thenReturn(Optional.of(newResource));
+        when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newResource);
         when(calculateExpressionService.calculate(request, pathExpression)).thenReturn(pathExpressionValue);
         when(calculateExpressionService.calculate(request, mapExpression)).thenReturn(mapExpressionValue);
         when(environment.getValueEnvironment().getCollectionConverter().convert(mapExpressionValue)).thenReturn(Converter.Result.defined(wrappedCollection));
         when(environment.getRenderEnvironment().getRenderResourceService().render(eq(request), argThat(theSame(new RenderResourceRequest(newResource, false, !inheritModel, wrappedCollection)))))
                 .thenReturn(renderable);
+        when(environment.getResourceEnvironment().getResourceService().loadMetadata(newResource)).thenReturn(resourceMetadata);
+        when(resourceMetadata.exists()).thenReturn(true);
 
         Renderable result = underTest.render(request, node);
 
@@ -139,15 +144,16 @@ public class EmbedNodeRenderTest {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         EmbedNode node = mock(EmbedNode.class);
         Expression pathExpression = mock(Expression.class, "pathExpression");
-        Resource resource = mock(Resource.class, "parentResource");
+        ResourceReference resource = mock(ResourceReference.class, "parentResource");
         CalculateExpressionService calculateExpressionService = mock(CalculateExpressionService.class);
         Environment environment = mock(Environment.class, RETURNS_DEEP_STUBS);
         Object pathExpressionValue = new Object();
-        Resource newResource = mock(Resource.class, "new");
+        ResourceReference newResource = mock(ResourceReference.class, "new");
         Expression mapExpression = mock(Expression.class, "map");
         WrappedCollection wrappedCollection = mock(WrappedCollection.class, "collection");
         OverrideBlockNode node1 = mock(OverrideBlockNode.class, "node1");
         OverrideBlockNode node2 = mock(OverrideBlockNode.class, "node2");
+        ResourceMetadata resourceMetadata = mock(ResourceMetadata.class);
         Object mapExpressionValue = new Object();
 
         when(node.getResourceExpression()).thenReturn(pathExpression);
@@ -159,12 +165,14 @@ public class EmbedNodeRenderTest {
         when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(resource);
         when(environment.getValueEnvironment().getStringConverter().convert(pathExpressionValue)).thenReturn(pathExpressionValueAsString);
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
-        when(environment.getResourceEnvironment().getResourceResolver().resolve(environment, resource, pathExpressionValueAsString)).thenReturn(Optional.of(newResource));
+        when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newResource);
         when(calculateExpressionService.calculate(request, pathExpression)).thenReturn(pathExpressionValue);
         when(calculateExpressionService.calculate(request, mapExpression)).thenReturn(mapExpressionValue);
         when(environment.getValueEnvironment().getCollectionConverter().convert(mapExpressionValue)).thenReturn(Converter.Result.defined(wrappedCollection));
         when(environment.getRenderEnvironment().getRenderResourceService().render(eq(request), argThat(theSame(new RenderResourceRequest(newResource, false, !inheritModel, wrappedCollection)))))
                 .thenReturn(renderable);
+        when(environment.getResourceEnvironment().getResourceService().loadMetadata(newResource)).thenReturn(resourceMetadata);
+        when(resourceMetadata.exists()).thenReturn(true);
 
         Renderable result = underTest.render(request, node);
 

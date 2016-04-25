@@ -1,15 +1,11 @@
 package org.jtwig.integration.node;
 
-import com.google.common.base.Optional;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
-import org.jtwig.environment.Environment;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
-import org.jtwig.resource.Resource;
-import org.jtwig.resource.StringResource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
-import org.jtwig.resource.resolver.ResourceResolver;
+import org.jtwig.resource.loader.InMemoryResourceLoader;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -19,6 +15,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.jtwig.JtwigModel.newModel;
 import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuration;
+import static org.jtwig.resource.reference.ResourceReference.MEMORY;
 
 public class IncludeTest extends AbstractIntegrationTest {
     @Rule
@@ -35,18 +32,13 @@ public class IncludeTest extends AbstractIntegrationTest {
 
     @Test
     public void includeWithoutExportingModel() throws Exception {
-        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' only %}", configuration()
-                .resources().resourceResolvers().add(new ResourceResolver() {
-                    @Override
-                    public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
-                        if ("a".equals(relativePath)) {
-                            return Optional.<Resource>of(new StringResource("{{ name }}"));
-                        }
-                        return Optional.absent();
-                    }
-                }).and().and()
-                .build());
-
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'memory:a' only %}",
+                configuration()
+                        .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .withResource("a", "{{ name }}")
+                        .build()).and().and()
+                        .build()
+        );
         String result = template.render(newModel().with("name", "Hello"));
 
         assertThat(result, is(""));
@@ -54,17 +46,13 @@ public class IncludeTest extends AbstractIntegrationTest {
 
     @Test
     public void includeWithoutExportingModelButIncluding() throws Exception {
-        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' with { name: 'Joao' } only %}", configuration()
-                .resources().resourceResolvers().add(new ResourceResolver() {
-                    @Override
-                    public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
-                        if ("a".equals(relativePath)) {
-                            return Optional.<Resource>of(new StringResource("{{ name }}"));
-                        }
-                        return Optional.absent();
-                    }
-                }).and().and()
-                .build());
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'memory:a' with { name: 'Joao' } only %}",
+                configuration()
+                        .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .withResource("a", "{{ name }}")
+                        .build()).and().and()
+                        .build()
+        );
 
         String result = template.render(newModel().with("name", "Hello"));
 
@@ -73,17 +61,12 @@ public class IncludeTest extends AbstractIntegrationTest {
 
     @Test
     public void includeShouldExportModel() throws Exception {
-        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' %}", configuration()
-                .resources().resourceResolvers().add(new ResourceResolver() {
-                    @Override
-                    public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
-                        if ("a".equals(relativePath)) {
-                            return Optional.<Resource>of(new StringResource("{{ name }}"));
-                        }
-                        return Optional.absent();
-                    }
-                }).and().and()
-                .build());
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'memory:a' %}", configuration()
+                .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .withResource("a", "{{ name }}")
+                        .build()).and().and()
+                .build()
+        );
 
         String result = template.render(newModel().with("name", "Hello"));
 
@@ -92,17 +75,12 @@ public class IncludeTest extends AbstractIntegrationTest {
 
     @Test
     public void includeShouldExportModelAndExtraData() throws Exception {
-        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' with { joao: 'Melo' } %}", configuration()
-                .resources().resourceResolvers().add(new ResourceResolver() {
-                    @Override
-                    public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
-                        if ("a".equals(relativePath)) {
-                            return Optional.<Resource>of(new StringResource("{{ name }} {{ joao }}"));
-                        }
-                        return Optional.absent();
-                    }
-                }).and().and()
-                .build());
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'memory:a' with { joao: 'Melo' } %}", configuration()
+                .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .withResource("a", "{{ name }} {{ joao }}")
+                        .build()).and().and()
+                .build()
+        );
 
         String result = template.render(newModel().with("name", "Hello"));
 
@@ -111,17 +89,12 @@ public class IncludeTest extends AbstractIntegrationTest {
 
     @Test
     public void includeShouldNotRedefineModelVariable() throws Exception {
-        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' %}{{ name }}", configuration()
-                .resources().resourceResolvers().add(new ResourceResolver() {
-                    @Override
-                    public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
-                        if ("a".equals(relativePath)) {
-                            return Optional.<Resource>of(new StringResource("{% set name = 'test' %}"));
-                        }
-                        return Optional.absent();
-                    }
-                }).and().and()
-                .build());
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'memory:a' %}{{ name }}", configuration()
+                .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .withResource("a", "{% set name = 'test' %}")
+                        .build()).and().and()
+                .build()
+        );
 
         String result = template.render(newModel().with("name", "Hello"));
 
@@ -130,17 +103,12 @@ public class IncludeTest extends AbstractIntegrationTest {
 
     @Test
     public void includeShouldNotExposeNewModelVariable() throws Exception {
-        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'a' %}{{ var }}", configuration()
-                .resources().resourceResolvers().add(new ResourceResolver() {
-                    @Override
-                    public Optional<Resource> resolve(Environment environment, Resource resource, String relativePath) {
-                        if ("a".equals(relativePath)) {
-                            return Optional.<Resource>of(new StringResource("{% set var = 'test' %}"));
-                        }
-                        return Optional.absent();
-                    }
-                }).and().and()
-                .build());
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'memory:a' %}{{ var }}",configuration()
+                .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .withResource("a", "{% set var = 'test' %}")
+                        .build()).and().and()
+                .build()
+        );
 
         String result = template.render(newModel());
 

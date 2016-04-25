@@ -19,7 +19,7 @@ import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
 import org.jtwig.render.expression.calculator.operation.unary.calculators.UnaryOperationCalculator;
 import org.jtwig.render.expression.test.calculator.TestExpressionCalculator;
 import org.jtwig.render.node.renderer.NodeRender;
-import org.jtwig.resource.resolver.ResourceResolver;
+import org.jtwig.resource.resolver.RelativeResourceResolver;
 import org.jtwig.value.WrappedCollection;
 import org.jtwig.value.compare.ValueComparator;
 import org.jtwig.value.convert.Converter;
@@ -99,16 +99,16 @@ public class EnvironmentConfigurationBuilderTest {
 
     @Test
     public void resources() throws Exception {
-        ResourceResolver resourceResolver = mock(ResourceResolver.class);
+        RelativeResourceResolver relativeResourceResolver = mock(RelativeResourceResolver.class);
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
                 .resources()
-                .resourceResolvers().add(resourceResolver).and()
+                .resourceResolvers().add(relativeResourceResolver).and()
                 .and()
                 .build();
 
-        assertThat(configuration.getResourceConfiguration().getResourceResolvers(), hasItem(resourceResolver));
+        assertThat(configuration.getResourceConfiguration().getRelativeResourceResolvers(), hasItem(relativeResourceResolver));
     }
 
     @Test

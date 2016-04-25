@@ -1,15 +1,11 @@
 package org.jtwig.integration.node;
 
-import com.google.common.base.Optional;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
-import org.jtwig.environment.Environment;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
-import org.jtwig.resource.Resource;
-import org.jtwig.resource.StringResource;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
-import org.jtwig.resource.resolver.ResourceResolver;
+import org.jtwig.resource.loader.InMemoryResourceLoader;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -18,6 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuration;
+import static org.jtwig.resource.reference.ResourceReference.MEMORY;
 
 public class EmbedTest extends AbstractIntegrationTest {
     @Rule
@@ -25,8 +22,10 @@ public class EmbedTest extends AbstractIntegrationTest {
 
     @Test
     public void simpleEmbed() throws Exception {
-        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% embed 'a' %}{% block one %}Ola{% endblock %}{% endembed %}", configuration()
-                .resources().resourceResolvers().add(resolvePath("a", "{% block one %}three{% endblock %}")).and().and()
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% embed 'memory:a' %}{% block one %}Ola{% endblock %}{% endembed %}", configuration()
+                .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .withResource("a", "{% block one %}three{% endblock %}")
+                        .build()).and().and()
                 .build());
         String result = template.render(JtwigModel.newModel());
         assertThat(result, is("Ola"));
@@ -99,17 +98,5 @@ public class EmbedTest extends AbstractIntegrationTest {
 
         JtwigTemplate.inlineTemplate("{% embed 'asdasd' %}")
                 .render(JtwigModel.newModel());
-    }
-
-    private ResourceResolver resolvePath(final String path, final String content) {
-        return new ResourceResolver() {
-            @Override
-            public Optional<Resource> resolve(Environment env, Resource resource, String relativePath) {
-                if (path.equals(relativePath)) {
-                    return Optional.<Resource>of(new StringResource(content));
-                }
-                return Optional.absent();
-            }
-        };
     }
 }
