@@ -9,6 +9,6 @@ public class ResourceEnvironmentFactory {
                 resourceConfiguration.getAbsoluteResourceTypes(),
                 resourceConfiguration.getRelativeResourceResolvers(),
                 resourceConfiguration.getResourceReferenceExtractor());
-        return new ResourceEnvironment(resourceConfiguration.getDefaultCharset(), resourceService);
+        return new ResourceEnvironment(resourceConfiguration.getDefaultCharset(), resourceService, resourceConfiguration.getResourceReferenceExtractor());
     }
 }
