@@ -22,6 +22,18 @@ public class ConstantFunctionTest {
 
         assertThat(result, is(HELLO));
     }
+    @Test
+    public void constantCompareValue() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{{ constant('oi','org.jtwig.integration.function.ConstantFunctionTest.HELLO') }}").render(JtwigModel.newModel());
+
+        assertThat(result, is("false"));
+    }
+    @Test
+    public void constantCompareValueTrue() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{{ constant('hello','org.jtwig.integration.function.ConstantFunctionTest.HELLO') }}").render(JtwigModel.newModel());
+
+        assertThat(result, is("true"));
+    }
 
     @Test
     public void constantInvalid() throws Exception {

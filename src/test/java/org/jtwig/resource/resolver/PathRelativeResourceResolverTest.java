@@ -42,8 +42,8 @@ public class PathRelativeResourceResolverTest {
         ResourceReference newReference = mock(ResourceReference.class);
 
         types.add("blah");
-        when(newReference.getType()).thenReturn("blah");
         when(newReference.getPath()).thenReturn(path);
+        when(parentReference.getType()).thenReturn("blah");
         when(pathResolver.isRelative(path)).thenReturn(false);
 
         Optional<ResourceReference> result = underTest.resolve(parentReference, newReference);
@@ -60,8 +60,8 @@ public class PathRelativeResourceResolverTest {
         ResourceReference newReference = mock(ResourceReference.class);
 
         types.add("blah");
-        when(newReference.getType()).thenReturn("blah");
         when(newReference.getPath()).thenReturn(newPath);
+        when(parentReference.getType()).thenReturn("blah");
         when(parentReference.getPath()).thenReturn(parentPath);
         when(pathResolver.isRelative(newPath)).thenReturn(true);
         when(pathResolver.resolve(parentPath, newPath)).thenReturn(resolved);
