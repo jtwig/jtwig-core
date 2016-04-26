@@ -3,12 +3,34 @@ package org.jtwig.resource.reference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.io.File;
+
 public class ResourceReference {
     public static final String ANY_TYPE = "any";
     public static final String STRING = "string";
     public static final String FILE = "file";
     public static final String MEMORY = "memory";
     public static final String CLASSPATH = "classpath";
+
+    public static ResourceReference inline (String template) {
+        return new ResourceReference(STRING, template);
+    }
+
+    public static ResourceReference memory (String name) {
+        return new ResourceReference(MEMORY, name);
+    }
+
+    public static ResourceReference file (String path) {
+        return new ResourceReference(FILE, path);
+    }
+
+    public static ResourceReference file (File path) {
+        return new ResourceReference(FILE, path.getAbsolutePath());
+    }
+
+    public static ResourceReference classpath (String path) {
+        return new ResourceReference(CLASSPATH, path);
+    }
 
     private final String type;
     private final String path;
