@@ -45,23 +45,25 @@ public class EnvironmentFactory {
     }
 
     public Environment create(EnvironmentConfiguration environmentConfiguration) {
+        EnvironmentConfiguration configuration = environmentConfiguration;
+
         if (!environmentConfiguration.getExtensions().isEmpty()) {
             EnvironmentConfigurationBuilder builder = new EnvironmentConfigurationBuilder(environmentConfiguration);
             for (Extension extension : environmentConfiguration.getExtensions()) {
                 extension.configure(builder);
             }
-            environmentConfiguration = builder.build();
+            configuration = builder.build();
         }
 
         return new Environment(
-                jtwigParserFactory.create(environmentConfiguration.getJtwigParserConfiguration()),
-                environmentConfiguration.getParameters(),
-                resourceEnvironmentFactory.create(environmentConfiguration.getResourceConfiguration()),
-                functionResolverFactory.create(environmentConfiguration.getFunctions()),
-                propertyResolverFactory.create(environmentConfiguration.getPropertyResolvers()),
-                renderEnvironmentFactory.create(environmentConfiguration.getRenderConfiguration()),
-                valueEnvironmentFactory.create(environmentConfiguration.getValueConfiguration()),
-                enumerationListStrategyFactory.create(environmentConfiguration.getEnumerationStrategies()),
-                escapeEnvironmentFactory.create(environmentConfiguration.getEscapeConfiguration()));
+                jtwigParserFactory.create(configuration.getJtwigParserConfiguration()),
+                configuration.getParameters(),
+                resourceEnvironmentFactory.create(configuration.getResourceConfiguration()),
+                functionResolverFactory.create(configuration.getFunctions()),
+                propertyResolverFactory.create(configuration.getPropertyResolvers()),
+                renderEnvironmentFactory.create(configuration.getRenderConfiguration()),
+                valueEnvironmentFactory.create(configuration.getValueConfiguration()),
+                enumerationListStrategyFactory.create(configuration.getEnumerationStrategies()),
+                escapeEnvironmentFactory.create(configuration.getEscapeConfiguration()));
     }
 }

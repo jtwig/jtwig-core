@@ -2,7 +2,6 @@ package org.jtwig.parser.parboiled.node;
 
 import org.jtwig.model.tree.TextNode;
 import org.jtwig.parser.parboiled.AbstractParserTest;
-import org.jtwig.parser.parboiled.ParserContext;
 import org.junit.Test;
 import org.parboiled.support.ParsingResult;
 

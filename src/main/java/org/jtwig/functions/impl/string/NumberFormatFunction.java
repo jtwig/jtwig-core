@@ -40,8 +40,8 @@ public class NumberFormatFunction extends SimpleJtwigFunction {
         return request.getEnvironment().getValueEnvironment().getNumberConverter().convert(request.get(index)).orThrow(request.getPosition(), String.format("Cannot convert argument %d of number_format to number", index + 1));
     }
 
-    private String numberFormat (Object number, BigDecimal fractionDigits, String decimalSeparator, String groupingSeparator) {
-        number = (number == null) ? 0 : number;
+    private String numberFormat (Object numberArg, BigDecimal fractionDigits, String decimalSeparator, String groupingSeparator) {
+        Object number = (numberArg == null) ? 0 : numberArg;
 
         DecimalFormat numberFormat = new DecimalFormat();
         DecimalFormatSymbols decimalFormatSymbols = numberFormat.getDecimalFormatSymbols();

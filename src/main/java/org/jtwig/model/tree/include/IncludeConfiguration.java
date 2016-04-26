@@ -1,9 +1,6 @@
 package org.jtwig.model.tree.include;
 
 import org.jtwig.model.expression.Expression;
-import org.jtwig.model.tree.Node;
-
-import java.util.Collection;
 
 public class IncludeConfiguration {
     private final boolean inheritModel;

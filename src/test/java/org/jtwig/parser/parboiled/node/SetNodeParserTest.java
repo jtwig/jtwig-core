@@ -2,8 +2,6 @@ package org.jtwig.parser.parboiled.node;
 
 import org.jtwig.model.tree.SetNode;
 import org.jtwig.parser.parboiled.AbstractParserTest;
-import org.jtwig.parser.parboiled.expression.operator.BinaryOperatorParser;
-import org.jtwig.parser.parboiled.expression.operator.UnaryOperatorParser;
 import org.junit.Test;
 import org.parboiled.support.ParsingResult;
 

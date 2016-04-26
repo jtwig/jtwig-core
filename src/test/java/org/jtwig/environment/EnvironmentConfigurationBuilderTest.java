@@ -1,7 +1,6 @@
 package org.jtwig.environment;
 
 import org.jtwig.escape.EscapeEngine;
-import org.jtwig.escape.NoneEscapeEngine;
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.JtwigFunction;
 import org.jtwig.model.expression.Expression;
@@ -113,7 +112,6 @@ public class EnvironmentConfigurationBuilderTest {
 
     @Test
     public void renderConfig() throws Exception {
-        EscapeEngine initialEscapeMode = NoneEscapeEngine.instance();
         boolean strictMode = false;
         Charset outputCharset = Charset.defaultCharset();
         NodeRender nodeRender = mock(NodeRender.class);

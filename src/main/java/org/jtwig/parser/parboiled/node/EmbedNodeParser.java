@@ -3,7 +3,6 @@ package org.jtwig.parser.parboiled.node;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.MapExpression;
 import org.jtwig.model.tree.EmbedNode;
-import org.jtwig.model.tree.Node;
 import org.jtwig.model.tree.OverrideBlockNode;
 import org.jtwig.model.tree.include.IncludeConfiguration;
 import org.jtwig.parser.ParseException;

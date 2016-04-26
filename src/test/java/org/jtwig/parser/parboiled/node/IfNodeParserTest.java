@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.parboiled.support.ParsingResult;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class IfNodeParserTest extends AbstractParserTest {
     private IfNodeParser underTest = context.parser(IfNodeParser.class);
