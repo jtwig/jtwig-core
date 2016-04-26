@@ -3,7 +3,6 @@ package org.jtwig.parser.parboiled.expression;
 import org.jtwig.model.expression.ConstantExpression;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.parser.parboiled.AbstractParserTest;
-import org.jtwig.parser.parboiled.ParserContext;
 import org.junit.Test;
 import org.parboiled.support.ParsingResult;
 

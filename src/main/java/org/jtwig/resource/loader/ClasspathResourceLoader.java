@@ -40,7 +40,7 @@ public class ClasspathResourceLoader implements ResourceLoader {
 
     private String getPath(String path) {
         if (path.startsWith(ROOT_PATH)) {
-            path = path.substring(1);
+            return path.substring(1);
         }
         return path;
     }

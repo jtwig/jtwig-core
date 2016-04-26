@@ -1,6 +1,5 @@
 package org.jtwig.parser.parboiled.expression.test;
 
-import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.expression.test.FunctionTestExpression;
 import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.expression.FunctionExpressionParser;

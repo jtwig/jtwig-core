@@ -29,24 +29,26 @@ public final class HtmlUtils {
     private static String removeTags(String input, List<String> knownTagList) {
         Pattern tag = compile("</?([^\\s>]*)\\s*[^>]*>", Pattern.CASE_INSENSITIVE);
         Matcher matches = tag.matcher(input);
+        String result = input;
         while (matches.find()) {
             if (!knownTagList.contains(matches.group(1))) {
-                input = input.replaceAll(quote(matches.group()), "");
+                result = result.replaceAll(quote(matches.group()), "");
             }
         }
-        return input;
+        return result;
     }
 
     private static String removeTags (String input, String startTag, String endTag) {
-        while (input.contains(startTag)) {
-            int start = input.indexOf(startTag);
-            int end = input.substring(start + startTag.length()).indexOf(endTag);
+        String result = input;
+        while (result.contains(startTag)) {
+            int start = result.indexOf(startTag);
+            int end = result.substring(start + startTag.length()).indexOf(endTag);
 
-            if (end == -1) input = input.substring(0, start);
-            else input = input.substring(0, start) + input.substring(start + startTag.length() + end + endTag.length());
+            if (end == -1) result = result.substring(0, start);
+            else result = result.substring(0, start) + result.substring(start + startTag.length() + end + endTag.length());
         }
 
-        return input;
+        return result;
     }
 
     private static String removeHtmlComments (String input) {

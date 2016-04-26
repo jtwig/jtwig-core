@@ -1,16 +1,12 @@
 package org.jtwig.parser.parboiled.base;
 
 import org.jtwig.parser.parboiled.AbstractParserTest;
-import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.node.TextNodeParser;
 import org.junit.Test;
-import org.parboiled.Rule;
-import org.parboiled.parserunners.ReportingParseRunner;
 import org.parboiled.support.ParsingResult;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.parboiled.Parboiled.createParser;
 
 public class TextBuilderParserTest extends AbstractParserTest {
     private TextNodeParser.TextBuilderParser underTest = context.parser(TextNodeParser.TextBuilderParser.class);

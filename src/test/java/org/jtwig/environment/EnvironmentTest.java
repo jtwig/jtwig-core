@@ -58,7 +58,6 @@ public class EnvironmentTest {
     @Test
     public void parameterWithDefaultNotPresent() throws Exception {
         String key = "key";
-        Object value = new Object();
         Object defaultValue = new Object();
 
         Object result = underTest.parameter(key, defaultValue);

@@ -7,7 +7,6 @@ import org.parboiled.support.ParsingResult;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
 
 public class DoNodeParserTest extends AbstractParserTest {
     private DoNodeParser underTest = context.parser(DoNodeParser.class);
