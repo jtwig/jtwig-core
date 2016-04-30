@@ -2,6 +2,7 @@ package org.jtwig.environment;
 
 import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.environment.and.*;
+import org.jtwig.environment.initializer.EnvironmentInitializer;
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.JtwigFunction;
 import org.jtwig.property.PropertyResolver;
@@ -19,6 +20,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     private final ListBuilder<EnvironmentConfigurationBuilder, JtwigFunction> functions;
     private final ListBuilder<EnvironmentConfigurationBuilder, PropertyResolver> propertyResolvers;
     private final ListBuilder<EnvironmentConfigurationBuilder, EnumerationListStrategy> enumerationListStrategies;
+    private final ListBuilder<EnvironmentConfigurationBuilder, EnvironmentInitializer> initializers;
     private final AndRenderConfigurationBuilder renderConfiguration;
     private final AndJtwigParserConfigurationBuilder jtwigParserConfigurationBuilder;
     private final AndResourceConfigurationBuilder resourceConfigurationBuilder;
@@ -36,6 +38,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         valueConfigurationBuilder = new AndValueConfigurationBuilder(this);
         extensions = new ListBuilder<>(this);
         parameters = new MapBuilder<>(this);
+        initializers = new ListBuilder<>(this);
     }
     public EnvironmentConfigurationBuilder (EnvironmentConfiguration prototype) {
         functions = new ListBuilder<>(this, prototype.getFunctions());
@@ -48,6 +51,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         valueConfigurationBuilder = new AndValueConfigurationBuilder(prototype.getValueConfiguration(), this);
         extensions = new ListBuilder<>(this, prototype.getExtensions());
         parameters = new MapBuilder<>(this, prototype.getParameters());
+        initializers = new ListBuilder<>(this, prototype.getInitializers());
     }
 
     @Override
@@ -62,7 +66,8 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
                 propertyResolvers.build(),
                 functions.build(),
                 parameters.build(),
-                extensions.build());
+                extensions.build(),
+                initializers.build());
     }
 
     public AndJtwigParserConfigurationBuilder parser () {
@@ -93,6 +98,10 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
 
     public ListBuilder<EnvironmentConfigurationBuilder, EnumerationListStrategy> enumerationStrategies() {
         return enumerationListStrategies;
+    }
+
+    public ListBuilder<EnvironmentConfigurationBuilder, EnvironmentInitializer> initializers () {
+        return initializers;
     }
 
     public MapBuilder<EnvironmentConfigurationBuilder, String, Object> parameters () {
