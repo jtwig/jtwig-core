@@ -1,5 +1,6 @@
 package org.jtwig.environment;
 
+import org.jtwig.environment.initializer.EnvironmentInitializer;
 import org.jtwig.escape.config.DefaultEscapeEngineConfiguration;
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.config.DefaultJtwigFunctionList;
@@ -24,6 +25,7 @@ public class DefaultEnvironmentConfiguration extends EnvironmentConfiguration {
                 new DefaultPropertyResolverList(),
                 new DefaultJtwigFunctionList(),
                 Collections.<String, Object>emptyMap(),
-                Collections.<Extension>emptyList());
+                Collections.<Extension>emptyList(),
+                Collections.<EnvironmentInitializer>emptyList());
     }
 }

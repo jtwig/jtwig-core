@@ -1,5 +1,6 @@
 package org.jtwig.environment;
 
+import org.jtwig.environment.initializer.EnvironmentInitializer;
 import org.jtwig.escape.config.EscapeEngineConfiguration;
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.JtwigFunction;
@@ -12,6 +13,7 @@ import org.jtwig.value.config.ValueConfiguration;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EnvironmentConfiguration {
@@ -25,8 +27,9 @@ public class EnvironmentConfiguration {
     private final Collection<JtwigFunction> functions;
     private final Map<String, Object> parameters = new HashMap<>();
     private final Collection<Extension> extensions;
+    private final List<EnvironmentInitializer> initializers;
 
-    public EnvironmentConfiguration(ResourceConfiguration resourceConfiguration, Collection<EnumerationListStrategy> enumerationStrategies, JtwigParserConfiguration jtwigParserConfiguration, ValueConfiguration valueConfiguration, RenderConfiguration renderConfiguration, EscapeEngineConfiguration escapeConfiguration, Collection<PropertyResolver> propertyResolvers, Collection<JtwigFunction> functions, Map<String, Object> parameters, Collection<Extension> extensions) {
+    public EnvironmentConfiguration(ResourceConfiguration resourceConfiguration, Collection<EnumerationListStrategy> enumerationStrategies, JtwigParserConfiguration jtwigParserConfiguration, ValueConfiguration valueConfiguration, RenderConfiguration renderConfiguration, EscapeEngineConfiguration escapeConfiguration, Collection<PropertyResolver> propertyResolvers, Collection<JtwigFunction> functions, Map<String, Object> parameters, Collection<Extension> extensions, List<EnvironmentInitializer> initializers) {
         this.resourceConfiguration = resourceConfiguration;
         this.escapeConfiguration = escapeConfiguration;
         this.propertyResolvers = propertyResolvers;
@@ -36,6 +39,7 @@ public class EnvironmentConfiguration {
         this.renderConfiguration = renderConfiguration;
         this.functions = functions;
         this.extensions = extensions;
+        this.initializers = initializers;
         this.parameters.putAll(parameters);
     }
 
@@ -77,5 +81,9 @@ public class EnvironmentConfiguration {
 
     public EscapeEngineConfiguration getEscapeConfiguration() {
         return escapeConfiguration;
+    }
+
+    public List<EnvironmentInitializer> getInitializers() {
+        return initializers;
     }
 }

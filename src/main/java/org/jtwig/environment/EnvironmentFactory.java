@@ -1,5 +1,6 @@
 package org.jtwig.environment;
 
+import org.jtwig.environment.initializer.EnvironmentInitializer;
 import org.jtwig.escape.environment.EscapeEnvironmentFactory;
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.environment.FunctionResolverFactory;
@@ -55,7 +56,7 @@ public class EnvironmentFactory {
             configuration = builder.build();
         }
 
-        return new Environment(
+        Environment instance = new Environment(
                 jtwigParserFactory.create(configuration.getJtwigParserConfiguration()),
                 configuration.getParameters(),
                 resourceEnvironmentFactory.create(configuration.getResourceConfiguration()),
@@ -65,5 +66,11 @@ public class EnvironmentFactory {
                 valueEnvironmentFactory.create(configuration.getValueConfiguration()),
                 enumerationListStrategyFactory.create(configuration.getEnumerationStrategies()),
                 escapeEnvironmentFactory.create(configuration.getEscapeConfiguration()));
+
+        for (EnvironmentInitializer initializer : configuration.getInitializers()) {
+            initializer.initialize(instance);
+        }
+
+        return instance;
     }
 }
