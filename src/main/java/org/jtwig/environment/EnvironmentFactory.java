@@ -10,11 +10,15 @@ import org.jtwig.render.environment.RenderEnvironmentFactory;
 import org.jtwig.render.expression.calculator.enumerated.environment.EnumerationListStrategyFactory;
 import org.jtwig.resource.environment.ResourceEnvironmentFactory;
 import org.jtwig.value.environment.ValueEnvironmentFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Stateless and thread-safe implementation of a Environment factory.
  */
 public class EnvironmentFactory {
+    private static final Logger log = LoggerFactory.getLogger(EnvironmentFactory.class);
+
     private final JtwigParserFactory jtwigParserFactory;
     private final ResourceEnvironmentFactory resourceEnvironmentFactory;
     private final RenderEnvironmentFactory renderEnvironmentFactory;
@@ -49,8 +53,10 @@ public class EnvironmentFactory {
         EnvironmentConfiguration configuration = environmentConfiguration;
 
         if (!environmentConfiguration.getExtensions().isEmpty()) {
+            log.info("Jtwig base configuration extended with:");
             EnvironmentConfigurationBuilder builder = new EnvironmentConfigurationBuilder(environmentConfiguration);
             for (Extension extension : environmentConfiguration.getExtensions()) {
+                log.info("- {}", extension.getClass().getSimpleName());
                 extension.configure(builder);
             }
             configuration = builder.build();
@@ -67,8 +73,11 @@ public class EnvironmentFactory {
                 enumerationListStrategyFactory.create(configuration.getEnumerationStrategies()),
                 escapeEnvironmentFactory.create(configuration.getEscapeConfiguration()));
 
-        for (EnvironmentInitializer initializer : configuration.getInitializers()) {
-            initializer.initialize(instance);
+        if (!configuration.getInitializers().isEmpty()) {
+            log.info("Jtwig pre-loading resources");
+            for (EnvironmentInitializer initializer : configuration.getInitializers()) {
+                initializer.initialize(instance);
+            }
         }
 
         return instance;
