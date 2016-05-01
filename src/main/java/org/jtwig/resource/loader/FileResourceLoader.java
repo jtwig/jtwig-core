@@ -12,13 +12,15 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 public class FileResourceLoader implements ResourceLoader {
-    private static final FileResourceLoader INSTANCE = new FileResourceLoader();
-
     public static FileResourceLoader instance () {
-        return INSTANCE;
+        return new FileResourceLoader(new File(""));
     }
 
-    private FileResourceLoader () {}
+    private final File baseDirectory;
+
+    public FileResourceLoader (File baseDirectory) {
+        this.baseDirectory = baseDirectory;
+    }
 
     @Override
     public Optional<Charset> getCharset(String path) {
@@ -28,7 +30,7 @@ public class FileResourceLoader implements ResourceLoader {
     @Override
     public InputStream load(String path) {
         try {
-            return new FileInputStream(path);
+            return new FileInputStream(file(path));
         } catch (FileNotFoundException e) {
             throw new ResourceNotFoundException(e);
         }
@@ -36,15 +38,24 @@ public class FileResourceLoader implements ResourceLoader {
 
     @Override
     public boolean exists(String path) {
-        return new File(path).exists();
+        return file(path).exists();
     }
 
     @Override
     public Optional<URL> toUrl(String path) {
         try {
-            return Optional.of(new File(path).toURI().toURL());
+            return Optional.of(file(path).toURI().toURL());
         } catch (MalformedURLException e) {
             return Optional.absent();
+        }
+    }
+
+    private File file(String path) {
+        File file = new File(path);
+        if (file.isAbsolute()) {
+            return file;
+        } else {
+            return new File(baseDirectory, path);
         }
     }
 }

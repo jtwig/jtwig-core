@@ -3,6 +3,7 @@ package org.jtwig.integration.structured;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.resource.loader.InMemoryResourceLoader;
+import org.jtwig.resource.loader.TypedResourceLoader;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -21,9 +22,9 @@ public class BlockValueContextTest extends AbstractIntegrationTest {
 
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% extends 'memory:a' %}{% block name %}{{ var }}{% endblock %}",
                 configuration()
-                        .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{% for a in [1..2] %}{% block name %}this{% endblock %}{% endfor %}")
-                        .build()).and().and()
+                        .build())).and().and()
                         .build()
         );
 
@@ -36,10 +37,10 @@ public class BlockValueContextTest extends AbstractIntegrationTest {
     public void blockInheritance() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% extends 'memory:a' %}{% block a %}a{% endblock %}",
                 configuration()
-                        .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{% extends 'memory:b' %}")
                         .withResource("b", "{% block a %}b{% endblock %}")
-                        .build()).and().and()
+                        .build())).and().and()
                         .build()
         );
 

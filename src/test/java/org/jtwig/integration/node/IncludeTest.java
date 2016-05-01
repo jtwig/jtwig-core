@@ -6,6 +6,7 @@ import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
 import org.jtwig.resource.loader.InMemoryResourceLoader;
+import org.jtwig.resource.loader.TypedResourceLoader;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -34,9 +35,9 @@ public class IncludeTest extends AbstractIntegrationTest {
     public void includeWithoutExportingModel() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'memory:a' only %}",
                 configuration()
-                        .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{{ name }}")
-                        .build()).and().and()
+                        .build())).and().and()
                         .build()
         );
         String result = template.render(newModel().with("name", "Hello"));
@@ -48,9 +49,9 @@ public class IncludeTest extends AbstractIntegrationTest {
     public void includeWithoutExportingModelButIncluding() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'memory:a' with { name: 'Joao' } only %}",
                 configuration()
-                        .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{{ name }}")
-                        .build()).and().and()
+                        .build())).and().and()
                         .build()
         );
 
@@ -62,9 +63,9 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeShouldExportModel() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'memory:a' %}", configuration()
-                .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{{ name }}")
-                        .build()).and().and()
+                        .build())).and().and()
                 .build()
         );
 
@@ -76,9 +77,9 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeShouldExportModelAndExtraData() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'memory:a' with { joao: 'Melo' } %}", configuration()
-                .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{{ name }} {{ joao }}")
-                        .build()).and().and()
+                        .build())).and().and()
                 .build()
         );
 
@@ -90,9 +91,9 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeShouldNotRedefineModelVariable() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'memory:a' %}{{ name }}", configuration()
-                .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{% set name = 'test' %}")
-                        .build()).and().and()
+                        .build())).and().and()
                 .build()
         );
 
@@ -104,9 +105,9 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeShouldNotExposeNewModelVariable() throws Exception {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include 'memory:a' %}{{ var }}",configuration()
-                .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{% set var = 'test' %}")
-                        .build()).and().and()
+                        .build())).and().and()
                 .build()
         );
 

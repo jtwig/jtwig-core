@@ -18,6 +18,8 @@ import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
 import org.jtwig.render.expression.calculator.operation.unary.calculators.UnaryOperationCalculator;
 import org.jtwig.render.expression.test.calculator.TestExpressionCalculator;
 import org.jtwig.render.node.renderer.NodeRender;
+import org.jtwig.resource.loader.ResourceLoader;
+import org.jtwig.resource.loader.TypedResourceLoader;
 import org.jtwig.resource.resolver.RelativeResourceResolver;
 import org.jtwig.value.WrappedCollection;
 import org.jtwig.value.compare.ValueComparator;
@@ -50,6 +52,13 @@ public class EnvironmentConfigurationBuilderTest {
                 .build();
 
         assertThat(result, theSameBean(prototype));
+    }
+
+    @Test
+    public void emptyConstructor() throws Exception {
+        EnvironmentConfiguration configuration = new EnvironmentConfigurationBuilder().build();
+
+        assertTrue(configuration.getExtensions().isEmpty());
     }
 
     @Test
@@ -99,12 +108,14 @@ public class EnvironmentConfigurationBuilderTest {
     @Test
     public void resources() throws Exception {
         RelativeResourceResolver relativeResourceResolver = mock(RelativeResourceResolver.class);
+        ResourceLoader resourceLoader = mock(ResourceLoader.class);
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
-                .resources()
-                .resourceResolvers().add(relativeResourceResolver).and()
-                .and()
+                    .resources()
+                        .resourceLoaders().add(new TypedResourceLoader("type", resourceLoader)).and()
+                        .relativeResourceResolvers().add(relativeResourceResolver).and()
+                    .and()
                 .build();
 
         assertThat(configuration.getResourceConfiguration().getRelativeResourceResolvers(), hasItem(relativeResourceResolver));

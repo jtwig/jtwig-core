@@ -6,6 +6,7 @@ import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
 import org.jtwig.resource.loader.InMemoryResourceLoader;
+import org.jtwig.resource.loader.TypedResourceLoader;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -42,10 +43,10 @@ public class ImportTest extends AbstractIntegrationTest {
     public void nestedImports() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% import 'memory:a' as a %}{{ a.example('hello') }}",
                 configuration()
-                        .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{% import 'memory:b' as b %}{% macro example (input) %}{{ b.example(input) }}{% endmacro %}")
                         .withResource("b", "{% macro example (input) %}{{ input }}{% endmacro %}")
-                        .build()).and().and()
+                        .build())).and().and()
                         .build())
                 .render(JtwigModel.newModel());
 
