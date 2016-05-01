@@ -9,4 +9,19 @@ env:
 
 after_success:
  - gradle jacocoTestReport coveralls
- - if [[ $TRAVIS_PULL_REQUEST == "false" ]]; then gradle bintrayUpload ; fi
+ - |
+     if [[ ($TRAVIS_BRANCH == master) &&
+           ($TRAVIS_PULL_REQUEST == false) &&
+           ( (! $TRAVIS_JOB_NUMBER == *.*) || ($TRAVIS_JOB_NUMBER == *.1) ) ]] ; then
+       gradle bintrayUpload
+       curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
+       sh trigger-travis.sh jtwig jtwig-web $TRAVIS_ACCESS_TOKEN
+       sleep 1
+       sh trigger-travis.sh jtwig jtwig-hot-reloading-extension $TRAVIS_ACCESS_TOKEN
+       sleep 1
+       sh trigger-travis.sh jtwig jtwig-json-extension $TRAVIS_ACCESS_TOKEN
+       sleep 1
+       sh trigger-travis.sh jtwig jtwig-spaceless-extension $TRAVIS_ACCESS_TOKEN
+       sleep 1
+       sh trigger-travis.sh jtwig jtwig-translate-extension $TRAVIS_ACCESS_TOKEN
+     fi
