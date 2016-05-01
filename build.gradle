@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+    }
+}
+
 apply plugin: 'java'
 apply from: 'gradle/version-release.gradle'
 apply from: 'gradle/coverage-support.gradle'
@@ -16,20 +28,8 @@ repositories {
     }
 }
 
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
-    }
-}
-
 dependencies {
-    compile 'org.jtwig:jtwig-reflection:1.14'
+    compile "org.jtwig:jtwig-reflection:$jtwigReflectionVersion"
 
     compile 'com.google.guava:guava:18.0'
     compile 'org.apache.commons:commons-lang3:3.1'

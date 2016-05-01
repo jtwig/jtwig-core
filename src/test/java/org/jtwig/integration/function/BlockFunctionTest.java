@@ -4,6 +4,7 @@ import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.resource.loader.InMemoryResourceLoader;
+import org.jtwig.resource.loader.TypedResourceLoader;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,9 +32,9 @@ public class BlockFunctionTest extends AbstractIntegrationTest {
     @Test
     public void blockWithExtends() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% extends 'a' %}{% block one %}a{% endblock %}", configuration()
-                .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{% block one %}Hello{% endblock %}{{ block('one') }}")
-                        .build()).and().and()
+                        .build())).and().and()
                 .build())
                 .render(JtwigModel.newModel());
 

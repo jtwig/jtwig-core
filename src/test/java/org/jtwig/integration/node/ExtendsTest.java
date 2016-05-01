@@ -6,6 +6,7 @@ import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
 import org.jtwig.resource.loader.InMemoryResourceLoader;
+import org.jtwig.resource.loader.TypedResourceLoader;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -24,9 +25,9 @@ public class ExtendsTest extends AbstractIntegrationTest {
     @Test
     public void extendsTest() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% extends 'memory:a' %}{% block c %}a{% endblock %}", configuration()
-                .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{% block c %}d{% endblock %}")
-                        .build()).and().and()
+                        .build())).and().and()
                 .build())
                 .render(JtwigModel.newModel());
 
@@ -36,10 +37,10 @@ public class ExtendsTest extends AbstractIntegrationTest {
     @Test
     public void nestedExtendsTest() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% extends 'memory:a' %}{% block c %}a{% endblock %}", configuration()
-                .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{% extends 'memory:b' %}{% block c %}d{% endblock %}")
                         .withResource("b", "{% block c %}e{% endblock %}")
-                        .build()).and().and()
+                        .build())).and().and()
                 .build())
                 .render(JtwigModel.newModel());
 
@@ -50,10 +51,10 @@ public class ExtendsTest extends AbstractIntegrationTest {
     public void extendsWithSetTest() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% extends 'memory:a' %}{% set var = 1 %}",
                 configuration()
-                        .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                        .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{% extends 'memory:b' %}{% block c %}d{% endblock %}")
                         .withResource("b", "{{ var }}")
-                        .build()).and().and()
+                        .build())).and().and()
                         .build())
                 .render(JtwigModel.newModel());
 
@@ -138,11 +139,11 @@ public class ExtendsTest extends AbstractIntegrationTest {
 
         String result = JtwigTemplate.inlineTemplate("{% extends 'memory:a' %}" +
                 "{% block post %}- {{ item.title }}{% endblock %}", configuration()
-                .resources().resourceLoaders().add(MEMORY, InMemoryResourceLoader.builder()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                         .withResource("a", "{% for item in posts %}" +
                                 "{% block post %}{{ item.title }}{% endblock %}" +
                                 "{% endfor %}")
-                        .build()).and().and()
+                        .build())).and().and()
                 .build())
                 .render(JtwigModel.newModel().with("posts", asList(
                         new Item("a"),

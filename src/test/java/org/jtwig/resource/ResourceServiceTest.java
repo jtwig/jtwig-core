@@ -3,6 +3,7 @@ package org.jtwig.resource;
 import com.google.common.base.Optional;
 import org.jtwig.resource.exceptions.ResourceException;
 import org.jtwig.resource.loader.ResourceLoader;
+import org.jtwig.resource.loader.TypedResourceLoader;
 import org.jtwig.resource.reference.ResourceReference;
 import org.jtwig.resource.reference.ResourceReferenceExtractor;
 import org.jtwig.resource.resolver.RelativeResourceResolver;
@@ -11,22 +12,25 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static junit.framework.TestCase.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ResourceServiceTest {
-    private final HashMap<String, ResourceLoader> resourceLoaders = new HashMap<>();
+    private final HashMap<String, ResourceLoader> resourceLoaderMap = new HashMap<>();
+    private final List<TypedResourceLoader> resourceLoaderList = new ArrayList<>();
     private final ArrayList<String> absoluteResourceTypes = new ArrayList<>();
     private final ArrayList<RelativeResourceResolver> relativeResourceResolvers = new ArrayList<>();
     private final ResourceReferenceExtractor resourceReferenceExtractor = mock(ResourceReferenceExtractor.class);
 
-    private final ResourceService underTest = new ResourceService(resourceLoaders, absoluteResourceTypes, relativeResourceResolvers, resourceReferenceExtractor);
+    private final ResourceService underTest = new ResourceService(resourceLoaderMap, resourceLoaderList, absoluteResourceTypes, relativeResourceResolvers, resourceReferenceExtractor);
 
     @Before
     public void setUp() throws Exception {
-        resourceLoaders.clear();
+        resourceLoaderMap.clear();
+        resourceLoaderList.clear();
         absoluteResourceTypes.clear();
         relativeResourceResolvers.clear();
     }
