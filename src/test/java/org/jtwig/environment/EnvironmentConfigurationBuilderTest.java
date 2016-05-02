@@ -20,6 +20,7 @@ import org.jtwig.render.expression.test.calculator.TestExpressionCalculator;
 import org.jtwig.render.node.renderer.NodeRender;
 import org.jtwig.resource.loader.ResourceLoader;
 import org.jtwig.resource.loader.TypedResourceLoader;
+import org.jtwig.resource.reference.DefaultResourceReferenceExtractor;
 import org.jtwig.resource.resolver.RelativeResourceResolver;
 import org.jtwig.value.WrappedCollection;
 import org.jtwig.value.compare.ValueComparator;
@@ -109,12 +110,17 @@ public class EnvironmentConfigurationBuilderTest {
     public void resources() throws Exception {
         RelativeResourceResolver relativeResourceResolver = mock(RelativeResourceResolver.class);
         ResourceLoader resourceLoader = mock(ResourceLoader.class);
+        TypedResourceLoader typedResourceLoader = new TypedResourceLoader("type", resourceLoader);
+        DefaultResourceReferenceExtractor extractor = new DefaultResourceReferenceExtractor();
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
                     .resources()
-                        .resourceLoaders().add(new TypedResourceLoader("type", resourceLoader)).and()
+                        .resourceLoaders().add(typedResourceLoader).and()
                         .relativeResourceResolvers().add(relativeResourceResolver).and()
+                        .absoluteResourceTypes().add("string").and()
+                        .withDefaultInputCharset(Charset.forName("UTF-8"))
+                        .withResourceReferenceExtractor(extractor)
                     .and()
                 .build();
 
