@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 version = releaseVersion()
 group = "org.jtwig"
@@ -52,4 +53,31 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 
 artifacts {
     archives sourcesJar, javadocJar
+}
+
+
+publishing {
+    publications {
+        BintrayArchives(MavenPublication) {
+            from components.java
+
+            pom.withXml {
+                // Generate map of resolved versions
+                Map resolvedVersionMap = [:]
+                Set<ResolvedArtifact> resolvedArtifacts = configurations.compile.getResolvedConfiguration().getResolvedArtifacts()
+                resolvedArtifacts.addAll(configurations.testCompile.getResolvedConfiguration().getResolvedArtifacts())
+                resolvedArtifacts.each {
+                    ModuleVersionIdentifier mvi = it.getModuleVersion().getId();
+                    resolvedVersionMap.put("${mvi.getGroup()}:${mvi.getName()}", mvi.getVersion())
+                }
+
+                // Update dependencies with resolved versions
+                asNode().dependencies.first().each {
+                    def groupId = it.get("groupId").first().value().first()
+                    def artifactId = it.get("artifactId").first().value().first()
+                    it.get("version").first().value = resolvedVersionMap.get("${groupId}:${artifactId}")
+                }
+            }
+        }
+    }
 }
