@@ -4,6 +4,7 @@ bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_KEY')
     configurations = ['archives']
+    publications = ['BintrayArchives']
     pkg {
         repo = 'maven'
         userOrg = 'jtwig'

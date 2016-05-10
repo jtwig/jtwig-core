@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    compile "org.jtwig:jtwig-reflection:1.14"
+    compile "org.jtwig:jtwig-reflection:1.+"
 
     compile 'com.google.guava:guava:18.0'
     compile 'org.apache.commons:commons-lang3:3.1'
