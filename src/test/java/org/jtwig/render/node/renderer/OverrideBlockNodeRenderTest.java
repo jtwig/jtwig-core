@@ -4,6 +4,7 @@ import org.jtwig.model.tree.OverrideBlockNode;
 import org.jtwig.render.RenderRequest;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.EmptyRenderable;
+import org.jtwig.resource.reference.ResourceReference;
 import org.junit.Test;
 
 import static org.junit.Assert.assertSame;
@@ -16,10 +17,13 @@ public class OverrideBlockNodeRenderTest {
     public void render() throws Exception {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         OverrideBlockNode blockNode = mock(OverrideBlockNode.class);
+        ResourceReference resourceReference = mock(ResourceReference.class);
+
+        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(resourceReference);
 
         Renderable result = underTest.render(request, blockNode);
 
-        verify(request.getRenderContext().getBlockContext().getCurrent()).add(blockNode);
+        verify(request.getRenderContext().getBlockContext().getCurrent()).add(blockNode, resourceReference);
         assertSame(EmptyRenderable.instance(), result);
     }
 }
