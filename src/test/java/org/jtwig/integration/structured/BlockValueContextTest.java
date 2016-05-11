@@ -1,5 +1,6 @@
 package org.jtwig.integration.structured;
 
+import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.resource.loader.InMemoryResourceLoader;
@@ -17,6 +18,14 @@ import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuratio
 import static org.jtwig.resource.reference.ResourceReference.MEMORY;
 
 public class BlockValueContextTest extends AbstractIntegrationTest {
+    @Test
+    public void extendsRelativeResourceResolution() throws Exception {
+        String result = JtwigTemplate.classpathTemplate("/example/classpath-extends-include-in-block.twig")
+                .render(JtwigModel.newModel());
+
+        assertThat(result, is("Hello World"));
+    }
+
     @Test
     public void extendLogic() throws Exception {
 

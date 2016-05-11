@@ -24,4 +24,6 @@ after_success:
        sh trigger-travis.sh jtwig jtwig-spaceless-extension $TRAVIS_ACCESS_TOKEN
        sleep 1
        sh trigger-travis.sh jtwig jtwig-translate-extension $TRAVIS_ACCESS_TOKEN
+       sleep 1
+       sh trigger-travis.sh jtwig jtwig-highlight-extension $TRAVIS_ACCESS_TOKEN
      fi
