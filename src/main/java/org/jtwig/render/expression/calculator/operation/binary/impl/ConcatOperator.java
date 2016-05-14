@@ -10,6 +10,6 @@ public class ConcatOperator implements BinaryOperator {
 
     @Override
     public int precedence() {
-        return 10;
+        return 12;
     }
 }
