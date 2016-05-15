@@ -93,10 +93,12 @@ public class DefaultRenderConfiguration extends RenderConfiguration {
 
                 ImmutableMap.<Class<? extends TestExpression>, TestExpressionCalculator>builder()
                         .put(NotTestExpression.class, new NotTestExpressionCalculator())
-                        .put(FunctionTestExpression.class, new FunctionTestExpressionCalculator())
+                        .put(DefinedTestExpression.class, new DefinedTestExpressionCalculator())
+                        .put(IsFunctionTestExpression.class, new IsFunctionTestExpressionCalculator())
                         .put(DivisibleByTestExpression.class, new DivisibleByTestExpressionCalculator())
                         .put(NullTestExpression.class, new NullTestExpressionCalculator())
                         .put(SameAsTestExpression.class, new SameAsTestExpressionCalculator())
+                        .put(FunctionTestExpression.class, new FunctionTestExpressionCalculator())
                         .build()
         );
     }

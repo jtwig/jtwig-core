@@ -22,6 +22,8 @@ public class AnyTestExpressionParser extends TestExpressionParser<TestExpression
         NotParser notParser = parserContext().parser(NotParser.class);
         TestExpressionParser[] parsers = new TestExpressionParser[] {
                 parserContext().parser(NullTestExpressionParser.class),
+                parserContext().parser(DefinedTestExpressionParser.class),
+                parserContext().parser(IsFunctionTestExpressionParser.class),
                 parserContext().parser(DivisibleByTestExpressionParser.class),
                 parserContext().parser(SameAsTestExpressionParser.class),
                 parserContext().parser(FunctionTestExpressionParser.class)
