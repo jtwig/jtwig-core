@@ -10,6 +10,7 @@ import java.util.Collections;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuration;
 
 public class IsTest extends AbstractIntegrationTest {
     public static final String HELLO = "one";
@@ -43,6 +44,39 @@ public class IsTest extends AbstractIntegrationTest {
 
         assertThat(result, is(equalTo("Hi")));
     }
+
+    @Test
+    public void isDefinedFunctionWithStrictMode () throws Exception {
+        JtwigModel model = new JtwigModel();
+
+        String result = JtwigTemplate.inlineTemplate("{% if (variable is not defined) %}Hi{% else %}blue{% endif %}", configuration()
+                .render().withStrictMode(true).and()
+                .build())
+                .render(model);
+
+        assertThat(result, is(equalTo("Hi")));
+    }
+
+    @Test
+    public void isFunctionTrue () throws Exception {
+        JtwigModel model = new JtwigModel();
+
+        String result = JtwigTemplate.inlineTemplate("{% if (defined is function) %}Hi{% else %}blue{% endif %}")
+                .render(model);
+
+        assertThat(result, is(equalTo("Hi")));
+    }
+
+    @Test
+    public void isFunctionFalse () throws Exception {
+        JtwigModel model = new JtwigModel();
+
+        String result = JtwigTemplate.inlineTemplate("{% if (blah is function) %}Hi{% else %}blue{% endif %}")
+                .render(model);
+
+        assertThat(result, is(equalTo("blue")));
+    }
+
     @Test
     public void isEvenFunction () throws Exception {
         JtwigModel model = new JtwigModel();

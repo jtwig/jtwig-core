@@ -36,6 +36,8 @@ public class ParserContext {
         createParser(CommentParser.class, context);
 
         createParser(SameAsTestExpressionParser.class, context);
+        createParser(DefinedTestExpressionParser.class, context);
+        createParser(IsFunctionTestExpressionParser.class, context);
         createParser(DivisibleByTestExpressionParser.class, context);
         createParser(NullTestExpressionParser.class, context);
         createParser(FunctionTestExpressionParser.class, context);
