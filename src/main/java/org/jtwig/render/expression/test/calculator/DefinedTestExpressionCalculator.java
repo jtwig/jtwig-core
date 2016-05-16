@@ -14,7 +14,7 @@ public class DefinedTestExpressionCalculator implements TestExpressionCalculator
         CalculateExpressionService calculateExpressionService = request.getEnvironment().getRenderEnvironment().getCalculateExpressionService();
         try {
             Object value = calculateExpressionService.calculate(request, argument);
-            return value != null && value != Undefined.UNDEFINED;
+            return value != Undefined.UNDEFINED;
         } catch (ResolveValueException e) {
             return false;
         }
