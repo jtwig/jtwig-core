@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.cache.TemplateCache;
+import org.jtwig.parser.parboiled.expression.test.TestExpressionParser;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
 import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
 import org.jtwig.util.builder.ListBuilder;
@@ -13,6 +14,7 @@ public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationB
     private final ListBuilder<B, AddonParserProvider> addonParserProviders;
     private final ListBuilder<B, UnaryOperator> unaryOperators;
     private final ListBuilder<B, BinaryOperator> binaryOperators;
+    private final ListBuilder<B, Class<? extends TestExpressionParser>> testExpressionParsers;
     private Optional<TemplateCache> templateCache;
 
     public JtwigParserConfigurationBuilder () {
@@ -20,12 +22,14 @@ public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationB
         this.addonParserProviders = new ListBuilder<>(self());
         this.unaryOperators = new ListBuilder<>(self());
         this.binaryOperators = new ListBuilder<>(self());
+        this.testExpressionParsers = new ListBuilder<>(self());
     }
     public JtwigParserConfigurationBuilder (JtwigParserConfiguration prototype) {
         this.syntaxConfiguration  = new AndSyntaxConfigurationBuilder<>(self(), prototype.getSyntaxConfiguration());
         this.addonParserProviders = new ListBuilder<>(self(), prototype.getAddonParserProviders());
         this.unaryOperators = new ListBuilder<>(self(), prototype.getUnaryOperators());
         this.binaryOperators = new ListBuilder<>(self(), prototype.getBinaryOperators());
+        this.testExpressionParsers = new ListBuilder<>(self(), prototype.getTestExpressionParsers());
         this.templateCache = prototype.getTemplateCache();
     }
 
@@ -56,12 +60,16 @@ public class JtwigParserConfigurationBuilder<B extends JtwigParserConfigurationB
         return binaryOperators;
     }
 
+    public ListBuilder<B, Class<? extends TestExpressionParser>> testExpressionParsers() {
+        return testExpressionParsers;
+    }
+
     protected B self () {
         return (B) this;
     }
 
     @Override
     public JtwigParserConfiguration build() {
-        return new JtwigParserConfiguration(syntaxConfiguration.build(), addonParserProviders.build(), unaryOperators.build(), binaryOperators.build(), templateCache);
+        return new JtwigParserConfiguration(syntaxConfiguration.build(), addonParserProviders.build(), unaryOperators.build(), binaryOperators.build(), testExpressionParsers.build(), templateCache);
     }
 }

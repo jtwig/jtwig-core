@@ -14,7 +14,8 @@ public abstract class AbstractParserTest {
             parserConfiguration.getSyntaxConfiguration(),
             parserConfiguration.getAddonParserProviders(),
             parserConfiguration.getUnaryOperators(),
-            parserConfiguration.getBinaryOperators());
+            parserConfiguration.getBinaryOperators(),
+            parserConfiguration.getTestExpressionParsers());
 
     protected <T> ParsingResult<T> parse(Rule rule, String input) {
         ParseRunner<T> handler = new BasicParseRunner<T>(rule);
