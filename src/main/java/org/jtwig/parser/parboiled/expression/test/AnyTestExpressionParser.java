@@ -9,25 +9,26 @@ import org.jtwig.parser.parboiled.base.SpacingParser;
 import org.jtwig.parser.parboiled.model.Keyword;
 import org.parboiled.Rule;
 
+import java.util.List;
+
 import static org.parboiled.Parboiled.createParser;
 
 public class AnyTestExpressionParser extends TestExpressionParser<TestExpression> {
-    public AnyTestExpressionParser(ParserContext context) {
+    private final List<Class<? extends TestExpressionParser>> testExpressionParsers;
+
+    public AnyTestExpressionParser(ParserContext context, List<Class<? extends TestExpressionParser>> testExpressionParsers) {
         super(AnyTestExpressionParser.class, context);
+        this.testExpressionParsers = testExpressionParsers;
         createParser(NotParser.class, context);
     }
 
     @Override
     public Rule Test() {
         NotParser notParser = parserContext().parser(NotParser.class);
-        TestExpressionParser[] parsers = new TestExpressionParser[] {
-                parserContext().parser(NullTestExpressionParser.class),
-                parserContext().parser(DefinedTestExpressionParser.class),
-                parserContext().parser(IsFunctionTestExpressionParser.class),
-                parserContext().parser(DivisibleByTestExpressionParser.class),
-                parserContext().parser(SameAsTestExpressionParser.class),
-                parserContext().parser(FunctionTestExpressionParser.class)
-        };
+        TestExpressionParser[] parsers = new TestExpressionParser[testExpressionParsers.size()];
+        for (int i = 0; i < parsers.length; i++) {
+            parsers[i] = parserContext().parser(testExpressionParsers.get(i));
+        }
         return Sequence(
                 notParser.Rule(),
                 FirstOf(rulesFor(parsers, notParser))

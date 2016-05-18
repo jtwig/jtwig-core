@@ -6,17 +6,15 @@ import org.jtwig.parser.parboiled.base.*;
 import org.jtwig.parser.parboiled.expression.*;
 import org.jtwig.parser.parboiled.expression.operator.BinaryOperatorParser;
 import org.jtwig.parser.parboiled.expression.operator.UnaryOperatorParser;
-import org.jtwig.parser.parboiled.expression.test.*;
+import org.jtwig.parser.parboiled.expression.test.AnyTestExpressionParser;
+import org.jtwig.parser.parboiled.expression.test.TestExpressionParser;
 import org.jtwig.parser.parboiled.node.*;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
 import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
 import org.jtwig.resource.reference.ResourceReference;
 import org.parboiled.BaseParser;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.parboiled.Parboiled.createParser;
 
@@ -25,7 +23,8 @@ public class ParserContext {
     public static ParserContext instance (ResourceReference resource, SyntaxConfiguration configuration,
                                           Collection<AddonParserProvider> addOnParsers,
                                           Collection<UnaryOperator> unaryOperators,
-                                          Collection<BinaryOperator> binaryOperators) {
+                                          Collection<BinaryOperator> binaryOperators,
+                                          List<Class<? extends TestExpressionParser>> testExpressionParsers) {
         ParserContext context = new ParserContext(resource, configuration, addOnParsers);
 
         createParser(BooleanParser.class, context);
@@ -35,13 +34,11 @@ public class ParserContext {
         createParser(LimitsParser.class, context);
         createParser(CommentParser.class, context);
 
-        createParser(SameAsTestExpressionParser.class, context);
-        createParser(DefinedTestExpressionParser.class, context);
-        createParser(IsFunctionTestExpressionParser.class, context);
-        createParser(DivisibleByTestExpressionParser.class, context);
-        createParser(NullTestExpressionParser.class, context);
-        createParser(FunctionTestExpressionParser.class, context);
-        createParser(AnyTestExpressionParser.class, context);
+        for (Class<? extends TestExpressionParser> testExpressionParser : testExpressionParsers) {
+            createParser(testExpressionParser, context);
+        }
+
+        createParser(AnyTestExpressionParser.class, context, testExpressionParsers);
         createParser(MapSelectionExpressionParser.class, context);
 
         createParser(UnaryOperatorParser.class, context, unaryOperators);

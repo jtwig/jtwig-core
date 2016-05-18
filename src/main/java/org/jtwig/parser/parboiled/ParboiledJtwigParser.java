@@ -37,7 +37,8 @@ public class ParboiledJtwigParser implements JtwigParser {
                 ParserContext.instance(resource, configuration.getSyntaxConfiguration(),
                         configuration.getAddonParserProviders(),
                         configuration.getUnaryOperators(),
-                        configuration.getBinaryOperators())
+                        configuration.getBinaryOperators(),
+                        configuration.getTestExpressionParsers())
                         .parser(DocumentParser.class)
                         .NodeRule()
         );

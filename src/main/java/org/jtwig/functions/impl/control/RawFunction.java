@@ -15,8 +15,9 @@ public class RawFunction extends SimpleJtwigFunction {
     @Override
     public Object execute(FunctionRequest request) {
         request.maximumNumberOfArguments(1).minimumNumberOfArguments(1);
+        Object value = request.get(0);
         getRenderContext().getEscapeEngineContext().set(NoneEscapeEngine.instance());
-        return request.get(0);
+        return value;
     }
 
     protected RenderContext getRenderContext() {

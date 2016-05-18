@@ -35,7 +35,8 @@ public class EscapeFunction extends SimpleJtwigFunction {
             }
         }
 
+        Object value = request.get(0);
         request.getRenderContext().getEscapeEngineContext().set(escapeEngine);
-        return request.get(0);
+        return value;
     }
 }

@@ -1,9 +1,11 @@
 package org.jtwig.functions.environment;
 
 import org.jtwig.exceptions.InvalidFunctionNameException;
+import org.jtwig.functions.FunctionRequestFactory;
 import org.jtwig.functions.JtwigFunction;
 import org.jtwig.functions.resolver.CoreFunctionResolver;
 import org.jtwig.functions.resolver.FunctionResolver;
+import org.jtwig.functions.resolver.FunctionValueSupplierFactory;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,7 +23,7 @@ public class FunctionResolverFactory {
                 map.put(alias, jtwigFunction);
             }
         }
-        return new CoreFunctionResolver(map);
+        return new CoreFunctionResolver(map, new FunctionRequestFactory(), new FunctionValueSupplierFactory());
     }
 
     private void validate(String name) {

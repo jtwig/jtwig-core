@@ -51,7 +51,7 @@ public class DefaultRenderConfiguration extends RenderConfiguration {
                         .put(ConstantExpression.class, new ConstantExpressionCalculator())
                         .put(VariableExpression.class, new VariableExpressionCalculator())
                         .put(BinaryOperationExpression.class, new BinaryOperationExpressionCalculator())
-                        .put(FunctionExpression.class, new FunctionExpressionCalculator())
+                        .put(FunctionExpression.class, new FunctionExpressionCalculator(new FunctionArgumentsFactory()))
                         .put(MapExpression.class, new MapExpressionCalculator())
                         .put(ComprehensionListExpression.class, new ComprehensionListExpressionCalculator())
                         .put(EnumeratedListExpression.class, new EnumeratedListExpressionCalculator())
