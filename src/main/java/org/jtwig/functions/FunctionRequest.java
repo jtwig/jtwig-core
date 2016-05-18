@@ -1,6 +1,7 @@
 package org.jtwig.functions;
 
 import org.jtwig.exceptions.CalculationException;
+import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.render.RenderRequest;
 
@@ -11,13 +12,13 @@ import static org.jtwig.util.ErrorMessageFormatter.errorMessage;
 public class FunctionRequest extends RenderRequest {
     private final Position position;
     private final String functionName;
-    private final List<Object> arguments;
+    private final FunctionArguments functionArguments;
 
-    public FunctionRequest(RenderRequest request, Position position, String functionName, List<Object> arguments) {
+    public FunctionRequest(RenderRequest request, Position position, String functionName, FunctionArguments functionArguments) {
         super(request.getRenderContext(), request.getEnvironment());
         this.position = position;
         this.functionName = functionName;
-        this.arguments = arguments;
+        this.functionArguments = functionArguments;
     }
 
     public Position getPosition() {
@@ -25,22 +26,26 @@ public class FunctionRequest extends RenderRequest {
     }
 
     public int getNumberOfArguments () {
-        return arguments.size();
+        return functionArguments.size();
     }
 
     public List<Object> getArguments() {
-        return arguments;
+        return functionArguments.getValues();
+    }
+
+    public List<Expression> getExpressionArguments () {
+        return functionArguments.getExpressions();
     }
 
     public FunctionRequest minimumNumberOfArguments(int number) {
-        if (arguments.size() < number) {
+        if (functionArguments.size() < number) {
             throw exception(String.format("Expected at least %d arguments", number));
         }
         return this;
     }
 
     public FunctionRequest maximumNumberOfArguments(int number) {
-        if (arguments.size() > number) {
+        if (functionArguments.size() > number) {
             throw exception(String.format("Expected at most %d arguments", number));
         }
         return this;
@@ -55,17 +60,12 @@ public class FunctionRequest extends RenderRequest {
     }
 
     public Object get(int index) {
-        return arguments.get(index);
+        return functionArguments.getValue(index);
     }
 
+    public Expression getExpression (int index) { return functionArguments.getExpression(index); }
+
     public Object[] getRemainingArguments(int start) {
-        if (arguments.size() <= 0) return new Object[0];
-        else {
-            Object[] objects = new Object[arguments.size() - start];
-            for (int i = start; i < arguments.size(); i++) {
-                objects[i-start] = get(i);
-            }
-            return objects;
-        }
+        return functionArguments.getRemainingArguments(start);
     }
 }

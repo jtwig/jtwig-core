@@ -7,6 +7,7 @@ import org.jtwig.reflection.model.java.JavaMethod;
 import org.jtwig.reflection.model.java.JavaMethodArgument;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -97,5 +98,53 @@ public class MethodNameMethodPropertyExtractorTest {
 
         assertThat(result.isPresent(), is(true));
         assertSame(expected, result.get().getValue());
+    }
+
+    @Test
+    public void thrownInvocationTargetException() throws Exception {
+        String methodName = "parameter";
+        String providedParameterName = "argument";
+        List<JavaMethodArgument> javaMethodArguments = Collections.singletonList(mock(JavaMethodArgument.class));
+        List<Object> arguments = Collections.singletonList(new Object());
+        List<Object> resultArguments = asList(new Object());
+        Object entity = new Object();
+        Object expected = new Object();
+
+        when(propertyResolveRequest.getPropertyName()).thenReturn(providedParameterName);
+        when(javaMethod.name()).thenReturn(methodName);
+        when(javaMethod.arguments()).thenReturn(javaMethodArguments);
+        when(propertyResolveRequest.getArguments()).thenReturn(arguments);
+        when(propertyResolveRequest.getEntity()).thenReturn(new Value(entity));
+        when(methodNameComparator.compare(methodName, providedParameterName)).thenReturn(0);
+        when(retrieveArgumentsService.retrieveArguments(arguments, javaMethodArguments)).thenReturn(Optional.of(resultArguments));
+        when(javaMethod.invoke(entity, resultArguments.toArray())).thenThrow(InvocationTargetException.class);
+
+        Optional<Value> result = underTest.extract(propertyResolveRequest, javaMethod);
+
+        assertThat(result.isPresent(), is(false));
+    }
+
+    @Test
+    public void thrownIllegalAccessException() throws Exception {
+        String methodName = "parameter";
+        String providedParameterName = "argument";
+        List<JavaMethodArgument> javaMethodArguments = Collections.singletonList(mock(JavaMethodArgument.class));
+        List<Object> arguments = Collections.singletonList(new Object());
+        List<Object> resultArguments = asList(new Object());
+        Object entity = new Object();
+        Object expected = new Object();
+
+        when(propertyResolveRequest.getPropertyName()).thenReturn(providedParameterName);
+        when(javaMethod.name()).thenReturn(methodName);
+        when(javaMethod.arguments()).thenReturn(javaMethodArguments);
+        when(propertyResolveRequest.getArguments()).thenReturn(arguments);
+        when(propertyResolveRequest.getEntity()).thenReturn(new Value(entity));
+        when(methodNameComparator.compare(methodName, providedParameterName)).thenReturn(0);
+        when(retrieveArgumentsService.retrieveArguments(arguments, javaMethodArguments)).thenReturn(Optional.of(resultArguments));
+        when(javaMethod.invoke(entity, resultArguments.toArray())).thenThrow(IllegalAccessException.class);
+
+        Optional<Value> result = underTest.extract(propertyResolveRequest, javaMethod);
+
+        assertThat(result.isPresent(), is(false));
     }
 }

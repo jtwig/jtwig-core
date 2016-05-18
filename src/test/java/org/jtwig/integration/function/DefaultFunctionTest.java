@@ -2,7 +2,6 @@ package org.jtwig.integration.function;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
-import org.jtwig.exceptions.ResolveValueException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -36,13 +35,10 @@ public class DefaultFunctionTest {
 
     @Test
     public void defaultWhenStrictModeActive() throws Exception {
-        expectedException.expectMessage("Variable 'var' undefined");
-        expectedException.expect(ResolveValueException.class);
-
-        JtwigTemplate.inlineTemplate("{{ default(var, 'hi') }}", configuration()
+        String result = JtwigTemplate.inlineTemplate("{{ default(var, 'hi') }}", configuration()
                 .render().withStrictMode(true).and()
                 .build()).render(JtwigModel.newModel());
 
-
+        assertThat(result, is("hi"));
     }
 }
