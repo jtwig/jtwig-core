@@ -78,7 +78,7 @@ public class JtwigTemplate {
     }
 
     public void render(JtwigModel model, OutputStream outputStream) {
-        RenderResult result = new StreamRenderResult(outputStream);
+        RenderResult result = new StreamRenderResult(outputStream, environment.getRenderEnvironment().getDefaultOutputCharset());
         render(model, result);
     }
 
