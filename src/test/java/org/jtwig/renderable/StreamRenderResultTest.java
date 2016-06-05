@@ -4,13 +4,14 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 public class StreamRenderResultTest {
     private final OutputStream outputStream = mock(OutputStream.class);
-    private StreamRenderResult underTest = new StreamRenderResult(outputStream);
+    private StreamRenderResult underTest = new StreamRenderResult(outputStream, Charset.defaultCharset());
 
     @Test
     public void append() throws Exception {
