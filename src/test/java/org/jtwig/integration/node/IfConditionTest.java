@@ -1,5 +1,6 @@
 package org.jtwig.integration.node;
 
+import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.parser.ParseException;
@@ -23,6 +24,14 @@ public class IfConditionTest extends AbstractIntegrationTest {
         String result = jtwigTemplate.render(newModel());
 
         assertThat(result, is("ok"));
+    }
+
+    @Test
+    public void ifExpressionWhereVariableUnexpected() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{% if (variable) %}OK{% else %}KO{% endif %}")
+                .render(JtwigModel.newModel().with("variable", new Object()));
+
+        assertThat(result, is("OK"));
     }
 
     @Test

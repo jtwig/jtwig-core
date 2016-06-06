@@ -22,7 +22,7 @@ public class IfNodeRender implements NodeRender<IfNode> {
             Object result = calculateExpressionService.calculate(request, conditionNode.getCondition());
             Converter.Result<Boolean> booleanValue = booleanConverter.convert(result);
 
-            if (booleanValue.get()) {
+            if (booleanValue.or(true)) {
                 return renderNodeService.render(request, conditionNode.getContent());
             }
         }
