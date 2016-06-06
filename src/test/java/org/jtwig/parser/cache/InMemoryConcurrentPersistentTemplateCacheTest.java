@@ -18,16 +18,6 @@ public class InMemoryConcurrentPersistentTemplateCacheTest {
     private InMemoryConcurrentPersistentTemplateCache underTest = new InMemoryConcurrentPersistentTemplateCache();
 
     @Test
-    public void callMultipleTimesNonExistingResource() throws Exception {
-        JtwigParser jtwigParser = mock(JtwigParser.class);
-        ResourceReference resource = mock(ResourceReference.class);
-        Environment environment = mock(Environment.class);
-
-        underTest.get(jtwigParser, environment, resource);
-
-    }
-
-    @Test
     public void multipleRequestsRetrievingBeforeCompleteParse() throws Exception {
         int parties = 100;
         final Node node = mock(Node.class);
