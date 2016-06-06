@@ -13,14 +13,14 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Future;
 
 public class InMemoryConcurrentPersistentTemplateCache implements TemplateCache {
-    private final ConcurrentMap<ResourceReference, Future<Node>> cache;
-    private final Function<Future<Node>, Node> retriever = new RetrieveFuture<>();
+    private final ConcurrentMap<ResourceReference, Future<Result>> cache;
+    private final Function<Future<Result>, Result> retriever = new RetrieveFuture<>();
 
     public InMemoryConcurrentPersistentTemplateCache () {
         this(101, Integer.MAX_VALUE);
     }
     public InMemoryConcurrentPersistentTemplateCache(int initialCapacity, int maxValue) {
-        this.cache = new ConcurrentLinkedHashMap.Builder<ResourceReference, Future<Node>>()
+        this.cache = new ConcurrentLinkedHashMap.Builder<ResourceReference, Future<Result>>()
                 .initialCapacity(initialCapacity)
                 .maximumWeightedCapacity(maxValue)
                 .build();
@@ -28,18 +28,43 @@ public class InMemoryConcurrentPersistentTemplateCache implements TemplateCache 
 
     @Override
     public Node get(JtwigParser parser, Environment environment, ResourceReference resource) {
-        Optional<Future<Node>> optional = Optional.fromNullable(cache.get(resource));
+        Optional<Future<Result>> optional = Optional.fromNullable(cache.get(resource));
         if (optional.isPresent()) {
-            return retriever.apply(optional.get());
+            return retriever.apply(optional.get()).get();
         } else {
-            SettableFuture<Node> future = SettableFuture.create();
-            Future<Node> result = cache.putIfAbsent(resource, future);
+            SettableFuture<Result> future = SettableFuture.create();
+            Future<Result> result = cache.putIfAbsent(resource, future);
             if (result == null) {
-                Node node = parser.parse(environment, resource);
-                future.set(node);
-                return node;
+                try {
+                    Node node = parser.parse(environment, resource);
+                    future.set(new Result(Optional.of(node), Optional.<RuntimeException>absent()));
+                    return node;
+                } catch (RuntimeException e) {
+                    cache.remove(resource);
+                    future.set(new Result(Optional.<Node>absent(), Optional.of(e)));
+                    throw e;
+                }
             } else {
-                return retriever.apply(result);
+                return retriever.apply(result).get();
+            }
+        }
+    }
+
+    public static class Result {
+        private final Optional<Node> node;
+        private final Optional<RuntimeException> exception;
+
+
+        public Result(Optional<Node> node, Optional<RuntimeException> exception) {
+            this.node = node;
+            this.exception = exception;
+        }
+
+        public Node get () {
+            if (!node.isPresent()) {
+                throw exception.get();
+            } else {
+                return node.get();
             }
         }
     }
