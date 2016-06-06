@@ -35,6 +35,18 @@ public class ExtendsTest extends AbstractIntegrationTest {
     }
 
     @Test
+    public void extendsWithSet() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{% extends 'memory:a' %}{% set var = 'one' %}{% block c %}{{ var }}{% endblock %}", configuration()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
+                        .withResource("a", "{% block c %}d{% endblock %}")
+                        .build())).and().and()
+                .build())
+                .render(JtwigModel.newModel());
+
+        assertThat(result, is("one"));
+    }
+
+    @Test
     public void nestedExtendsTest() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{% extends 'memory:a' %}{% block c %}a{% endblock %}", configuration()
                 .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
