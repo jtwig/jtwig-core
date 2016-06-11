@@ -6,10 +6,7 @@ import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
 import org.jtwig.render.context.RenderContextHolder;
 import org.jtwig.render.context.StackedContext;
-import org.jtwig.render.context.model.BlockContext;
-import org.jtwig.render.context.model.MacroAliasesContext;
-import org.jtwig.render.context.model.MacroDefinitionContext;
-import org.jtwig.render.context.model.RenderContext;
+import org.jtwig.render.context.model.*;
 import org.jtwig.renderable.RenderResult;
 import org.jtwig.renderable.StreamRenderResult;
 import org.jtwig.renderable.StringBuilderRenderResult;
@@ -89,8 +86,9 @@ public class JtwigTemplate {
         StackedContext<BlockContext> blockContext = StackedContext.context(BlockContext.newContext());
         StackedContext<MacroDefinitionContext> macroDefinitionContext = StackedContext.emptyContext();
         StackedContext<MacroAliasesContext> macroContext = StackedContext.emptyContext();
+        StackedContext<PropertiesContext> propertiesContext = StackedContext.emptyContext();
 
-        RenderContext renderContext = new RenderContext(valueContextContext, escapeEngineContext, resourceContext, blockContext, macroDefinitionContext, macroContext);
+        RenderContext renderContext = new RenderContext(valueContextContext, escapeEngineContext, resourceContext, blockContext, macroDefinitionContext, macroContext, propertiesContext);
 
         EnvironmentHolder.set(environment);
         RenderContextHolder.set(renderContext);
