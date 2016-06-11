@@ -9,6 +9,7 @@ import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class JtwigParserConfiguration {
     private final SyntaxConfiguration syntaxConfiguration;
@@ -17,14 +18,16 @@ public class JtwigParserConfiguration {
     private final Collection<BinaryOperator> binaryOperators;
     private final List<Class<? extends TestExpressionParser>> testExpressionParsers;
     private final Optional<TemplateCache> templateCache;
+    private final Map<String, Object> properties;
 
-    public JtwigParserConfiguration(SyntaxConfiguration syntaxConfiguration, List<AddonParserProvider> addonParserProviders, Collection<UnaryOperator> unaryOperators, Collection<BinaryOperator> binaryOperators, List<Class<? extends TestExpressionParser>> testExpressionParsers, Optional<TemplateCache> templateCache) {
+    public JtwigParserConfiguration(SyntaxConfiguration syntaxConfiguration, List<AddonParserProvider> addonParserProviders, Collection<UnaryOperator> unaryOperators, Collection<BinaryOperator> binaryOperators, List<Class<? extends TestExpressionParser>> testExpressionParsers, Optional<TemplateCache> templateCache, Map<String, Object> properties) {
         this.syntaxConfiguration = syntaxConfiguration;
         this.addonParserProviders = addonParserProviders;
         this.unaryOperators = unaryOperators;
         this.binaryOperators = binaryOperators;
         this.testExpressionParsers = testExpressionParsers;
         this.templateCache = templateCache;
+        this.properties = properties;
     }
 
     public SyntaxConfiguration getSyntaxConfiguration() {
@@ -49,5 +52,9 @@ public class JtwigParserConfiguration {
 
     public List<Class<? extends TestExpressionParser>> getTestExpressionParsers() {
         return testExpressionParsers;
+    }
+
+    public Map<String, Object> getProperties() {
+        return properties;
     }
 }

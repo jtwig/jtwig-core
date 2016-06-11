@@ -34,7 +34,7 @@ public class ParboiledJtwigParser implements JtwigParser {
     public Node parse(Environment environment, ResourceReference resource) {
         ResourceService resourceService = environment.getResourceEnvironment().getResourceService();
         BasicParseRunner<Node> runner = new BasicParseRunner<Node>(
-                ParserContext.instance(resource, configuration.getSyntaxConfiguration(),
+                ParserContext.instance(resource, configuration,
                         configuration.getAddonParserProviders(),
                         configuration.getUnaryOperators(),
                         configuration.getBinaryOperators(),
