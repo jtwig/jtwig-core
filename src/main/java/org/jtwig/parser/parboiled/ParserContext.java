@@ -1,6 +1,7 @@
 package org.jtwig.parser.parboiled;
 
 import org.jtwig.parser.addon.AddonParserProvider;
+import org.jtwig.parser.config.JtwigParserConfiguration;
 import org.jtwig.parser.config.SyntaxConfiguration;
 import org.jtwig.parser.parboiled.base.*;
 import org.jtwig.parser.parboiled.expression.*;
@@ -20,7 +21,7 @@ import static org.parboiled.Parboiled.createParser;
 
 public class ParserContext {
 
-    public static ParserContext instance (ResourceReference resource, SyntaxConfiguration configuration,
+    public static ParserContext instance (ResourceReference resource, JtwigParserConfiguration configuration,
                                           Collection<AddonParserProvider> addOnParsers,
                                           Collection<UnaryOperator> unaryOperators,
                                           Collection<BinaryOperator> binaryOperators,
@@ -101,13 +102,13 @@ public class ParserContext {
     }
 
     private final ResourceReference resource;
-    private final SyntaxConfiguration syntaxConfiguration;
+    private final JtwigParserConfiguration configuration;
     private final Map<Class, BaseParser> parsers;
     private final Collection<AddonParserProvider> addOnParsers;
 
-    public ParserContext(ResourceReference resource, SyntaxConfiguration syntaxConfiguration, Collection<AddonParserProvider> addOnParsers) {
+    public ParserContext(ResourceReference resource, JtwigParserConfiguration configuration, Collection<AddonParserProvider> addOnParsers) {
         this.resource = resource;
-        this.syntaxConfiguration = syntaxConfiguration;
+        this.configuration = configuration;
         this.parsers = new HashMap<>();
         this.addOnParsers = addOnParsers;
     }
@@ -126,7 +127,11 @@ public class ParserContext {
     }
 
     public SyntaxConfiguration syntaxConfiguration() {
-        return syntaxConfiguration;
+        return configuration.getSyntaxConfiguration();
+    }
+
+    public JtwigParserConfiguration getConfiguration() {
+        return configuration;
     }
 
     public ResourceReference resource() {

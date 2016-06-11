@@ -11,7 +11,7 @@ import org.parboiled.support.ParsingResult;
 public abstract class AbstractParserTest {
     private JtwigParserConfiguration parserConfiguration = new DefaultJtwigParserConfiguration();
     protected final ParserContext context = ParserContext.instance(new ResourceReference(ResourceReference.STRING, ""),
-            parserConfiguration.getSyntaxConfiguration(),
+            parserConfiguration,
             parserConfiguration.getAddonParserProviders(),
             parserConfiguration.getUnaryOperators(),
             parserConfiguration.getBinaryOperators(),
