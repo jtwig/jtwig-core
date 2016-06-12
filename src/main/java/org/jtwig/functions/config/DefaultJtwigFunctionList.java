@@ -3,6 +3,7 @@ package org.jtwig.functions.config;
 import org.jtwig.functions.JtwigFunction;
 import org.jtwig.functions.impl.control.EscapeFunction;
 import org.jtwig.functions.impl.control.RawFunction;
+import org.jtwig.functions.impl.date.DateFormatFunction;
 import org.jtwig.functions.impl.java.ConstantFunction;
 import org.jtwig.functions.impl.list.*;
 import org.jtwig.functions.impl.logical.*;
@@ -70,7 +71,10 @@ public class DefaultJtwigFunctionList extends ArrayList<JtwigFunction> {
                 new JoinFunction(),
                 new MergeFunction(),
                 new SliceFunction(),
-                new SortFunction()
+                new SortFunction(),
+
+                // Date
+                new DateFormatFunction()
         ));
     }
 }
