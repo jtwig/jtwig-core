@@ -30,7 +30,7 @@ public class FunctionExpressionParser extends ExpressionParser<FunctionExpressio
         ArgumentsParser argumentsParser = parserContext().parser(ArgumentsParser.class);
         return Sequence(
                 positionTrackerParser.PushPosition(),
-                functionNameParser.Name(), spacingParser.Spacing(),
+                functionNameParser.Name(),
                 argumentsParser.Arguments(), spacingParser.Spacing(),
                 push(new FunctionExpression(
                         positionTrackerParser.pop(2),
@@ -68,15 +68,24 @@ public class FunctionExpressionParser extends ExpressionParser<FunctionExpressio
             SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
             return Sequence(
                     push(new ArrayList<Expression>()),
-                    "(", spacingParser.Spacing(),
-                    Optional(
-                            ArgumentExpression(),
-                            ZeroOrMore(
-                                    String(","), spacingParser.Spacing(),
-                                    ArgumentExpression()
+                    FirstOf(
+                            Sequence(
+                                    spacingParser.Spacing(),
+                                    "(", spacingParser.Spacing(),
+                                    Optional(
+                                            ArgumentExpression(),
+                                            ZeroOrMore(
+                                                    String(","), spacingParser.Spacing(),
+                                                    ArgumentExpression()
+                                            )
+                                    ),
+                                    ")"
+                            ),
+                            Sequence(
+                                    spacingParser.Mandatory(),
+                                    ArgumentPrimaryExpression()
                             )
-                    ),
-                    ")"
+                    )
             );
         }
 
@@ -87,6 +96,16 @@ public class FunctionExpressionParser extends ExpressionParser<FunctionExpressio
                     anyExpressionParser.ExpressionRule(),
                     spacingParser.Spacing(),
                     peek(1).add(anyExpressionParser.pop())
+            );
+        }
+
+        Rule ArgumentPrimaryExpression() {
+            SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
+            ConstantExpressionParser constantExpressionParser = parserContext().parser(ConstantExpressionParser.class);
+            return Sequence(
+                    constantExpressionParser.ExpressionRule(),
+                    spacingParser.Spacing(),
+                    peek(1).add(constantExpressionParser.pop())
             );
         }
     }
