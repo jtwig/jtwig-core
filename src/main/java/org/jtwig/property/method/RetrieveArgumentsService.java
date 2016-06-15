@@ -1,6 +1,10 @@
 package org.jtwig.property.method;
 
 import com.google.common.base.Optional;
+import org.jtwig.property.method.argument.ArgumentConverter;
+import org.jtwig.property.method.argument.AssignableTypes;
+import org.jtwig.property.method.argument.IsNativeType;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.reflection.model.java.JavaMethodArgument;
 
 import java.util.ArrayList;
@@ -8,16 +12,16 @@ import java.util.Iterator;
 import java.util.List;
 
 public class RetrieveArgumentsService {
-    private final static RetrieveArgumentsService INSTANCE = new RetrieveArgumentsService(new IsNullableType());
+    private final static RetrieveArgumentsService INSTANCE = new RetrieveArgumentsService(new ArgumentConverter(IsNativeType.instance(), new AssignableTypes(IsNativeType.instance())));
 
     public static RetrieveArgumentsService instance () {
         return INSTANCE;
     }
 
-    private final IsNullableType isNullableType;
+    private final ArgumentConverter argumentConverter;
 
-    public RetrieveArgumentsService(IsNullableType isNullableType) {
-        this.isNullableType = isNullableType;
+    public RetrieveArgumentsService(ArgumentConverter argumentConverter) {
+        this.argumentConverter = argumentConverter;
     }
 
     public Optional<List<Object>> retrieveArguments(List<Object> arguments, List<JavaMethodArgument> classes) {
@@ -29,18 +33,10 @@ public class RetrieveArgumentsService {
             Object next = argumentsIterator.next();
             JavaMethodArgument argument = methodArgumentIterator.next();
 
-            if ((next != null)) {
-                if (argument.type().isAssignableFrom(next.getClass())) {
-                    result.add(next);
-                } else {
-                    return Optional.absent();
-                }
-            } else {
-                if (!isNullableType.isNullable(argument.type())) {
-                    return Optional.absent();
-                } else {
-                    result.add(null);
-                }
+            Optional<Value> value = argumentConverter.convert(argument, next);
+            if (!value.isPresent()) return Optional.absent();
+            else {
+                result.add(value.get().getValue());
             }
         }
 

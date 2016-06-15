@@ -110,6 +110,22 @@ public class SelectionTest extends AbstractIntegrationTest {
         assertThat(result, is("0"));
     }
 
+    @Test
+    public void selectionMethodCallWithStringArg() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{{ var.argCallString('test') }}")
+                .render(newModel().with("var", new TestClass("test")));
+
+        assertThat(result, is("test"));
+    }
+
+    @Test
+    public void selectionMethodCallWithArguments() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{% for i in [1] %}{{ var.argInteger(loop.index0) }}{% endfor %}")
+                .render(newModel().with("var", new TestClass("test")));
+
+        assertThat(result, is("0"));
+    }
+
     public static class TestClass {
         private final String privateField;
         public final Integer sum = 0;
@@ -128,6 +144,14 @@ public class SelectionTest extends AbstractIntegrationTest {
 
         public String hasTest2 () {
             return privateField;
+        }
+
+        public String argCallString (String argument) {
+            return argument;
+        }
+
+        public int argInteger (int argument) {
+            return argument;
         }
     }
 }
