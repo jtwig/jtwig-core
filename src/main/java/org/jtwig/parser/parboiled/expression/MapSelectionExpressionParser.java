@@ -13,7 +13,7 @@ public class MapSelectionExpressionParser extends ExpressionParser<MapSelectionE
 
     @Override
     public Rule ExpressionRule() {
-        PrimaryExpressionParser anyExpressionParser = parserContext().parser(PrimaryExpressionParser.class);
+        BinaryOrPrimaryExpressionParser anyExpressionParser = parserContext().parser(BinaryOrPrimaryExpressionParser.class);
         PositionTrackerParser positionTrackerParser = parserContext().parser(PositionTrackerParser.class);
         SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
 
@@ -23,6 +23,7 @@ public class MapSelectionExpressionParser extends ExpressionParser<MapSelectionE
                 spacingParser.Spacing(),
                 String("["), spacingParser.Spacing(),
                 anyExpressionParser.ExpressionRule(),
+                spacingParser.Spacing(),
                 String("]"),
 
                 push(new MapSelectionExpression(positionTrackerParser.pop(2), anyExpressionParser.pop(1), anyExpressionParser.pop()))

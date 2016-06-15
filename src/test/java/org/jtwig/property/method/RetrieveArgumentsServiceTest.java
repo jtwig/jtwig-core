@@ -1,6 +1,8 @@
 package org.jtwig.property.method;
 
 import com.google.common.base.Optional;
+import org.jtwig.property.method.argument.ArgumentConverter;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.reflection.model.java.JavaMethodArgument;
 import org.junit.Test;
 
@@ -12,70 +14,38 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class RetrieveArgumentsServiceTest {
-    private final IsNullableType isNullableType = mock(IsNullableType.class);
-    private RetrieveArgumentsService underTest = new RetrieveArgumentsService(isNullableType);
+    private final ArgumentConverter argumentConverter = mock(ArgumentConverter.class);
+    private RetrieveArgumentsService underTest = new RetrieveArgumentsService(argumentConverter);
 
     @Test
-    public void retrieveArgumentsTypeMismatch() throws Exception {
-        Object argument = "hello";
-        JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
-
-        List<Object> arguments = asList(argument);
-        List<JavaMethodArgument> methodArguments = asList(javaMethodArgument);
-
-        when(javaMethodArgument.type()).thenReturn(Boolean.class);
-
-        Optional<List<Object>> result = underTest.retrieveArguments(arguments, methodArguments);
-
-        assertEquals(false, result.isPresent());
-    }
-
-    @Test
-    public void retrieveArgumentsNullNotNullable() throws Exception {
+    public void retrieveArgumentsNotSameType() throws Exception {
         Object argument = null;
         JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
 
         List<Object> arguments = asList(argument);
         List<JavaMethodArgument> methodArguments = asList(javaMethodArgument);
 
-        when(javaMethodArgument.type()).thenReturn(Boolean.class);
-        when(isNullableType.isNullable(Boolean.class)).thenReturn(false);
+        when(argumentConverter.convert(javaMethodArgument, argument)).thenReturn(Optional.<Value>absent());
 
         Optional<List<Object>> result = underTest.retrieveArguments(arguments, methodArguments);
 
         assertEquals(false, result.isPresent());
-    }
-
-    @Test
-    public void retrieveArgumentsNullNullable() throws Exception {
-        Object argument = null;
-        JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
-
-        List<Object> arguments = asList(argument);
-        List<JavaMethodArgument> methodArguments = asList(javaMethodArgument);
-
-        when(javaMethodArgument.type()).thenReturn(Boolean.class);
-        when(isNullableType.isNullable(Boolean.class)).thenReturn(true);
-
-        Optional<List<Object>> result = underTest.retrieveArguments(arguments, methodArguments);
-
-        assertEquals(true, result.isPresent());
-        assertEquals(asList(argument), result.get());
     }
 
     @Test
     public void retrieveArgumentsSameType() throws Exception {
         Object argument = "asdasd";
         JavaMethodArgument javaMethodArgument = mock(JavaMethodArgument.class);
+        Object value = new Object();
 
         List<Object> arguments = asList(argument);
         List<JavaMethodArgument> methodArguments = asList(javaMethodArgument);
 
-        when(javaMethodArgument.type()).thenReturn(String.class);
+        when(argumentConverter.convert(javaMethodArgument, argument)).thenReturn(Optional.of(new Value(value)));
 
         Optional<List<Object>> result = underTest.retrieveArguments(arguments, methodArguments);
 
         assertEquals(true, result.isPresent());
-        assertEquals(asList(argument), result.get());
+        assertEquals(asList(value), result.get());
     }
 }

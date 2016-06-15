@@ -44,6 +44,7 @@ public class ParserContext {
 
         createParser(UnaryOperatorParser.class, context, unaryOperators);
         createParser(BinaryOperatorParser.class, context);
+        createParser(BinaryOrPrimaryExpressionParser.class, context);
 
         createParser(EnumerationListExpressionParser.class, context);
         createParser(ComprehensionListExpressionParser.class, context);

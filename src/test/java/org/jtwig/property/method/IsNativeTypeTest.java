@@ -1,22 +1,23 @@
 package org.jtwig.property.method;
 
+import org.jtwig.property.method.argument.IsNativeType;
 import org.junit.Test;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class IsNullableTypeTest {
-    private IsNullableType underTest = new IsNullableType();
+public class IsNativeTypeTest {
+    private IsNativeType underTest = IsNativeType.instance();
 
     @Test
-    public void isNullable() throws Exception {
+    public void isNative() throws Exception {
         for (Class nativeType : asList(Integer.TYPE, Float.TYPE, Double.TYPE, Long.TYPE, Boolean.TYPE, Character.TYPE)) {
-            assertFalse(underTest.isNullable(nativeType));
+            assertTrue(underTest.isNative(nativeType));
         }
 
         for (Class nonNativeType : asList(String.class, Boolean.class)) {
-            assertTrue(underTest.isNullable(nonNativeType));
+            assertFalse(underTest.isNative(nonNativeType));
         }
     }
 }
