@@ -30,6 +30,7 @@ public class ForLoopNodeRender implements NodeRender<ForLoopNode> {
 
         Object collectionJtwigValue = calculateExpressionService.calculate(request, node.getExpression());
         WrappedCollection valueCollection = collectionConverter.convert(collectionJtwigValue).or(WrappedCollection.singleton(collectionJtwigValue));
+        if (valueCollection == null) valueCollection = WrappedCollection.empty();
         StackedContext<ValueContext> valueContext = request.getRenderContext().getValueContext();
 
         ValueContext parentContext = valueContext.getCurrent();
