@@ -20,12 +20,20 @@ public class RangeFunction extends SimpleJtwigFunction {
 
         int step = 1;
         if (request.getNumberOfArguments() > 2) {
-            step = ((BigDecimal) request.getArguments().get(2)).intValue();
+            step = intValue(request.getArguments().get(2));
         }
-        int min = ((BigDecimal) request.getArguments().get(0)).intValue();
-        int max = ((BigDecimal) request.getArguments().get(1)).intValue();
+        int min = intValue(request.getArguments().get(0));
+        int max = intValue(request.getArguments().get(1));
 
         return new RangeIterable(min, max, step);
+    }
+
+    protected int intValue(Object param) {
+        if (param instanceof BigDecimal) {
+            return ((BigDecimal) param).intValue();
+        } else {
+            return (Integer) param;
+        }
     }
 
     public static class RangeIterable implements Iterable<Integer> {
