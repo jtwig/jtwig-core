@@ -72,6 +72,7 @@ public class DefaultJtwigFunctionList extends ArrayList<JtwigFunction> {
                 new MergeFunction(),
                 new SliceFunction(),
                 new SortFunction(),
+                new RangeFunction(),
 
                 // Date
                 new DateFormatFunction()
