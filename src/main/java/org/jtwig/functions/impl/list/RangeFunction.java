@@ -84,5 +84,10 @@ public class RangeFunction extends SimpleJtwigFunction {
             this.current += step;
             return val;
         }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("Operation not supported");
+        }
     }
 }
