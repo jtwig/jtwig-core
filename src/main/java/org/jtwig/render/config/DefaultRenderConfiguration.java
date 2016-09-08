@@ -62,6 +62,7 @@ public class DefaultRenderConfiguration extends RenderConfiguration {
                         .build(),
 
                 ImmutableMap.<Class<? extends BinaryOperator>, BinaryOperationCalculator>builder()
+                        .put(MatchesOperator.class, new SimpleOperationCalculator(new MatchesOperationCalculator()))
                         .put(ConcatOperator.class, new SimpleOperationCalculator(new ConcatOperationCalculator()))
                         .put(CompositionOperator.class, new CompositionOperationCalculator())
                         .put(SelectionOperator.class, new SelectionOperationCalculator(new PropertyAndArgumentsCalculator(), new ResolveSelectionPropertyCalculator()))
