@@ -24,6 +24,7 @@ public class DefaultJtwigParserConfiguration extends JtwigParserConfiguration {
                         new NotUnaryOperator()
                 ),
                 asList(
+                        new MatchesOperator(),
                         new SelectionOperator(),
                         new CompositionOperator(),
                         new InOperator(),
