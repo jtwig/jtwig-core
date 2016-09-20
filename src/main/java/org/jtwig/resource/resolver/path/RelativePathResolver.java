@@ -22,7 +22,11 @@ public class RelativePathResolver {
     public String resolve(String parent, String child) {
         File newFile = new File(new File(parent).getParentFile(), child);
         try {
-            return newFile.getCanonicalPath();
+            String path = newFile.getCanonicalPath();
+            if (path.charAt(1) == ':')
+                return path.replaceFirst("^.:", "");
+            else
+                return path;
         } catch (IOException e) {
             throw new ResourceException(String.format("Canonical path ('%s', '%s') = '%s' is invalid", parent, child, newFile.getPath()));
         }
