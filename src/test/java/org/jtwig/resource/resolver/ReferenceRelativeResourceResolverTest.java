@@ -13,10 +13,10 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PathRelativeResourceResolverTest {
+public class ReferenceRelativeResourceResolverTest {
     private final ArrayList<String> types = new ArrayList<>();
     private final RelativePathResolver pathResolver = mock(RelativePathResolver.class);
-    private PathRelativeResourceResolver underTest = new PathRelativeResourceResolver(types, pathResolver);
+    private ReferenceRelativeResourceResolver underTest = new ReferenceRelativeResourceResolver(types, pathResolver);
 
     @Before
     public void setUp() throws Exception {

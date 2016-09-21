@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class    ResourceService {
+public class ResourceService {
     private final Map<String, ResourceLoader> loaderMap;
     private final List<TypedResourceLoader> loaderList;
     private final Collection<String> absoluteResourceTypes;

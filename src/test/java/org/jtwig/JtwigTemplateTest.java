@@ -110,7 +110,7 @@ public class JtwigTemplateTest {
 
     @Test
     public void fileNotExists() throws Exception {
-        expectedException.expectMessage(containsString("Resource 'file:/nonSensePath' not found"));
+        expectedException.expectMessage(containsString("Resource 'file:/nonSensePath' (resolved to 'file:/nonSensePath') not found"));
 
         JtwigTemplate.inlineTemplate("{% include 'file:/nonSensePath' %}").render(JtwigModel.newModel().with("name", "World"));
     }
