@@ -18,7 +18,9 @@ public class RelativePathResolverTest {
     @Test
     public void resolve() throws Exception {
         assertThat(underTest.resolve("/parent", "child"), is("/child"));
+        assertThat(underTest.resolve("parent", "../child"), is("../child"));
         assertThat(underTest.resolve("/test/parent", "child"), is("/test/child"));
+        assertThat(underTest.resolve("/test/parent/", "child"), is("/test/child"));
     }
 
     @Test(expected = ResourceException.class)

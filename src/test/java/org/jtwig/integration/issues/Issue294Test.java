@@ -7,6 +7,10 @@ import org.junit.Test;
 
 import java.io.File;
 
+import static org.hamcrest.core.Is.is;
+import static org.jtwig.util.EscapeUtils.escapeJtwig;
+import static org.junit.Assert.assertThat;
+
 public class Issue294Test {
     @Test
     public void jtwigSupportsAbsolutePaths() throws Exception {
@@ -16,11 +20,11 @@ public class Issue294Test {
         FileUtils.write(child, "{{ var }}");
 
         File parent = File.createTempFile("jtwig", "test");
-        FileUtils.write(parent, "{% extends '"+baseDir.getAbsolutePath()+"/child.twig' %}");
+        FileUtils.write(parent, "{% extends '"+ escapeJtwig(baseDir.getAbsolutePath() + File.separator)+ "child.twig' %}");
 
         String result = JtwigTemplate.fileTemplate(parent).render(JtwigModel.newModel()
                 .with("var", "Hi"));
 
-        System.out.println(result);
+        assertThat(result, is("Hi"));
     }
 }

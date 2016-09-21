@@ -119,7 +119,7 @@ public class IncludeTest extends AbstractIntegrationTest {
     @Test
     public void includeResourceNotFound() throws Exception {
         expectedException.expect(ResourceNotFoundException.class);
-        expectedException.expectMessage(containsString("Resource 'one' not found"));
+        expectedException.expectMessage(containsString("Resource 'one' (resolved to 'one') not found"));
 
         JtwigTemplate.inlineTemplate("{% include 'one' %}")
                 .render(JtwigModel.newModel());

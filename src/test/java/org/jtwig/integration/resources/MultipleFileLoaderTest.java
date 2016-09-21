@@ -58,7 +58,7 @@ public class MultipleFileLoaderTest {
 
         FileUtils.write(tempFile, "Hello");
 
-        expectedException.expectMessage(String.format("Resource '%s' not found", filename));
+        expectedException.expectMessage(String.format("Resource '%s' (resolved to '%s') not found", filename, filename));
         expectedException.expect(ResourceNotFoundException.class);
 
         JtwigTemplate.inlineTemplate("{% include '" + filename + "' %}")
@@ -69,7 +69,7 @@ public class MultipleFileLoaderTest {
     public void configWithoutLoaderFileType() throws Exception {
         File tempFile = File.createTempFile("jtwig-", ".twig");
 
-        expectedException.expectMessage("Resource 'file:blah' not found");
+        expectedException.expectMessage("Resource 'file:blah' (resolved to 'file:blah') not found");
         expectedException.expect(ResourceNotFoundException.class);
 
         JtwigTemplate.inlineTemplate("{% include 'file:blah' %}", EnvironmentConfigurationBuilder.configuration()
@@ -85,7 +85,7 @@ public class MultipleFileLoaderTest {
 
         FileUtils.write(tempFile, "Hello");
 
-        expectedException.expectMessage(String.format("Resource 'file:%s' not found", filename));
+        expectedException.expectMessage(String.format("Resource 'file:%s' (resolved to 'file:%s') not found", filename, filename));
         expectedException.expect(ResourceNotFoundException.class);
 
         JtwigTemplate.inlineTemplate("{% include 'file:" + filename + "' %}")

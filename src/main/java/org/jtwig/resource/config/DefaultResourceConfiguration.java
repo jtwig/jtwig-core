@@ -7,18 +7,20 @@ import org.jtwig.resource.loader.StringResourceLoader;
 import org.jtwig.resource.loader.TypedResourceLoader;
 import org.jtwig.resource.reference.DefaultResourceReferenceExtractor;
 import org.jtwig.resource.reference.ResourceReference;
-import org.jtwig.resource.resolver.PathRelativeResourceResolver;
+import org.jtwig.resource.resolver.ReferenceRelativeResourceResolver;
 import org.jtwig.resource.resolver.RelativeResourceResolver;
+import org.jtwig.resource.resolver.path.RelativeFilePathResolver;
 import org.jtwig.resource.resolver.path.RelativePathResolver;
 
 import java.nio.charset.Charset;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singleton;
 
 public class DefaultResourceConfiguration extends ResourceConfiguration {
     public DefaultResourceConfiguration() {
         super(ImmutableList.<RelativeResourceResolver>builder()
-                .add(new PathRelativeResourceResolver(asList(ResourceReference.FILE, ResourceReference.CLASSPATH), RelativePathResolver.instance()))
+                .add(new ReferenceRelativeResourceResolver(singleton(ResourceReference.CLASSPATH), RelativePathResolver.instance()))
+                .add(new ReferenceRelativeResourceResolver(singleton(ResourceReference.FILE), RelativeFilePathResolver.instance()))
                 .build(),
                 ImmutableList.of(ResourceReference.STRING, ResourceReference.MEMORY),
                 ImmutableList.of(

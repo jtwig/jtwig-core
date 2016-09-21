@@ -58,7 +58,7 @@ public class ResourceService {
         } else {
             Optional<ResourceLoader> loaderOptional = Optional.fromNullable(loaderMap.get(reference.getType()));
             if (!loaderOptional.isPresent()) {
-                throw new ResourceException(String.format("Resource loader for type '%s' not configured", reference.getType()));
+                throw new ResourceException(String.format("Cannot load resource %s. Resource loader for type '%s' not configured", reference, reference.getType()));
             } else {
                 result = loaderOptional.get();
             }

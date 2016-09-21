@@ -2,10 +2,11 @@ package org.jtwig.resource.resolver.path;
 
 import org.jtwig.resource.exceptions.ResourceException;
 
-import java.io.File;
-import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.InvalidPathException;
 
-public class RelativePathResolver {
+public class RelativePathResolver implements RelativeReferenceResolver {
     public static final String ROOT_PATH = "/";
     private static final RelativePathResolver INSTANCE = new RelativePathResolver();
 
@@ -15,16 +16,17 @@ public class RelativePathResolver {
 
     private RelativePathResolver () {}
 
+    @Override
     public boolean isRelative(String path) {
         return !path.startsWith(ROOT_PATH);
     }
 
+    @Override
     public String resolve(String parent, String child) {
-        File newFile = new File(new File(parent).getParentFile(), child);
         try {
-            return newFile.getCanonicalPath();
-        } catch (IOException e) {
-            throw new ResourceException(String.format("Canonical path ('%s', '%s') = '%s' is invalid", parent, child, newFile.getPath()));
+            return new URI(String.format("%s/../%s", parent, child)).normalize().toString();
+        } catch (InvalidPathException | URISyntaxException e) {
+            throw new ResourceException("Invalid path", e);
         }
     }
 }

@@ -47,7 +47,7 @@ public class IncludeNodeRenderTest {
         when(environment.getResourceEnvironment().getResourceService().resolve(currentResource, path)).thenReturn(newResource);
 
         expectedException.expect(ResourceNotFoundException.class);
-        expectedException.expectMessage(containsString("Resource 'path' not found"));
+        expectedException.expectMessage(containsString("Resource 'path' (resolved to 'null') not found"));
 
         underTest.render(request, includeNode);
     }
