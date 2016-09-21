@@ -43,7 +43,7 @@ public class IncludeNodeRender implements NodeRender<IncludeNode> {
             if (node.isIgnoreMissing()) {
                 return EmptyRenderable.instance();
             } else {
-                throw new ResourceNotFoundException(ErrorMessageFormatter.errorMessage(node.getPosition(), String.format("Resource '%s' not found", path)));
+                throw new ResourceNotFoundException(ErrorMessageFormatter.errorMessage(node.getPosition(), String.format("Resource '%s' (resolved to '%s') not found", path, newReference)));
             }
         }
     }

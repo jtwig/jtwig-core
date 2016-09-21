@@ -7,6 +7,8 @@ import java.io.IOException;
 
 public class RelativePathResolver {
     public static final String ROOT_PATH = "/";
+    public static final String WINDOWS_ROOT = "\\";
+    public static final String WINDOWS_DRIVE_PATTERN = "^\\w:\\\\.*";
     private static final RelativePathResolver INSTANCE = new RelativePathResolver();
 
     public static RelativePathResolver instance () {
@@ -16,7 +18,9 @@ public class RelativePathResolver {
     private RelativePathResolver () {}
 
     public boolean isRelative(String path) {
-        return !path.startsWith(ROOT_PATH);
+        return !path.startsWith(ROOT_PATH)
+                && !path.startsWith(WINDOWS_ROOT)
+                && !path.matches(WINDOWS_DRIVE_PATTERN);
     }
 
     public String resolve(String parent, String child) {
