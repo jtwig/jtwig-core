@@ -9,11 +9,36 @@ import org.junit.Test;
 
 import java.util.Collections;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 public class FieldPropertyResolverTest {
     private FieldPropertyResolver underTest = new FieldPropertyResolver(false);
+
+    @Test
+    public void resolveWithNullEntity() throws Exception {
+        PropertyResolveRequest request = mock(PropertyResolveRequest.class);
+        given(request.getArguments()).willReturn(Collections.emptyList());
+        given(request.getEntity()).willReturn(null);
+
+        Optional<Value> result = underTest.resolve(request);
+
+        assertThat(result.isPresent(), is(false));
+    }
+
+    @Test
+    public void resolveWithNullValue() throws Exception {
+        PropertyResolveRequest request = mock(PropertyResolveRequest.class);
+        given(request.getArguments()).willReturn(Collections.emptyList());
+        given(request.getEntity()).willReturn(new Value(null));
+
+        Optional<Value> result = underTest.resolve(request);
+
+        assertThat(result.isPresent(), is(false));
+    }
 
     @Test
     public void resolvePrivateField() throws Exception {

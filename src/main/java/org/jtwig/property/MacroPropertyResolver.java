@@ -15,6 +15,8 @@ public class MacroPropertyResolver implements PropertyResolver {
 
     @Override
     public Optional<Value> resolve(PropertyResolveRequest request) {
+        if (request.getEntity() == null) return Optional.absent();
+
         if (request.getEntity().getValue() instanceof MacroDefinitionContext) {
             MacroDefinitionContext macroDefinitionContext = (MacroDefinitionContext) request.getEntity().getValue();
             Optional<Macro> macroOptional = macroDefinitionContext.resolve(request.getPropertyName());

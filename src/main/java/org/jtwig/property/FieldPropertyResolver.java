@@ -18,6 +18,9 @@ public class FieldPropertyResolver implements PropertyResolver {
     @Override
     public Optional<Value> resolve(final PropertyResolveRequest request) {
         if (request.getArguments().isEmpty()) {
+            if (request.getEntity() == null) return Optional.absent();
+            if (request.getEntity().getValue() == null) return Optional.absent();
+
             Optional<JavaField> field = request.getEntity()
                     .type()
                     .field(request.getPropertyName());

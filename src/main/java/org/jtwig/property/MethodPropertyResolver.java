@@ -16,6 +16,9 @@ public class MethodPropertyResolver implements PropertyResolver {
 
     @Override
     public Optional<Value> resolve(PropertyResolveRequest request) {
+        if (request.getEntity() == null) return Optional.absent();
+        if (request.getEntity().getValue() == null) return Optional.absent();
+
         Collection<JavaMethod> declaredMethods = request.getEntity().type().methods();
         for (JavaMethod declaredMethod : declaredMethods) {
             Optional<Value> result = methodPropertyExtractor.extract(request, declaredMethod);

@@ -8,6 +8,9 @@ import java.util.Map;
 public class MapPropertyResolver implements PropertyResolver {
     @Override
     public Optional<Value> resolve(PropertyResolveRequest request) {
+        if (request.getEntity() == null) return Optional.absent();
+        if (request.getEntity().getValue() == null) return Optional.absent();
+
         if (request.getArguments().isEmpty()) {
             if (request.getEntity().getValue() instanceof Map) {
                 Map map = (Map) request.getEntity().getValue();
