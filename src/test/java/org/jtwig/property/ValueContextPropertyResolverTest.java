@@ -1,22 +1,48 @@
 package org.jtwig.property;
 
 import com.google.common.base.Optional;
+import org.hamcrest.CoreMatchers;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.value.context.MapValueContext;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.HashMap;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ValueContextPropertyResolverTest {
     private ValueContextPropertyResolver underTest = new ValueContextPropertyResolver();
     private PropertyResolveRequest request = mock(PropertyResolveRequest.class);
+
+
+    @Test
+    public void resolveWithNullEntity() throws Exception {
+        PropertyResolveRequest request = mock(PropertyResolveRequest.class);
+        given(request.getArguments()).willReturn(Collections.emptyList());
+        given(request.getEntity()).willReturn(null);
+
+        Optional<Value> result = underTest.resolve(request);
+
+        assertThat(result.isPresent(), CoreMatchers.is(false));
+    }
+
+    @Test
+    public void resolveWithNullValue() throws Exception {
+        PropertyResolveRequest request = mock(PropertyResolveRequest.class);
+        given(request.getArguments()).willReturn(Collections.emptyList());
+        given(request.getEntity()).willReturn(new Value(null));
+
+        Optional<Value> result = underTest.resolve(request);
+
+        assertThat(result.isPresent(), CoreMatchers.is(false));
+    }
 
     @Test
     public void resolveWithArguments() throws Exception {

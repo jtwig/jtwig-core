@@ -9,6 +9,8 @@ public class ValueContextPropertyResolver implements PropertyResolver {
     @Override
     public Optional<Value> resolve(PropertyResolveRequest request) {
         if (request.getArguments().isEmpty()) {
+            if (request.getEntity() == null) return Optional.absent();
+
             Object value = request.getEntity().getValue();
             if (value instanceof ValueContext) {
                 Object resolve = ((ValueContext) value).resolve(request.getPropertyName());

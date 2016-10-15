@@ -1,6 +1,7 @@
 package org.jtwig.property;
 
 import com.google.common.base.Optional;
+import org.hamcrest.CoreMatchers;
 import org.jtwig.reflection.model.Value;
 import org.junit.Test;
 
@@ -17,6 +18,24 @@ import static org.mockito.Mockito.when;
 public class MapPropertyResolverTest {
     private final PropertyResolveRequest request = mock(PropertyResolveRequest.class);
     private MapPropertyResolver underTest = new MapPropertyResolver();
+
+    @Test
+    public void resolveWithNullEntity() throws Exception {
+        when(request.getEntity()).thenReturn(null);
+
+        Optional<Value> result = underTest.resolve(request);
+
+        assertThat(result.isPresent(), CoreMatchers.is(false));
+    }
+
+    @Test
+    public void resolveWithNullValue() throws Exception {
+        when(request.getEntity()).thenReturn(new Value(null));
+
+        Optional<Value> result = underTest.resolve(request);
+
+        assertThat(result.isPresent(), CoreMatchers.is(false));
+    }
 
     @Test
     public void resolveWhenWithArguments() throws Exception {
