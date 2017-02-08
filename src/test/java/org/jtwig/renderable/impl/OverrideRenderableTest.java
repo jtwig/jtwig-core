@@ -5,6 +5,8 @@ import org.jtwig.renderable.Renderable;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class OverrideRenderableTest {
@@ -33,5 +35,6 @@ public class OverrideRenderableTest {
 
         verify(defaultContent, never()).appendTo(renderResult);
         verify(override).appendTo(renderResult);
+        assertThat(underTest.getDefault(), is(defaultContent));
     }
 }

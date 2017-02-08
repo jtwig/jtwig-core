@@ -11,6 +11,7 @@ import java.nio.charset.Charset;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -78,5 +79,12 @@ public class ResourceResourceMetadataTest {
         Optional<URL> result = underTest.toUrl();
 
         assertSame(expected, result);
+    }
+
+    @Test
+    public void resourceReference() throws Exception {
+        ResourceReference result = underTest.getResourceReference();
+
+        assertEquals(result, resourceReference);
     }
 }

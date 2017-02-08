@@ -4,7 +4,7 @@ import com.google.common.base.Optional;
 import org.jtwig.escape.environment.EscapeEnvironment;
 import org.jtwig.functions.resolver.FunctionResolver;
 import org.jtwig.parser.JtwigParser;
-import org.jtwig.property.PropertyResolver;
+import org.jtwig.property.environment.PropertyResolverEnvironment;
 import org.jtwig.render.environment.RenderEnvironment;
 import org.jtwig.render.expression.calculator.enumerated.EnumerationListStrategy;
 import org.jtwig.resource.environment.ResourceEnvironment;
@@ -20,7 +20,7 @@ public class Environment {
     private final Map<String, Object> parameters;
     private final ResourceEnvironment resourceEnvironment;
     private final FunctionResolver functionResolver;
-    private final PropertyResolver propertyResolver;
+    private final PropertyResolverEnvironment propertyResolverEnvironment;
     private final RenderEnvironment renderEnvironment;
     private final ValueEnvironment valueEnvironment;
     private final EnumerationListStrategy enumerationStrategy;
@@ -28,14 +28,14 @@ public class Environment {
 
     public Environment(JtwigParser parser, Map<String, Object> parameters,
                        ResourceEnvironment resourceEnvironment, FunctionResolver functionResolver,
-                       PropertyResolver propertyResolver, RenderEnvironment renderEnvironment,
+                       PropertyResolverEnvironment propertyResolverEnvironment, RenderEnvironment renderEnvironment,
                        ValueEnvironment valueEnvironment, EnumerationListStrategy enumerationStrategy,
                        EscapeEnvironment escapeEnvironment) {
         this.parser = parser;
         this.parameters = parameters;
         this.resourceEnvironment = resourceEnvironment;
         this.functionResolver = functionResolver;
-        this.propertyResolver = propertyResolver;
+        this.propertyResolverEnvironment = propertyResolverEnvironment;
         this.renderEnvironment = renderEnvironment;
         this.valueEnvironment = valueEnvironment;
         this.enumerationStrategy = enumerationStrategy;
@@ -54,8 +54,8 @@ public class Environment {
         return functionResolver;
     }
 
-    public PropertyResolver getPropertyResolver() {
-        return propertyResolver;
+    public PropertyResolverEnvironment getPropertyResolverEnvironment() {
+        return propertyResolverEnvironment;
     }
 
     public RenderEnvironment getRenderEnvironment() {

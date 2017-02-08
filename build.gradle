@@ -44,4 +44,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.exparity:hamcrest-bean:1.0.11'
     testCompile 'org.unitils:unitils-core:3.4.2'
+    testCompile 'net.jperf:jperf:1.0.3'
 }

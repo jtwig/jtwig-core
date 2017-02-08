@@ -5,7 +5,7 @@ import org.jtwig.escape.environment.EscapeEnvironmentFactory;
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.environment.FunctionResolverFactory;
 import org.jtwig.parser.JtwigParserFactory;
-import org.jtwig.property.PropertyResolverFactory;
+import org.jtwig.property.environment.PropertyResolverEnvironmentFactory;
 import org.jtwig.render.environment.RenderEnvironmentFactory;
 import org.jtwig.render.expression.calculator.enumerated.environment.EnumerationListStrategyFactory;
 import org.jtwig.resource.environment.ResourceEnvironmentFactory;
@@ -23,7 +23,7 @@ public class EnvironmentFactory {
     private final ResourceEnvironmentFactory resourceEnvironmentFactory;
     private final RenderEnvironmentFactory renderEnvironmentFactory;
     private final FunctionResolverFactory functionResolverFactory;
-    private final PropertyResolverFactory propertyResolverFactory;
+    private final PropertyResolverEnvironmentFactory propertyResolverFactory;
     private final ValueEnvironmentFactory valueEnvironmentFactory;
     private final EnumerationListStrategyFactory enumerationListStrategyFactory;
     private final EscapeEnvironmentFactory escapeEnvironmentFactory;
@@ -32,13 +32,13 @@ public class EnvironmentFactory {
         this(new JtwigParserFactory(), new ResourceEnvironmentFactory(),
                 new RenderEnvironmentFactory(),
                 new FunctionResolverFactory(),
-                new PropertyResolverFactory(),
+                new PropertyResolverEnvironmentFactory(),
                 new ValueEnvironmentFactory(),
                 new EnumerationListStrategyFactory(),
                 new EscapeEnvironmentFactory());
     }
 
-    public EnvironmentFactory(JtwigParserFactory jtwigParserFactory, ResourceEnvironmentFactory resourceEnvironmentFactory, RenderEnvironmentFactory renderEnvironmentFactory, FunctionResolverFactory functionResolverFactory, PropertyResolverFactory propertyResolverFactory, ValueEnvironmentFactory valueEnvironmentFactory, EnumerationListStrategyFactory enumerationListStrategyFactory, EscapeEnvironmentFactory escapeEnvironmentFactory) {
+    public EnvironmentFactory(JtwigParserFactory jtwigParserFactory, ResourceEnvironmentFactory resourceEnvironmentFactory, RenderEnvironmentFactory renderEnvironmentFactory, FunctionResolverFactory functionResolverFactory, PropertyResolverEnvironmentFactory propertyResolverFactory, ValueEnvironmentFactory valueEnvironmentFactory, EnumerationListStrategyFactory enumerationListStrategyFactory, EscapeEnvironmentFactory escapeEnvironmentFactory) {
         this.jtwigParserFactory = jtwigParserFactory;
         this.resourceEnvironmentFactory = resourceEnvironmentFactory;
         this.renderEnvironmentFactory = renderEnvironmentFactory;
@@ -67,7 +67,7 @@ public class EnvironmentFactory {
                 configuration.getParameters(),
                 resourceEnvironmentFactory.create(configuration.getResourceConfiguration()),
                 functionResolverFactory.create(configuration.getFunctions()),
-                propertyResolverFactory.create(configuration.getPropertyResolvers()),
+                propertyResolverFactory.create(configuration.getPropertyResolverConfiguration()),
                 renderEnvironmentFactory.create(configuration.getRenderConfiguration()),
                 valueEnvironmentFactory.create(configuration.getValueConfiguration()),
                 enumerationListStrategyFactory.create(configuration.getEnumerationStrategies()),
