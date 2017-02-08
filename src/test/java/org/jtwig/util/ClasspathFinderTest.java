@@ -1,12 +1,13 @@
 package org.jtwig.util;
 
+import org.jtwig.reflection.model.java.JavaClassManager;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class ClasspathFinderTest {
-    private ClasspathFinder underTest = new ClasspathFinder(getClass().getClassLoader());
+    private ClasspathFinder underTest = new ClasspathFinder(getClass().getClassLoader(), JavaClassManager.classManager());
 
     @Test
     public void existsWhenValid() throws Exception {

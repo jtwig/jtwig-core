@@ -9,7 +9,8 @@ import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.Node;
 import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.config.JtwigParserConfiguration;
-import org.jtwig.property.PropertyResolver;
+import org.jtwig.property.selection.cache.SelectionPropertyResolverCache;
+import org.jtwig.property.strategy.PropertyResolverStrategy;
 import org.jtwig.render.expression.calculator.ExpressionCalculator;
 import org.jtwig.render.expression.calculator.enumerated.EnumerationListStrategy;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
@@ -205,16 +206,21 @@ public class EnvironmentConfigurationBuilderTest {
 
     @Test
     public void propertyResolverConfiguration() throws Exception {
-        PropertyResolver propertyResolver = mock(PropertyResolver.class);
+        SelectionPropertyResolverCache cache = mock(SelectionPropertyResolverCache.class);
+        PropertyResolverStrategy propertyResolverStrategy = mock(PropertyResolverStrategy.class);
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
-                .propertyResolvers()
-                .add(propertyResolver)
+                .propertyResolver()
+                    .withCache(cache)
+                    .propertyResolverStrategies()
+                        .add(propertyResolverStrategy)
+                    .and()
                 .and()
                 .build();
 
-        assertThat(configuration.getPropertyResolvers(), hasItem(propertyResolver));
+        assertThat(configuration.getPropertyResolverConfiguration().getCache(), is(cache));
+        assertThat(configuration.getPropertyResolverConfiguration().getPropertyResolverStrategies(), hasItem(propertyResolverStrategy));
     }
 
     @Test

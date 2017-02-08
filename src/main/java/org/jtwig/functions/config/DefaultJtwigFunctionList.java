@@ -13,6 +13,7 @@ import org.jtwig.functions.impl.math.RoundFunction;
 import org.jtwig.functions.impl.mixed.*;
 import org.jtwig.functions.impl.string.*;
 import org.jtwig.functions.impl.structural.BlockFunction;
+import org.jtwig.reflection.model.java.JavaClassManager;
 import org.jtwig.util.ClasspathFinder;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class DefaultJtwigFunctionList extends ArrayList<JtwigFunction> {
                 new UpperFunction(),
 
                 // Mixed
-                new ConstantFunction(new ClasspathFinder(ConstantFunction.class.getClassLoader())),
+                new ConstantFunction(new ClasspathFinder(ConstantFunction.class.getClassLoader(), JavaClassManager.classManager())),
                 new UrlEncodeFunction(),
                 new FirstFunction(),
                 new LastFunction(),

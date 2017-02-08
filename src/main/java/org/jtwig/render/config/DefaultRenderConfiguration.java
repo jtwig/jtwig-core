@@ -7,8 +7,7 @@ import org.jtwig.model.tree.*;
 import org.jtwig.render.expression.calculator.*;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
 import org.jtwig.render.expression.calculator.operation.binary.calculators.*;
-import org.jtwig.render.expression.calculator.operation.binary.calculators.selection.PropertyAndArgumentsCalculator;
-import org.jtwig.render.expression.calculator.operation.binary.calculators.selection.ResolveSelectionPropertyCalculator;
+import org.jtwig.render.expression.calculator.operation.binary.calculators.selection.SelectionErrorMessageGenerator;
 import org.jtwig.render.expression.calculator.operation.binary.calculators.selection.SelectionOperationCalculator;
 import org.jtwig.render.expression.calculator.operation.binary.impl.*;
 import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
@@ -65,7 +64,7 @@ public class DefaultRenderConfiguration extends RenderConfiguration {
                         .put(MatchesOperator.class, new SimpleOperationCalculator(new MatchesOperationCalculator()))
                         .put(ConcatOperator.class, new SimpleOperationCalculator(new ConcatOperationCalculator()))
                         .put(CompositionOperator.class, new CompositionOperationCalculator())
-                        .put(SelectionOperator.class, new SelectionOperationCalculator(new PropertyAndArgumentsCalculator(), new ResolveSelectionPropertyCalculator()))
+                        .put(SelectionOperator.class, new SelectionOperationCalculator(new SelectionErrorMessageGenerator()))
                         .put(InOperator.class, new SimpleOperationCalculator(new InOperationCalculator()))
 
                         .put(SumOperator.class, new SimpleOperationCalculator(new MathOperationCalculator(new SumOperationCalculator())))

@@ -5,7 +5,7 @@ import org.jtwig.escape.config.EscapeEngineConfiguration;
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.JtwigFunction;
 import org.jtwig.parser.config.JtwigParserConfiguration;
-import org.jtwig.property.PropertyResolver;
+import org.jtwig.property.configuration.PropertyResolverConfiguration;
 import org.jtwig.render.config.RenderConfiguration;
 import org.jtwig.render.expression.calculator.enumerated.EnumerationListStrategy;
 import org.jtwig.resource.config.ResourceConfiguration;
@@ -22,21 +22,21 @@ public class EnvironmentConfiguration {
     private final RenderConfiguration renderConfiguration;
     private final ValueConfiguration valueConfiguration;
     private final EscapeEngineConfiguration escapeConfiguration;
+    private final PropertyResolverConfiguration propertyResolverConfiguration;
     private final Collection<EnumerationListStrategy> enumerationStrategies;
-    private final Collection<PropertyResolver> propertyResolvers;
     private final Collection<JtwigFunction> functions;
     private final Map<String, Object> parameters = new HashMap<>();
     private final Collection<Extension> extensions;
     private final List<EnvironmentInitializer> initializers;
 
-    public EnvironmentConfiguration(ResourceConfiguration resourceConfiguration, Collection<EnumerationListStrategy> enumerationStrategies, JtwigParserConfiguration jtwigParserConfiguration, ValueConfiguration valueConfiguration, RenderConfiguration renderConfiguration, EscapeEngineConfiguration escapeConfiguration, Collection<PropertyResolver> propertyResolvers, Collection<JtwigFunction> functions, Map<String, Object> parameters, Collection<Extension> extensions, List<EnvironmentInitializer> initializers) {
+    public EnvironmentConfiguration(ResourceConfiguration resourceConfiguration, Collection<EnumerationListStrategy> enumerationStrategies, JtwigParserConfiguration jtwigParserConfiguration, ValueConfiguration valueConfiguration, RenderConfiguration renderConfiguration, EscapeEngineConfiguration escapeConfiguration, PropertyResolverConfiguration propertyResolverConfiguration, Collection<JtwigFunction> functions, Map<String, Object> parameters, Collection<Extension> extensions, List<EnvironmentInitializer> initializers) {
         this.resourceConfiguration = resourceConfiguration;
         this.escapeConfiguration = escapeConfiguration;
-        this.propertyResolvers = propertyResolvers;
         this.enumerationStrategies = enumerationStrategies;
         this.jtwigParserConfiguration = jtwigParserConfiguration;
         this.valueConfiguration = valueConfiguration;
         this.renderConfiguration = renderConfiguration;
+        this.propertyResolverConfiguration = propertyResolverConfiguration;
         this.functions = functions;
         this.extensions = extensions;
         this.initializers = initializers;
@@ -55,8 +55,8 @@ public class EnvironmentConfiguration {
         return functions;
     }
 
-    public Collection<PropertyResolver> getPropertyResolvers() {
-        return propertyResolvers;
+    public PropertyResolverConfiguration getPropertyResolverConfiguration() {
+        return propertyResolverConfiguration;
     }
 
     public Collection<EnumerationListStrategy> getEnumerationStrategies() {

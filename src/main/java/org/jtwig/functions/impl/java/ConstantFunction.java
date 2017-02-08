@@ -5,6 +5,7 @@ import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
 import org.jtwig.reflection.model.Value;
 import org.jtwig.reflection.model.java.JavaClass;
+import org.jtwig.reflection.model.java.JavaConstant;
 import org.jtwig.util.ClasspathFinder;
 
 public class ConstantFunction extends SimpleJtwigFunction {
@@ -52,9 +53,14 @@ public class ConstantFunction extends SimpleJtwigFunction {
 
         Optional<JavaClass> optional = classpathFinder.load(className);
         if (optional.isPresent()) {
-            Optional<Value> valueOptional = optional.get().constant(constantName);
+            Optional<JavaConstant> valueOptional = optional.get().constant(constantName);
             if (valueOptional.isPresent()) {
-                return valueOptional.get().getValue();
+                Optional<Value> value = valueOptional.get().value();
+                if (value.isPresent()) {
+                    return value.get().getValue();
+                } else {
+                    throw request.exception(String.format("Unable to retrieve value of constant %s in class %s", constantName, className));
+                }
             } else {
                 throw request.exception(String.format("Class %s does not expose constant %s", className, constantName));
             }

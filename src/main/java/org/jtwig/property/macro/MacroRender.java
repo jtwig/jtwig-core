@@ -1,6 +1,6 @@
 package org.jtwig.property.macro;
 
-import org.jtwig.property.PropertyResolveRequest;
+import org.jtwig.render.RenderRequest;
 import org.jtwig.render.context.model.Macro;
 import org.jtwig.render.context.model.MacroDefinitionContext;
 import org.jtwig.renderable.RenderResult;
@@ -10,12 +10,13 @@ import org.jtwig.value.context.ValueContext;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class MacroRender {
-    public String render(PropertyResolveRequest request, Macro macro) {
+    public String render(RenderRequest request, List<Object> arguments, Macro macro) {
         Map<String, Object> valueMap = new HashMap<>();
-        Iterator<Object> valueIterator = request.getArguments().iterator();
+        Iterator<Object> valueIterator = arguments.iterator();
 
         for (String variableName : macro.getArgumentNames()) {
             if (valueIterator.hasNext()) {

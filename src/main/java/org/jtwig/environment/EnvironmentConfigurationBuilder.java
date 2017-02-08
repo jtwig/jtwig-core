@@ -5,7 +5,6 @@ import org.jtwig.environment.and.*;
 import org.jtwig.environment.initializer.EnvironmentInitializer;
 import org.jtwig.extension.Extension;
 import org.jtwig.functions.JtwigFunction;
-import org.jtwig.property.PropertyResolver;
 import org.jtwig.render.expression.calculator.enumerated.EnumerationListStrategy;
 import org.jtwig.util.builder.ListBuilder;
 import org.jtwig.util.builder.MapBuilder;
@@ -18,7 +17,6 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     private final MapBuilder<EnvironmentConfigurationBuilder, String, Object> parameters;
     private final ListBuilder<EnvironmentConfigurationBuilder, Extension> extensions;
     private final ListBuilder<EnvironmentConfigurationBuilder, JtwigFunction> functions;
-    private final ListBuilder<EnvironmentConfigurationBuilder, PropertyResolver> propertyResolvers;
     private final ListBuilder<EnvironmentConfigurationBuilder, EnumerationListStrategy> enumerationListStrategies;
     private final ListBuilder<EnvironmentConfigurationBuilder, EnvironmentInitializer> initializers;
     private final AndRenderConfigurationBuilder renderConfiguration;
@@ -26,6 +24,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
     private final AndResourceConfigurationBuilder resourceConfigurationBuilder;
     private final AndValueConfigurationBuilder valueConfigurationBuilder;
     private final AndEscapeEngineConfigurationBuilder escapeEngineConfigurationBuilder;
+    private final AndPropertyResolverConfigurationBuilder propertyResolverConfigurationBuilder;
 
     public EnvironmentConfigurationBuilder () {
         functions  = new ListBuilder<>(this);
@@ -33,7 +32,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(this);
         resourceConfigurationBuilder = new AndResourceConfigurationBuilder(this);
         escapeEngineConfigurationBuilder = new AndEscapeEngineConfigurationBuilder(this);
-        propertyResolvers = new ListBuilder<>(this);
+        propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(this);
         enumerationListStrategies = new ListBuilder<>(this);
         valueConfigurationBuilder = new AndValueConfigurationBuilder(this);
         extensions = new ListBuilder<>(this);
@@ -46,7 +45,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         jtwigParserConfigurationBuilder = new AndJtwigParserConfigurationBuilder(prototype.getJtwigParserConfiguration(), this);
         resourceConfigurationBuilder = new AndResourceConfigurationBuilder(prototype.getResourceConfiguration(), this);
         escapeEngineConfigurationBuilder = new AndEscapeEngineConfigurationBuilder(prototype.getEscapeConfiguration(), this);
-        propertyResolvers = new ListBuilder<>(this, prototype.getPropertyResolvers());
+        propertyResolverConfigurationBuilder = new AndPropertyResolverConfigurationBuilder(prototype.getPropertyResolverConfiguration(), this);
         enumerationListStrategies = new ListBuilder<>(this, prototype.getEnumerationStrategies());
         valueConfigurationBuilder = new AndValueConfigurationBuilder(prototype.getValueConfiguration(), this);
         extensions = new ListBuilder<>(this, prototype.getExtensions());
@@ -63,7 +62,7 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
                 valueConfigurationBuilder.build(),
                 renderConfiguration.build(),
                 escapeEngineConfigurationBuilder.build(),
-                propertyResolvers.build(),
+                propertyResolverConfigurationBuilder.build(),
                 functions.build(),
                 parameters.build(),
                 extensions.build(),
@@ -86,8 +85,8 @@ public class EnvironmentConfigurationBuilder implements Builder<EnvironmentConfi
         return resourceConfigurationBuilder;
     }
 
-    public ListBuilder<EnvironmentConfigurationBuilder, PropertyResolver> propertyResolvers() {
-        return propertyResolvers;
+    public AndPropertyResolverConfigurationBuilder propertyResolver() {
+        return propertyResolverConfigurationBuilder;
     }
 
     public AndValueConfigurationBuilder value () { return valueConfigurationBuilder; }

@@ -32,7 +32,11 @@ public class ForTest extends AbstractIntegrationTest {
 
     @Test
     public void forLoopVariable() throws Exception {
-        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for i in [1, 2] %}{% if (loop.first) %}f{% endif %}{{loop.index}}{{loop.index0}}{{loop.revindex}}{{loop.revindex0}}{% if (loop.last) %}l{% endif %}{% endfor %}");
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% for i in [1, 2] %}" +
+                "{% if (loop.first) %}f{% endif %}" +
+                "{{loop.index}}{{loop.index0}}{{loop.revindex}}{{loop.revindex0}}" +
+                "{% if (loop.last) %}l{% endif %}" +
+                "{% endfor %}");
         String result = jtwigTemplate.render(newModel());
         assertThat(result, is("f10212110l"));
     }
