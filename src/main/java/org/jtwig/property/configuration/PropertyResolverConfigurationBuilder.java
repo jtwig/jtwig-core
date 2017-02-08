@@ -1,6 +1,6 @@
 package org.jtwig.property.configuration;
 
-import javafx.util.Builder;
+import org.apache.commons.lang3.builder.Builder;
 import org.jtwig.property.selection.cache.SelectionPropertyResolverCache;
 import org.jtwig.property.strategy.PropertyResolverStrategy;
 import org.jtwig.util.builder.ListBuilder;
