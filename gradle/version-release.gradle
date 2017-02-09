@@ -137,7 +137,7 @@ publishing {
 }
 
 
-task projectPom (type: Copy, dependsOn: publish) {
+task projectPom (type: Copy) {
     from "build/publications/MavenProject/pom-default.xml"
     into '.'
     rename { String fileName ->
