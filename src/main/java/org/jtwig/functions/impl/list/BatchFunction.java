@@ -2,12 +2,13 @@ package org.jtwig.functions.impl.list;
 
 import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
-import org.jtwig.value.WrappedCollection;
+import org.jtwig.util.FunctionValueUtils;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static org.jtwig.util.FunctionValueUtils.getNumber;
 
 public class BatchFunction extends SimpleJtwigFunction {
     @Override
@@ -22,14 +23,14 @@ public class BatchFunction extends SimpleJtwigFunction {
         int groupSize = getNumber(request, 1).intValue();
 
         if (request.getNumberOfArguments() == 3) {
-            return batch(request, request.get(0), groupSize, request.get(2));
+            return batch(request, 0, groupSize, request.get(2));
         } else {
-            return batch(request, request.get(0), groupSize);
+            return batch(request, 0, groupSize);
         }
     }
 
-    private List<List<Object>> batch(FunctionRequest request, Object input, int groupSize) {
-        Iterator<Object> iterator = getCollection(request, input).iterator();
+    private List<List<Object>> batch(FunctionRequest request, int index, int groupSize) {
+        Iterator<Object> iterator = FunctionValueUtils.getCollection(request, index).iterator();
         List<List<Object>> result = new ArrayList<>();
         while (iterator.hasNext()) {
             List<Object> batch = new ArrayList<>();
@@ -42,8 +43,8 @@ public class BatchFunction extends SimpleJtwigFunction {
         return result;
     }
 
-    public List<List<Object>> batch(FunctionRequest request, Object input, int groupSize, Object padding) {
-        Iterator<Object> iterator = getCollection(request, input).iterator();
+    public List<List<Object>> batch(FunctionRequest request, int index, int groupSize, Object padding) {
+        Iterator<Object> iterator = FunctionValueUtils.getCollection(request, index).iterator();
         List<List<Object>> result = new ArrayList<>();
         while (iterator.hasNext()) {
             List<Object> batch = new ArrayList<>();
@@ -56,15 +57,5 @@ public class BatchFunction extends SimpleJtwigFunction {
             result.add(batch);
         }
         return result;
-    }
-
-    private Iterable<Object> getCollection(FunctionRequest request, Object input) {
-        return request.getEnvironment().getValueEnvironment().getCollectionConverter()
-                .convert(input).or(WrappedCollection.singleton(input))
-                .values();
-    }
-
-    private BigDecimal getNumber(FunctionRequest request, int index) {
-        return request.getEnvironment().getValueEnvironment().getNumberConverter().convert(request.get(index)).orThrow(request.getPosition(), String.format("Cannot convert argument %d of number_format to number", index + 1));
     }
 }
