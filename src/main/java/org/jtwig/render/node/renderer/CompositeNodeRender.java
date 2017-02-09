@@ -14,9 +14,10 @@ public class CompositeNodeRender implements NodeRender<CompositeNode> {
     @Override
     public Renderable render(RenderRequest request, CompositeNode list) {
         RenderNodeService renderNodeService = request.getEnvironment().getRenderEnvironment().getRenderNodeService();
-        Collection<Renderable> renderableCollection = new ArrayList<>();
+        Collection<Node> listNodes = list.getNodes();
+        Collection<Renderable> renderableCollection = new ArrayList<>(listNodes.size());
 
-        for (Node node : list.getNodes()) {
+        for (Node node : listNodes) {
             renderableCollection.add(renderNodeService.render(request, node));
         }
 

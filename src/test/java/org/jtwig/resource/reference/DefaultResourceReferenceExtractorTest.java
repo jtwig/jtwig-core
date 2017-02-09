@@ -1,41 +1,47 @@
 package org.jtwig.resource.reference;
 
+import org.jtwig.resource.reference.path.PathType;
+import org.jtwig.resource.reference.path.PathTypeSupplier;
 import org.junit.Test;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertSame;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 public class DefaultResourceReferenceExtractorTest {
-    private DefaultResourceReferenceExtractor underTest = new DefaultResourceReferenceExtractor();
+    private final PathTypeSupplier pathTypeSupplier = mock(PathTypeSupplier.class);
+    private final PosixResourceReferenceExtractor posixResourceReferenceExtractor = mock(PosixResourceReferenceExtractor.class);
+    private final UncResourceReferenceExtractor uncResourceReferenceExtractor = mock(UncResourceReferenceExtractor.class);
+    private DefaultResourceReferenceExtractor underTest = new DefaultResourceReferenceExtractor(pathTypeSupplier, posixResourceReferenceExtractor, uncResourceReferenceExtractor);
 
     @Test
-    public void extractWindows() throws Exception {
-        String path = "C:\\file.jtwig";
+    public void posix() throws Exception {
+        String spec = "spec";
 
-        ResourceReference result = underTest.extract(path);
+        ResourceReference resourceReference = mock(ResourceReference.class);
 
-        assertThat(result.getType(), is(ResourceReference.ANY_TYPE));
-        assertThat(result.getPath(), is(path));
+        given(pathTypeSupplier.get()).willReturn(PathType.POSIX);
+        given(posixResourceReferenceExtractor.extract(spec)).willReturn(resourceReference);
+
+        ResourceReference result = underTest.extract(spec);
+
+        assertSame(resourceReference, result);
+        verifyZeroInteractions(uncResourceReferenceExtractor);
     }
 
     @Test
-    public void extractWindows2() throws Exception {
-        String path = "F:\\file.jtwig";
+    public void unc() throws Exception {
+        String spec = "spec";
 
-        ResourceReference result = underTest.extract(path);
+        ResourceReference resourceReference = mock(ResourceReference.class);
 
-        assertThat(result.getType(), is(ResourceReference.ANY_TYPE));
-        assertThat(result.getPath(), is(path));
-    }
+        given(pathTypeSupplier.get()).willReturn(PathType.UNC);
+        given(uncResourceReferenceExtractor.extract(spec)).willReturn(resourceReference);
 
-    @Test
-    public void extractUnix() throws Exception {
-        String path = "/path/location";
+        ResourceReference result = underTest.extract(spec);
 
-        ResourceReference result = underTest.extract(path);
-
-        assertThat(result.getType(), is(ResourceReference.ANY_TYPE));
-        assertThat(result.getPath(), is(path));
-
+        assertSame(resourceReference, result);
+        verifyZeroInteractions(posixResourceReferenceExtractor);
     }
 }

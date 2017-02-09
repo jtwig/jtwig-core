@@ -23,7 +23,6 @@ public class ForLoopNodeRender implements NodeRender<ForLoopNode> {
 
     @Override
     public Renderable render(RenderRequest request, ForLoopNode node) {
-        Collection<Renderable> renderables = new ArrayList<>();
         Converter<WrappedCollection> collectionConverter = request.getEnvironment().getValueEnvironment().getCollectionConverter();
         RenderNodeService renderNodeService = request.getEnvironment().getRenderEnvironment().getRenderNodeService();
         CalculateExpressionService calculateExpressionService = request.getEnvironment().getRenderEnvironment().getCalculateExpressionService();
@@ -39,6 +38,7 @@ public class ForLoopNodeRender implements NodeRender<ForLoopNode> {
         valueContext.start(newValueContext);
 
         Iterator<Map.Entry<String, Object>> iterator = valueCollection.iterator();
+        Collection<Renderable> renderables = new ArrayList<>(valueCollection.size());
 
         while (iterator.hasNext()) {
             Map.Entry<String, Object> item = iterator.next();
