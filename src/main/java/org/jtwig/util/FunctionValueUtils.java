@@ -12,6 +12,10 @@ public class FunctionValueUtils {
     private static final String NUMBER_TYPE = "number";
     private static final String COLLECTION_TYPE = "collection of objects";
 
+    public static String getString (FunctionRequest request, int position) {
+        return request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(position));
+    }
+
     public static BigDecimal getNumber (FunctionRequest request, int position) {
         Converter<BigDecimal> converter = request.getEnvironment().getValueEnvironment().getNumberConverter();
         return convert(converter, NUMBER_TYPE, request, position);
