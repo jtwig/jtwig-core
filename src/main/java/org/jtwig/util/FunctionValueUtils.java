@@ -9,14 +9,17 @@ import java.math.BigDecimal;
 import java.util.Collection;
 
 public class FunctionValueUtils {
+    private static final String NUMBER_TYPE = "number";
+    private static final String COLLECTION_TYPE = "collection of objects";
+
     public static BigDecimal getNumber (FunctionRequest request, int position) {
         Converter<BigDecimal> converter = request.getEnvironment().getValueEnvironment().getNumberConverter();
-        return convert(converter, "number", request, position);
+        return convert(converter, NUMBER_TYPE, request, position);
     }
 
     public static Collection<Object> getCollection (FunctionRequest request, int position) {
         Converter<WrappedCollection> collectionConverter = request.getEnvironment().getValueEnvironment().getCollectionConverter();
-        return convert(collectionConverter, "collection of objects", request, position).values();
+        return convert(collectionConverter, COLLECTION_TYPE, request, position).values();
     }
 
     private static <T> T convert(Converter<T> converter, String typeName, FunctionRequest request, int position) {
