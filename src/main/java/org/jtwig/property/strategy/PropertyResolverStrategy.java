@@ -6,11 +6,6 @@ import org.jtwig.property.resolver.PropertyResolver;
 import org.jtwig.render.RenderRequest;
 
 public interface PropertyResolverStrategy {
-    /**
-     * Preconditions:
-     *
-     * request.leftValue != null && request.leftValue != Undefined.Undefined
-     */
     Optional<PropertyResolver> select (Request request);
 
     class Request extends RenderRequest {
