@@ -105,11 +105,19 @@ publishing {
                 Set<ResolvedArtifact> resolvedTestArtifacts = configurations.testCompile.getResolvedConfiguration().getResolvedArtifacts()
                 resolvedTestArtifacts.each {
                     ModuleVersionIdentifier mvi = it.getModuleVersion().getId();
-                    Node dependency = mainPom.dependencies.first().appendNode("dependency");
-                    dependency.appendNode("groupId", mvi.getGroup())
-                    dependency.appendNode("artifactId", mvi.getName())
-                    dependency.appendNode("version", mvi.getVersion())
-                    dependency.appendNode("scope", "test")
+                    boolean addTestDependency = true
+                    configurations.compile.getResolvedConfiguration().getResolvedArtifacts().each {
+                        ModuleVersionIdentifier cmpDep = it.getModuleVersion().getId();
+                        if (mvi.group == cmpDep.group && mvi.name == cmpDep.name) addTestDependency = false
+                    }
+
+                    if (addTestDependency) {
+                        Node dependency = mainPom.dependencies.first().appendNode("dependency");
+                        dependency.appendNode("groupId", mvi.getGroup())
+                        dependency.appendNode("artifactId", mvi.getName())
+                        dependency.appendNode("version", mvi.getVersion())
+                        dependency.appendNode("scope", "test")
+                    }
                 }
 
                 Node repositories = asNode().appendNode("repositories");
