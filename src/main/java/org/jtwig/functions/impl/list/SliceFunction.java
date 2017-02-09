@@ -3,9 +3,8 @@ package org.jtwig.functions.impl.list;
 import org.jtwig.exceptions.CalculationException;
 import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
-import org.jtwig.value.WrappedCollection;
+import org.jtwig.util.FunctionValueUtils;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,13 +18,13 @@ public class SliceFunction extends SimpleJtwigFunction {
     @Override
     public Object execute(FunctionRequest request) {
         request.minimumNumberOfArguments(3).maximumNumberOfArguments(3);
-        return slice(request, request.get(0),
-                getNumber(request, 1).intValue(),
-                getNumber(request, 2).intValue());
+        return slice(request,
+                FunctionValueUtils.getNumber(request, 1).intValue(),
+                FunctionValueUtils.getNumber(request, 2).intValue());
     }
 
-
-    private Object slice(FunctionRequest request, Object input, int begin, int length) throws CalculationException {
+    private Object slice(FunctionRequest request, int begin, int length) throws CalculationException {
+        Object input = request.get(0);
         if (input instanceof String) {
             String value = (String) input;
             if (value.length() < begin) {
@@ -35,7 +34,7 @@ public class SliceFunction extends SimpleJtwigFunction {
             }
         }
 
-        Iterator<Object> iterator = getCollection(request, input).iterator();
+        Iterator<Object> iterator = FunctionValueUtils.getCollection(request, 0).iterator();
         List<Object> list = new ArrayList<>();
         int i = 0;
         while (iterator.hasNext()) {
@@ -47,16 +46,5 @@ public class SliceFunction extends SimpleJtwigFunction {
         }
 
         return list;
-    }
-
-    private BigDecimal getNumber(FunctionRequest request, int index) {
-        return request.getEnvironment().getValueEnvironment().getNumberConverter().convert(request.get(index)).orThrow(request.getPosition(), String.format("Cannot convert argument %d of number_format to number", index + 1));
-    }
-
-
-    private Iterable<Object> getCollection(FunctionRequest request, Object input) {
-        return request.getEnvironment().getValueEnvironment().getCollectionConverter()
-                .convert(input).or(WrappedCollection.singleton(input))
-                .values();
     }
 }

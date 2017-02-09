@@ -112,7 +112,7 @@ public class EnvironmentConfigurationBuilderTest {
         RelativeResourceResolver relativeResourceResolver = mock(RelativeResourceResolver.class);
         ResourceLoader resourceLoader = mock(ResourceLoader.class);
         TypedResourceLoader typedResourceLoader = new TypedResourceLoader("type", resourceLoader);
-        DefaultResourceReferenceExtractor extractor = new DefaultResourceReferenceExtractor();
+        DefaultResourceReferenceExtractor extractor = mock(DefaultResourceReferenceExtractor.class);
 
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()

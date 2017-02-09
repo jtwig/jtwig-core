@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
+import static org.jtwig.util.FunctionValueUtils.getNumber;
+import static org.jtwig.util.FunctionValueUtils.getString;
+
 public class NumberFormatFunction extends SimpleJtwigFunction {
     @Override
     public String name() {
@@ -30,14 +33,6 @@ public class NumberFormatFunction extends SimpleJtwigFunction {
                 return numberFormat(number, null, null, null);
 
         }
-    }
-
-    private String getString(FunctionRequest request, int index) {
-        return request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(index));
-    }
-
-    private BigDecimal getNumber(FunctionRequest request, int index) {
-        return request.getEnvironment().getValueEnvironment().getNumberConverter().convert(request.get(index)).orThrow(request.getPosition(), String.format("Cannot convert argument %d of number_format to number", index + 1));
     }
 
     private String numberFormat (Object numberArg, BigDecimal fractionDigits, String decimalSeparator, String groupingSeparator) {

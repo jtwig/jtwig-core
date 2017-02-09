@@ -19,10 +19,4 @@ public class MapSelectionExpression extends Expression {
     public Expression getSelectValue() {
         return selectValue;
     }
-
-    //    @Override
-//    public JtwigValue calculate(CalculateRequest request) {
-//        JtwigValue map = mapExpression.calculate(request);
-//        return map.getMapValue(selectValue.calculate(request));
-//    }
 }

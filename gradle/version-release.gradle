@@ -79,5 +79,68 @@ publishing {
                 }
             }
         }
+
+        MavenProject(MavenPublication) {
+            from components.java
+
+            pom.withXml {
+                // Generate map of resolved versions
+                Node mainPom = asNode();
+                Map resolvedVersionMap = [:]
+                Set<ResolvedArtifact> resolvedArtifacts = configurations.compile.getResolvedConfiguration().getResolvedArtifacts()
+                resolvedArtifacts.addAll(configurations.testCompile.getResolvedConfiguration().getResolvedArtifacts())
+                resolvedArtifacts.each {
+                    ModuleVersionIdentifier mvi = it.getModuleVersion().getId();
+                    resolvedVersionMap.put("${mvi.getGroup()}:${mvi.getName()}", mvi.getVersion())
+                }
+
+                // Update dependencies with resolved versions
+                asNode().dependencies.first().each {
+                    def groupId = it.get("groupId").first().value().first()
+                    def artifactId = it.get("artifactId").first().value().first()
+                    it.get("version").first().value = resolvedVersionMap.get("${groupId}:${artifactId}")
+                    it.get("scope").first().value = "compile"
+                }
+
+                Set<ResolvedArtifact> resolvedTestArtifacts = configurations.testCompile.getResolvedConfiguration().getResolvedArtifacts()
+                resolvedTestArtifacts.each {
+                    ModuleVersionIdentifier mvi = it.getModuleVersion().getId();
+                    Node dependency = mainPom.dependencies.first().appendNode("dependency");
+                    dependency.appendNode("groupId", mvi.getGroup())
+                    dependency.appendNode("artifactId", mvi.getName())
+                    dependency.appendNode("version", mvi.getVersion())
+                    dependency.appendNode("scope", "test")
+                }
+
+                Node repositories = asNode().appendNode("repositories");
+
+                project.repositories.each {
+                    if (it.name != "MavenLocal") {
+                        Node repository = repositories.appendNode("repository");
+                        repository.appendNode("id", it.name);
+                        repository.appendNode("url", it.url);
+                    }
+                }
+
+                Node compilerPlugin = asNode().appendNode("build").appendNode("plugins").appendNode("plugin");
+                compilerPlugin.appendNode("groupId", "org.apache.maven.plugins");
+                compilerPlugin.appendNode("artifactId", "maven-compiler-plugin");
+                compilerPlugin.appendNode("version", "3.6.1");
+
+                Node compilerPluginConfig = compilerPlugin.appendNode("configuration");
+                compilerPluginConfig.appendNode("source", project.sourceCompatibility);
+                compilerPluginConfig.appendNode("target", project.targetCompatibility);
+
+            }
+        }
+    }
+}
+
+
+task projectPom (type: Copy, dependsOn: publish) {
+    from "build/publications/MavenProject/pom-default.xml"
+    into '.'
+    rename { String fileName ->
+        fileName.replace("pom-default.xml", "pom.xml")
     }
 }
