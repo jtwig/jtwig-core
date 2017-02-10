@@ -120,6 +120,15 @@ publishing {
                     }
                 }
 
+                configurations.provided.getResolvedConfiguration().getResolvedArtifacts().each {
+                    ModuleVersionIdentifier mvi = it.getModuleVersion().getId();
+                    Node dependency = mainPom.dependencies.first().appendNode("dependency");
+                    dependency.appendNode("groupId", mvi.getGroup())
+                    dependency.appendNode("artifactId", mvi.getName())
+                    dependency.appendNode("version", mvi.getVersion())
+                    dependency.appendNode("scope", "provided")
+                }
+
                 Node repositories = asNode().appendNode("repositories");
 
                 project.repositories.each {
