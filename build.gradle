@@ -11,10 +11,11 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply from: 'gradle/version-release.gradle'
-apply from: 'gradle/coverage-support.gradle'
-apply from: 'gradle/ide-support.gradle'
-apply from: 'gradle/bintray.gradle'
+apply from: 'gradle/jtwig-plugins/version-release.gradle'
+apply from: 'gradle/jtwig-plugins/coverage-support.gradle'
+apply from: 'gradle/jtwig-plugins/ide-support.gradle'
+apply from: 'gradle/jtwig-plugins/bintray.gradle'
+apply from: 'gradle/jtwig-plugins/wrapper.gradle'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7

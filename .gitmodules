@@ -1,0 +1,3 @@
+[submodule "gradle/jtwig-plugins"]
+	path = gradle/jtwig-plugins
+	url = https://github.com/jtwig/jtwig-gradle-plugins.git
