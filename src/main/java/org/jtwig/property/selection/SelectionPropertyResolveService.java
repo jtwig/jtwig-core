@@ -14,9 +14,9 @@ public class SelectionPropertyResolveService {
     }
 
     public SelectionResult resolve(PropertyResolver propertyResolver, SelectionRequest request, Object leftValue) {
-        Object value = propertyResolver.resolve(propertyResolveRequestFactory.create(request, leftValue));
-        if (value == null || value == Undefined.UNDEFINED)
-            return new SelectionResult(Optional.<PropertyResolver>absent(), Optional.of(new Value(Undefined.UNDEFINED)));
-        return new SelectionResult(Optional.of(propertyResolver), Optional.of(new Value(value)));
+        if (leftValue == null || leftValue == Undefined.UNDEFINED)
+            return new SelectionResult(Optional.<PropertyResolver>absent(), Optional.<Value>absent());
+        Optional<Value> value = propertyResolver.resolve(propertyResolveRequestFactory.create(request, leftValue));
+        return new SelectionResult(Optional.of(propertyResolver), value);
     }
 }

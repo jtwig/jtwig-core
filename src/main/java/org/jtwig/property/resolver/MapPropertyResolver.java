@@ -1,16 +1,17 @@
 package org.jtwig.property.resolver;
 
+import com.google.common.base.Optional;
 import org.jtwig.property.resolver.request.PropertyResolveRequest;
-import org.jtwig.value.Undefined;
+import org.jtwig.reflection.model.Value;
 
 import java.util.Map;
 
 public class MapPropertyResolver implements PropertyResolver {
     @Override
-    public Object resolve(PropertyResolveRequest request) {
-        if (request.getContext() == null) return Undefined.UNDEFINED;
-        if (!(request.getContext() instanceof Map)) return Undefined.UNDEFINED;
+    public Optional<Value> resolve(PropertyResolveRequest request) {
+        if (request.getContext() == null) return Optional.absent();
+        if (!(request.getContext() instanceof Map)) return Optional.absent();
 
-        return ((Map) request.getContext()).get(request.getPropertyName().get());
+        return Optional.of(new Value(((Map) request.getContext()).get(request.getPropertyName().get())));
     }
 }

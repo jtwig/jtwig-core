@@ -3,9 +3,9 @@ package org.jtwig.property.resolver;
 import com.google.common.base.Optional;
 import org.jtwig.property.macro.MacroRender;
 import org.jtwig.property.resolver.request.PropertyResolveRequest;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.render.context.model.Macro;
 import org.jtwig.render.context.model.MacroDefinitionContext;
-import org.jtwig.value.Undefined;
 
 public class MacroPropertyResolver implements PropertyResolver {
     private final MacroRender macroRender;
@@ -17,10 +17,10 @@ public class MacroPropertyResolver implements PropertyResolver {
     }
 
     @Override
-    public Object resolve(PropertyResolveRequest request) {
+    public Optional<Value> resolve(PropertyResolveRequest request) {
         Optional<Macro> resolve = macro.resolve(request.getPropertyName().get());
-        if (!resolve.isPresent()) return Undefined.UNDEFINED;
+        if (!resolve.isPresent()) return Optional.absent();
 
-        return macroRender.render(request, request.getArguments(), resolve.get());
+        return Optional.of(new Value(macroRender.render(request, request.getArguments(), resolve.get())));
     }
 }

@@ -10,10 +10,13 @@ import static org.hamcrest.core.Is.is;
 public class Issue328Test {
     @Test
     public void nullPointerException() throws Exception {
-        String result = JtwigTemplate.inlineTemplate("{% if test.value.internal %}KO{% else %}OK{% endif %}")
-                .render(JtwigModel.newModel().with("test", new TestBean(null)));
+        JtwigTemplate jtwigTemplate = JtwigTemplate.inlineTemplate("{% if test.value.internal %}KO{% else %}OK{% endif %}");
 
-        assertThat(result, is("OK"));
+        String result1 = jtwigTemplate.render(JtwigModel.newModel().with("test", new TestBean(null)));
+        String result2 = jtwigTemplate.render(JtwigModel.newModel().with("test", new TestBean(null)));
+
+        assertThat(result1, is("OK"));
+        assertThat(result2, is("OK")); // testing cache
     }
 
     public static class TestBean {

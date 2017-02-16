@@ -1,7 +1,8 @@
 package org.jtwig.property.resolver;
 
+import com.google.common.base.Optional;
 import org.jtwig.property.resolver.request.PropertyResolveRequest;
-import org.jtwig.value.Undefined;
+import org.jtwig.reflection.model.Value;
 
 public class EmptyPropertyResolver implements PropertyResolver {
     private static final EmptyPropertyResolver INSTANCE = new EmptyPropertyResolver();
@@ -13,7 +14,7 @@ public class EmptyPropertyResolver implements PropertyResolver {
     private EmptyPropertyResolver () {}
 
     @Override
-    public Object resolve(PropertyResolveRequest request) {
-        return Undefined.UNDEFINED;
+    public Optional<Value> resolve(PropertyResolveRequest request) {
+        return Optional.absent();
     }
 }

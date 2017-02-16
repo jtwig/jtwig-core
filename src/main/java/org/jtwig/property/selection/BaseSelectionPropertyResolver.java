@@ -23,6 +23,9 @@ public class BaseSelectionPropertyResolver implements SelectionPropertyResolver 
         Object leftValue = request.getEnvironment().getRenderEnvironment().getCalculateExpressionService()
                 .calculate(request, request.getLeftExpression());
 
+        if (leftValue == null || leftValue == Undefined.UNDEFINED)
+            return new SelectionResult(Optional.<PropertyResolver>absent(), Optional.<Value>absent());
+
         PropertyResolverStrategy.Request strategyRequest = new PropertyResolverStrategy.Request(
                 request, leftValue, request.getRightExpression()
         );
@@ -34,6 +37,6 @@ public class BaseSelectionPropertyResolver implements SelectionPropertyResolver 
             }
         }
 
-        return new SelectionResult(Optional.<PropertyResolver>of(EmptyPropertyResolver.instance()), Optional.of(new Value(Undefined.UNDEFINED)));
+        return new SelectionResult(Optional.<PropertyResolver>of(EmptyPropertyResolver.instance()), Optional.<Value>absent());
     }
 }
