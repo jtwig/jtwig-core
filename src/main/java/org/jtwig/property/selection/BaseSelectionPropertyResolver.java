@@ -5,6 +5,7 @@ import org.jtwig.property.resolver.EmptyPropertyResolver;
 import org.jtwig.property.resolver.PropertyResolver;
 import org.jtwig.property.strategy.PropertyResolverStrategy;
 import org.jtwig.reflection.model.Value;
+import org.jtwig.value.Undefined;
 
 import java.util.Collection;
 
@@ -33,6 +34,6 @@ public class BaseSelectionPropertyResolver implements SelectionPropertyResolver 
             }
         }
 
-        return new SelectionResult(EmptyPropertyResolver.instance(), Optional.<Value>absent());
+        return new SelectionResult(Optional.<PropertyResolver>of(EmptyPropertyResolver.instance()), Optional.of(new Value(Undefined.UNDEFINED)));
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import org.jtwig.property.resolver.PropertyResolver;
 import org.jtwig.property.resolver.request.PropertyResolveRequestFactory;
 import org.jtwig.reflection.model.Value;
+import org.jtwig.value.Undefined;
 
 public class SelectionPropertyResolveService {
     private final PropertyResolveRequestFactory propertyResolveRequestFactory;
@@ -14,6 +15,8 @@ public class SelectionPropertyResolveService {
 
     public SelectionResult resolve(PropertyResolver propertyResolver, SelectionRequest request, Object leftValue) {
         Object value = propertyResolver.resolve(propertyResolveRequestFactory.create(request, leftValue));
-        return new SelectionResult(propertyResolver, Optional.of(new Value(value)));
+        if (value == null || value == Undefined.UNDEFINED)
+            return new SelectionResult(Optional.<PropertyResolver>absent(), Optional.of(new Value(Undefined.UNDEFINED)));
+        return new SelectionResult(Optional.of(propertyResolver), Optional.of(new Value(value)));
     }
 }

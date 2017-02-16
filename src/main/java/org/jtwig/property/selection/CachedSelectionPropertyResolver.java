@@ -24,7 +24,9 @@ public class CachedSelectionPropertyResolver implements SelectionPropertyResolve
             return selectionPropertyResolveService.resolve(propertyResolver, request, leftValue);
         } else {
             SelectionResult cacheMissResult = delegate.resolve(request);
-            selectionPropertyResolverCache.cacheResolver(request.getRightExpression(), cacheMissResult.getPropertyResolver());
+            if (cacheMissResult.getPropertyResolver().isPresent()) {
+                selectionPropertyResolverCache.cacheResolver(request.getRightExpression(), cacheMissResult.getPropertyResolver().get());
+            }
             return cacheMissResult;
         }
     }
