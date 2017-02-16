@@ -3,8 +3,8 @@ package org.jtwig.property.resolver;
 import com.google.common.base.Optional;
 import org.jtwig.property.resolver.request.PropertyResolveRequest;
 import org.jtwig.property.strategy.method.ArgumentsConverter;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.reflection.model.java.JavaMethod;
-import org.jtwig.value.Undefined;
 import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
@@ -30,10 +30,11 @@ public class MethodPropertyResolverTest {
         given(propertyResolveRequest.getArguments()).willReturn(asList());
         given(argumentsConverter.convert(eq(javaMethod), argThat(arrayWithSize(0)))).willReturn(Optional.<Object[]>absent());
 
-        Object result = underTest.resolve(propertyResolveRequest);
+        Optional<Value> result = underTest.resolve(propertyResolveRequest);
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
+
     @Test
     public void invocationFails() throws Exception {
         Object[] arguments = {};
@@ -45,10 +46,11 @@ public class MethodPropertyResolverTest {
         given(argumentsConverter.convert(eq(javaMethod), argThat(arrayWithSize(0)))).willReturn(Optional.of(arguments));
         given(javaMethod.invoke(context, arguments)).willThrow(InvocationTargetException.class);
 
-        Object result = underTest.resolve(propertyResolveRequest);
+        Optional<Value> result = underTest.resolve(propertyResolveRequest);
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
+
     @Test
     public void invocationFailsWithIllegalAccess() throws Exception {
         Object[] arguments = {};
@@ -60,10 +62,11 @@ public class MethodPropertyResolverTest {
         given(argumentsConverter.convert(eq(javaMethod), argThat(arrayWithSize(0)))).willReturn(Optional.of(arguments));
         given(javaMethod.invoke(context, arguments)).willThrow(IllegalAccessException.class);
 
-        Object result = underTest.resolve(propertyResolveRequest);
+        Optional<Value> result = underTest.resolve(propertyResolveRequest);
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
+
     @Test
     public void invocationFailsWithIllegalArgumentException() throws Exception {
         Object[] arguments = {};
@@ -75,9 +78,9 @@ public class MethodPropertyResolverTest {
         given(argumentsConverter.convert(eq(javaMethod), argThat(arrayWithSize(0)))).willReturn(Optional.of(arguments));
         given(javaMethod.invoke(context, arguments)).willThrow(IllegalArgumentException.class);
 
-        Object result = underTest.resolve(propertyResolveRequest);
+        Optional<Value> result = underTest.resolve(propertyResolveRequest);
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
 
     @Test
@@ -87,8 +90,8 @@ public class MethodPropertyResolverTest {
         given(propertyResolveRequest.getArguments()).willReturn(asList());
         given(propertyResolveRequest.getContext()).willReturn(null);
 
-        Object result = underTest.resolve(propertyResolveRequest);
+        Optional<Value> result = underTest.resolve(propertyResolveRequest);
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
 }

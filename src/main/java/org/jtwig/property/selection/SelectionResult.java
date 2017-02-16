@@ -5,15 +5,15 @@ import org.jtwig.property.resolver.PropertyResolver;
 import org.jtwig.reflection.model.Value;
 
 public class SelectionResult {
-    private final PropertyResolver propertyResolver;
+    private final Optional<PropertyResolver> propertyResolver;
     private final Optional<Value> resolvedValue;
 
-    public SelectionResult(PropertyResolver propertyResolver, Optional<Value> resolvedValue) {
+    public SelectionResult(Optional<PropertyResolver> propertyResolver, Optional<Value> resolvedValue) {
         this.propertyResolver = propertyResolver;
         this.resolvedValue = resolvedValue;
     }
 
-    public PropertyResolver getPropertyResolver() {
+    public Optional<PropertyResolver> getPropertyResolver() {
         return propertyResolver;
     }
 

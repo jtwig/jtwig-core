@@ -1,13 +1,14 @@
 package org.jtwig.property.resolver;
 
+import com.google.common.base.Optional;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.jtwig.property.resolver.request.PropertyResolveRequest;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.reflection.model.java.JavaClass;
 import org.jtwig.reflection.model.java.JavaClassManager;
 import org.jtwig.reflection.model.java.JavaMethod;
-import org.jtwig.value.Undefined;
 import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
@@ -31,9 +32,9 @@ public class CallMethodPropertyResolverTest {
         given(request.getContext()).willReturn(context);
         given(javaMethod.invoke(eq(context), argThat(arrayHasItem(argument)))).willThrow(InvocationTargetException.class);
 
-        Object result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
 
     @Test
@@ -44,10 +45,11 @@ public class CallMethodPropertyResolverTest {
         given(request.getContext()).willReturn(context);
         given(javaMethod.invoke(eq(context), argThat(arrayHasItem(argument)))).willThrow(IllegalAccessException.class);
 
-        Object result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
+
     @Test
     public void callThrowsIllegalArgumentException() throws Exception {
         Object context = new Object();
@@ -56,9 +58,9 @@ public class CallMethodPropertyResolverTest {
         given(request.getContext()).willReturn(context);
         given(javaMethod.invoke(eq(context), argThat(arrayHasItem(argument)))).willThrow(IllegalArgumentException.class);
 
-        Object result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -74,9 +76,9 @@ public class CallMethodPropertyResolverTest {
 
         given(request.getContext()).willReturn(null);
 
-        Object result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
 
     private Matcher<Object[]> arrayHasItem(final Object input) {

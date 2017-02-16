@@ -1,15 +1,16 @@
 package org.jtwig.property.resolver;
 
+import com.google.common.base.Optional;
 import org.jtwig.property.resolver.request.PropertyResolveRequest;
-import org.jtwig.value.Undefined;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.value.context.ValueContext;
 
 public class ValueContextPropertyResolver implements PropertyResolver {
     @Override
-    public Object resolve(PropertyResolveRequest request) {
-        if (request.getContext() == null) return Undefined.UNDEFINED;
-        if (!(request.getContext() instanceof ValueContext)) return Undefined.UNDEFINED;
+    public Optional<Value> resolve(PropertyResolveRequest request) {
+        if (request.getContext() == null) return Optional.absent();
+        if (!(request.getContext() instanceof ValueContext)) return Optional.absent();
 
-        return ((ValueContext) request.getContext()).resolve(request.getPropertyName().get());
+        return Optional.of(new Value(((ValueContext) request.getContext()).resolve(request.getPropertyName().get())));
     }
 }

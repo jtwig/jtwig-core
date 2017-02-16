@@ -1,10 +1,11 @@
 package org.jtwig.property.resolver;
 
+import com.google.common.base.Optional;
 import org.jtwig.property.resolver.request.PropertyResolveRequest;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.reflection.model.java.JavaClass;
 import org.jtwig.reflection.model.java.JavaClassManager;
 import org.jtwig.reflection.model.java.JavaField;
-import org.jtwig.value.Undefined;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -23,9 +24,9 @@ public class FieldPropertyResolverTest {
         given(request.getContext()).willReturn(context);
         given(javaField.value(context)).willThrow(IllegalAccessException.class);
 
-        Object result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
 
     @Test
@@ -36,9 +37,9 @@ public class FieldPropertyResolverTest {
         given(request.getContext()).willReturn(context);
         given(javaField.value(context)).willThrow(IllegalArgumentException.class);
 
-        Object result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
 
     @Test(expected = IllegalArgumentException.class)

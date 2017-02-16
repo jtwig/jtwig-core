@@ -1,7 +1,8 @@
 package org.jtwig.property.resolver;
 
+import com.google.common.base.Optional;
 import org.jtwig.property.resolver.request.PropertyResolveRequest;
-import org.jtwig.value.Undefined;
+import org.jtwig.reflection.model.Value;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -12,8 +13,8 @@ public class EmptyPropertyResolverTest {
 
     @Test
     public void resolve() throws Exception {
-        Object result = underTest.resolve(mock(PropertyResolveRequest.class));
+        Optional<Value> result = underTest.resolve(mock(PropertyResolveRequest.class));
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
 }

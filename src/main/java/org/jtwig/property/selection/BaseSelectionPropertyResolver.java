@@ -5,6 +5,7 @@ import org.jtwig.property.resolver.EmptyPropertyResolver;
 import org.jtwig.property.resolver.PropertyResolver;
 import org.jtwig.property.strategy.PropertyResolverStrategy;
 import org.jtwig.reflection.model.Value;
+import org.jtwig.value.Undefined;
 
 import java.util.Collection;
 
@@ -22,6 +23,9 @@ public class BaseSelectionPropertyResolver implements SelectionPropertyResolver 
         Object leftValue = request.getEnvironment().getRenderEnvironment().getCalculateExpressionService()
                 .calculate(request, request.getLeftExpression());
 
+        if (leftValue == null || leftValue == Undefined.UNDEFINED)
+            return new SelectionResult(Optional.<PropertyResolver>absent(), Optional.<Value>absent());
+
         PropertyResolverStrategy.Request strategyRequest = new PropertyResolverStrategy.Request(
                 request, leftValue, request.getRightExpression()
         );
@@ -33,6 +37,6 @@ public class BaseSelectionPropertyResolver implements SelectionPropertyResolver 
             }
         }
 
-        return new SelectionResult(EmptyPropertyResolver.instance(), Optional.<Value>absent());
+        return new SelectionResult(Optional.<PropertyResolver>of(EmptyPropertyResolver.instance()), Optional.<Value>absent());
     }
 }

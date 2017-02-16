@@ -1,7 +1,8 @@
 package org.jtwig.property.resolver;
 
+import com.google.common.base.Optional;
 import org.jtwig.property.resolver.request.PropertyResolveRequest;
-import org.jtwig.value.Undefined;
+import org.jtwig.reflection.model.Value;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -19,9 +20,9 @@ public class ValueContextPropertyResolverTest {
 
         given(request.getContext()).willReturn(null);
 
-        Object result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
 
     @Test
@@ -30,9 +31,9 @@ public class ValueContextPropertyResolverTest {
 
         given(request.getContext()).willReturn(new HashMap<>());
 
-        Object result = underTest.resolve(request);
+        Optional<Value> result = underTest.resolve(request);
 
-        assertEquals(Undefined.UNDEFINED, result);
+        assertEquals(Optional.<Value>absent(), result);
     }
 
 }

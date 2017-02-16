@@ -1,8 +1,9 @@
 package org.jtwig.property.resolver;
 
+import com.google.common.base.Optional;
 import org.jtwig.property.resolver.request.PropertyResolveRequest;
+import org.jtwig.reflection.model.Value;
 import org.jtwig.reflection.model.java.JavaField;
-import org.jtwig.value.Undefined;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,12 +16,12 @@ public class FieldPropertyResolver implements PropertyResolver {
     }
 
     @Override
-    public Object resolve(PropertyResolveRequest request) {
+    public Optional<Value> resolve(PropertyResolveRequest request) {
         try {
-            return field.value(request.getContext());
+            return Optional.of(new Value(field.value(request.getContext())));
         } catch (IllegalAccessException | IllegalArgumentException e) {
             logger.debug("Unable to access field {} on object {}", field, request.getContext());
-            return Undefined.UNDEFINED;
+            return Optional.absent();
         }
     }
 }
