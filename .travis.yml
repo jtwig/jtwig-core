@@ -4,26 +4,7 @@ jdk:
 
 env:
   TERM: dumb
-  global:
-    - secure: tQwlxG03BVo5TTwSsNpwCBtCavqctNCpAyKPc87n20ZHw5NAgAstFjee7C/t0pPGpihNxh/ecjtPLYO2M6YO/gtlfMQDnqkMHnlUA2zq27hP9pP7T37VUsdYWWnlCYx4C+OgN61E5keJJOANeZ5nUEGTQnsm+jHybYtE0KT125bsheLDI3G7gffMkkqa3Ovbn8fuT+2HsOMlgyM9hJDyNG+OmfIPkOdNkHmxF4JSyB60LbP7hb7+Zb5dxJ7KeqMwIyejRXPi1KeYW+wci0rN2Pksv5MBMu3iFK49ZTnddZMAME47EKFOFT190xEt19bIcsVV7MmNCkFfhbXxB7qGc8cteQT3SbsUGxXvRSJZu8jJxR5F1tfdPkDGnnFhjrD4/urR2fTQ9RdEqdJ9YWcJOdQiZ21tVtwTSttsS3lVuP4qq9eDXRnXhSfyn07B9CptB7kRm7oGxTld7N3yx1FEN7cGQF10IG5VnfR5VKy7fkiC6V3hpQL3Dt1GjcFNHXsuGbAps+L7K1RwJ/9qv1n2hVWx+kBvzGHvJDAkxmcgL0BgTlvG4E6f7VmQ2g29Zc7uDUfCXqIlWqdqTBbFxgmANhImxhYVoIg0y6UWQYZStRcT6TGBRMPfEaw/YD0vj2ZdcoaRi7ZSL6CISwjrnbneTHkdiSTNoyzrCRmgNk7DmuU=
 
 after_success:
  - gradle jacocoTestReport coveralls
- - |
-     if [[ ($TRAVIS_BRANCH == master) &&
-           ($TRAVIS_PULL_REQUEST == false) &&
-           ( (! $TRAVIS_JOB_NUMBER == *.*) || ($TRAVIS_JOB_NUMBER == *.1) ) ]] ; then
-       gradle bintrayUpload
-       curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
-       sh trigger-travis.sh jtwig jtwig-web $TRAVIS_ACCESS_TOKEN
-       sleep 1
-       sh trigger-travis.sh jtwig jtwig-hot-reloading-extension $TRAVIS_ACCESS_TOKEN
-       sleep 1
-       sh trigger-travis.sh jtwig jtwig-json-extension $TRAVIS_ACCESS_TOKEN
-       sleep 1
-       sh trigger-travis.sh jtwig jtwig-spaceless-extension $TRAVIS_ACCESS_TOKEN
-       sleep 1
-       sh trigger-travis.sh jtwig jtwig-translate-extension $TRAVIS_ACCESS_TOKEN
-       sleep 1
-       sh trigger-travis.sh jtwig jtwig-highlight-extension $TRAVIS_ACCESS_TOKEN
-     fi
+ - gradle jtwigRelease

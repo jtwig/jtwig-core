@@ -2,15 +2,20 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
+        maven {
+            url "http://dl.bintray.com/jtwig/maven"
+        }
     }
 
     dependencies {
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+        classpath 'org.jtwig:jtwig-release-plugin:1.+'
     }
 }
 
 apply plugin: 'java'
+apply plugin: 'org.jtwig.release'
 apply from: 'gradle/jtwig-plugins/version-release.gradle'
 apply from: 'gradle/jtwig-plugins/coverage-support.gradle'
 apply from: 'gradle/jtwig-plugins/ide-support.gradle'
@@ -46,4 +51,23 @@ dependencies {
     testCompile 'org.exparity:hamcrest-bean:1.0.11'
     testCompile 'org.unitils:unitils-core:3.4.2'
     testCompile 'net.jperf:jperf:1.0.3'
+}
+
+jtwigRelease {
+    version = System.getenv("JTWIG_VERSION")
+
+    git {
+        username = System.getenv("GITHUB_USER")
+        password = System.getenv("GITHUB_PASS")
+    }
+
+    github {
+        username = System.getenv("GITHUB_USER")
+        token = System.getenv("GITHUB_TOKEN")
+    }
+
+    bintray {
+        user = System.getenv("BINTRAY_USER")
+        apiKey = System.getenv("BINTRAY_KEY")
+    }
 }
