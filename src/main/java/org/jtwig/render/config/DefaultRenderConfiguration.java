@@ -35,6 +35,7 @@ public class DefaultRenderConfiguration extends RenderConfiguration {
                         .put(FlushNode.class, new FlushNodeRender())
                         .put(ForLoopNode.class, new ForLoopNodeRender())
                         .put(IfNode.class, new IfNodeRender())
+                        .put(ImportSelfNode.class, new ImportSelfNodeRender())
                         .put(ImportNode.class, new ImportNodeRender())
                         .put(IncludeNode.class, new IncludeNodeRender())
                         .put(MacroNode.class, new MacroNodeRender())

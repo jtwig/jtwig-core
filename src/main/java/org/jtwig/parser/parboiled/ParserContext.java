@@ -72,6 +72,7 @@ public class ParserContext {
         createParser(OverrideBlockNodeParser.class, context);
         createParser(IfNodeParser.class, context);
         createParser(ForLoopNodeParser.class, context);
+        createParser(ImportSelfNodeParser.class, context);
         createParser(ImportNodeParser.class, context);
         createParser(TextNodeParser.class, context);
         createParser(MacroNodeParser.class, context);

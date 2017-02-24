@@ -47,6 +47,7 @@ public class CompositeNodeParser extends NodeParser<CompositeNode> {
                     EmbedNodeParser.class,
                     ForLoopNodeParser.class,
                     IfNodeParser.class,
+                    ImportSelfNodeParser.class,
                     ImportNodeParser.class,
                     IncludeNodeParser.class,
                     MacroNodeParser.class,
