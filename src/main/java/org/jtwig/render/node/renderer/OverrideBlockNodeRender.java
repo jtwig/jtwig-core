@@ -9,7 +9,7 @@ import org.jtwig.resource.reference.ResourceReference;
 public class OverrideBlockNodeRender implements NodeRender<OverrideBlockNode> {
     @Override
     public Renderable render(RenderRequest renderRequest, OverrideBlockNode node) {
-        ResourceReference current = renderRequest.getRenderContext().getResourceContext().getCurrent();
+        ResourceReference current = renderRequest.getRenderContext().getResourceContext().getCurrent().getItem();
         renderRequest.getRenderContext().getBlockContext().getCurrent().add(node, current);
         return EmptyRenderable.instance();
     }

@@ -2,13 +2,10 @@ package org.jtwig.resource.reference;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.jtwig.render.context.OnEndTrigger;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-public class ResourceReference implements OnEndTrigger {
+public class ResourceReference {
     public static final String ANY_TYPE = "any";
     public static final String STRING = "string";
     public static final String FILE = "file";
@@ -37,7 +34,6 @@ public class ResourceReference implements OnEndTrigger {
 
     private final String type;
     private final String path;
-    private final List<Runnable> endTasks = new ArrayList<>();
 
     public ResourceReference(String type, String path) {
         this.type = type;
@@ -78,16 +74,5 @@ public class ResourceReference implements OnEndTrigger {
     public String toString() {
         if (ANY_TYPE.equals(type)) return path;
         else return String.format("%s:%s", type, path);
-    }
-
-    public void onEnd (Runnable runnable) {
-        endTasks.add(runnable);
-    }
-
-    @Override
-    public void end() {
-        for (Runnable endTask : endTasks) {
-            endTask.run();
-        }
     }
 }

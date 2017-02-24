@@ -3,6 +3,7 @@ package org.jtwig.render;
 import org.jtwig.environment.Environment;
 import org.jtwig.escape.EscapeEngine;
 import org.jtwig.model.tree.Node;
+import org.jtwig.render.context.ContextItem;
 import org.jtwig.render.context.StackedContext;
 import org.jtwig.render.context.model.BlockContext;
 import org.jtwig.render.node.RenderNodeService;
@@ -24,7 +25,7 @@ public class RenderResourceService {
 
         StackedContext<BlockContext> blockContext = request.getRenderContext().getBlockContext();
         StackedContext<ValueContext> valueContext = request.getRenderContext().getValueContext();
-        StackedContext<ResourceReference> resourceContext = request.getRenderContext().getResourceContext();
+        StackedContext<ContextItem<ResourceReference>> resourceContext = request.getRenderContext().getResourceContext();
         StackedContext<EscapeEngine> escapeEngineContext = request.getRenderContext().getEscapeEngineContext();
 
         if (renderResourceRequest.isNewBlockContext()) {
@@ -37,7 +38,7 @@ public class RenderResourceService {
             valueContext.start(new IsolateParentValueContext(valueContext.getCurrent(), MapValueContext.newContext()));
         }
 
-        resourceContext.start(renderResourceRequest.getResource());
+        resourceContext.start(new ContextItem<>(renderResourceRequest.getResource()));
         escapeEngineContext.start(environment.getEscapeEnvironment().getInitialEscapeEngine());
 
         Iterator<Map.Entry<String, Object>> iterator = renderResourceRequest.getIncludeModel().iterator();

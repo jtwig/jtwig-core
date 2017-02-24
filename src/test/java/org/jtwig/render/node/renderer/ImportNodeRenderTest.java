@@ -5,6 +5,7 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.tree.ImportNode;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
+import org.jtwig.render.context.ContextItem;
 import org.jtwig.render.context.model.MacroAliasesContext;
 import org.jtwig.render.context.model.MacroDefinitionContext;
 import org.jtwig.renderable.Renderable;
@@ -45,7 +46,7 @@ public class ImportNodeRenderTest {
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, expression))
                 .thenReturn(pathValue);
         when(environment.getValueEnvironment().getStringConverter().convert(pathValue)).thenReturn(path);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(resource);
+        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, path)).thenReturn(newResource);
 
         expectedException.expect(ResourceNotFoundException.class);
@@ -77,7 +78,7 @@ public class ImportNodeRenderTest {
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, expression))
                 .thenReturn(pathValue);
         when(environment.getValueEnvironment().getStringConverter().convert(pathValue)).thenReturn(path);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(resource);
+        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, path)).thenReturn(newResource);
         when(environment.getParser().parse(environment, newResource)).thenReturn(node);
         when(environment.getResourceEnvironment().getResourceService().loadMetadata(newResource)).thenReturn(resourceMetadata);
@@ -116,7 +117,7 @@ public class ImportNodeRenderTest {
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, expression))
                 .thenReturn(pathValue);
         when(environment.getValueEnvironment().getStringConverter().convert(pathValue)).thenReturn(path);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(resource);
+        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, path)).thenReturn(newResource);
         when(environment.getParser().parse(environment, newResource)).thenReturn(node);
         when(environment.getResourceEnvironment().getResourceService().loadMetadata(newResource)).thenReturn(resourceMetadata);

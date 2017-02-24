@@ -1,6 +1,7 @@
 package org.jtwig.render.context.model;
 
 import org.jtwig.escape.EscapeEngine;
+import org.jtwig.render.context.ContextItem;
 import org.jtwig.render.context.StackedContext;
 import org.jtwig.resource.reference.ResourceReference;
 import org.jtwig.value.context.ValueContext;
@@ -17,7 +18,7 @@ public class RenderContextTest {
 
         RenderContext underTest = new RenderContext(StackedContext.<ValueContext>emptyContext(),
                 StackedContext.<EscapeEngine>emptyContext(),
-                StackedContext.<ResourceReference>emptyContext(),
+                StackedContext.<ContextItem<ResourceReference>>emptyContext(),
                 StackedContext.<BlockContext>emptyContext(),
                 StackedContext.<MacroDefinitionContext>emptyContext(),
                 StackedContext.<MacroAliasesContext>emptyContext(),

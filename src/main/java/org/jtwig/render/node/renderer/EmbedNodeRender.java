@@ -25,7 +25,7 @@ public class EmbedNodeRender implements NodeRender<EmbedNode> {
         Environment environment = renderRequest.getEnvironment();
         CalculateExpressionService calculateExpressionService = environment.getRenderEnvironment().getCalculateExpressionService();
         Object path = calculateExpressionService.calculate(renderRequest, node.getResourceExpression());
-        ResourceReference current = renderRequest.getRenderContext().getResourceContext().getCurrent();
+        ResourceReference current = renderRequest.getRenderContext().getResourceContext().getCurrent().getItem();
         ResourceService resourceService = environment.getResourceEnvironment().getResourceService();
         ResourceReference newReference = resourceService.resolve(current, getString(renderRequest, path));
         ResourceMetadata resourceMetadata = resourceService.loadMetadata(newReference);
