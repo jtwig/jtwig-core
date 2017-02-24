@@ -27,4 +27,28 @@ public class UncResourceReferenceExtractorTest {
         assertThat(result.getType(), is(ResourceReference.ANY_TYPE));
         assertThat(result.getPath(), is(path));
     }
+
+    @Test
+    public void relativeNoType() throws Exception {
+        ResourceReference result = underTest.extract("one\\test");
+
+        assertThat(result.getType(), is(ResourceReference.ANY_TYPE));
+        assertThat(result.getPath(), is("one\\test"));
+    }
+
+    @Test
+    public void relativeWithType() throws Exception {
+        ResourceReference result = underTest.extract("file:one\\test");
+
+        assertThat(result.getType(), is(ResourceReference.FILE));
+        assertThat(result.getPath(), is("one\\test"));
+    }
+
+    @Test
+    public void absoluteWithType() throws Exception {
+        ResourceReference result = underTest.extract("file:C:\\one\\test");
+
+        assertThat(result.getType(), is(ResourceReference.FILE));
+        assertThat(result.getPath(), is("C:\\one\\test"));
+    }
 }
