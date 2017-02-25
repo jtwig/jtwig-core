@@ -3,6 +3,7 @@ package org.jtwig.functions.impl.structural;
 import com.google.common.base.Optional;
 import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
+import org.jtwig.render.context.ContextItem;
 import org.jtwig.render.context.model.BlockDefinition;
 import org.jtwig.render.node.RenderNodeService;
 import org.jtwig.renderable.RenderResult;
@@ -24,7 +25,7 @@ public class BlockFunction extends SimpleJtwigFunction {
         if (nodeOptional.isPresent()) {
             RenderNodeService renderNodeService = request.getEnvironment().getRenderEnvironment().getRenderNodeService();
             BlockDefinition definition = nodeOptional.get();
-            request.getRenderContext().getResourceContext().start(definition.getSource());
+            request.getRenderContext().getResourceContext().start(new ContextItem<>(definition.getSource()));
             RenderResult result = renderNodeService.render(request, definition.getNode())
                     .appendTo(new StringBuilderRenderResult());
             request.getRenderContext().getResourceContext().end();

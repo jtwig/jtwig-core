@@ -54,7 +54,7 @@ public class JtwigTemplateTest {
         assertThat(renderRequest.getRenderContext().getEscapeEngineContext().getCurrent(), is((EscapeEngine) HtmlEscapeEngine.instance()));
         assertThat(renderRequest.getRenderContext().getEscapeEngineContext().end().hasCurrent(), is(false));
         assertThat(renderRequest.getRenderContext().getMacroDefinitionContext().hasCurrent(), is(false));
-        assertThat(renderRequest.getRenderContext().getResourceContext().getCurrent(), is(resource));
+        assertThat(renderRequest.getRenderContext().getResourceContext().getCurrent().getItem(), is(resource));
         assertThat(renderRequest.getRenderContext().getResourceContext().end().hasCurrent(), is(false));
         assertThat(renderRequest.getRenderContext().getValueContext().end().hasCurrent(), is(false));
     }

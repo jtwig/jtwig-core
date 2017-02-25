@@ -6,6 +6,7 @@ import org.jtwig.model.tree.EmbedNode;
 import org.jtwig.model.tree.OverrideBlockNode;
 import org.jtwig.render.RenderRequest;
 import org.jtwig.render.RenderResourceRequest;
+import org.jtwig.render.context.ContextItem;
 import org.jtwig.render.context.model.BlockContext;
 import org.jtwig.render.expression.CalculateExpressionService;
 import org.jtwig.renderable.Renderable;
@@ -51,7 +52,7 @@ public class EmbedNodeRenderTest {
         when(node.getResourceExpression()).thenReturn(pathExpression);
         when(node.isIgnoreMissing()).thenReturn(false);
         when(request.getEnvironment()).thenReturn(environment);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(resource);
+        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newReference);
         when(calculateExpressionService.calculate(request, pathExpression)).thenReturn(pathExpressionValue);
@@ -78,7 +79,7 @@ public class EmbedNodeRenderTest {
         when(node.getResourceExpression()).thenReturn(pathExpression);
         when(node.isIgnoreMissing()).thenReturn(true);
         when(request.getEnvironment()).thenReturn(environment);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(resource);
+        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
         when(environment.getValueEnvironment().getStringConverter().convert(pathExpressionValue)).thenReturn(pathExpressionValueAsString);
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newReference);
@@ -115,7 +116,7 @@ public class EmbedNodeRenderTest {
         when(node.getMapExpression()).thenReturn(mapExpression);
         when(node.getNodes()).thenReturn(asList(node1, node2));
         when(request.getEnvironment()).thenReturn(environment);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(resource);
+        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
         when(environment.getValueEnvironment().getStringConverter().convert(pathExpressionValue)).thenReturn(pathExpressionValueAsString);
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newResource);
@@ -162,7 +163,7 @@ public class EmbedNodeRenderTest {
         when(node.getMapExpression()).thenReturn(mapExpression);
         when(node.getNodes()).thenReturn(asList(node1, node2));
         when(request.getEnvironment()).thenReturn(environment);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(resource);
+        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
         when(environment.getValueEnvironment().getStringConverter().convert(pathExpressionValue)).thenReturn(pathExpressionValueAsString);
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newResource);

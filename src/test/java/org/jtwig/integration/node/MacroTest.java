@@ -11,6 +11,7 @@ import org.junit.rules.ExpectedException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuration;
 
 public class MacroTest extends AbstractIntegrationTest {
     @Rule
@@ -21,6 +22,27 @@ public class MacroTest extends AbstractIntegrationTest {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{% macro name () %}{% endmacro %}");
         String result = template.render(JtwigModel.newModel());
         assertThat(result, is(""));
+    }
+
+
+    @Test
+    public void mixedImports() throws Exception {
+        String result = JtwigTemplate.classpathTemplate("example/macros/mixed-imports-example.twig", configuration()
+                .render().withStrictMode(true).and()
+                .build())
+                .render(JtwigModel.newModel());
+
+        assertThat(result.trim(), is("Hello! oi"));
+    }
+
+    @Test
+    public void nestedMacro() throws Exception {
+        String result = JtwigTemplate.classpathTemplate("example/macros/nested-macro-example.twig", configuration()
+                .render().withStrictMode(true).and()
+                .build())
+                .render(JtwigModel.newModel());
+
+        assertThat(result.trim(), is("oi"));
     }
 
     @Test

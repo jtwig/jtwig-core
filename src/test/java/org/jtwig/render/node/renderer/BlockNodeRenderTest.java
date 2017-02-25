@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import org.jtwig.model.tree.BlockNode;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
+import org.jtwig.render.context.ContextItem;
 import org.jtwig.render.context.model.BlockDefinition;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.resource.reference.ResourceReference;
@@ -25,7 +26,7 @@ public class BlockNodeRenderTest {
         ResourceReference reference = mock(ResourceReference.class);
 
         when(node.getIdentifier()).thenReturn(identifier);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(reference);
+        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(reference));
         when(request.getRenderContext().getBlockContext().getCurrent().get(identifier))
                 .thenReturn(Optional.of(new BlockDefinition(content, reference)));
         when(request.getEnvironment().getRenderEnvironment().getRenderNodeService().render(request, content))

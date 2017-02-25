@@ -2,6 +2,7 @@ package org.jtwig.render.node.renderer;
 
 import org.jtwig.model.tree.OverrideBlockNode;
 import org.jtwig.render.RenderRequest;
+import org.jtwig.render.context.ContextItem;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.EmptyRenderable;
 import org.jtwig.resource.reference.ResourceReference;
@@ -19,7 +20,7 @@ public class OverrideBlockNodeRenderTest {
         OverrideBlockNode blockNode = mock(OverrideBlockNode.class);
         ResourceReference resourceReference = mock(ResourceReference.class);
 
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(resourceReference);
+        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resourceReference));
 
         Renderable result = underTest.render(request, blockNode);
 

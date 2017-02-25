@@ -65,4 +65,10 @@ public class ResourceReferenceTest {
 
         assertThat(instance.toString(), is("path"));
     }
+
+    @Test
+    public void resourceReference() throws Exception {
+
+
+    }
 }

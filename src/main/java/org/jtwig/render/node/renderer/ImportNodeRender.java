@@ -31,7 +31,7 @@ public class ImportNodeRender implements NodeRender<ImportNode> {
 
         Object objectPath = calculateExpressionService.calculate(renderRequest, node.getImportExpression());
         String path = environment.getValueEnvironment().getStringConverter().convert(objectPath);
-        ResourceReference current = renderRequest.getRenderContext().getResourceContext().getCurrent();
+        ResourceReference current = renderRequest.getRenderContext().getResourceContext().getCurrent().getItem();
         ResourceReference newReference = resourceService.resolve(current, path);
         ResourceMetadata resourceMetadata = resourceService.loadMetadata(newReference);
 

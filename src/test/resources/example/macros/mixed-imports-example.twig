@@ -1,0 +1,4 @@
+{% import _self as m %}
+{% import 'macro-example.twig' as another %}
+{% macro test() %}Hello!{% endmacro %}
+{{ m.test() }} {{ another.text('oi') }}

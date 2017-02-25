@@ -28,7 +28,7 @@ public class ExtendsNodeRender implements NodeRender<ExtendsNode> {
         Expression extendsExpression = node.getExtendsExpression();
         Object objectPath = calculateExpressionService.calculate(renderRequest, extendsExpression);
         String path = renderRequest.getEnvironment().getValueEnvironment().getStringConverter().convert(objectPath);
-        ResourceReference current = renderRequest.getRenderContext().getResourceContext().getCurrent();
+        ResourceReference current = renderRequest.getRenderContext().getResourceContext().getCurrent().getItem();
         ResourceReference newReference = resourceService.resolve(current, path);
         ResourceMetadata resourceMetadata = resourceService.loadMetadata(newReference);
 
