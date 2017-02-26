@@ -1,7 +1,7 @@
 package org.jtwig.render;
 
 import org.jtwig.environment.Environment;
-import org.jtwig.render.context.model.RenderContext;
+import org.jtwig.render.context.RenderContext;
 
 public class RenderRequest {
     private final RenderContext renderContext;

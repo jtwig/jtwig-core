@@ -5,7 +5,6 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.tree.ImportNode;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.context.ContextItem;
 import org.jtwig.render.context.model.MacroAliasesContext;
 import org.jtwig.render.context.model.MacroDefinitionContext;
 import org.jtwig.renderable.Renderable;
@@ -13,6 +12,7 @@ import org.jtwig.renderable.impl.EmptyRenderable;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
 import org.jtwig.resource.metadata.ResourceMetadata;
 import org.jtwig.resource.reference.ResourceReference;
+import org.jtwig.value.context.ValueContext;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -46,7 +46,7 @@ public class ImportNodeRenderTest {
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, expression))
                 .thenReturn(pathValue);
         when(environment.getValueEnvironment().getStringConverter().convert(pathValue)).thenReturn(path);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
+        when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(resource);
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, path)).thenReturn(newResource);
 
         expectedException.expect(ResourceNotFoundException.class);
@@ -70,15 +70,15 @@ public class ImportNodeRenderTest {
         ResourceMetadata resourceMetadata = mock(ResourceMetadata.class);
         Node node = mock(Node.class);
 
-        when(request.getRenderContext().getMacroAliasesContext().hasCurrent()).thenReturn(false);
-        when(request.getRenderContext().getMacroAliasesContext().getCurrent()).thenReturn(macroAliasesContext);
+        when(request.getRenderContext().hasCurrent(MacroAliasesContext.class)).thenReturn(false);
+        when(request.getRenderContext().getCurrent(MacroAliasesContext.class)).thenReturn(macroAliasesContext);
         when(importNode.getAliasIdentifier().getIdentifier()).thenReturn(identifier);
         when(importNode.getImportExpression()).thenReturn(expression);
         when(request.getEnvironment()).thenReturn(environment);
-        when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, expression))
-                .thenReturn(pathValue);
+        when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, expression)).thenReturn(pathValue);
         when(environment.getValueEnvironment().getStringConverter().convert(pathValue)).thenReturn(path);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
+        when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(resource);
+        when(request.getRenderContext().getCurrent(ValueContext.class)).thenReturn(mock(ValueContext.class));
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, path)).thenReturn(newResource);
         when(environment.getParser().parse(environment, newResource)).thenReturn(node);
         when(environment.getResourceEnvironment().getResourceService().loadMetadata(newResource)).thenReturn(resourceMetadata);
@@ -88,9 +88,9 @@ public class ImportNodeRenderTest {
         Renderable result = underTest.render(request, importNode);
 
         assertSame(EmptyRenderable.instance(), result);
-        verify(request.getRenderContext().getMacroAliasesContext()).start(argThat(theSame(MacroAliasesContext.newContext())));
+        verify(request.getRenderContext()).start(eq(MacroAliasesContext.class), argThat(theSame(MacroAliasesContext.newContext())));
         verify(environment.getRenderEnvironment().getRenderNodeService()).render(request, node);
-        verify(request.getRenderContext().getMacroAliasesContext()).end();
+        verify(request.getRenderContext()).end(eq(MacroAliasesContext.class));
         verifyZeroInteractions(macroAliasesContext);
     }
 
@@ -109,15 +109,16 @@ public class ImportNodeRenderTest {
         Node node = mock(Node.class);
         String pathValue = "path";
 
-        when(request.getRenderContext().getMacroAliasesContext().hasCurrent()).thenReturn(true);
-        when(request.getRenderContext().getMacroAliasesContext().getCurrent()).thenReturn(macroAliasesContext);
+        when(request.getRenderContext().hasCurrent(MacroAliasesContext.class)).thenReturn(true);
+        when(request.getRenderContext().getCurrent(MacroAliasesContext.class)).thenReturn(macroAliasesContext);
         when(importNode.getAliasIdentifier().getIdentifier()).thenReturn(identifier);
         when(importNode.getImportExpression()).thenReturn(expression);
         when(request.getEnvironment()).thenReturn(environment);
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, expression))
                 .thenReturn(pathValue);
         when(environment.getValueEnvironment().getStringConverter().convert(pathValue)).thenReturn(path);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
+        when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(resource);
+        when(request.getRenderContext().getCurrent(ValueContext.class)).thenReturn(mock(ValueContext.class));
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, path)).thenReturn(newResource);
         when(environment.getParser().parse(environment, newResource)).thenReturn(node);
         when(environment.getResourceEnvironment().getResourceService().loadMetadata(newResource)).thenReturn(resourceMetadata);
@@ -127,10 +128,7 @@ public class ImportNodeRenderTest {
         Renderable result = underTest.render(request, importNode);
 
         assertSame(EmptyRenderable.instance(), result);
-        verify(request.getRenderContext().getMacroAliasesContext()).start(argThat(theSame(MacroAliasesContext.newContext())));
-        verify(request.getRenderContext().getMacroDefinitionContext()).start(argThat(theSame(MacroDefinitionContext.newContext())));
         verify(environment.getRenderEnvironment().getRenderNodeService()).render(request, node);
-        verify(request.getRenderContext().getMacroAliasesContext()).end();
         verify(macroAliasesContext).with(eq(identifier), argThat(theSame(MacroDefinitionContext.newContext())));
     }
 }

@@ -24,13 +24,15 @@ public class MacroNodeRenderTest {
     public void noContext() throws Exception {
         RenderRequest renderRequest = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         MacroNode macroNode = mock(MacroNode.class);
+        MacroDefinitionContext macroDefinitionContext = mock(MacroDefinitionContext.class);
 
-        when(renderRequest.getRenderContext().getMacroDefinitionContext().hasCurrent()).thenReturn(false);
+        when(renderRequest.getRenderContext().hasCurrent(MacroDefinitionContext.class)).thenReturn(false);
+        when(renderRequest.getRenderContext().getCurrent(MacroDefinitionContext.class)).thenReturn(macroDefinitionContext);
 
         Renderable result = underTest.render(renderRequest, macroNode);
 
         assertSame(EmptyRenderable.instance(), result);
-        verify(renderRequest.getRenderContext().getMacroDefinitionContext().getCurrent(), never()).add(anyString(), any(Macro.class));
+        verify(macroDefinitionContext, never()).add(anyString(), any(Macro.class));
     }
 
     @Test
@@ -42,9 +44,9 @@ public class MacroNodeRenderTest {
         MacroNode macroNode = mock(MacroNode.class, RETURNS_DEEP_STUBS);
         Node node = mock(Node.class);
 
-        when(renderRequest.getRenderContext().getMacroDefinitionContext().getCurrent()).thenReturn(macroDefinitionContext);
-        when(renderRequest.getRenderContext().getMacroDefinitionContext().hasCurrent()).thenReturn(true);
-        when(renderRequest.getRenderContext().getMacroAliasesContext().hasCurrent()).thenReturn(false);
+        when(renderRequest.getRenderContext().getCurrent(MacroDefinitionContext.class)).thenReturn(macroDefinitionContext);
+        when(renderRequest.getRenderContext().hasCurrent(MacroDefinitionContext.class)).thenReturn(true);
+        when(renderRequest.getRenderContext().hasCurrent(MacroAliasesContext.class)).thenReturn(false);
         when(macroNode.getMacroName().getIdentifier()).thenReturn(identifier);
         when(macroNode.getContent()).thenReturn(node);
         when(macroNode.getMacroArgumentNames()).thenReturn(arguments);
@@ -65,10 +67,10 @@ public class MacroNodeRenderTest {
         MacroNode macroNode = mock(MacroNode.class, RETURNS_DEEP_STUBS);
         Node node = mock(Node.class);
 
-        when(renderRequest.getRenderContext().getMacroDefinitionContext().getCurrent()).thenReturn(macroDefinitionContext);
-        when(renderRequest.getRenderContext().getMacroDefinitionContext().hasCurrent()).thenReturn(true);
-        when(renderRequest.getRenderContext().getMacroAliasesContext().hasCurrent()).thenReturn(true);
-        when(renderRequest.getRenderContext().getMacroAliasesContext().getCurrent()).thenReturn(macroAliasesContext);
+        when(renderRequest.getRenderContext().getCurrent(MacroDefinitionContext.class)).thenReturn(macroDefinitionContext);
+        when(renderRequest.getRenderContext().hasCurrent(MacroDefinitionContext.class)).thenReturn(true);
+        when(renderRequest.getRenderContext().hasCurrent(MacroAliasesContext.class)).thenReturn(true);
+        when(renderRequest.getRenderContext().getCurrent(MacroAliasesContext.class)).thenReturn(macroAliasesContext);
         when(macroNode.getMacroName().getIdentifier()).thenReturn(identifier);
         when(macroNode.getContent()).thenReturn(node);
         when(macroNode.getMacroArgumentNames()).thenReturn(arguments);

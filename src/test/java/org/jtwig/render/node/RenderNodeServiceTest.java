@@ -43,14 +43,14 @@ public class RenderNodeServiceTest {
         NodeRender nodeRender = mock(NodeRender.class);
         Renderable renderable = mock(Renderable.class);
 
-        when(renderRequest.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
+        when(renderRequest.getRenderContext().getCurrent(EscapeEngine.class)).thenReturn(escapeMode);
         when(nodeRenderSelector.renderFor(node)).thenReturn(Optional.of(nodeRender));
         when(nodeRender.render(renderRequest, node)).thenReturn(renderable);
 
         Renderable result = underTest.render(renderRequest, node);
 
         assertSame(renderable, result);
-        verify(renderRequest.getRenderContext().getEscapeEngineContext()).start(escapeMode);
-        verify(renderRequest.getRenderContext().getEscapeEngineContext()).end();
+        verify(renderRequest.getRenderContext()).start(EscapeEngine.class, escapeMode);
+        verify(renderRequest.getRenderContext()).end(EscapeEngine.class);
     }
 }

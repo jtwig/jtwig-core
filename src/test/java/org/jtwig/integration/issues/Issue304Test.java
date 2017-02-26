@@ -23,6 +23,7 @@ public class Issue304Test {
 
         String result = JtwigTemplate.fileTemplate(tempFile, configuration()
                 .resources().withDefaultInputCharset(Charset.forName("ISO-8859-1")).and()
+                .render().withOutputCharset(Charset.defaultCharset()).and()
                 .build()).render(JtwigModel.newModel());
 
         assertThat(result, is(equalTo(originalText)));

@@ -6,7 +6,6 @@ import org.jtwig.model.tree.ExtendsNode;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
 import org.jtwig.render.RenderResourceRequest;
-import org.jtwig.render.context.ContextItem;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
 import org.jtwig.resource.metadata.ResourceMetadata;
@@ -43,7 +42,7 @@ public class ExtendsNodeRenderTest {
         ResourceMetadata resourceMetadata = mock(ResourceMetadata.class);
 
         when(request.getEnvironment()).thenReturn(environment);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(parentResource));
+        when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(parentResource);
         when(node.getExtendsExpression()).thenReturn(expression);
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, expression)).thenReturn(pathValue);
         when(environment.getValueEnvironment().getStringConverter().convert(pathValue)).thenReturn(path);
@@ -74,7 +73,7 @@ public class ExtendsNodeRenderTest {
         Node node2 = mock(Node.class);
 
         when(request.getEnvironment()).thenReturn(environment);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(parentResource));
+        when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(parentResource);
         when(node.getExtendsExpression()).thenReturn(expression);
         when(node.getNodes()).thenReturn(asList(node1, node2));
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, expression)).thenReturn(pathValue);

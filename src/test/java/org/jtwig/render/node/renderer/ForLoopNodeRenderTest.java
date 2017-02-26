@@ -14,7 +14,6 @@ import org.jtwig.value.WrappedCollection;
 import org.jtwig.value.context.ValueContext;
 import org.jtwig.value.convert.Converter;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
@@ -27,8 +26,6 @@ public class ForLoopNodeRenderTest {
 
     @Test
     public void render() throws Exception {
-        ArgumentCaptor<ValueContext> argumentCaptor = ArgumentCaptor.forClass(ValueContext.class);
-
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         ForLoopNode loopNode = mock(ForLoopNode.class, RETURNS_DEEP_STUBS);
         Expression expression = mock(Expression.class);
@@ -50,6 +47,7 @@ public class ForLoopNodeRenderTest {
                 .put("key1", object1)
                 .build().entrySet().iterator());
         when(request.getEnvironment().getRenderEnvironment().getRenderNodeService().render(request, content)).thenReturn(renderable);
+        when(request.getRenderContext().getCurrent(ValueContext.class)).thenReturn(mock(ValueContext.class));
 
         Renderable result = underTest.render(request, loopNode);
 

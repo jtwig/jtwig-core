@@ -6,15 +6,12 @@ import org.jtwig.model.tree.EmbedNode;
 import org.jtwig.model.tree.OverrideBlockNode;
 import org.jtwig.render.RenderRequest;
 import org.jtwig.render.RenderResourceRequest;
-import org.jtwig.render.context.ContextItem;
-import org.jtwig.render.context.model.BlockContext;
 import org.jtwig.render.expression.CalculateExpressionService;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.EmptyRenderable;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
 import org.jtwig.resource.metadata.ResourceMetadata;
 import org.jtwig.resource.reference.ResourceReference;
-import org.jtwig.support.MatcherUtils;
 import org.jtwig.value.WrappedCollection;
 import org.jtwig.value.convert.Converter;
 import org.junit.Rule;
@@ -52,7 +49,7 @@ public class EmbedNodeRenderTest {
         when(node.getResourceExpression()).thenReturn(pathExpression);
         when(node.isIgnoreMissing()).thenReturn(false);
         when(request.getEnvironment()).thenReturn(environment);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
+        when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(resource);
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newReference);
         when(calculateExpressionService.calculate(request, pathExpression)).thenReturn(pathExpressionValue);
@@ -79,7 +76,7 @@ public class EmbedNodeRenderTest {
         when(node.getResourceExpression()).thenReturn(pathExpression);
         when(node.isIgnoreMissing()).thenReturn(true);
         when(request.getEnvironment()).thenReturn(environment);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
+        when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(resource);
         when(environment.getValueEnvironment().getStringConverter().convert(pathExpressionValue)).thenReturn(pathExpressionValueAsString);
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newReference);
@@ -116,7 +113,7 @@ public class EmbedNodeRenderTest {
         when(node.getMapExpression()).thenReturn(mapExpression);
         when(node.getNodes()).thenReturn(asList(node1, node2));
         when(request.getEnvironment()).thenReturn(environment);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
+        when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(resource);
         when(environment.getValueEnvironment().getStringConverter().convert(pathExpressionValue)).thenReturn(pathExpressionValueAsString);
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newResource);
@@ -131,8 +128,6 @@ public class EmbedNodeRenderTest {
         Renderable result = underTest.render(request, node);
 
         assertSame(renderable, result);
-        verify(request.getRenderContext().getBlockContext()).start(argThat(MatcherUtils.theSame(BlockContext.newContext())));
-        verify(request.getRenderContext().getBlockContext()).end();
         verify(environment.getRenderEnvironment().getRenderNodeService()).render(request, node1);
         verify(environment.getRenderEnvironment().getRenderNodeService()).render(request, node2);
     }
@@ -163,7 +158,7 @@ public class EmbedNodeRenderTest {
         when(node.getMapExpression()).thenReturn(mapExpression);
         when(node.getNodes()).thenReturn(asList(node1, node2));
         when(request.getEnvironment()).thenReturn(environment);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(resource));
+        when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(resource);
         when(environment.getValueEnvironment().getStringConverter().convert(pathExpressionValue)).thenReturn(pathExpressionValueAsString);
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
         when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newResource);
@@ -178,8 +173,6 @@ public class EmbedNodeRenderTest {
         Renderable result = underTest.render(request, node);
 
         assertSame(renderable, result);
-        verify(request.getRenderContext().getBlockContext()).start(argThat(MatcherUtils.theSame(BlockContext.newContext())));
-        verify(request.getRenderContext().getBlockContext()).end();
         verify(environment.getRenderEnvironment().getRenderNodeService()).render(request, node1);
         verify(environment.getRenderEnvironment().getRenderNodeService()).render(request, node2);
     }

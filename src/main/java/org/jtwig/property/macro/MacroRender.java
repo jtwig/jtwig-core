@@ -29,14 +29,14 @@ public class MacroRender {
         }
 
         ValueContext valueContext = MapValueContext.newContext(valueMap);
-        request.getRenderContext().getValueContext().start(valueContext);
+        request.getRenderContext().start(ValueContext.class, valueContext);
         RenderResult renderResult = new StringBuilderRenderResult();
 
         request.getEnvironment().getRenderEnvironment().getRenderNodeService().render(request, macro.getContent())
             .appendTo(renderResult);
 
 
-        request.getRenderContext().getValueContext().end();
+        request.getRenderContext().end(ValueContext.class);
 
         return renderResult.content();
 

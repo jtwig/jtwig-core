@@ -13,7 +13,7 @@ public class TextNodeRender implements NodeRender<TextNode> {
         TextNode.Configuration configuration = node.getConfiguration();
         text = configuration.isTrimLeft() ? trimLeft(text) : text;
         text = configuration.isTrimRight() ? trimRight(text) : text;
-        EscapeEngine escapeEngine = request.getRenderContext().getEscapeEngineContext().getCurrent();
+        EscapeEngine escapeEngine = request.getRenderContext().getCurrent(EscapeEngine.class);
         return new StringRenderable(text, escapeEngine);
     }
 

@@ -26,7 +26,7 @@ public class TextNodeRenderTest {
         when(textNode.getConfiguration().isTrimLeft()).thenReturn(false);
         when(textNode.getConfiguration().isTrimRight()).thenReturn(false);
         when(textNode.getText()).thenReturn(content);
-        when(request.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
+        when(request.getRenderContext().getCurrent(EscapeEngine.class)).thenReturn(escapeMode);
 
         Renderable result = underTest.render(request, textNode);
 
@@ -43,7 +43,7 @@ public class TextNodeRenderTest {
         when(textNode.getConfiguration().isTrimLeft()).thenReturn(true);
         when(textNode.getConfiguration().isTrimRight()).thenReturn(false);
         when(textNode.getText()).thenReturn(content);
-        when(request.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
+        when(request.getRenderContext().getCurrent(EscapeEngine.class)).thenReturn(escapeMode);
 
         Renderable result = underTest.render(request, textNode);
 
@@ -60,7 +60,7 @@ public class TextNodeRenderTest {
         when(textNode.getConfiguration().isTrimLeft()).thenReturn(false);
         when(textNode.getConfiguration().isTrimRight()).thenReturn(true);
         when(textNode.getText()).thenReturn(content);
-        when(request.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
+        when(request.getRenderContext().getCurrent(EscapeEngine.class)).thenReturn(escapeMode);
 
         Renderable result = underTest.render(request, textNode);
 
@@ -77,7 +77,7 @@ public class TextNodeRenderTest {
         when(textNode.getConfiguration().isTrimLeft()).thenReturn(true);
         when(textNode.getConfiguration().isTrimRight()).thenReturn(true);
         when(textNode.getText()).thenReturn(content);
-        when(request.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
+        when(request.getRenderContext().getCurrent(EscapeEngine.class)).thenReturn(escapeMode);
 
         Renderable result = underTest.render(request, textNode);
 

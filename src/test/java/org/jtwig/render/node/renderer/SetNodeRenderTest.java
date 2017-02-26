@@ -6,6 +6,7 @@ import org.jtwig.model.tree.SetNode;
 import org.jtwig.render.RenderRequest;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.EmptyRenderable;
+import org.jtwig.value.context.ValueContext;
 import org.junit.Test;
 
 import static org.junit.Assert.assertSame;
@@ -27,10 +28,11 @@ public class SetNodeRenderTest {
         when(setNode.getVariableExpression()).thenReturn(variableExpression);
         when(variableExpression.getIdentifier()).thenReturn(identifier);
         when(request.getEnvironment().getRenderEnvironment().getCalculateExpressionService().calculate(request, expression)).thenReturn(value);
+        when(request.getRenderContext().getCurrent(ValueContext.class)).thenReturn(mock(ValueContext.class));
 
         Renderable result = underTest.render(request, setNode);
 
-        verify(request.getRenderContext().getValueContext().getCurrent()).with(identifier, value);
+        verify(request.getRenderContext().getCurrent(ValueContext.class)).with(identifier, value);
         assertSame(EmptyRenderable.instance(), result);
     }
 }

@@ -29,7 +29,7 @@ public class OutputNodeRenderTest {
 
         when(outputNode.getExpression()).thenReturn(expression);
         when(request.getEnvironment().getRenderEnvironment().getCalculateExpressionService().calculate(request, expression)).thenReturn(outputValue);
-        when(request.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
+        when(request.getRenderContext().getCurrent(EscapeEngine.class)).thenReturn(escapeMode);
         when(request.getEnvironment().getValueEnvironment().getStringConverter().convert(outputValue)).thenReturn(output);
 
         Renderable result = underTest.render(request, outputNode);

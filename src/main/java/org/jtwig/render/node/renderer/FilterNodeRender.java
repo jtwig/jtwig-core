@@ -1,5 +1,6 @@
 package org.jtwig.render.node.renderer;
 
+import org.jtwig.escape.EscapeEngine;
 import org.jtwig.model.expression.ConstantExpression;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.InjectableExpression;
@@ -24,7 +25,7 @@ public class FilterNodeRender implements NodeRender<FilterNode> {
         Expression injectedExpression = filterExpression.inject(expression);
 
         Object calculate = calculateExpressionService.calculate(renderRequest, injectedExpression);
-        return new StringRenderable(getString(renderRequest, calculate), renderRequest.getRenderContext().getEscapeEngineContext().getCurrent());
+        return new StringRenderable(getString(renderRequest, calculate), renderRequest.getRenderContext().getCurrent(EscapeEngine.class));
     }
 
     private String getString(RenderRequest request, Object input) {

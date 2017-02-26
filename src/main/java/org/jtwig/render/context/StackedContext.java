@@ -1,7 +1,5 @@
 package org.jtwig.render.context;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 public class StackedContext<T> {
@@ -13,7 +11,6 @@ public class StackedContext<T> {
     }
 
     private final Stack<T> contexts;
-    private final List<Runnable> endTasks = new ArrayList<>();
 
     public StackedContext(Stack<T> contexts) {
         this.contexts = contexts;

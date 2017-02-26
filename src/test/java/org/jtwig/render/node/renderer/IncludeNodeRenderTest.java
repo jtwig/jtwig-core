@@ -5,7 +5,6 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.model.tree.IncludeNode;
 import org.jtwig.render.RenderRequest;
 import org.jtwig.render.RenderResourceRequest;
-import org.jtwig.render.context.ContextItem;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.EmptyRenderable;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
@@ -44,7 +43,7 @@ public class IncludeNodeRenderTest {
         when(includeNode.getResourceExpression()).thenReturn(resourceExpression);
         when(request.getEnvironment()).thenReturn(environment);
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, resourceExpression)).thenReturn(path);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<ResourceReference>(currentResource));
+        when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(currentResource);
         when(environment.getResourceEnvironment().getResourceService().resolve(currentResource, path)).thenReturn(newResource);
 
         expectedException.expect(ResourceNotFoundException.class);
@@ -67,7 +66,7 @@ public class IncludeNodeRenderTest {
         when(includeNode.getResourceExpression()).thenReturn(resourceExpression);
         when(request.getEnvironment()).thenReturn(environment);
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, resourceExpression)).thenReturn(path);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(currentResource));
+        when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(currentResource);
         when(environment.getResourceEnvironment().getResourceService().resolve(currentResource, path)).thenReturn(newResource);
 
         Renderable result = underTest.render(request, includeNode);
@@ -98,7 +97,7 @@ public class IncludeNodeRenderTest {
         when(includeNode.getMapExpression()).thenReturn(mapExpression);
         when(request.getEnvironment()).thenReturn(environment);
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, resourceExpression)).thenReturn(path);
-        when(request.getRenderContext().getResourceContext().getCurrent()).thenReturn(new ContextItem<>(currentResource));
+        when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(currentResource);
         when(environment.getValueEnvironment().getStringConverter().convert(path)).thenReturn(relativePath);
         when(environment.getResourceEnvironment().getResourceService().resolve(currentResource, relativePath)).thenReturn(resource);
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, mapExpression)).thenReturn(mapValue);

@@ -4,6 +4,7 @@ import org.jtwig.exceptions.ResolveValueException;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.render.RenderRequest;
 import org.jtwig.value.Undefined;
+import org.jtwig.value.context.ValueContext;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -21,11 +22,13 @@ public class VariableExpressionCalculatorTest {
     @Test
     public void calculateWhenUndefinedAndStrictMode() throws Exception {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
+        ValueContext valueContext = mock(ValueContext.class);
         VariableExpression variableExpression = mock(VariableExpression.class);
 
         String identifier = "identifier";
         when(variableExpression.getIdentifier()).thenReturn(identifier);
-        when(request.getRenderContext().getValueContext().getCurrent().resolve(identifier)).thenReturn(Undefined.UNDEFINED);
+        when(request.getRenderContext().getCurrent(ValueContext.class)).thenReturn(valueContext);
+        when(valueContext.resolve(identifier)).thenReturn(Undefined.UNDEFINED);
         when(request.getEnvironment().getRenderEnvironment().getStrictMode()).thenReturn(true);
 
         expectedException.expect(ResolveValueException.class);
@@ -37,11 +40,13 @@ public class VariableExpressionCalculatorTest {
     @Test
     public void calculateWhenUndefinedAndNotStrictMode() throws Exception {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
+        ValueContext valueContext = mock(ValueContext.class);
         VariableExpression variableExpression = mock(VariableExpression.class);
 
         String identifier = "identifier";
         when(variableExpression.getIdentifier()).thenReturn(identifier);
-        when(request.getRenderContext().getValueContext().getCurrent().resolve(identifier)).thenReturn(Undefined.UNDEFINED);
+        when(request.getRenderContext().getCurrent(ValueContext.class)).thenReturn(valueContext);
+        when(valueContext.resolve(identifier)).thenReturn(Undefined.UNDEFINED);
         when(request.getEnvironment().getRenderEnvironment().getStrictMode()).thenReturn(false);
 
         Object result = underTest.calculate(request, variableExpression);
@@ -53,11 +58,13 @@ public class VariableExpressionCalculatorTest {
     public void calculateWhenDefined() throws Exception {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         VariableExpression variableExpression = mock(VariableExpression.class);
+        ValueContext valueContext = mock(ValueContext.class);
         Object value = new Object();
         String identifier = "identifier";
 
         when(variableExpression.getIdentifier()).thenReturn(identifier);
-        when(request.getRenderContext().getValueContext().getCurrent().resolve(identifier)).thenReturn(value);
+        when(request.getRenderContext().getCurrent(ValueContext.class)).thenReturn(valueContext);
+        when(valueContext.resolve(identifier)).thenReturn(value);
         when(request.getEnvironment().getRenderEnvironment().getStrictMode()).thenReturn(false);
 
         Object result = underTest.calculate(request, variableExpression);
