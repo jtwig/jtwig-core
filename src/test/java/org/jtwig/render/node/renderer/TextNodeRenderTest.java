@@ -30,7 +30,7 @@ public class TextNodeRenderTest {
 
         Renderable result = underTest.render(request, textNode);
 
-        assertThat(result, is(MatcherUtils.<Renderable>theSameBean(new StringRenderable(content, escapeMode))));
+        assertThat(result, is(MatcherUtils.<Renderable>theSameBean(new StringRenderable(content))));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class TextNodeRenderTest {
 
         Renderable result = underTest.render(request, textNode);
 
-        assertThat(result, is(MatcherUtils.<Renderable>theSameBean(new StringRenderable("content ", escapeMode))));
+        assertThat(result, is(MatcherUtils.<Renderable>theSameBean(new StringRenderable("content "))));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class TextNodeRenderTest {
 
         Renderable result = underTest.render(request, textNode);
 
-        assertThat(result, is(MatcherUtils.<Renderable>theSameBean(new StringRenderable(" content", escapeMode))));
+        assertThat(result, is(MatcherUtils.<Renderable>theSameBean(new StringRenderable(" content"))));
     }
 
     @Test
@@ -81,6 +81,6 @@ public class TextNodeRenderTest {
 
         Renderable result = underTest.render(request, textNode);
 
-        assertThat(result, is(MatcherUtils.<Renderable>theSameBean(new StringRenderable("content", escapeMode))));
+        assertThat(result, is(MatcherUtils.<Renderable>theSameBean(new StringRenderable("content"))));
     }
 }

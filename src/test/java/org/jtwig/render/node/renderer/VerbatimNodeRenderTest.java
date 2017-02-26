@@ -28,6 +28,6 @@ public class VerbatimNodeRenderTest {
 
         Renderable result = underTest.render(request, verbatimNode);
 
-        assertThat(result, is(MatcherUtils.<Renderable>theSameBean(new StringRenderable(content, escapeMode))));
+        assertThat(result, is(MatcherUtils.<Renderable>theSameBean(new StringRenderable(content))));
     }
 }

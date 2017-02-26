@@ -2,7 +2,6 @@ package org.jtwig.integration.addon;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
-import org.jtwig.escape.NoneEscapeEngine;
 import org.jtwig.integration.AbstractIntegrationTest;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.Node;
@@ -51,7 +50,7 @@ public class AddOnParserTest extends AbstractIntegrationTest {
 
         @Override
         public Renderable render(RenderRequest renderRequest, SimpleAddOn node) {
-            return new StringRenderable("Hello World!", NoneEscapeEngine.instance());
+            return new StringRenderable("Hello World!");
         }
     }
 

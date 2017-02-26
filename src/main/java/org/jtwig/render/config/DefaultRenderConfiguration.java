@@ -27,6 +27,7 @@ public class DefaultRenderConfiguration extends RenderConfiguration {
                 Charset.defaultCharset(),
                 ImmutableMap.<Class<? extends Node>, NodeRender>builder()
                         .put(AutoEscapeNode.class, new AutoEscapeNodeRender())
+                        .put(ContentEscapeNode.class, new ContentEscapeNodeRender())
                         .put(BlockNode.class, new BlockNodeRender())
                         .put(CompositeNode.class, new CompositeNodeRender())
                         .put(DoNode.class, new DoNodeRender())

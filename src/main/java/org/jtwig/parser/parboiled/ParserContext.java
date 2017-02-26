@@ -80,6 +80,7 @@ public class ParserContext {
         createParser(EmbedNodeParser.class, context);
         createParser(OutputNodeParser.class, context);
         createParser(AutoEscapeNodeParser.class, context);
+        createParser(ContentEscapeNodeParser.class, context);
         createParser(VerbatimNodeParser.class, context);
         createParser(FilterNodeParser.class, context);
 
