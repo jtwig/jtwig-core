@@ -3,8 +3,6 @@ package org.jtwig.render;
 import org.jtwig.environment.Environment;
 import org.jtwig.escape.EscapeEngine;
 import org.jtwig.model.tree.Node;
-import org.jtwig.render.context.ContextItem;
-import org.jtwig.render.context.StackedContext;
 import org.jtwig.render.context.model.BlockContext;
 import org.jtwig.render.node.RenderNodeService;
 import org.jtwig.renderable.Renderable;
@@ -23,26 +21,22 @@ public class RenderResourceService {
         RenderNodeService renderNodeService = environment.getRenderEnvironment().getRenderNodeService();
         Node node = environment.getParser().parse(environment, renderResourceRequest.getResource());
 
-        StackedContext<BlockContext> blockContext = request.getRenderContext().getBlockContext();
-        StackedContext<ValueContext> valueContext = request.getRenderContext().getValueContext();
-        StackedContext<ContextItem<ResourceReference>> resourceContext = request.getRenderContext().getResourceContext();
-        StackedContext<EscapeEngine> escapeEngineContext = request.getRenderContext().getEscapeEngineContext();
-
         if (renderResourceRequest.isNewBlockContext()) {
-            blockContext.start(BlockContext.newContext());
+            request.getRenderContext().start(BlockContext.class, BlockContext.newContext());
         }
 
         if (renderResourceRequest.isNewValueContext()) {
-            valueContext.start(MapValueContext.newContext());
+            request.getRenderContext().start(ValueContext.class, MapValueContext.newContext());
         } else {
-            valueContext.start(new IsolateParentValueContext(valueContext.getCurrent(), MapValueContext.newContext()));
+            ValueContext current = request.getRenderContext().getCurrent(ValueContext.class);
+            request.getRenderContext().start(ValueContext.class, new IsolateParentValueContext(current, MapValueContext.newContext()));
         }
 
-        resourceContext.start(new ContextItem<>(renderResourceRequest.getResource()));
-        escapeEngineContext.start(environment.getEscapeEnvironment().getInitialEscapeEngine());
+        request.getRenderContext().start(ResourceReference.class, renderResourceRequest.getResource());
+        request.getRenderContext().start(EscapeEngine.class, environment.getEscapeEnvironment().getInitialEscapeEngine());
 
         Iterator<Map.Entry<String, Object>> iterator = renderResourceRequest.getIncludeModel().iterator();
-        ValueContext valueContextCurrent = valueContext.getCurrent();
+        ValueContext valueContextCurrent = request.getRenderContext().getCurrent(ValueContext.class);
 
         while (iterator.hasNext()) {
             Map.Entry<String, Object> item = iterator.next();
@@ -52,11 +46,12 @@ public class RenderResourceService {
         Renderable renderable = renderNodeService.render(request, node);
 
         if (renderResourceRequest.isNewBlockContext()) {
-            blockContext.end();
+            request.getRenderContext().end(BlockContext.class);
         }
-        resourceContext.end();
-        valueContext.end();
-        escapeEngineContext.end();
+
+        request.getRenderContext().end(ResourceReference.class);
+        request.getRenderContext().end(ValueContext.class);
+        request.getRenderContext().end(EscapeEngine.class);
 
         return renderable;
     }

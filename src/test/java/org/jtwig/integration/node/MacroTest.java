@@ -36,6 +36,16 @@ public class MacroTest extends AbstractIntegrationTest {
     }
 
     @Test
+    public void macroSelf() throws Exception {
+        String result = JtwigTemplate.classpathTemplate("example/macros/macro-self-example.twig", configuration()
+                .render().withStrictMode(true).and()
+                .build())
+                .render(JtwigModel.newModel());
+
+        assertThat(result.trim(), is("one\n1"));
+    }
+
+    @Test
     public void nestedMacro() throws Exception {
         String result = JtwigTemplate.classpathTemplate("example/macros/nested-macro-example.twig", configuration()
                 .render().withStrictMode(true).and()

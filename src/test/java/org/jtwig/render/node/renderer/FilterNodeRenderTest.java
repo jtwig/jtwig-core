@@ -43,7 +43,7 @@ public class FilterNodeRenderTest {
         when(injectableExpression.inject(argThat(theSame(new ConstantExpression(position, content))))).thenReturn(expression);
         when(request.getEnvironment().getRenderEnvironment().getCalculateExpressionService().calculate(request, expression)).thenReturn(value);
         when(request.getEnvironment().getValueEnvironment().getStringConverter().convert(value)).thenReturn(output);
-        when(request.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
+        when(request.getRenderContext().getCurrent(EscapeEngine.class)).thenReturn(escapeMode);
 
         Renderable result = underTest.render(request, filterNode);
 

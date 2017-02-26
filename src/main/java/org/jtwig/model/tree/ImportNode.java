@@ -21,5 +21,4 @@ public class ImportNode extends Node {
     public VariableExpression getAliasIdentifier() {
         return aliasIdentifier;
     }
-
 }

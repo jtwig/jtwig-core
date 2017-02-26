@@ -1,0 +1,7 @@
+{% import _self as this %}
+{% macro text (name) -%}
+{{ name }}
+{%- endmacro %}
+
+{% if (true) %}{{ this.text('one') }}{% endif %}
+{% for item in [1] %}{{ item }}{% endfor %}

@@ -1,6 +1,5 @@
 package org.jtwig.render.node.renderer;
 
-import org.jtwig.escape.EscapeEngine;
 import org.jtwig.model.tree.TextNode;
 import org.jtwig.render.RenderRequest;
 import org.jtwig.renderable.Renderable;
@@ -13,8 +12,7 @@ public class TextNodeRender implements NodeRender<TextNode> {
         TextNode.Configuration configuration = node.getConfiguration();
         text = configuration.isTrimLeft() ? trimLeft(text) : text;
         text = configuration.isTrimRight() ? trimRight(text) : text;
-        EscapeEngine escapeEngine = request.getRenderContext().getEscapeEngineContext().getCurrent();
-        return new StringRenderable(text, escapeEngine);
+        return new StringRenderable(text);
     }
 
     private String trimRight(String content) {

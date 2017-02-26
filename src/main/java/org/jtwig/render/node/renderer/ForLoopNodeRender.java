@@ -2,7 +2,6 @@ package org.jtwig.render.node.renderer;
 
 import org.jtwig.model.tree.ForLoopNode;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.context.StackedContext;
 import org.jtwig.render.expression.CalculateExpressionService;
 import org.jtwig.render.node.RenderNodeService;
 import org.jtwig.renderable.Renderable;
@@ -30,12 +29,11 @@ public class ForLoopNodeRender implements NodeRender<ForLoopNode> {
         Object collectionJtwigValue = calculateExpressionService.calculate(request, node.getExpression());
         WrappedCollection valueCollection = collectionConverter.convert(collectionJtwigValue).or(WrappedCollection.singleton(collectionJtwigValue));
         if (valueCollection == null) valueCollection = WrappedCollection.empty();
-        StackedContext<ValueContext> valueContext = request.getRenderContext().getValueContext();
 
-        ValueContext parentContext = valueContext.getCurrent();
+        ValueContext parentContext = request.getRenderContext().getCurrent(ValueContext.class);
         LoopCursor loopCursor = new LoopCursor(parentContext, valueCollection);
         StaticVariableValueContext newValueContext = new StaticVariableValueContext(parentContext, LOOP, loopCursor);
-        valueContext.start(newValueContext);
+        request.getRenderContext().start(ValueContext.class, newValueContext);
 
         Iterator<Map.Entry<String, Object>> iterator = valueCollection.iterator();
         Collection<Renderable> renderables = new ArrayList<>(valueCollection.size());
@@ -53,7 +51,7 @@ public class ForLoopNodeRender implements NodeRender<ForLoopNode> {
             loopCursor.step();
         }
 
-        valueContext.end();
+        request.getRenderContext().end(ValueContext.class);
         return new CompositeRenderable(renderables);
     }
 }

@@ -16,6 +16,6 @@ public class UncResourceReferenceExtractor implements ResourceReferenceExtractor
     }
 
     private boolean isAbsolute(String spec) {
-        return spec.length() > 1 && spec.charAt(1) == ':' && spec.charAt(2) == '\\';
+        return spec.length() > 2 && spec.charAt(1) == ':' && spec.charAt(2) == '\\';
     }
 }

@@ -1,6 +1,7 @@
 package org.jtwig.render.node;
 
 import com.google.common.base.Optional;
+import org.jtwig.escape.EscapeEngine;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
 import org.jtwig.render.node.renderer.NodeRender;
@@ -17,9 +18,9 @@ public class RenderNodeService {
     public Renderable render(RenderRequest request, Node node) {
         Optional<NodeRender> nodeRenderOptional = nodeRenderSelector.renderFor(node);
         if (nodeRenderOptional.isPresent()) {
-            request.getRenderContext().getEscapeEngineContext().start(request.getRenderContext().getEscapeEngineContext().getCurrent());
+            request.getRenderContext().start(EscapeEngine.class, request.getRenderContext().getCurrent(EscapeEngine.class));
             Renderable renderable = nodeRenderOptional.get().render(request, node);
-            request.getRenderContext().getEscapeEngineContext().end();
+            request.getRenderContext().end(EscapeEngine.class);
             return renderable;
         } else {
             throw new IllegalArgumentException(ErrorMessageFormatter.errorMessage(node.getPosition(), String.format("No render found for %s", node.getClass())));

@@ -24,10 +24,10 @@ public class VerbatimNodeRenderTest {
         VerbatimNode verbatimNode = mock(VerbatimNode.class);
 
         when(verbatimNode.getContent()).thenReturn(content);
-        when(request.getRenderContext().getEscapeEngineContext().getCurrent()).thenReturn(escapeMode);
+        when(request.getRenderContext().getCurrent(EscapeEngine.class)).thenReturn(escapeMode);
 
         Renderable result = underTest.render(request, verbatimNode);
 
-        assertThat(result, is(MatcherUtils.<Renderable>theSameBean(new StringRenderable(content, escapeMode))));
+        assertThat(result, is(MatcherUtils.<Renderable>theSameBean(new StringRenderable(content))));
     }
 }

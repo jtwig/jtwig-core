@@ -13,7 +13,7 @@ public class OutputNodeRender implements NodeRender<OutputNode> {
         CalculateExpressionService calculateExpressionService = request.getEnvironment().getRenderEnvironment().getCalculateExpressionService();
 
         Object calculate = calculateExpressionService.calculate(request, node.getExpression());
-        EscapeEngine escapeEngine = request.getRenderContext().getEscapeEngineContext().getCurrent();
+        EscapeEngine escapeEngine = request.getRenderContext().getCurrent(EscapeEngine.class);
         return new StringRenderable(getString(request, calculate), escapeEngine);
     }
 

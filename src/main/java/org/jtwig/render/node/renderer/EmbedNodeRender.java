@@ -25,7 +25,7 @@ public class EmbedNodeRender implements NodeRender<EmbedNode> {
         Environment environment = renderRequest.getEnvironment();
         CalculateExpressionService calculateExpressionService = environment.getRenderEnvironment().getCalculateExpressionService();
         Object path = calculateExpressionService.calculate(renderRequest, node.getResourceExpression());
-        ResourceReference current = renderRequest.getRenderContext().getResourceContext().getCurrent().getItem();
+        ResourceReference current = renderRequest.getRenderContext().getCurrent(ResourceReference.class);
         ResourceService resourceService = environment.getResourceEnvironment().getResourceService();
         ResourceReference newReference = resourceService.resolve(current, getString(renderRequest, path));
         ResourceMetadata resourceMetadata = resourceService.loadMetadata(newReference);
@@ -38,14 +38,14 @@ public class EmbedNodeRender implements NodeRender<EmbedNode> {
             Object mapValue = calculateExpressionService.calculate(renderRequest, node.getMapExpression());
             WrappedCollection includeModel = collectionConverter.convert(mapValue).or(WrappedCollection.empty());
 
-            renderRequest.getRenderContext().getBlockContext().start(BlockContext.newContext());
+            renderRequest.getRenderContext().start(BlockContext.class, BlockContext.newContext());
             for (Node subNode : node.getNodes()) {
                 renderNodeService.render(renderRequest, subNode);
             }
 
             Renderable renderable = renderResourceService.render(renderRequest, new RenderResourceRequest(newReference, false, !node.isInheritModel(), includeModel));
 
-            renderRequest.getRenderContext().getBlockContext().end();
+            renderRequest.getRenderContext().end(BlockContext.class);
             return renderable;
         } else {
             if (node.isIgnoreMissing()) {

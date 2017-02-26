@@ -14,7 +14,7 @@ public class SetNodeRender implements NodeRender<SetNode> {
 
         Object result = calculateExpressionService.calculate(request, node.getExpression());
 
-        ValueContext valueContext = request.getRenderContext().getValueContext().getCurrent();
+        ValueContext valueContext = request.getRenderContext().getCurrent(ValueContext.class);
         valueContext.with(node.getVariableExpression().getIdentifier(), result);
         return EmptyRenderable.instance();
     }

@@ -4,10 +4,9 @@ import org.jtwig.environment.*;
 import org.jtwig.escape.EscapeEngine;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.context.ContextItem;
+import org.jtwig.render.context.RenderContext;
 import org.jtwig.render.context.RenderContextHolder;
-import org.jtwig.render.context.StackedContext;
-import org.jtwig.render.context.model.*;
+import org.jtwig.render.context.model.BlockContext;
 import org.jtwig.renderable.RenderResult;
 import org.jtwig.renderable.StreamRenderResult;
 import org.jtwig.renderable.StringBuilderRenderResult;
@@ -81,15 +80,12 @@ public class JtwigTemplate {
     }
 
     private void render(JtwigModel model, RenderResult renderResult) {
-        StackedContext<ValueContext> valueContextContext = StackedContext.<ValueContext>context(new IsolateParentValueContext(new JtwigModelValueContext(model), MapValueContext.newContext()));
-        StackedContext<EscapeEngine> escapeEngineContext = StackedContext.context(environment.getEscapeEnvironment().getInitialEscapeEngine());
-        StackedContext<ContextItem<ResourceReference>> resourceContext = StackedContext.context(new ContextItem<>(resource));
-        StackedContext<BlockContext> blockContext = StackedContext.context(BlockContext.newContext());
-        StackedContext<MacroDefinitionContext> macroDefinitionContext = StackedContext.emptyContext();
-        StackedContext<MacroAliasesContext> macroContext = StackedContext.emptyContext();
-        StackedContext<PropertiesContext> propertiesContext = StackedContext.emptyContext();
-
-        RenderContext renderContext = new RenderContext(valueContextContext, escapeEngineContext, resourceContext, blockContext, macroDefinitionContext, macroContext, propertiesContext);
+        RenderContext renderContext = RenderContext.create()
+                .start(ValueContext.class, new IsolateParentValueContext(new JtwigModelValueContext(model), MapValueContext.newContext()))
+                .start(EscapeEngine.class, environment.getEscapeEnvironment().getInitialEscapeEngine())
+                .start(ResourceReference.class, resource)
+                .start(BlockContext.class, BlockContext.newContext())
+                ;
 
         EnvironmentHolder.set(environment);
         RenderContextHolder.set(renderContext);
@@ -98,5 +94,10 @@ public class JtwigTemplate {
         environment.getRenderEnvironment().getRenderNodeService()
                 .render(new RenderRequest(renderContext, environment), node)
                 .appendTo(renderResult);
+
+        renderContext.end(ValueContext.class);
+        renderContext.end(EscapeEngine.class);
+        renderContext.end(ResourceReference.class);
+        renderContext.end(BlockContext.class);
     }
 }

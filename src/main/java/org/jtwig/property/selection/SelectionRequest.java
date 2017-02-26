@@ -3,7 +3,7 @@ package org.jtwig.property.selection;
 import org.jtwig.environment.Environment;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.context.model.RenderContext;
+import org.jtwig.render.context.RenderContext;
 
 public class SelectionRequest extends RenderRequest {
     private final Expression leftExpression;

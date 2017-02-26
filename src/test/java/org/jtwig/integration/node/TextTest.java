@@ -40,7 +40,7 @@ public class TextTest extends AbstractIntegrationTest {
 
     @Test
     public void textWithEscapeJs() throws Exception {
-        String result = JtwigTemplate.inlineTemplate("'one time', \"Stop!\"", configuration()
+        String result = JtwigTemplate.inlineTemplate("{{ '\\'one time\\', \"Stop!\"' }}", configuration()
                 .escape().withInitialEngine("js").and().build())
                 .render(JtwigModel.newModel());
 
@@ -49,7 +49,7 @@ public class TextTest extends AbstractIntegrationTest {
 
     @Test
     public void textWithEscapeJavascript() throws Exception {
-        String result = JtwigTemplate.inlineTemplate("'one time', \"Stop!\"", configuration()
+        String result = JtwigTemplate.inlineTemplate("{{ '\\'one time\\', \"Stop!\"' }}", configuration()
                 .escape().withInitialEngine("js").and().build())
                 .render(JtwigModel.newModel());
 
@@ -58,7 +58,7 @@ public class TextTest extends AbstractIntegrationTest {
 
     @Test
     public void textWithEscapeHtml() throws Exception {
-        String result = JtwigTemplate.inlineTemplate("\"bread\" & \"butter\"", configuration()
+        String result = JtwigTemplate.inlineTemplate("{{ '\"bread\" & \"butter\"' }}", configuration()
                 .escape().withInitialEngine("html").and().build())
                 .render(JtwigModel.newModel());
 

@@ -1,38 +1,34 @@
 package org.jtwig.model.tree;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import org.jtwig.model.expression.VariableExpression;
 import org.jtwig.model.position.Position;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MacroNode extends Node {
+public class MacroNode extends ContentNode {
+    public static MacroNode create (Position position, VariableExpression macroName, List<VariableExpression> macroArgumentExpressions, Node content) {
+        List<String> macroArgumentNames = new ArrayList<>();
+        for (VariableExpression variableExpression : macroArgumentExpressions) {
+            macroArgumentNames.add(variableExpression.getIdentifier());
+        }
+        return new MacroNode(position, macroName, macroArgumentNames, content);
+    }
+
     private final VariableExpression macroName;
-    private final Collection<String> macroArgumentNames;
-    private final Node content;
+    private final List<String> macroArgumentNames;
 
-    public MacroNode(Position position, VariableExpression macroName, Collection<VariableExpression> macroArgumentNames, Node content) {
-        super(position);
+    public MacroNode(Position position, VariableExpression macroName, List<String> macroArgumentNames, Node content) {
+        super(position, content);
         this.macroName = macroName;
-        this.macroArgumentNames = Collections2.transform(macroArgumentNames, new Function<VariableExpression, String>() {
-            @Override
-            public String apply(VariableExpression input) {
-                return input.getIdentifier();
-            }
-        });
-        this.content = content;
+        this.macroArgumentNames = macroArgumentNames;
     }
 
     public VariableExpression getMacroName() {
         return macroName;
     }
 
-    public Collection<String> getMacroArgumentNames() {
+    public List<String> getMacroArgumentNames() {
         return macroArgumentNames;
-    }
-
-    public Node getContent() {
-        return content;
     }
 }

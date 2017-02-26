@@ -9,7 +9,7 @@ import org.jtwig.parser.parboiled.model.Keyword;
 import org.parboiled.Rule;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import static org.parboiled.Parboiled.createParser;
 
@@ -52,7 +52,7 @@ public class MacroNodeParser extends NodeParser<MacroNode> {
                         Mandatory(limitsParser.endCode(), "Code island not closed")
                 ), "Missing macroend tag"),
 
-                push(new MacroNode(
+                push(MacroNode.create(
                         positionTrackerParser.pop(3),
                         variableExpressionParser.pop(2),
                         parametersParser.pop(1),
@@ -62,7 +62,7 @@ public class MacroNodeParser extends NodeParser<MacroNode> {
         );
     }
 
-    public static class ParametersParser extends BasicParser<Collection<VariableExpression>> {
+    public static class ParametersParser extends BasicParser<List<VariableExpression>> {
         public ParametersParser(ParserContext context) {
             super(ParametersParser.class, context);
         }

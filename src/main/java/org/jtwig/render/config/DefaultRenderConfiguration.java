@@ -1,6 +1,7 @@
 package org.jtwig.render.config;
 
 import com.google.common.collect.ImmutableMap;
+import org.jtwig.macro.render.ImportRender;
 import org.jtwig.model.expression.*;
 import org.jtwig.model.expression.test.*;
 import org.jtwig.model.tree.*;
@@ -27,6 +28,7 @@ public class DefaultRenderConfiguration extends RenderConfiguration {
                 Charset.defaultCharset(),
                 ImmutableMap.<Class<? extends Node>, NodeRender>builder()
                         .put(AutoEscapeNode.class, new AutoEscapeNodeRender())
+                        .put(ContentEscapeNode.class, new ContentEscapeNodeRender())
                         .put(BlockNode.class, new BlockNodeRender())
                         .put(CompositeNode.class, new CompositeNodeRender())
                         .put(DoNode.class, new DoNodeRender())
@@ -35,8 +37,8 @@ public class DefaultRenderConfiguration extends RenderConfiguration {
                         .put(FlushNode.class, new FlushNodeRender())
                         .put(ForLoopNode.class, new ForLoopNodeRender())
                         .put(IfNode.class, new IfNodeRender())
-                        .put(ImportSelfNode.class, new ImportSelfNodeRender())
-                        .put(ImportNode.class, new ImportNodeRender())
+                        .put(ImportSelfNode.class, new ImportSelfNodeRender(ImportRender.instance()))
+                        .put(ImportNode.class, new ImportNodeRender(ImportRender.instance()))
                         .put(IncludeNode.class, new IncludeNodeRender())
                         .put(MacroNode.class, new MacroNodeRender())
                         .put(OutputNode.class, new OutputNodeRender())

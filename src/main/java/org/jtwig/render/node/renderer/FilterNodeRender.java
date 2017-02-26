@@ -24,7 +24,7 @@ public class FilterNodeRender implements NodeRender<FilterNode> {
         Expression injectedExpression = filterExpression.inject(expression);
 
         Object calculate = calculateExpressionService.calculate(renderRequest, injectedExpression);
-        return new StringRenderable(getString(renderRequest, calculate), renderRequest.getRenderContext().getEscapeEngineContext().getCurrent());
+        return new StringRenderable(getString(renderRequest, calculate));
     }
 
     private String getString(RenderRequest request, Object input) {

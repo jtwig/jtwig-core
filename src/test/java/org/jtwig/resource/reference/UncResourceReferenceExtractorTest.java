@@ -51,4 +51,32 @@ public class UncResourceReferenceExtractorTest {
         assertThat(result.getType(), is(ResourceReference.FILE));
         assertThat(result.getPath(), is("C:\\one\\test"));
     }
+
+    @Test
+    public void emptyString() throws Exception {
+        ResourceReference result = underTest.extract("");
+
+        assertThat(result.getPath(), is(""));
+    }
+
+    @Test
+    public void oneCharString() throws Exception {
+        ResourceReference result = underTest.extract("a");
+
+        assertThat(result.getPath(), is("a"));
+    }
+
+    @Test
+    public void twoCharsString() throws Exception {
+        ResourceReference result = underTest.extract("a:");
+
+        assertThat(result.getPath(), is(""));
+    }
+
+    @Test
+    public void twoCharsStringNoColon() throws Exception {
+        ResourceReference result = underTest.extract("aa");
+
+        assertThat(result.getPath(), is("aa"));
+    }
 }

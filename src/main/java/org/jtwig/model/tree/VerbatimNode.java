@@ -13,5 +13,4 @@ public class VerbatimNode extends Node {
     public String getContent() {
         return content;
     }
-
 }

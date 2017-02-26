@@ -2,6 +2,7 @@ package org.jtwig.model.tree;
 
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
+import org.jtwig.model.tree.visitor.NodeVisitor;
 
 import java.util.Collection;
 
@@ -15,6 +16,14 @@ public class IfNode extends Node {
 
     public Collection<IfConditionNode> getConditionNodes() {
         return conditionNodes;
+    }
+
+    @Override
+    public void visit(NodeVisitor nodeConsumer) {
+        super.visit(nodeConsumer);
+        for (IfConditionNode conditionNode : conditionNodes) {
+            conditionNode.visit(nodeConsumer);
+        }
     }
 
     public static class IfConditionNode extends ContentNode {

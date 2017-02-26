@@ -2,7 +2,6 @@ package org.jtwig;
 
 import org.apache.commons.io.FileUtils;
 import org.jtwig.environment.Environment;
-import org.jtwig.escape.EscapeEngine;
 import org.jtwig.escape.HtmlEscapeEngine;
 import org.jtwig.escape.NoneEscapeEngine;
 import org.jtwig.model.tree.Node;
@@ -50,13 +49,6 @@ public class JtwigTemplateTest {
         RenderRequest renderRequest = renderRequestArgumentCaptor.getValue();
 
         assertThat(renderRequest.getEnvironment(), is(environment));
-        assertThat(renderRequest.getRenderContext().getBlockContext().end().hasCurrent(), is(false));
-        assertThat(renderRequest.getRenderContext().getEscapeEngineContext().getCurrent(), is((EscapeEngine) HtmlEscapeEngine.instance()));
-        assertThat(renderRequest.getRenderContext().getEscapeEngineContext().end().hasCurrent(), is(false));
-        assertThat(renderRequest.getRenderContext().getMacroDefinitionContext().hasCurrent(), is(false));
-        assertThat(renderRequest.getRenderContext().getResourceContext().getCurrent().getItem(), is(resource));
-        assertThat(renderRequest.getRenderContext().getResourceContext().end().hasCurrent(), is(false));
-        assertThat(renderRequest.getRenderContext().getValueContext().end().hasCurrent(), is(false));
     }
 
 

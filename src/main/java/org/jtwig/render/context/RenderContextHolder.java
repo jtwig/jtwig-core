@@ -1,7 +1,5 @@
 package org.jtwig.render.context;
 
-import org.jtwig.render.context.model.RenderContext;
-
 public class RenderContextHolder {
     private static final ThreadLocal<RenderContext> current = new ThreadLocal<>();
 
