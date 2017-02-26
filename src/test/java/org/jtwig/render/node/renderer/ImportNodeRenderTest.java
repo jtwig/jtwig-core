@@ -1,12 +1,11 @@
 package org.jtwig.render.node.renderer;
 
 import org.jtwig.environment.Environment;
+import org.jtwig.macro.render.ImportRender;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.tree.ImportNode;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.RenderRequest;
-import org.jtwig.render.context.model.MacroAliasesContext;
-import org.jtwig.render.context.model.MacroDefinitionContext;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.renderable.impl.EmptyRenderable;
 import org.jtwig.resource.exceptions.ResourceNotFoundException;
@@ -18,12 +17,12 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.jtwig.support.MatcherUtils.theSame;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.*;
 
 public class ImportNodeRenderTest {
-    private ImportNodeRender underTest = new ImportNodeRender();
+    private final ImportRender importRender = mock(ImportRender.class);
+    private ImportNodeRender underTest = new ImportNodeRender(importRender);
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -63,15 +62,12 @@ public class ImportNodeRenderTest {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         ImportNode importNode = mock(ImportNode.class, RETURNS_DEEP_STUBS);
         Environment environment = mock(Environment.class, RETURNS_DEEP_STUBS);
-        MacroAliasesContext macroAliasesContext = mock(MacroAliasesContext.class);
         Expression expression = mock(Expression.class);
         ResourceReference resource = mock(ResourceReference.class);
         ResourceReference newResource = mock(ResourceReference.class);
         ResourceMetadata resourceMetadata = mock(ResourceMetadata.class);
         Node node = mock(Node.class);
 
-        when(request.getRenderContext().hasCurrent(MacroAliasesContext.class)).thenReturn(false);
-        when(request.getRenderContext().getCurrent(MacroAliasesContext.class)).thenReturn(macroAliasesContext);
         when(importNode.getAliasIdentifier().getIdentifier()).thenReturn(identifier);
         when(importNode.getImportExpression()).thenReturn(expression);
         when(request.getEnvironment()).thenReturn(environment);
@@ -88,10 +84,6 @@ public class ImportNodeRenderTest {
         Renderable result = underTest.render(request, importNode);
 
         assertSame(EmptyRenderable.instance(), result);
-        verify(request.getRenderContext()).start(eq(MacroAliasesContext.class), argThat(theSame(MacroAliasesContext.newContext())));
-        verify(environment.getRenderEnvironment().getRenderNodeService()).render(request, node);
-        verify(request.getRenderContext()).end(eq(MacroAliasesContext.class));
-        verifyZeroInteractions(macroAliasesContext);
     }
 
     @Test
@@ -101,7 +93,6 @@ public class ImportNodeRenderTest {
         RenderRequest request = mock(RenderRequest.class, RETURNS_DEEP_STUBS);
         ImportNode importNode = mock(ImportNode.class, RETURNS_DEEP_STUBS);
         Environment environment = mock(Environment.class, RETURNS_DEEP_STUBS);
-        MacroAliasesContext macroAliasesContext = mock(MacroAliasesContext.class);
         Expression expression = mock(Expression.class);
         ResourceReference resource = mock(ResourceReference.class);
         ResourceReference newResource = mock(ResourceReference.class);
@@ -109,8 +100,6 @@ public class ImportNodeRenderTest {
         Node node = mock(Node.class);
         String pathValue = "path";
 
-        when(request.getRenderContext().hasCurrent(MacroAliasesContext.class)).thenReturn(true);
-        when(request.getRenderContext().getCurrent(MacroAliasesContext.class)).thenReturn(macroAliasesContext);
         when(importNode.getAliasIdentifier().getIdentifier()).thenReturn(identifier);
         when(importNode.getImportExpression()).thenReturn(expression);
         when(request.getEnvironment()).thenReturn(environment);
@@ -128,7 +117,5 @@ public class ImportNodeRenderTest {
         Renderable result = underTest.render(request, importNode);
 
         assertSame(EmptyRenderable.instance(), result);
-        verify(environment.getRenderEnvironment().getRenderNodeService()).render(request, node);
-        verify(macroAliasesContext).with(eq(identifier), argThat(theSame(MacroDefinitionContext.newContext())));
     }
 }

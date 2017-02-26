@@ -94,5 +94,10 @@ public class JtwigTemplate {
         environment.getRenderEnvironment().getRenderNodeService()
                 .render(new RenderRequest(renderContext, environment), node)
                 .appendTo(renderResult);
+
+        renderContext.end(ValueContext.class);
+        renderContext.end(EscapeEngine.class);
+        renderContext.end(ResourceReference.class);
+        renderContext.end(BlockContext.class);
     }
 }

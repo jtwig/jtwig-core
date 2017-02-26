@@ -1,6 +1,7 @@
 package org.jtwig.render.config;
 
 import com.google.common.collect.ImmutableMap;
+import org.jtwig.macro.render.ImportRender;
 import org.jtwig.model.expression.*;
 import org.jtwig.model.expression.test.*;
 import org.jtwig.model.tree.*;
@@ -36,8 +37,8 @@ public class DefaultRenderConfiguration extends RenderConfiguration {
                         .put(FlushNode.class, new FlushNodeRender())
                         .put(ForLoopNode.class, new ForLoopNodeRender())
                         .put(IfNode.class, new IfNodeRender())
-                        .put(ImportSelfNode.class, new ImportSelfNodeRender())
-                        .put(ImportNode.class, new ImportNodeRender())
+                        .put(ImportSelfNode.class, new ImportSelfNodeRender(ImportRender.instance()))
+                        .put(ImportNode.class, new ImportNodeRender(ImportRender.instance()))
                         .put(IncludeNode.class, new IncludeNodeRender())
                         .put(MacroNode.class, new MacroNodeRender())
                         .put(OutputNode.class, new OutputNodeRender())

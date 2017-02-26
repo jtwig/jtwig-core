@@ -1,7 +1,7 @@
 package org.jtwig.property.configuration;
 
+import org.jtwig.macro.render.MacroRender;
 import org.jtwig.model.expression.Expression;
-import org.jtwig.property.macro.MacroRender;
 import org.jtwig.property.resolver.PropertyResolver;
 import org.jtwig.property.selection.cache.SelectionPropertyResolverPersistentCache;
 import org.jtwig.property.strategy.*;

@@ -44,7 +44,7 @@ public class ImportTest extends AbstractIntegrationTest {
         String result = JtwigTemplate.inlineTemplate("{% import 'memory:a' as a %}{{ a.example('hello') }}",
                 configuration()
                         .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
-                        .withResource("a", "{% import 'memory:b' as b %}{% macro example (input) %}{{ b.example(input) }}{% endmacro %}")
+                        .withResource("a", "{% macro example (input) %}{% import 'memory:b' as b %}{{ b.example(input) }}{% endmacro %}")
                         .withResource("b", "{% macro example (input) %}{{ input }}{% endmacro %}")
                         .build())).and().and()
                         .build())

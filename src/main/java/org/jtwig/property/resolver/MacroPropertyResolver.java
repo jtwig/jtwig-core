@@ -1,17 +1,17 @@
 package org.jtwig.property.resolver;
 
 import com.google.common.base.Optional;
-import org.jtwig.property.macro.MacroRender;
+import org.jtwig.macro.ImportedMacros;
+import org.jtwig.macro.Macro;
+import org.jtwig.macro.render.MacroRender;
 import org.jtwig.property.resolver.request.PropertyResolveRequest;
 import org.jtwig.reflection.model.Value;
-import org.jtwig.render.context.model.Macro;
-import org.jtwig.render.context.model.MacroDefinitionContext;
 
 public class MacroPropertyResolver implements PropertyResolver {
     private final MacroRender macroRender;
-    private final MacroDefinitionContext macro;
+    private final ImportedMacros macro;
 
-    public MacroPropertyResolver(MacroRender macroRender, MacroDefinitionContext macro) {
+    public MacroPropertyResolver(MacroRender macroRender, ImportedMacros macro) {
         this.macroRender = macroRender;
         this.macro = macro;
     }

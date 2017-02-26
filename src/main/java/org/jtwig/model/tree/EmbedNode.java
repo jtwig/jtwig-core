@@ -3,6 +3,7 @@ package org.jtwig.model.tree;
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.include.IncludeConfiguration;
+import org.jtwig.model.tree.visitor.NodeVisitor;
 
 import java.util.Collection;
 
@@ -32,5 +33,13 @@ public class EmbedNode extends Node {
 
     public boolean isIgnoreMissing() {
         return includeConfiguration.isIgnoreMissing();
+    }
+
+    @Override
+    public void visit(NodeVisitor nodeConsumer) {
+        super.visit(nodeConsumer);
+        for (OverrideBlockNode node : nodes) {
+            node.visit(nodeConsumer);
+        }
     }
 }

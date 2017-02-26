@@ -46,10 +46,7 @@ public class RenderContext {
     }
 
     public boolean hasCurrent (Class type) {
-        if (contexts.containsKey(type)) {
-            return !contexts.get(type).isEmpty();
-        }
-        return false;
+        return contexts.containsKey(type) && !contexts.get(type).isEmpty();
     }
 
     public void onEndCurrent (Class type, Runnable runnable) {

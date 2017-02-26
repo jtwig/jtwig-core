@@ -1,11 +1,11 @@
 package org.jtwig.property.strategy;
 
 import com.google.common.base.Optional;
+import org.jtwig.macro.ImportedMacros;
+import org.jtwig.macro.render.MacroRender;
 import org.jtwig.model.expression.FunctionExpression;
-import org.jtwig.property.macro.MacroRender;
 import org.jtwig.property.resolver.MacroPropertyResolver;
 import org.jtwig.property.resolver.PropertyResolver;
-import org.jtwig.render.context.model.MacroDefinitionContext;
 
 public class MacroPropertyResolverStrategy implements PropertyResolverStrategy {
     private final MacroRender macroRender;
@@ -16,10 +16,10 @@ public class MacroPropertyResolverStrategy implements PropertyResolverStrategy {
 
     @Override
     public Optional<PropertyResolver> select(Request request) {
-        if (request.getLeftValue() instanceof MacroDefinitionContext) {
+        if (request.getLeftValue() instanceof ImportedMacros) {
             if (request.getRightExpression() instanceof FunctionExpression) {
-                MacroDefinitionContext macroDefinitionContext = (MacroDefinitionContext) request.getLeftValue();
-                PropertyResolver propertyResolver = new MacroPropertyResolver(macroRender, macroDefinitionContext);
+                ImportedMacros importedMacros = (ImportedMacros) request.getLeftValue();
+                PropertyResolver propertyResolver = new MacroPropertyResolver(macroRender, importedMacros);
                 return Optional.of(propertyResolver);
             }
         }
