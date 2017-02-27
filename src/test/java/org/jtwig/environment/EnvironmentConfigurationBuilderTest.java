@@ -18,6 +18,9 @@ import org.jtwig.render.expression.calculator.operation.binary.calculators.Binar
 import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
 import org.jtwig.render.expression.calculator.operation.unary.calculators.UnaryOperationCalculator;
 import org.jtwig.render.expression.test.calculator.TestExpressionCalculator;
+import org.jtwig.render.listeners.RenderListener;
+import org.jtwig.render.listeners.RenderStage;
+import org.jtwig.render.listeners.StagedRenderListener;
 import org.jtwig.render.node.renderer.NodeRender;
 import org.jtwig.resource.loader.ResourceLoader;
 import org.jtwig.resource.loader.TypedResourceLoader;
@@ -138,6 +141,7 @@ public class EnvironmentConfigurationBuilderTest {
         UnaryOperationCalculator unaryOpCalc = mock(UnaryOperationCalculator.class);
         TestExpressionCalculator testCalc = mock(TestExpressionCalculator.class);
 
+        StagedRenderListener stagedRenderListener = new StagedRenderListener(RenderStage.POST_TEMPLATE_RENDER, mock(RenderListener.class));
         EnvironmentConfiguration result = EnvironmentConfigurationBuilder
                 .configuration()
                 .render()
@@ -152,6 +156,9 @@ public class EnvironmentConfigurationBuilderTest {
                 .add(CustomUnaryOperator.class, unaryOpCalc).and()
                 .testExpressionCalculators()
                 .add(CustomTestExpression.class, testCalc).and()
+                .renderListeners()
+                    .add(stagedRenderListener)
+                .and()
                 .and()
                 .build();
 
@@ -162,6 +169,7 @@ public class EnvironmentConfigurationBuilderTest {
         assertThat(result.getRenderConfiguration().getBinaryExpressionCalculators().get(CustomBinaryOperator.class), is(binOpCalc));
         assertThat(result.getRenderConfiguration().getUnaryExpressionCalculators().get(CustomUnaryOperator.class), is(unaryOpCalc));
         assertThat(result.getRenderConfiguration().getTestExpressionCalculators().get(CustomTestExpression.class), is(testCalc));
+        assertThat(result.getRenderConfiguration().getRenderListeners(), hasItem(stagedRenderListener));
     }
 
     public static class CustomNode extends Node {

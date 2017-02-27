@@ -4,6 +4,7 @@ import org.jtwig.environment.Environment;
 import org.jtwig.escape.EscapeEngine;
 import org.jtwig.model.tree.Node;
 import org.jtwig.render.context.model.BlockContext;
+import org.jtwig.render.listeners.RenderStage;
 import org.jtwig.render.node.RenderNodeService;
 import org.jtwig.renderable.Renderable;
 import org.jtwig.resource.reference.ResourceReference;
@@ -43,7 +44,11 @@ public class RenderResourceService {
             valueContextCurrent.with(item.getKey(), item.getValue());
         }
 
+        environment.getRenderEnvironment().getRenderListeners().trigger(RenderStage.PRE_RESOURCE_RENDER, request);
+
         Renderable renderable = renderNodeService.render(request, node);
+
+        environment.getRenderEnvironment().getRenderListeners().trigger(RenderStage.POST_RESOURCE_RENDER, request);
 
         if (renderResourceRequest.isNewBlockContext()) {
             request.getRenderContext().end(BlockContext.class);

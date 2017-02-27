@@ -5,6 +5,7 @@ import org.jtwig.render.expression.CalculateExpressionService;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperationService;
 import org.jtwig.render.expression.calculator.operation.unary.UnaryOperationService;
 import org.jtwig.render.expression.test.CalculateTestExpressionService;
+import org.jtwig.render.listeners.RenderListenerRegistry;
 import org.jtwig.render.node.RenderNodeService;
 
 import java.nio.charset.Charset;
@@ -18,8 +19,9 @@ public class RenderEnvironment {
     private final BinaryOperationService binaryOperationService;
     private final UnaryOperationService unaryOperationService;
     private final CalculateTestExpressionService calculateTestExpressionService;
+    private final RenderListenerRegistry renderListeners;
 
-    public RenderEnvironment(boolean strictMode, Charset defaultOutputCharset, RenderResourceService renderResourceService, RenderNodeService renderNodeService, CalculateExpressionService calculateExpressionService, BinaryOperationService binaryOperationService, UnaryOperationService unaryOperationService, CalculateTestExpressionService calculateTestExpressionService) {
+    public RenderEnvironment(boolean strictMode, Charset defaultOutputCharset, RenderResourceService renderResourceService, RenderNodeService renderNodeService, CalculateExpressionService calculateExpressionService, BinaryOperationService binaryOperationService, UnaryOperationService unaryOperationService, CalculateTestExpressionService calculateTestExpressionService, RenderListenerRegistry renderListeners) {
         this.strictMode = strictMode;
         this.defaultOutputCharset = defaultOutputCharset;
         this.renderResourceService = renderResourceService;
@@ -28,6 +30,7 @@ public class RenderEnvironment {
         this.binaryOperationService = binaryOperationService;
         this.unaryOperationService = unaryOperationService;
         this.calculateTestExpressionService = calculateTestExpressionService;
+        this.renderListeners = renderListeners;
     }
 
     public boolean getStrictMode() {
@@ -60,5 +63,9 @@ public class RenderEnvironment {
 
     public CalculateTestExpressionService getCalculateTestExpressionService() {
         return calculateTestExpressionService;
+    }
+
+    public RenderListenerRegistry getRenderListeners() {
+        return renderListeners;
     }
 }
