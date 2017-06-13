@@ -12,6 +12,10 @@ public class MapPropertyResolver implements PropertyResolver {
         if (request.getContext() == null) return Optional.absent();
         if (!(request.getContext() instanceof Map)) return Optional.absent();
 
-        return Optional.of(new Value(((Map) request.getContext()).get(request.getPropertyName().get())));
+        if(((Map) request.getContext()).containsKey(request.getPropertyName().get())){
+            return Optional.of(new Value(((Map) request.getContext()).get(request.getPropertyName().get())));
+        }else{
+            return Optional.absent();
+        }
     }
 }
