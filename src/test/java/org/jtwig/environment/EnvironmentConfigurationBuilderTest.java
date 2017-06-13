@@ -9,7 +9,9 @@ import org.jtwig.model.position.Position;
 import org.jtwig.model.tree.Node;
 import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.config.JtwigParserConfiguration;
+import org.jtwig.property.resolver.PropertyResolver;
 import org.jtwig.property.selection.cache.SelectionPropertyResolverCache;
+import org.jtwig.property.selection.cache.SelectionPropertyResolverPersistentCache;
 import org.jtwig.property.strategy.PropertyResolverStrategy;
 import org.jtwig.render.expression.calculator.ExpressionCalculator;
 import org.jtwig.render.expression.calculator.enumerated.EnumerationListStrategy;
@@ -18,6 +20,9 @@ import org.jtwig.render.expression.calculator.operation.binary.calculators.Binar
 import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
 import org.jtwig.render.expression.calculator.operation.unary.calculators.UnaryOperationCalculator;
 import org.jtwig.render.expression.test.calculator.TestExpressionCalculator;
+import org.jtwig.render.listeners.RenderListener;
+import org.jtwig.render.listeners.RenderStage;
+import org.jtwig.render.listeners.StagedRenderListener;
 import org.jtwig.render.node.renderer.NodeRender;
 import org.jtwig.resource.loader.ResourceLoader;
 import org.jtwig.resource.loader.TypedResourceLoader;
@@ -33,7 +38,9 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.nio.charset.Charset;
+import java.util.concurrent.ConcurrentHashMap;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.jtwig.support.MatcherUtils.theSameBean;
@@ -138,6 +145,7 @@ public class EnvironmentConfigurationBuilderTest {
         UnaryOperationCalculator unaryOpCalc = mock(UnaryOperationCalculator.class);
         TestExpressionCalculator testCalc = mock(TestExpressionCalculator.class);
 
+        StagedRenderListener stagedRenderListener = new StagedRenderListener(RenderStage.POST_TEMPLATE_RENDER, mock(RenderListener.class));
         EnvironmentConfiguration result = EnvironmentConfigurationBuilder
                 .configuration()
                 .render()
@@ -152,6 +160,9 @@ public class EnvironmentConfigurationBuilderTest {
                 .add(CustomUnaryOperator.class, unaryOpCalc).and()
                 .testExpressionCalculators()
                 .add(CustomTestExpression.class, testCalc).and()
+                .renderListeners()
+                    .add(stagedRenderListener)
+                .and()
                 .and()
                 .build();
 
@@ -162,46 +173,7 @@ public class EnvironmentConfigurationBuilderTest {
         assertThat(result.getRenderConfiguration().getBinaryExpressionCalculators().get(CustomBinaryOperator.class), is(binOpCalc));
         assertThat(result.getRenderConfiguration().getUnaryExpressionCalculators().get(CustomUnaryOperator.class), is(unaryOpCalc));
         assertThat(result.getRenderConfiguration().getTestExpressionCalculators().get(CustomTestExpression.class), is(testCalc));
-    }
-
-    public static class CustomNode extends Node {
-        protected CustomNode(Position position) {
-            super(position);
-        }
-    }
-
-    public static class CustomExpression extends Expression {
-        protected CustomExpression(Position position) {
-            super(position);
-        }
-    }
-
-    public static class CustomTestExpression extends TestExpression {
-
-    }
-
-    public static class CustomUnaryOperator implements UnaryOperator {
-        @Override
-        public int precedence() {
-            return 0;
-        }
-
-        @Override
-        public String symbol() {
-            return null;
-        }
-    }
-
-    public static class CustomBinaryOperator implements BinaryOperator {
-        @Override
-        public String symbol() {
-            return null;
-        }
-
-        @Override
-        public int precedence() {
-            return 0;
-        }
+        assertThat(result.getRenderConfiguration().getRenderListeners(), hasItem(stagedRenderListener));
     }
 
     @Test
@@ -333,11 +305,15 @@ public class EnvironmentConfigurationBuilderTest {
         assertSame(configuration.getParameters().get(parameter2), value2);
     }
 
-    public static class CustomExtension implements Extension {
-        @Override
-        public void configure(EnvironmentConfigurationBuilder configurationBuilder) {
+    @Test
+    public void configPropertyCache() {
+        EnvironmentConfiguration config = EnvironmentConfigurationBuilder.configuration()
+                .propertyResolver()
+                .withCache(new SelectionPropertyResolverPersistentCache(new ConcurrentHashMap<Expression, PropertyResolver>()))
+                .and()
+                .build();
 
-        }
+        assertThat(config.getPropertyResolverConfiguration().getCache(), instanceOf(SelectionPropertyResolverPersistentCache.class));
     }
 
     private UnaryOperator customUnaryOperator() {
@@ -350,5 +326,52 @@ public class EnvironmentConfigurationBuilderTest {
 
     private AddonParserProvider customAddonParser() {
         return addonParserProvider;
+    }
+
+    public static class CustomNode extends Node {
+        protected CustomNode(Position position) {
+            super(position);
+        }
+    }
+
+    public static class CustomExpression extends Expression {
+        protected CustomExpression(Position position) {
+            super(position);
+        }
+    }
+
+    public static class CustomTestExpression extends TestExpression {
+
+    }
+
+    public static class CustomUnaryOperator implements UnaryOperator {
+        @Override
+        public int precedence() {
+            return 0;
+        }
+
+        @Override
+        public String symbol() {
+            return null;
+        }
+    }
+
+    public static class CustomBinaryOperator implements BinaryOperator {
+        @Override
+        public String symbol() {
+            return null;
+        }
+
+        @Override
+        public int precedence() {
+            return 0;
+        }
+    }
+
+    public static class CustomExtension implements Extension {
+        @Override
+        public void configure(EnvironmentConfigurationBuilder configurationBuilder) {
+
+        }
     }
 }

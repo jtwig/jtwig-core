@@ -7,6 +7,7 @@ import org.jtwig.render.RenderRequest;
 import org.jtwig.render.context.RenderContext;
 import org.jtwig.render.context.RenderContextHolder;
 import org.jtwig.render.context.model.BlockContext;
+import org.jtwig.render.listeners.RenderStage;
 import org.jtwig.renderable.RenderResult;
 import org.jtwig.renderable.StreamRenderResult;
 import org.jtwig.renderable.StringBuilderRenderResult;
@@ -90,10 +91,17 @@ public class JtwigTemplate {
         EnvironmentHolder.set(environment);
         RenderContextHolder.set(renderContext);
 
+        RenderRequest renderRequest = new RenderRequest(renderContext, environment);
+        environment.getRenderEnvironment().getRenderListeners().trigger(RenderStage.PRE_TEMPLATE_RENDER, renderRequest);
+        environment.getRenderEnvironment().getRenderListeners().trigger(RenderStage.PRE_RESOURCE_RENDER, renderRequest);
+
         Node node = environment.getParser().parse(environment, resource);
         environment.getRenderEnvironment().getRenderNodeService()
-                .render(new RenderRequest(renderContext, environment), node)
+                .render(renderRequest, node)
                 .appendTo(renderResult);
+
+        environment.getRenderEnvironment().getRenderListeners().trigger(RenderStage.POST_RESOURCE_RENDER, renderRequest);
+        environment.getRenderEnvironment().getRenderListeners().trigger(RenderStage.POST_TEMPLATE_RENDER, renderRequest);
 
         renderContext.end(ValueContext.class);
         renderContext.end(EscapeEngine.class);

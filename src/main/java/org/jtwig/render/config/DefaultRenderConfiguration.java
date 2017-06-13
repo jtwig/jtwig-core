@@ -18,9 +18,11 @@ import org.jtwig.render.expression.calculator.operation.unary.calculators.UnaryO
 import org.jtwig.render.expression.calculator.operation.unary.impl.NegativeUnaryOperator;
 import org.jtwig.render.expression.calculator.operation.unary.impl.NotUnaryOperator;
 import org.jtwig.render.expression.test.calculator.*;
+import org.jtwig.render.listeners.StagedRenderListener;
 import org.jtwig.render.node.renderer.*;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 public class DefaultRenderConfiguration extends RenderConfiguration {
     public DefaultRenderConfiguration() {
@@ -102,8 +104,8 @@ public class DefaultRenderConfiguration extends RenderConfiguration {
                         .put(NullTestExpression.class, new NullTestExpressionCalculator())
                         .put(SameAsTestExpression.class, new SameAsTestExpressionCalculator())
                         .put(FunctionTestExpression.class, new FunctionTestExpressionCalculator())
-                        .build()
-        );
+                        .build(),
+                new ArrayList<StagedRenderListener>());
     }
 
 

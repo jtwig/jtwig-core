@@ -10,7 +10,9 @@ import org.jtwig.render.expression.calculator.operation.binary.calculators.Binar
 import org.jtwig.render.expression.calculator.operation.unary.UnaryOperator;
 import org.jtwig.render.expression.calculator.operation.unary.calculators.UnaryOperationCalculator;
 import org.jtwig.render.expression.test.calculator.TestExpressionCalculator;
+import org.jtwig.render.listeners.StagedRenderListener;
 import org.jtwig.render.node.renderer.NodeRender;
+import org.jtwig.util.builder.ListBuilder;
 import org.jtwig.util.builder.MapBuilder;
 
 import java.nio.charset.Charset;
@@ -23,6 +25,7 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
     private final MapBuilder<B, Class<? extends BinaryOperator>, BinaryOperationCalculator> binaryExpressionCalculators;
     private final MapBuilder<B, Class<? extends UnaryOperator>, UnaryOperationCalculator> unaryExpressionCalculators;
     private final MapBuilder<B, Class<? extends TestExpression>, TestExpressionCalculator> testExpressionCalculators;
+    private final ListBuilder<B, StagedRenderListener> renderListeners;
 
     public RenderConfigurationBuilder() {
         nodeRenders = new MapBuilder<>(self());
@@ -30,6 +33,7 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
         this.binaryExpressionCalculators = new MapBuilder<>(self());
         this.unaryExpressionCalculators = new MapBuilder<>(self());
         this.testExpressionCalculators = new MapBuilder<>(self());
+        this.renderListeners = new ListBuilder<B, StagedRenderListener>(self());
     }
     public RenderConfigurationBuilder(RenderConfiguration prototype) {
         this.strictMode = prototype.getStrictMode();
@@ -39,6 +43,7 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
         this.binaryExpressionCalculators = new MapBuilder<>(self(), prototype.getBinaryExpressionCalculators());
         this.unaryExpressionCalculators = new MapBuilder<>(self(), prototype.getUnaryExpressionCalculators());
         this.testExpressionCalculators = new MapBuilder<>(self(), prototype.getTestExpressionCalculators());
+        this.renderListeners = new ListBuilder<>(self(), prototype.getRenderListeners());
     }
 
     public B withStrictMode(boolean strictMode) {
@@ -71,6 +76,10 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
         return testExpressionCalculators;
     }
 
+    public ListBuilder<B, StagedRenderListener> renderListeners() {
+        return renderListeners;
+    }
+
     protected B self () {
         return (B) this;
     }
@@ -82,6 +91,6 @@ public class RenderConfigurationBuilder<B extends RenderConfigurationBuilder> im
                 expressionCalculators.build(),
                 binaryExpressionCalculators.build(),
                 unaryExpressionCalculators.build(),
-                testExpressionCalculators.build());
+                testExpressionCalculators.build(), renderListeners.build());
     }
 }
