@@ -4,6 +4,7 @@ import org.jtwig.functions.JtwigFunction;
 import org.jtwig.functions.impl.control.EscapeFunction;
 import org.jtwig.functions.impl.control.RawFunction;
 import org.jtwig.functions.impl.date.DateFormatFunction;
+import org.jtwig.functions.impl.java.ClassFunction;
 import org.jtwig.functions.impl.java.ConstantFunction;
 import org.jtwig.functions.impl.list.*;
 import org.jtwig.functions.impl.logical.*;
@@ -56,6 +57,8 @@ public class DefaultJtwigFunctionList extends ArrayList<JtwigFunction> {
 
                 // Mixed
                 new ConstantFunction(new ClasspathFinder(ConstantFunction.class.getClassLoader(), JavaClassManager.classManager())),
+                new ClassFunction(),
+
                 new UrlEncodeFunction(),
                 new FirstFunction(),
                 new LastFunction(),
