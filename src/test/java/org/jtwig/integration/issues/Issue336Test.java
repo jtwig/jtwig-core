@@ -34,7 +34,7 @@ public class Issue336Test {
         String result2 = template.render(JtwigModel.newModel().with("value", new SubModelB()));
 
         assertThat(result1, is("A"));
-        assertThat(result2, is(""));
+        assertThat(result2, is("B"));
     }
 
     public abstract class AbstractModel {
