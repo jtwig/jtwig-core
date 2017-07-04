@@ -6,6 +6,7 @@ import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.EnvironmentConfiguration;
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
 import org.jtwig.property.resolver.PropertyResolver;
+import org.jtwig.property.selection.cache.SelectionPropertyResolverCacheKey;
 import org.jtwig.property.selection.cache.SelectionPropertyResolverPersistentCache;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class PolymorphicVariableTest {
 
 	@Before
 	public void setupConfiguration() {
-		final ConcurrentHashMap<Object, PropertyResolver> resolverHashMap = new ConcurrentHashMap<>();
+		final ConcurrentHashMap<SelectionPropertyResolverCacheKey, PropertyResolver> resolverHashMap = new ConcurrentHashMap<>();
 		final SelectionPropertyResolverPersistentCache resolverCache = new SelectionPropertyResolverPersistentCache(resolverHashMap);
 
 		configuration = EnvironmentConfigurationBuilder.configuration()
