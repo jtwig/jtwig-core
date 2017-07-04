@@ -14,12 +14,12 @@ public class NoSelectionPropertyResolverCache implements SelectionPropertyResolv
     private NoSelectionPropertyResolverCache () {}
 
     @Override
-    public Optional<PropertyResolver> getCachedResolver(Expression expression) {
+    public Optional<PropertyResolver> getCachedResolver(int leftValueClassHashcode, Expression expression) {
         return Optional.absent();
     }
 
     @Override
-    public void cacheResolver(Expression expression, PropertyResolver propertyResolver) {
+    public void cacheResolver(int leftValueClassHashcode, Expression expression, PropertyResolver propertyResolver) {
 
     }
 }
