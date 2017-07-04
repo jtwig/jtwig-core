@@ -4,6 +4,7 @@ import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
 import org.jtwig.property.resolver.PropertyResolver;
+import org.jtwig.property.selection.cache.SelectionPropertyResolverCacheKey;
 import org.jtwig.property.selection.cache.SelectionPropertyResolverPersistentCache;
 import org.junit.Test;
 
@@ -27,7 +28,7 @@ public class Issue336Test {
     @Test
     public void cachingPropertyResolutionWithCache() {
         JtwigTemplate template = JtwigTemplate.inlineTemplate("{{ value.key }}", EnvironmentConfigurationBuilder.configuration()
-                .propertyResolver().withCache(new SelectionPropertyResolverPersistentCache(new ConcurrentHashMap<Object, PropertyResolver>())).and()
+                .propertyResolver().withCache(new SelectionPropertyResolverPersistentCache(new ConcurrentHashMap<SelectionPropertyResolverCacheKey, PropertyResolver>())).and()
                 .build());
 
         String result1 = template.render(JtwigModel.newModel().with("value", new SubModelA()));

@@ -11,6 +11,7 @@ import org.jtwig.parser.addon.AddonParserProvider;
 import org.jtwig.parser.config.JtwigParserConfiguration;
 import org.jtwig.property.resolver.PropertyResolver;
 import org.jtwig.property.selection.cache.SelectionPropertyResolverCache;
+import org.jtwig.property.selection.cache.SelectionPropertyResolverCacheKey;
 import org.jtwig.property.selection.cache.SelectionPropertyResolverPersistentCache;
 import org.jtwig.property.strategy.PropertyResolverStrategy;
 import org.jtwig.render.expression.calculator.ExpressionCalculator;
@@ -309,7 +310,7 @@ public class EnvironmentConfigurationBuilderTest {
     public void configPropertyCache() {
         EnvironmentConfiguration config = EnvironmentConfigurationBuilder.configuration()
                 .propertyResolver()
-                .withCache(new SelectionPropertyResolverPersistentCache(new ConcurrentHashMap<Object, PropertyResolver>()))
+                .withCache(new SelectionPropertyResolverPersistentCache(new ConcurrentHashMap<SelectionPropertyResolverCacheKey, PropertyResolver>()))
                 .and()
                 .build();
 
