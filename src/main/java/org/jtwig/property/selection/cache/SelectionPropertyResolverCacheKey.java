@@ -16,16 +16,11 @@ public class SelectionPropertyResolverCacheKey {
     }
 
     public static SelectionPropertyResolverCacheKey createFor(Class<?> leftValueClass, Expression expression) {
-        return new SelectionPropertyResolverCacheKey(leftValueClass.hashCode(), expression);
+        return SelectionPropertyResolverCacheKey.createFor(leftValueClass == null ? 0 : leftValueClass.hashCode(), expression);
     }
 
     public static SelectionPropertyResolverCacheKey createFor(Object leftValue, Expression expression) {
-        if (leftValue == null) {
-            return SelectionPropertyResolverCacheKey.createFor(0, expression);
-        }
-        else {
-            return SelectionPropertyResolverCacheKey.createFor(leftValue.getClass(), expression);
-        }
+        return SelectionPropertyResolverCacheKey.createFor(leftValue == null ? null : leftValue.getClass(), expression);
     }
 
     @Override
