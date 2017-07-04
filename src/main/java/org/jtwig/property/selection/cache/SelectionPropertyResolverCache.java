@@ -5,6 +5,6 @@ import org.jtwig.model.expression.Expression;
 import org.jtwig.property.resolver.PropertyResolver;
 
 public interface SelectionPropertyResolverCache {
-    Optional<PropertyResolver> getCachedResolver (Expression expression);
-    void cacheResolver (Expression expression, PropertyResolver propertyResolver);
+    Optional<PropertyResolver> getCachedResolver(int leftValueClassHashcode, Expression expression);
+    void cacheResolver(int leftValueClassHashcode, Expression expression, PropertyResolver propertyResolver);
 }

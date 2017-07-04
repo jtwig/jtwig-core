@@ -309,7 +309,7 @@ public class EnvironmentConfigurationBuilderTest {
     public void configPropertyCache() {
         EnvironmentConfiguration config = EnvironmentConfigurationBuilder.configuration()
                 .propertyResolver()
-                .withCache(new SelectionPropertyResolverPersistentCache(new ConcurrentHashMap<Expression, PropertyResolver>()))
+                .withCache(new SelectionPropertyResolverPersistentCache(new ConcurrentHashMap<Object, PropertyResolver>()))
                 .and()
                 .build();
 

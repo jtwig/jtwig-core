@@ -17,15 +17,19 @@ public class CachedSelectionPropertyResolver implements SelectionPropertyResolve
 
     @Override
     public SelectionResult resolve(SelectionRequest request) {
-        Optional<PropertyResolver> result = selectionPropertyResolverCache.getCachedResolver(request.getRightExpression());
+        Object leftValue = request.getEnvironment().getRenderEnvironment().getCalculateExpressionService()
+                .calculate(request, request.getLeftExpression());
+
+        int leftValueClassHashcode = leftValue == null ? 0 : leftValue.getClass().hashCode();
+
+        Optional<PropertyResolver> result = selectionPropertyResolverCache.getCachedResolver(leftValueClassHashcode, request.getRightExpression());
         if (result.isPresent()) {
             PropertyResolver propertyResolver = result.get();
-            Object leftValue = request.getEnvironment().getRenderEnvironment().getCalculateExpressionService().calculate(request, request.getLeftExpression());
             return selectionPropertyResolveService.resolve(propertyResolver, request, leftValue);
         } else {
             SelectionResult cacheMissResult = delegate.resolve(request);
             if (cacheMissResult.getPropertyResolver().isPresent()) {
-                selectionPropertyResolverCache.cacheResolver(request.getRightExpression(), cacheMissResult.getPropertyResolver().get());
+                selectionPropertyResolverCache.cacheResolver(leftValueClassHashcode, request.getRightExpression(), cacheMissResult.getPropertyResolver().get());
             }
             return cacheMissResult;
         }
