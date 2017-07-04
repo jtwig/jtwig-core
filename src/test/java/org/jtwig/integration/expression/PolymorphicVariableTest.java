@@ -19,49 +19,49 @@ import static org.hamcrest.core.Is.is;
 
 public class PolymorphicVariableTest {
 
-	private List<ParentClass> list;
-	private EnvironmentConfiguration configuration;
+    private List<ParentClass> list;
+    private EnvironmentConfiguration configuration;
 
-	private abstract class ParentClass {
-		public abstract String getType();
-	}
+    private abstract class ParentClass {
+        public abstract String getType();
+    }
 
-	private class ConcreteClassA extends ParentClass {
-		public String getType() {
-			return "A";
-		}
-	}
+    private class ConcreteClassA extends ParentClass {
+        public String getType() {
+            return "A";
+        }
+    }
 
-	private class ConcreteClassB extends ParentClass {
-		public String getType() {
-			return "B";
-		}
-	}
+    private class ConcreteClassB extends ParentClass {
+        public String getType() {
+            return "B";
+        }
+    }
 
-	@Before
-	public void setupTestInstances() {
-		list = ImmutableList.of(
-				new ConcreteClassA(),
-				new ConcreteClassB(),
-				new ConcreteClassA()
-		);
-	}
+    @Before
+    public void setupTestInstances() {
+        list = ImmutableList.of(
+                new ConcreteClassA(),
+                new ConcreteClassB(),
+                new ConcreteClassA()
+        );
+    }
 
-	@Before
-	public void setupConfiguration() {
-		final ConcurrentHashMap<SelectionPropertyResolverCacheKey, PropertyResolver> resolverHashMap = new ConcurrentHashMap<>();
-		final SelectionPropertyResolverPersistentCache resolverCache = new SelectionPropertyResolverPersistentCache(resolverHashMap);
+    @Before
+    public void setupConfiguration() {
+        final ConcurrentHashMap<SelectionPropertyResolverCacheKey, PropertyResolver> resolverHashMap = new ConcurrentHashMap<>();
+        final SelectionPropertyResolverPersistentCache resolverCache = new SelectionPropertyResolverPersistentCache(resolverHashMap);
 
-		configuration = EnvironmentConfigurationBuilder.configuration()
-				.propertyResolver().withCache(resolverCache).and()
-				.build();
-	}
+        configuration = EnvironmentConfigurationBuilder.configuration()
+                .propertyResolver().withCache(resolverCache).and()
+                .build();
+    }
 
-	@Test
-	public void testPolymorphicVariableIsAcceessibleInPresenceOfPersistantResolverCache() {
-		String result = JtwigTemplate.inlineTemplate("{% for item in list %}{{ item.type }}{% endfor %}", configuration)
-				.render(JtwigModel.newModel().with("list", list));
+    @Test
+    public void testPolymorphicVariableIsAcceessibleInPresenceOfPersistantResolverCache() {
+        String result = JtwigTemplate.inlineTemplate("{% for item in list %}{{ item.type }}{% endfor %}", configuration)
+                .render(JtwigModel.newModel().with("list", list));
 
-		assertThat(result, is("ABA"));
-	}
+        assertThat(result, is("ABA"));
+    }
 }
