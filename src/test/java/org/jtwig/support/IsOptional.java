@@ -1,4 +1,4 @@
-package org.jtwig.matchers;
+package org.jtwig.support;
 
 import com.google.common.base.Objects;
 import org.hamcrest.Description;
