@@ -1,4 +1,4 @@
-package cache;
+package org.jtwig.cache;
 
 import org.jtwig.model.expression.Expression;
 import org.jtwig.model.expression.VariableExpression;
@@ -14,8 +14,8 @@ import org.junit.Test;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.jtwig.matchers.IsOptional.isAbsent;
-import static org.jtwig.matchers.IsOptional.isValue;
+import static org.jtwig.support.IsOptional.isAbsent;
+import static org.jtwig.support.IsOptional.isValue;
 
 public class SelectionPropertyResolverPersistentCacheTest {
 
