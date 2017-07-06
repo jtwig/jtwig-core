@@ -29,9 +29,37 @@ public class SelectionPropertyResolverCacheKeyTest {
     }
 
     @Test
+    public void hashCodeIsEqualForKeyCreatedForInt() {
+        SelectionPropertyResolverCacheKey cacheKeyA = SelectionPropertyResolverCacheKey.createFor(42, expression);
+        SelectionPropertyResolverCacheKey cacheKeyB = SelectionPropertyResolverCacheKey.createFor(42, expression);
+        assertThat(cacheKeyA.hashCode(), is(cacheKeyB.hashCode()));
+    }
+
+    @Test
+    public void equalsForKeyCreatedForInt() {
+        SelectionPropertyResolverCacheKey cacheKeyA = SelectionPropertyResolverCacheKey.createFor(42, expression);
+        SelectionPropertyResolverCacheKey cacheKeyB = SelectionPropertyResolverCacheKey.createFor(42, expression);
+        assertThat(cacheKeyA.equals(cacheKeyB), is(true));
+    }
+
+    @Test
     public void createForClass() {
         SelectionPropertyResolverCacheKey cacheKey = SelectionPropertyResolverCacheKey.createFor(SomeClass.class, expression);
         assertThat(cacheKey.hashCode(), not(is(0)));
+    }
+
+    @Test
+    public void hashCodeIsEqualForKeyCreatedForClass() {
+        SelectionPropertyResolverCacheKey cacheKeyA = SelectionPropertyResolverCacheKey.createFor(SomeClass.class, expression);
+        SelectionPropertyResolverCacheKey cacheKeyB = SelectionPropertyResolverCacheKey.createFor(SomeClass.class, expression);
+        assertThat(cacheKeyA.hashCode(), is(cacheKeyB.hashCode()));
+    }
+
+    @Test
+    public void equalsForKeyCreatedForClass() {
+        SelectionPropertyResolverCacheKey cacheKeyA = SelectionPropertyResolverCacheKey.createFor(SomeClass.class, expression);
+        SelectionPropertyResolverCacheKey cacheKeyB = SelectionPropertyResolverCacheKey.createFor(SomeClass.class, expression);
+        assertThat(cacheKeyA.equals(cacheKeyB), is(true));
     }
 
     @Test
@@ -41,15 +69,57 @@ public class SelectionPropertyResolverCacheKeyTest {
     }
 
     @Test
+    public void hashCodeIsEqualForKeyCreatedForObject() {
+        SelectionPropertyResolverCacheKey cacheKeyA = SelectionPropertyResolverCacheKey.createFor(new SomeClass(), expression);
+        SelectionPropertyResolverCacheKey cacheKeyB = SelectionPropertyResolverCacheKey.createFor(new SomeClass(), expression);
+        assertThat(cacheKeyA.hashCode(), is(cacheKeyB.hashCode()));
+    }
+
+    @Test
+    public void equalsForKeyCreatedForObject() {
+        SelectionPropertyResolverCacheKey cacheKeyA = SelectionPropertyResolverCacheKey.createFor(new SomeClass(), expression);
+        SelectionPropertyResolverCacheKey cacheKeyB = SelectionPropertyResolverCacheKey.createFor(new SomeClass(), expression);
+        assertThat(cacheKeyA.equals(cacheKeyB), is(true));
+    }
+
+    @Test
     public void createForNullObject() {
         SelectionPropertyResolverCacheKey cacheKey = SelectionPropertyResolverCacheKey.createFor((Object) null, expression);
         assertThat(cacheKey.hashCode(), not(is(0)));
     }
 
     @Test
+    public void hashCodeIsEqualForKeyCreatedForNullObject() {
+        SelectionPropertyResolverCacheKey cacheKeyA = SelectionPropertyResolverCacheKey.createFor((Object) null, expression);
+        SelectionPropertyResolverCacheKey cacheKeyB = SelectionPropertyResolverCacheKey.createFor((Object) null, expression);
+        assertThat(cacheKeyA.hashCode(), is(cacheKeyB.hashCode()));
+    }
+
+    @Test
+    public void equalsForKeyCreatedForNullObject() {
+        SelectionPropertyResolverCacheKey cacheKeyA = SelectionPropertyResolverCacheKey.createFor((Object) null, expression);
+        SelectionPropertyResolverCacheKey cacheKeyB = SelectionPropertyResolverCacheKey.createFor((Object) null, expression);
+        assertThat(cacheKeyA.equals(cacheKeyB), is(true));
+    }
+
+    @Test
     public void createForNullClass() {
         SelectionPropertyResolverCacheKey cacheKey = SelectionPropertyResolverCacheKey.createFor((Class<?>) null, expression);
         assertThat(cacheKey.hashCode(), not(is(0)));
+    }
+
+    @Test
+    public void hashCodeIsEqualForKeyCreatedForNullClass() {
+        SelectionPropertyResolverCacheKey cacheKeyA = SelectionPropertyResolverCacheKey.createFor((Class<?>) null, expression);
+        SelectionPropertyResolverCacheKey cacheKeyB = SelectionPropertyResolverCacheKey.createFor((Class<?>) null, expression);
+        assertThat(cacheKeyA.hashCode(), is(cacheKeyB.hashCode()));
+    }
+
+    @Test
+    public void equalsForKeyCreatedForNullClass() {
+        SelectionPropertyResolverCacheKey cacheKeyA = SelectionPropertyResolverCacheKey.createFor((Class<?>) null, expression);
+        SelectionPropertyResolverCacheKey cacheKeyB = SelectionPropertyResolverCacheKey.createFor((Class<?>) null, expression);
+        assertThat(cacheKeyA.equals(cacheKeyB), is(true));
     }
 
     private class SomeClass {

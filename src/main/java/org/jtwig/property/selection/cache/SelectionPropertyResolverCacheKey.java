@@ -27,4 +27,9 @@ public class SelectionPropertyResolverCacheKey {
     public int hashCode() {
         return 89 * expression.hashCode() ^ 43 * leftValueClassHashcode;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj.getClass() == this.getClass() && obj.hashCode() == this.hashCode();
+    }
 }
