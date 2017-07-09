@@ -39,19 +39,17 @@ public class MapSelectionExpressionParser extends ExpressionParser<MapSelectionE
         PositionTrackerParser positionTrackerParser = parserContext().parser(PositionTrackerParser.class);
         SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
 
-        return ZeroOrMore(
-                FirstOf(
-                        Sequence(
-                                positionTrackerParser.PushPosition(),
-                                String("["), spacingParser.Spacing(),
-                                binaryOrPrimaryExpressionParser.ExpressionRule(),
-                                spacingParser.Spacing(),
-                                String("]"),
+        return Sequence(
+                ZeroOrMore(
+                        positionTrackerParser.PushPosition(),
+                        String("["), spacingParser.Spacing(),
+                        binaryOrPrimaryExpressionParser.ExpressionRule(),
+                        spacingParser.Spacing(),
+                        String("]"),
 
-                                push(new MapSelectionExpression(positionTrackerParser.pop(1), binaryOrPrimaryExpressionParser.pop(1), binaryOrPrimaryExpressionParser.pop()))
-                        ),
-                        parserContext().parser(BinaryOperationSuffixExpressionParser.class).ExpressionRule()
-                )
+                        push(new MapSelectionExpression(positionTrackerParser.pop(1), binaryOrPrimaryExpressionParser.pop(1), binaryOrPrimaryExpressionParser.pop()))
+                ),
+                parserContext().parser(BinaryOperationSuffixExpressionParser.class).ExpressionRule()
         );
     }
 }

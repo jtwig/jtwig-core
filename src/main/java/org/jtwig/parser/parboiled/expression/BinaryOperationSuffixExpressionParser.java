@@ -52,16 +52,18 @@ public class BinaryOperationSuffixExpressionParser extends ExpressionParser<Bina
         if (expressionRule == null) {
             return Sequence(
                     parserContext().parser(SpacingParser.class).Spacing(),
-                    parserContext().parser(PositionTrackerParser.class).PushPosition(),
-                    parserContext().parser(BinaryOperatorParser.class).BinaryOperator(operator),
-                    parserContext().parser(SpacingParser.class).Spacing(),
-                    parserContext().parser(PrimaryExpressionParser.class).ExpressionRule(),
-                    push(new BinaryOperationExpression(
-                            parserContext().parser(PositionTrackerParser.class).pop(2),
-                            pop(2),
-                            parserContext().parser(BinaryOperatorParser.class).pop(1),
-                            pop()
-                    ))
+                    ZeroOrMore(
+                            parserContext().parser(PositionTrackerParser.class).PushPosition(),
+                            parserContext().parser(BinaryOperatorParser.class).BinaryOperator(operator),
+                            parserContext().parser(SpacingParser.class).Spacing(),
+                            parserContext().parser(PrimaryExpressionParser.class).ExpressionRule(),
+                            push(new BinaryOperationExpression(
+                                    parserContext().parser(PositionTrackerParser.class).pop(2),
+                                    pop(2),
+                                    parserContext().parser(BinaryOperatorParser.class).pop(1),
+                                    pop()
+                            ))
+                    )
             );
 
         } else {
@@ -72,7 +74,7 @@ public class BinaryOperationSuffixExpressionParser extends ExpressionParser<Bina
                             parserContext().parser(PositionTrackerParser.class).PushPosition(),
                             parserContext().parser(BinaryOperatorParser.class).BinaryOperator(operator),
                             parserContext().parser(SpacingParser.class).Spacing(),
-                            expressionRule,
+                            parserContext().parser(BinaryOperationExpressionParser.class).ExpressionRule(),
                             push(new BinaryOperationExpression(
                                     parserContext().parser(PositionTrackerParser.class).pop(2),
                                     pop(2),
