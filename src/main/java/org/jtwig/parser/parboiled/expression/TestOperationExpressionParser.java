@@ -19,18 +19,18 @@ public class TestOperationExpressionParser extends ExpressionParser<TestOperatio
     @Label("Test Operation")
     public Rule ExpressionRule() {
         SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
-        SimpleExpressionParser anyExpressionParser = parserContext().parser(SimpleExpressionParser.class);
+        SimpleExpressionParser simpleExpressionParser = parserContext().parser(SimpleExpressionParser.class);
         AnyTestExpressionParser testExpressionParser = parserContext().parser(AnyTestExpressionParser.class);
         PositionTrackerParser positionTrackerParser = parserContext().parser(PositionTrackerParser.class);
         return Sequence(
                 positionTrackerParser.PushPosition(),
-                anyExpressionParser.ExpressionRule(),
+                simpleExpressionParser.ExpressionRule(),
                 spacingParser.Spacing(),
                 parserContext().parser(LexicParser.class).Keyword(Keyword.IS),
                 spacingParser.Spacing(),
                 testExpressionParser.Test(),
 
-                push(new TestOperationExpression(positionTrackerParser.pop(2), anyExpressionParser.pop(1), testExpressionParser.pop()))
+                push(new TestOperationExpression(positionTrackerParser.pop(2), simpleExpressionParser.pop(1), testExpressionParser.pop()))
         );
     }
 }
