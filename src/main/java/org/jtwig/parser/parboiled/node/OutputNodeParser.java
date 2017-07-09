@@ -27,7 +27,7 @@ public class OutputNodeParser extends NodeParser<OutputNode> {
                 Mandatory(anyExpressionParser.ExpressionRule(), "Missing or invalid output expression"),
                 spacingParser.Spacing(),
 
-                Mandatory(limitsParser.endOutput(), "Expecting end of output code island"),
+                Mandatory(limitsParser.endOutput(), "Expecting end of output code island (Hint: Try to wrap parts of your expression in parentheses)"),
 
                 push(new OutputNode(
                         positionTrackerParser.pop(1),
