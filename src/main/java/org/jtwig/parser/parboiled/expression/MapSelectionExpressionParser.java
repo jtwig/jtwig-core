@@ -28,7 +28,22 @@ public class MapSelectionExpressionParser extends ExpressionParser<MapSelectionE
                 spacingParser.Spacing(),
                 String("]"),
 
-                push(new MapSelectionExpression(positionTrackerParser.pop(2), binaryOrPrimaryExpressionParser.pop(1), binaryOrPrimaryExpressionParser.pop()))
+                push(new MapSelectionExpression(positionTrackerParser.pop(2), binaryOrPrimaryExpressionParser.pop(1), binaryOrPrimaryExpressionParser.pop())),
+
+                ZeroOrMore(
+                        FirstOf(
+                                Sequence(
+                                        positionTrackerParser.PushPosition(),
+                                        String("["), spacingParser.Spacing(),
+                                        binaryOrPrimaryExpressionParser.ExpressionRule(),
+                                        spacingParser.Spacing(),
+                                        String("]"),
+
+                                        push(new MapSelectionExpression(positionTrackerParser.pop(1), binaryOrPrimaryExpressionParser.pop(1), binaryOrPrimaryExpressionParser.pop()))
+                                ),
+                                parserContext().parser(BinaryOperationSuffixExpressionParser.class).ExpressionRule()
+                        )
+                )
         );
     }
 }
