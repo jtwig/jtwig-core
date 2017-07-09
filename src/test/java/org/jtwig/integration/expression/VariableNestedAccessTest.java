@@ -94,6 +94,37 @@ public class VariableNestedAccessTest {
 
 
     @Test
+    public void mapWithParenthesisMapTest() {
+        testWith("{{ (map['map'])['key'] }}");
+    }
+
+    @Test
+    public void mapWithParenthesisMapDotTest() {
+        testWith("{{ (map['map']).key }}");
+    }
+
+    @Test
+    public void mapWithParenthesisListTest() {
+        testWith("{{ (map['list'])[0] }}");
+    }
+
+    @Test
+    public void mapWithParenthesisMethodTest() {
+        testWith("{{ (map['object']).valueMethod() }}");
+    }
+
+    @Test
+    public void mapWithParenthesisFieldTest() {
+        testWith("{{ (map['object']).value_field }}");
+    }
+
+    @Test
+    public void mapWithParenthesisGetterTest() {
+        testWith("{{ (map['object']).valueGetter }}");
+    }
+
+
+    @Test
     public void mapDotMapTest() {
         testWith("{{ map.map['key'] }}");
     }
@@ -152,6 +183,68 @@ public class VariableNestedAccessTest {
     @Test
     public void listGetterTest() {
         testWith("{{ list[2].valueGetter }}");
+    }
+
+
+    @Test
+    public void listWithParenthesisMapTest() {
+        testWith("{{ (list[1])['key'] }}");
+    }
+
+    @Test
+    public void listWithParenthesisMapDotTest() {
+        testWith("{{ (list[1]).key }}");
+    }
+
+    @Test
+    public void listWithParenthesisListTest() {
+        testWith("{{ (list[0])[0] }}");
+    }
+
+    @Test
+    public void listWithParenthesisMethodTest() {
+        testWith("{{ (list[2]).valueMethod() }}");
+    }
+
+    @Test
+    public void listWithParenthesisFieldTest() {
+        testWith("{{ (list[2]).value_field }}");
+    }
+
+    @Test
+    public void listWithParenthesisGetterTest() {
+        testWith("{{ (list[2]).valueGetter }}");
+    }
+
+
+    @Test
+    public void mapWithGetMapTest() {
+        testWith("{{ map.get('map')['key'] }}");
+    }
+
+    @Test
+    public void mapWithGetMapDotTest() {
+        testWith("{{ map.get('map').key }}");
+    }
+
+    @Test
+    public void mapWithGetListTest() {
+        testWith("{{ map.get('list')[0] }}");
+    }
+
+    @Test
+    public void mapWithGetMethodTest() {
+        testWith("{{ map.get('object').valueMethod() }}");
+    }
+
+    @Test
+    public void mapWithGetFieldTest() {
+        testWith("{{ map.get('object').value_field }}");
+    }
+
+    @Test
+    public void mapWithGetGetterTest() {
+        testWith("{{ map.get('object').valueGetter }}");
     }
 
 
