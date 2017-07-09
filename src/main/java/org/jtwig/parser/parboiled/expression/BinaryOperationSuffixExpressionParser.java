@@ -10,6 +10,7 @@ import org.jtwig.parser.parboiled.base.SpacingParser;
 import org.jtwig.parser.parboiled.expression.operator.BinaryOperatorParser;
 import org.jtwig.render.expression.calculator.operation.binary.BinaryOperator;
 import org.parboiled.Rule;
+import org.parboiled.annotations.Label;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +26,7 @@ public class BinaryOperationSuffixExpressionParser extends ExpressionParser<Bina
     }
 
     @Override
+    @Label("BinaryOperationSuffix Expression")
     public Rule ExpressionRule() {
         Rule initialExpression = null;
         ImmutableListMultimap<Integer, BinaryOperator> index = Multimaps.index(operators, precedence());
