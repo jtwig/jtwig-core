@@ -341,6 +341,285 @@ public class VariableNestedAccessTest {
     }
 
 
+    @Test
+    public void mapMapWithArithmeticTest() {
+        testWith("{{ map['map']['key'] + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapMapDotWithArithmeticTest() {
+        testWith("{{ map['map'].key + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapListWithArithmeticTest() {
+        testWith("{{ map['list'][0] + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapMethodWithArithmeticTest() {
+        testWith("{{ map['object'].valueMethod() + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapFieldWithArithmeticTest() {
+        testWith("{{ map['object'].value_field + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapGetterWithArithmeticTest() {
+        testWith("{{ map['object'].valueGetter + 1 - 1 }}");
+    }
+
+
+    @Test
+    public void mapWithParenthesisMapWithArithmeticTest() {
+        testWith("{{ (map['map'])['key'] + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapWithParenthesisMapDWithArithmeticotTest() {
+        testWith("{{ (map['map']).key + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapWithParenthesisListWithArithmeticTest() {
+        testWith("{{ (map['list'])[0] + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapWithParenthesisMethodWithArithmeticTest() {
+        testWith("{{ (map['object']).valueMethod() + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapWithParenthesisFieldWithArithmeticTest() {
+        testWith("{{ (map['object']).value_field + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapWithParenthesisGetterWithArithmeticTest() {
+        testWith("{{ (map['object']).valueGetter + 1 - 1 }}");
+    }
+
+
+    @Test
+    public void mapDotMapWithArithmeticTest() {
+        testWith("{{ map.map['key'] + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapDotMapDotWithArithmeticTest() {
+        testWith("{{ map.map.key + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapDotListWithArithmeticTest() {
+        testWith("{{ map.list[0] + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapDotMethodWithArithmeticTest() {
+        testWith("{{ map.object.valueMethod() + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapDotFieldWithArithmeticTest() {
+        testWith("{{ map.object.value_field + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapDotGetterWithArithmeticTest() {
+        testWith("{{ map.object.valueGetter + 1 - 1 }}");
+    }
+
+
+    @Test
+    public void listMapWithArithmeticTest() {
+        testWith("{{ list[1]['key'] + 1 - 1 }}");
+    }
+
+    @Test
+    public void listMapDotWithArithmeticTest() {
+        testWith("{{ list[1].key + 1 - 1 }}");
+    }
+
+    @Test
+    public void listListWithArithmeticTest() {
+        testWith("{{ list[0][0] + 1 - 1 }}");
+    }
+
+    @Test
+    public void listMethodWithArithmeticTest() {
+        testWith("{{ list[2].valueMethod() + 1 - 1 }}");
+    }
+
+    @Test
+    public void listFieldWithArithmeticTest() {
+        testWith("{{ list[2].value_field + 1 - 1 }}");
+    }
+
+    @Test
+    public void listGetterWithArithmeticTest() {
+        testWith("{{ list[2].valueGetter + 1 - 1 }}");
+    }
+
+
+    @Test
+    public void listWithParenthesisMapWithArithmeticTest() {
+        testWith("{{ (list[1])['key'] + 1 - 1 }}");
+    }
+
+    @Test
+    public void listWithParenthesisWithArithmeticMapDotTest() {
+        testWith("{{ (list[1]).key + 1 - 1 }}");
+    }
+
+    @Test
+    public void listWithParenthesiWithArithmeticsListTest() {
+        testWith("{{ (list[0])[0] + 1 - 1 }}");
+    }
+
+    @Test
+    public void listWithParenthesisMethodWithArithmeticTest() {
+        testWith("{{ (list[2]).valueMethod() + 1 - 1 }}");
+    }
+
+    @Test
+    public void listWithParenthesisFieldWithArithmeticTest() {
+        testWith("{{ (list[2]).value_field + 1 - 1 }}");
+    }
+
+    @Test
+    public void listWithParenthesisGetterWithArithmeticTest() {
+        testWith("{{ (list[2]).valueGetter + 1 - 1 }}");
+    }
+
+
+    @Test
+    public void mapWithGetMapWithArithmeticTest() {
+        testWith("{{ map.get('map')['key'] + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapWithGetMapDotWithArithmeticTest() {
+        testWith("{{ map.get('map').key + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapWithGetListWithArithmeticTest() {
+        testWith("{{ map.get('list')[0] + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapWithGetMethodWithArithmeticTest() {
+        testWith("{{ map.get('object').valueMethod() + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapWithGetFieldWithArithmeticTest() {
+        testWith("{{ map.get('object').value_field + 1 - 1 }}");
+    }
+
+    @Test
+    public void mapWithGetGetterWithArithmeticTest() {
+        testWith("{{ map.get('object').valueGetter + 1 - 1 }}");
+    }
+
+
+    @Test
+    public void methodMapWithArithmeticTest() {
+        testWith("{{ object.mapMethod()['key'] + 1 - 1 }}");
+    }
+
+    @Test
+    public void methodMapDotWithArithmeticTest() {
+        testWith("{{ object.mapMethod().key + 1 - 1 }}");
+    }
+
+    @Test
+    public void methodListWithArithmeticTest() {
+        testWith("{{ object.listMethod()[0] + 1 - 1 }}");
+    }
+
+    @Test
+    public void methodMethodWithArithmeticTest() {
+        testWith("{{ object.nestedMethod().valueMethod() + 1 - 1 }}");
+    }
+
+    @Test
+    public void methodFieldWithArithmeticTest() {
+        testWith("{{ object.nestedMethod().value_field + 1 - 1 }}");
+    }
+
+    @Test
+    public void methodGetterWithArithmeticTest() {
+        testWith("{{ object.nestedMethod().valueGetter + 1 - 1 }}");
+    }
+
+
+    @Test
+    public void fieldMapWithArithmeticTest() {
+        testWith("{{ object.map_field['key'] + 1 - 1 }}");
+    }
+
+    @Test
+    public void fieldMapDotWithArithmeticTest() {
+        testWith("{{ object.map_field.key + 1 - 1 }}");
+    }
+
+    @Test
+    public void fieldListWithArithmeticTest() {
+        testWith("{{ object.list_field[0] + 1 - 1 }}");
+    }
+
+    @Test
+    public void fieldMethodWithArithmeticTest() {
+        testWith("{{ object.nested_field.valueMethod() + 1 - 1 }}");
+    }
+
+    @Test
+    public void fieldFieldWithArithmeticTest() {
+        testWith("{{ object.nested_field.value_field + 1 - 1 }}");
+    }
+
+    @Test
+    public void fieldGetterWithArithmeticTest() {
+        testWith("{{ object.nested_field.valueGetter + 1 - 1 }}");
+    }
+
+
+    @Test
+    public void getterMapWithArithmeticTest() {
+        testWith("{{ object.mapGetter['key'] + 1 - 1 }}");
+    }
+
+    @Test
+    public void getterMapDotWithArithmeticTest() {
+        testWith("{{ object.mapGetter.key + 1 - 1 }}");
+    }
+
+    @Test
+    public void getterListWithArithmeticTest() {
+        testWith("{{ object.listGetter[0] + 1 - 1 }}");
+    }
+
+    @Test
+    public void getterMethodWithArithmeticTest() {
+        testWith("{{ object.nestedGetter.valueMethod() + 1 - 1 }}");
+    }
+
+    @Test
+    public void getterFieldWithArithmeticTest() {
+        testWith("{{ object.nestedGetter.value_field + 1 - 1 }}");
+    }
+
+    @Test
+    public void getterGetterWithArithmeticTest() {
+        testWith("{{ object.nestedGetter.valueGetter + 1 - 1 }}");
+    }
+
+
     private class NestedTestClass {
         private static final int MAX_DEPTH = 2;
 
