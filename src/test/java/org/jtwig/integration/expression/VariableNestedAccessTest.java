@@ -6,29 +6,131 @@ import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+@RunWith(Parameterized.class)
 public class VariableNestedAccessTest {
+    private static final int EXPECTED_VALUE = 32;
 
-    public static final int EXPECTED_VALUE = 32;
+    /**
+     * List of named Tests. Each Test lists a set of Terms that, when interpreted in the Context of the prepared Template,
+     * are expected to produce an instance of the supplied TermType.
+     * <p>
+     * For example: the Test "map" has expressions to generate a MAP, a LIST or an OBJECT by accessing map.
+     */
+    private static LeftTerms leftTerms = new LeftTerms()
+            .add("map", new AccessTerms()
+                    .add(TermType.MAP, "map['map']")
+                    .add(TermType.LIST, "map['list']")
+                    .add(TermType.OBJECT, "map['object']")
+            )
+            .add("mapWithParenthesis", new AccessTerms()
+                    .add(TermType.MAP, "(map['map'])")
+                    .add(TermType.LIST, "(map['list'])")
+                    .add(TermType.OBJECT, "(map['object'])")
+            )
+            .add("mapDot", new AccessTerms()
+                    .add(TermType.MAP, "map.map")
+                    .add(TermType.LIST, "map.list")
+                    .add(TermType.OBJECT, "map.object")
+            )
+            .add("mapGet", new AccessTerms()
+                    .add(TermType.MAP, "map.get('map')")
+                    .add(TermType.LIST, "map.get('list')")
+                    .add(TermType.OBJECT, "map.get('object')")
+            )
+            .add("list", new AccessTerms()
+                    .add(TermType.MAP, "list[0]")
+                    .add(TermType.LIST, "list[1]")
+                    .add(TermType.OBJECT, "list[2]")
+            )
+            .add("listWithParenthesis", new AccessTerms()
+                    .add(TermType.MAP, "(list[0])")
+                    .add(TermType.LIST, "(list[1])")
+                    .add(TermType.OBJECT, "(list[2])")
+            )
+            .add("objectMethod", new AccessTerms()
+                    .add(TermType.MAP, "object.mapMethod()")
+                    .add(TermType.LIST, "object.listMethod()")
+                    .add(TermType.OBJECT, "object.nestedMethod()")
+            )
+            .add("objectField", new AccessTerms()
+                    .add(TermType.MAP, "object.map_field")
+                    .add(TermType.LIST, "object.list_field")
+                    .add(TermType.OBJECT, "object.nested_field")
+            )
+            .add("objectGetter", new AccessTerms()
+                    .add(TermType.MAP, "object.mapGetter")
+                    .add(TermType.LIST, "object.listGetter")
+                    .add(TermType.OBJECT, "object.nestedGetter")
+            );
+
+    /**
+     * List of named Tests. Each Test lists a Terms that is added to each term from the leftTerms list. For each
+     * leftTerm the correct expression for the required TermType is choosen and prepended to the rightTerm.
+     * <p>
+     * For example: the leftTerm "map" combined with the rightTerm "map" produces the "mapMapTest", which evaluates
+     * the expression map['map']['key']
+     * <p>
+     * the leftTerm "list" combined with the rightTerm "map" produces the "listMapTest", which evaluates
+     * the expression list[0]['key']
+     * <p>
+     * the leftTerm "map" combined with the rightTerm "list" produces the "naoListTest", which evaluates
+     * the expression map['list'][0]
+     * <p>
+     * Additionally each Test is ran pnce without and once with an arithmetic expression following
+     * (" + 1 - 1" is appended)
+     */
+    private static RightTerms rightTerms = new RightTerms()
+            .add("map", TermType.MAP, "['key']")
+            .add("mapDot", TermType.MAP, ".key")
+            .add("list", TermType.LIST, "[0]")
+            .add("objectMethod", TermType.OBJECT, ".valueMethod()")
+            .add("objectField", TermType.OBJECT, ".value_field")
+            .add("objectGetter", TermType.OBJECT, ".valueGetter");
+
     private NestedTestClass testobject;
     private ImmutableMap<String, Object> testmap;
     private ImmutableList<Object> teslist;
+    private TestCase testCase;
 
-    private void testWith(String template) {
-        JtwigModel model = JtwigModel.newModel()
-                .with("map", testmap)
-                .with("list", teslist)
-                .with("object", testobject);
+    public VariableNestedAccessTest(TestCase testCase) {
+        this.testCase = testCase;
+    }
 
-        String result = JtwigTemplate.inlineTemplate(template).render(model);
+    @Parameterized.Parameters(name = "{0}")
+    public static Iterable<TestCase> data() {
+        ArrayList<TestCase> testCases = new ArrayList<>();
 
-        assertThat(result, is(String.valueOf(EXPECTED_VALUE)));
+        for (Map.Entry<String, AccessTerms> leftEntry : leftTerms.entrySet()) {
+            for (Map.Entry<String, AccessTerm> rightEntry : rightTerms.entrySet()) {
+                testCases.add(new TestCase(
+                        leftEntry.getValue(),
+                        rightEntry.getValue(),
+                        leftEntry.getKey(),
+                        rightEntry.getKey()
+                ));
+
+                testCases.add(new ArithmericTestCase(
+                        leftEntry.getValue(),
+                        rightEntry.getValue(),
+                        leftEntry.getKey(),
+                        rightEntry.getKey()
+                ));
+
+            }
+        }
+
+        return testCases;
     }
 
     @Before
@@ -52,573 +154,128 @@ public class VariableNestedAccessTest {
     @Before
     public void prepareTestList() {
         teslist = ImmutableList.of(
-                ImmutableList.of(
-                        EXPECTED_VALUE
-                ),
                 ImmutableMap.of(
                         "key", EXPECTED_VALUE
+                ),
+                ImmutableList.of(
+                        EXPECTED_VALUE
                 ),
                 new NestedTestClass()
         );
     }
 
     @Test
-    public void mapMapTest() {
-        testWith("{{ map['map']['key'] }}");
-    }
-
-    @Test
-    public void mapMapDotTest() {
-        testWith("{{ map['map'].key }}");
-    }
-
-    @Test
-    public void mapListTest() {
-        testWith("{{ map['list'][0] }}");
-    }
-
-    @Test
-    public void mapMethodTest() {
-        testWith("{{ map['object'].valueMethod() }}");
-    }
-
-    @Test
-    public void mapFieldTest() {
-        testWith("{{ map['object'].value_field }}");
-    }
-
-    @Test
-    public void mapGetterTest() {
-        testWith("{{ map['object'].valueGetter }}");
-    }
-
-
-    @Test
-    public void mapWithParenthesisMapTest() {
-        testWith("{{ (map['map'])['key'] }}");
-    }
-
-    @Test
-    public void mapWithParenthesisMapDotTest() {
-        testWith("{{ (map['map']).key }}");
-    }
-
-    @Test
-    public void mapWithParenthesisListTest() {
-        testWith("{{ (map['list'])[0] }}");
-    }
-
-    @Test
-    public void mapWithParenthesisMethodTest() {
-        testWith("{{ (map['object']).valueMethod() }}");
-    }
-
-    @Test
-    public void mapWithParenthesisFieldTest() {
-        testWith("{{ (map['object']).value_field }}");
-    }
-
-    @Test
-    public void mapWithParenthesisGetterTest() {
-        testWith("{{ (map['object']).valueGetter }}");
-    }
-
-
-    @Test
-    public void mapDotMapTest() {
-        testWith("{{ map.map['key'] }}");
-    }
-
-    @Test
-    public void mapDotMapDotTest() {
-        testWith("{{ map.map.key }}");
-    }
-
-    @Test
-    public void mapDotListTest() {
-        testWith("{{ map.list[0] }}");
-    }
-
-    @Test
-    public void mapDotMethodTest() {
-        testWith("{{ map.object.valueMethod() }}");
-    }
-
-    @Test
-    public void mapDotFieldTest() {
-        testWith("{{ map.object.value_field }}");
-    }
-
-    @Test
-    public void mapDotGetterTest() {
-        testWith("{{ map.object.valueGetter }}");
-    }
-
-
-    @Test
-    public void listMapTest() {
-        testWith("{{ list[1]['key'] }}");
-    }
-
-    @Test
-    public void listMapDotTest() {
-        testWith("{{ list[1].key }}");
-    }
-
-    @Test
-    public void listListTest() {
-        testWith("{{ list[0][0] }}");
-    }
-
-    @Test
-    public void listMethodTest() {
-        testWith("{{ list[2].valueMethod() }}");
-    }
-
-    @Test
-    public void listFieldTest() {
-        testWith("{{ list[2].value_field }}");
-    }
-
-    @Test
-    public void listGetterTest() {
-        testWith("{{ list[2].valueGetter }}");
-    }
-
-
-    @Test
-    public void listWithParenthesisMapTest() {
-        testWith("{{ (list[1])['key'] }}");
-    }
-
-    @Test
-    public void listWithParenthesisMapDotTest() {
-        testWith("{{ (list[1]).key }}");
-    }
-
-    @Test
-    public void listWithParenthesisListTest() {
-        testWith("{{ (list[0])[0] }}");
-    }
-
-    @Test
-    public void listWithParenthesisMethodTest() {
-        testWith("{{ (list[2]).valueMethod() }}");
-    }
-
-    @Test
-    public void listWithParenthesisFieldTest() {
-        testWith("{{ (list[2]).value_field }}");
-    }
-
-    @Test
-    public void listWithParenthesisGetterTest() {
-        testWith("{{ (list[2]).valueGetter }}");
-    }
-
-
-    @Test
-    public void mapWithGetMapTest() {
-        testWith("{{ map.get('map')['key'] }}");
-    }
-
-    @Test
-    public void mapWithGetMapDotTest() {
-        testWith("{{ map.get('map').key }}");
-    }
-
-    @Test
-    public void mapWithGetListTest() {
-        testWith("{{ map.get('list')[0] }}");
-    }
-
-    @Test
-    public void mapWithGetMethodTest() {
-        testWith("{{ map.get('object').valueMethod() }}");
-    }
-
-    @Test
-    public void mapWithGetFieldTest() {
-        testWith("{{ map.get('object').value_field }}");
-    }
-
-    @Test
-    public void mapWithGetGetterTest() {
-        testWith("{{ map.get('object').valueGetter }}");
-    }
-
-
-    @Test
-    public void methodMapTest() {
-        testWith("{{ object.mapMethod()['key'] }}");
-    }
-
-    @Test
-    public void methodMapDotTest() {
-        testWith("{{ object.mapMethod().key }}");
-    }
-
-    @Test
-    public void methodListTest() {
-        testWith("{{ object.listMethod()[0] }}");
-    }
-
-    @Test
-    public void methodMethodTest() {
-        testWith("{{ object.nestedMethod().valueMethod() }}");
-    }
-
-    @Test
-    public void methodFieldTest() {
-        testWith("{{ object.nestedMethod().value_field }}");
-    }
-
-    @Test
-    public void methodGetterTest() {
-        testWith("{{ object.nestedMethod().valueGetter }}");
-    }
-
-
-    @Test
-    public void fieldMapTest() {
-        testWith("{{ object.map_field['key'] }}");
-    }
-
-    @Test
-    public void fieldMapDotTest() {
-        testWith("{{ object.map_field.key }}");
-    }
-
-    @Test
-    public void fieldListTest() {
-        testWith("{{ object.list_field[0] }}");
-    }
-
-    @Test
-    public void fieldMethodTest() {
-        testWith("{{ object.nested_field.valueMethod() }}");
-    }
-
-    @Test
-    public void fieldFieldTest() {
-        testWith("{{ object.nested_field.value_field }}");
-    }
-
-    @Test
-    public void fieldGetterTest() {
-        testWith("{{ object.nested_field.valueGetter }}");
-    }
+    public void test() {
+        String template = "{{ " + testCase.getExpression() + " }}";
+        System.out.println(testCase+":");
+        System.out.println(template);
 
+        JtwigModel model = JtwigModel.newModel()
+                .with("map", testmap)
+                .with("list", teslist)
+                .with("object", testobject);
 
-    @Test
-    public void getterMapTest() {
-        testWith("{{ object.mapGetter['key'] }}");
-    }
-
-    @Test
-    public void getterMapDotTest() {
-        testWith("{{ object.mapGetter.key }}");
-    }
-
-    @Test
-    public void getterListTest() {
-        testWith("{{ object.listGetter[0] }}");
-    }
-
-    @Test
-    public void getterMethodTest() {
-        testWith("{{ object.nestedGetter.valueMethod() }}");
-    }
-
-    @Test
-    public void getterFieldTest() {
-        testWith("{{ object.nestedGetter.value_field }}");
-    }
-
-    @Test
-    public void getterGetterTest() {
-        testWith("{{ object.nestedGetter.valueGetter }}");
-    }
-
-
-    @Test
-    public void mapMapWithArithmeticTest() {
-        testWith("{{ map['map']['key'] + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapMapDotWithArithmeticTest() {
-        testWith("{{ map['map'].key + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapListWithArithmeticTest() {
-        testWith("{{ map['list'][0] + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapMethodWithArithmeticTest() {
-        testWith("{{ map['object'].valueMethod() + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapFieldWithArithmeticTest() {
-        testWith("{{ map['object'].value_field + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapGetterWithArithmeticTest() {
-        testWith("{{ map['object'].valueGetter + 1 - 1 }}");
-    }
-
-
-    @Test
-    public void mapWithParenthesisMapWithArithmeticTest() {
-        testWith("{{ (map['map'])['key'] + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapWithParenthesisMapDWithArithmeticotTest() {
-        testWith("{{ (map['map']).key + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapWithParenthesisListWithArithmeticTest() {
-        testWith("{{ (map['list'])[0] + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapWithParenthesisMethodWithArithmeticTest() {
-        testWith("{{ (map['object']).valueMethod() + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapWithParenthesisFieldWithArithmeticTest() {
-        testWith("{{ (map['object']).value_field + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapWithParenthesisGetterWithArithmeticTest() {
-        testWith("{{ (map['object']).valueGetter + 1 - 1 }}");
-    }
-
-
-    @Test
-    public void mapDotMapWithArithmeticTest() {
-        testWith("{{ map.map['key'] + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapDotMapDotWithArithmeticTest() {
-        testWith("{{ map.map.key + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapDotListWithArithmeticTest() {
-        testWith("{{ map.list[0] + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapDotMethodWithArithmeticTest() {
-        testWith("{{ map.object.valueMethod() + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapDotFieldWithArithmeticTest() {
-        testWith("{{ map.object.value_field + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapDotGetterWithArithmeticTest() {
-        testWith("{{ map.object.valueGetter + 1 - 1 }}");
-    }
-
+        String result = JtwigTemplate.inlineTemplate(template).render(model);
 
-    @Test
-    public void listMapWithArithmeticTest() {
-        testWith("{{ list[1]['key'] + 1 - 1 }}");
+        assertThat(result, is(String.valueOf(EXPECTED_VALUE)));
     }
 
-    @Test
-    public void listMapDotWithArithmeticTest() {
-        testWith("{{ list[1].key + 1 - 1 }}");
+    private enum TermType {
+        MAP,
+        LIST,
+        OBJECT
     }
 
-    @Test
-    public void listListWithArithmeticTest() {
-        testWith("{{ list[0][0] + 1 - 1 }}");
-    }
-
-    @Test
-    public void listMethodWithArithmeticTest() {
-        testWith("{{ list[2].valueMethod() + 1 - 1 }}");
-    }
-
-    @Test
-    public void listFieldWithArithmeticTest() {
-        testWith("{{ list[2].value_field + 1 - 1 }}");
-    }
-
-    @Test
-    public void listGetterWithArithmeticTest() {
-        testWith("{{ list[2].valueGetter + 1 - 1 }}");
-    }
-
-
-    @Test
-    public void listWithParenthesisMapWithArithmeticTest() {
-        testWith("{{ (list[1])['key'] + 1 - 1 }}");
-    }
-
-    @Test
-    public void listWithParenthesisWithArithmeticMapDotTest() {
-        testWith("{{ (list[1]).key + 1 - 1 }}");
-    }
-
-    @Test
-    public void listWithParenthesiWithArithmeticsListTest() {
-        testWith("{{ (list[0])[0] + 1 - 1 }}");
-    }
-
-    @Test
-    public void listWithParenthesisMethodWithArithmeticTest() {
-        testWith("{{ (list[2]).valueMethod() + 1 - 1 }}");
-    }
-
-    @Test
-    public void listWithParenthesisFieldWithArithmeticTest() {
-        testWith("{{ (list[2]).value_field + 1 - 1 }}");
-    }
-
-    @Test
-    public void listWithParenthesisGetterWithArithmeticTest() {
-        testWith("{{ (list[2]).valueGetter + 1 - 1 }}");
-    }
-
-
-    @Test
-    public void mapWithGetMapWithArithmeticTest() {
-        testWith("{{ map.get('map')['key'] + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapWithGetMapDotWithArithmeticTest() {
-        testWith("{{ map.get('map').key + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapWithGetListWithArithmeticTest() {
-        testWith("{{ map.get('list')[0] + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapWithGetMethodWithArithmeticTest() {
-        testWith("{{ map.get('object').valueMethod() + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapWithGetFieldWithArithmeticTest() {
-        testWith("{{ map.get('object').value_field + 1 - 1 }}");
-    }
-
-    @Test
-    public void mapWithGetGetterWithArithmeticTest() {
-        testWith("{{ map.get('object').valueGetter + 1 - 1 }}");
-    }
-
-
-    @Test
-    public void methodMapWithArithmeticTest() {
-        testWith("{{ object.mapMethod()['key'] + 1 - 1 }}");
-    }
-
-    @Test
-    public void methodMapDotWithArithmeticTest() {
-        testWith("{{ object.mapMethod().key + 1 - 1 }}");
-    }
-
-    @Test
-    public void methodListWithArithmeticTest() {
-        testWith("{{ object.listMethod()[0] + 1 - 1 }}");
-    }
-
-    @Test
-    public void methodMethodWithArithmeticTest() {
-        testWith("{{ object.nestedMethod().valueMethod() + 1 - 1 }}");
-    }
+    private static class TestCase {
+        private AccessTerms leftAccessTerms;
+        private AccessTerm rightAccessTerm;
+        private String testName = "";
 
-    @Test
-    public void methodFieldWithArithmeticTest() {
-        testWith("{{ object.nestedMethod().value_field + 1 - 1 }}");
-    }
-
-    @Test
-    public void methodGetterWithArithmeticTest() {
-        testWith("{{ object.nestedMethod().valueGetter + 1 - 1 }}");
-    }
+        private TestCase(AccessTerms leftAccessTerms, AccessTerm rightAccessTerm, String leftTestName, String rightTestName) {
+            this.leftAccessTerms = leftAccessTerms;
+            this.rightAccessTerm = rightAccessTerm;
+            setTestName(leftTestName, rightTestName);
+        }
 
+        private static String uppercaseFirstchar(String s) {
+            return s.substring(0, 1).toUpperCase() + s.substring(1);
+        }
 
-    @Test
-    public void fieldMapWithArithmeticTest() {
-        testWith("{{ object.map_field['key'] + 1 - 1 }}");
-    }
+        public String getExpression() {
+            return leftAccessTerms.get(rightAccessTerm.termType) + rightAccessTerm.term;
+        }
 
-    @Test
-    public void fieldMapDotWithArithmeticTest() {
-        testWith("{{ object.map_field.key + 1 - 1 }}");
-    }
+        public TestCase setTestName(String leftTestName, String rightTestName) {
+            setTestName(leftTestName + uppercaseFirstchar(rightTestName));
+            return this;
+        }
 
-    @Test
-    public void fieldListWithArithmeticTest() {
-        testWith("{{ object.list_field[0] + 1 - 1 }}");
-    }
+        public String getTestName() {
+            return testName;
+        }
 
-    @Test
-    public void fieldMethodWithArithmeticTest() {
-        testWith("{{ object.nested_field.valueMethod() + 1 - 1 }}");
-    }
+        public TestCase setTestName(String testName) {
+            this.testName = testName;
+            return this;
+        }
 
-    @Test
-    public void fieldFieldWithArithmeticTest() {
-        testWith("{{ object.nested_field.value_field + 1 - 1 }}");
+        @Override
+        public String toString() {
+            return getTestName() + "Test";
+        }
     }
 
-    @Test
-    public void fieldGetterWithArithmeticTest() {
-        testWith("{{ object.nested_field.valueGetter + 1 - 1 }}");
-    }
+    private static class ArithmericTestCase extends TestCase {
+        public ArithmericTestCase(AccessTerms leftAccessTerms, AccessTerm rightAccessTerm, String leftTestName, String rightTestName) {
+            super(leftAccessTerms, rightAccessTerm, leftTestName, rightTestName);
+        }
 
+        @Override
+        public String getExpression() {
+            return super.getExpression() + " * 6 / (3 + 3) + 4 - (1 + 3)";
+        }
 
-    @Test
-    public void getterMapWithArithmeticTest() {
-        testWith("{{ object.mapGetter['key'] + 1 - 1 }}");
+        @Override
+        public String getTestName() {
+            return super.getTestName() + "WithArithmetic";
+        }
     }
 
-    @Test
-    public void getterMapDotWithArithmeticTest() {
-        testWith("{{ object.mapGetter.key + 1 - 1 }}");
-    }
+    private static class AccessTerm {
+        private final TermType termType;
+        private final String term;
 
-    @Test
-    public void getterListWithArithmeticTest() {
-        testWith("{{ object.listGetter[0] + 1 - 1 }}");
+        public AccessTerm(TermType termType, String term) {
+            this.termType = termType;
+            this.term = term;
+        }
     }
 
-    @Test
-    public void getterMethodWithArithmeticTest() {
-        testWith("{{ object.nestedGetter.valueMethod() + 1 - 1 }}");
+    private static class AccessTerms extends HashMap<TermType, String> {
+        public AccessTerms add(TermType termType, String term) {
+            put(termType, term);
+            return this;
+        }
     }
 
-    @Test
-    public void getterFieldWithArithmeticTest() {
-        testWith("{{ object.nestedGetter.value_field + 1 - 1 }}");
+    private static class LeftTerms extends HashMap<String, AccessTerms> {
+        public LeftTerms add(String testName, AccessTerms accessTerms) {
+            put(testName, accessTerms);
+            return this;
+        }
     }
 
-    @Test
-    public void getterGetterWithArithmeticTest() {
-        testWith("{{ object.nestedGetter.valueGetter + 1 - 1 }}");
+    private static class RightTerms extends HashMap<String, AccessTerm> {
+        public RightTerms add(String testName, AccessTerm accessTerm) {
+            put(testName, accessTerm);
+            return this;
+        }
+
+        public RightTerms add(String testName, TermType requiredLeftTermType, String term) {
+            add(testName, new AccessTerm(requiredLeftTermType, term));
+            return this;
+        }
     }
-
 
     private class NestedTestClass {
         private static final int MAX_DEPTH = 2;
@@ -638,7 +295,6 @@ public class VariableNestedAccessTest {
             }
 
             nested_field = new NestedTestClass(depth + 1);
-            ;
         }
 
         public NestedTestClass getNestedGetter() {
