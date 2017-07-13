@@ -48,13 +48,13 @@ public class BinaryOperationSuffixExpressionParser extends ExpressionParser<Bina
         };
     }
 
-    Rule BinaryOperation(Rule expressionRule, List<BinaryOperator> operator) {
+    Rule BinaryOperation(Rule expressionRule, List<BinaryOperator> operators) {
         if (expressionRule == null) {
             return Sequence(
                     parserContext().parser(SpacingParser.class).Spacing(),
                     ZeroOrMore(
                             parserContext().parser(PositionTrackerParser.class).PushPosition(),
-                            parserContext().parser(BinaryOperatorParser.class).BinaryOperator(operator),
+                            parserContext().parser(BinaryOperatorParser.class).BinaryOperator(operators),
                             parserContext().parser(SpacingParser.class).Spacing(),
                             parserContext().parser(PrimaryExpressionParser.class).ExpressionRule(),
                             push(new BinaryOperationExpression(
@@ -72,9 +72,12 @@ public class BinaryOperationSuffixExpressionParser extends ExpressionParser<Bina
                     parserContext().parser(SpacingParser.class).Spacing(),
                     ZeroOrMore(
                             parserContext().parser(PositionTrackerParser.class).PushPosition(),
-                            parserContext().parser(BinaryOperatorParser.class).BinaryOperator(operator),
+                            parserContext().parser(BinaryOperatorParser.class).BinaryOperator(operators),
                             parserContext().parser(SpacingParser.class).Spacing(),
-                            parserContext().parser(BinaryOperationExpressionParser.class).ExpressionRule(),
+                            Sequence(
+                                    parserContext().parser(PrimaryExpressionParser.class).ExpressionRule(),
+                                    expressionRule
+                            ),
                             push(new BinaryOperationExpression(
                                     parserContext().parser(PositionTrackerParser.class).pop(2),
                                     pop(2),
