@@ -14,6 +14,7 @@ import org.jtwig.functions.impl.math.RoundFunction;
 import org.jtwig.functions.impl.mixed.*;
 import org.jtwig.functions.impl.string.*;
 import org.jtwig.functions.impl.structural.BlockFunction;
+import org.jtwig.functions.impl.structural.ParentFunction;
 import org.jtwig.reflection.model.java.JavaClassManager;
 import org.jtwig.util.ClasspathFinder;
 
@@ -36,6 +37,7 @@ public class DefaultJtwigFunctionList extends ArrayList<JtwigFunction> {
 
                 // Structural
                 new BlockFunction(),
+                new ParentFunction(),
 
                 // Math
                 new AbsFunction(),
