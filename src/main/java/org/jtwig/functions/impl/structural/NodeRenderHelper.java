@@ -8,7 +8,7 @@ import org.jtwig.renderable.StringBuilderRenderResult;
 import org.jtwig.resource.reference.ResourceReference;
 
 class NodeRenderHelper {
-    public static Object renderBlock(FunctionRequest renderRequest, BlockDefinition blockDefinition) {
+    static Object renderBlock(FunctionRequest renderRequest, BlockDefinition blockDefinition) {
         RenderNodeService renderNodeService = renderRequest.getEnvironment().getRenderEnvironment().getRenderNodeService();
         renderRequest.getRenderContext().start(ResourceReference.class, blockDefinition.getSource());
         RenderResult result = renderNodeService.render(renderRequest, blockDefinition.getNode())
