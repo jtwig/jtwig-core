@@ -30,7 +30,11 @@ public class BlockContext {
 
     public Optional<BlockDefinition> get(String identifier, int index) {
         Stack<BlockDefinition> stack = blocks.get(identifier);
-        return Optional.fromNullable(stack.get(index));
+        try {
+            return Optional.of(stack.get(index));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return Optional.absent();
+        }
     }
 
     public void add(BlockNode node, ResourceReference source) {

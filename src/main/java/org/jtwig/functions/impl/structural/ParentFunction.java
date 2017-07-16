@@ -28,6 +28,10 @@ public class ParentFunction extends SimpleJtwigFunction {
         BlockContext blockContext = request.getRenderContext().getCurrent(BlockContext.class);
         Optional<BlockDefinition> blockDefinition = blockContext.get(blockIdentifier, 1);
 
+        if(!blockDefinition.isPresent()) {
+            throw new IllegalStateException("Call to parent() in a Block that does not extend another Block.");
+        }
+
         return NodeRenderHelper.renderBlock(request, blockDefinition);
     }
 }
