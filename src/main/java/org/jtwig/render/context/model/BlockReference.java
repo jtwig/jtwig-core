@@ -10,9 +10,4 @@ public class BlockReference {
     public String getIdentifier() {
         return identifier;
     }
-
-    public BlockReference setIdentifier(String identifier) {
-        this.identifier = identifier;
-        return this;
-    }
 }
