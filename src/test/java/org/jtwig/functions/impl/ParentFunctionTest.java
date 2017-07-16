@@ -33,9 +33,15 @@ public class ParentFunctionTest {
                         "{% block a %}B{{ parent() }}B{% endblock %}")
                 .build());
 
+        TypedResourceLoader templateResourceC = new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
+                .withResource("c", "{% extends 'memory:b' %}" +
+                        "{% block a %}C{{ parent() }}C{% endblock %}")
+                .build());
+
         configTemplate = configuration().resources().resourceLoaders()
                 .add(templateResourceA)
                 .add(templateResourceB)
+                .add(templateResourceC)
                 .and().and().build();
     }
 
@@ -82,11 +88,20 @@ public class ParentFunctionTest {
     }
 
     @Test
-    public void inheritsParentBlockThroughMultipleLevels() {
+    public void inheritsParentBlockThroughTwoLevels() {
         testWith(
                 "{% extends 'memory:b' %}" +
                         "{% block a %}C{{ parent() }}C{% endblock %}",
                 "cCBABCx"
+        );
+    }
+
+    @Test
+    public void inheritsParentBlockThroughThreeLevels() {
+        testWith(
+                "{% extends 'memory:c' %}" +
+                        "{% block a %}D{{ parent() }}D{% endblock %}",
+                "cDCBABCDx"
         );
     }
 
