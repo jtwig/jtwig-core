@@ -68,7 +68,7 @@ public class ParentFunctionTest {
     public void errorWhenCallingParentWithoutExtending() {
         testWith(
                 "{% block a %}B{{ parent() }}{% endblock %}",
-                "xBABx"
+                ""
         );
     }
 
