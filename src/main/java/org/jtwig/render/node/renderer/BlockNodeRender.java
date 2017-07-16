@@ -14,7 +14,7 @@ public class BlockNodeRender implements NodeRender<BlockNode> {
     public Renderable render(RenderRequest renderRequest, BlockNode node) {
         String identifier = node.getIdentifier();
         ResourceReference current = renderRequest.getRenderContext().getCurrent(ResourceReference.class);
-        renderRequest.getRenderContext().getCurrent(BlockContext.class).add(node, current);
+        renderRequest.getRenderContext().getCurrent(BlockContext.class).addLast(node, current);
         BlockDefinition definition = renderRequest.getRenderContext().getCurrent(BlockContext.class).get(identifier).get();
         RenderNodeService renderNodeService = renderRequest.getEnvironment().getRenderEnvironment().getRenderNodeService();
 
