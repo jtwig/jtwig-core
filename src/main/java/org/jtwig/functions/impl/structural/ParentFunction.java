@@ -1,12 +1,11 @@
 package org.jtwig.functions.impl.structural;
 
 import com.google.common.base.Optional;
-import org.jtwig.environment.Environment;
 import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
 import org.jtwig.functions.impl.structural.exceptions.ParentFunctionOutsideBlockException;
 import org.jtwig.functions.impl.structural.exceptions.ParentFunctionWithoutExtending;
-import org.jtwig.render.context.RenderContext;
+import org.jtwig.render.RenderRequest;
 import org.jtwig.render.context.model.BlockContext;
 import org.jtwig.render.context.model.BlockDefinition;
 import org.jtwig.render.context.model.BlockReference;
@@ -22,44 +21,56 @@ public class ParentFunction extends SimpleJtwigFunction {
         request.minimumNumberOfArguments(0);
         request.maximumNumberOfArguments(0);
 
-        // FIXME cleanup try/catches into sub-methods
-        Environment env = request.getEnvironment();
-        RenderContext ctx = request.getRenderContext();
+        String identifier = getBlockIdentifier(request);
+        BlockContext blockContext = getBlockContext(request);
 
-        String identifier;
-        try {
-            identifier = ctx.getCurrent(BlockReference.class).getIdentifier();
-        }
-        catch (IllegalStateException e) {
-            throw new ParentFunctionOutsideBlockException();
-        }
+        BlockDefinition currentBlockDefinition = pollCurrentBlockDefinition(identifier, blockContext);
+        BlockDefinition parentBlockDefinition = getParentBlockDefinition(identifier, blockContext);
 
-        BlockContext blockContext;
-        try {
-            blockContext = request.getRenderContext().getCurrent(BlockContext.class);
-        }
-        catch (IllegalStateException e) {
-            throw new ParentFunctionOutsideBlockException();
-        }
+        Object renderBlock = NodeRenderHelper.renderBlock(request, parentBlockDefinition);
 
-        Optional<BlockDefinition> currentBlockDefinition = blockContext.pollFirst(identifier);
-        //System.err.println("parent function in block "+currentBlockDefinition.get().getSource());
+        restoreCurrentBlockDefinition(identifier, blockContext, currentBlockDefinition);
 
-        if(!currentBlockDefinition.isPresent()) {
-            throw new ParentFunctionOutsideBlockException();
-        }
+        return renderBlock;
+    }
 
+    private void restoreCurrentBlockDefinition(String identifier, BlockContext blockContext, BlockDefinition currentBlockDefinition) {
+        blockContext.addFirst(identifier, currentBlockDefinition);
+    }
 
-        Optional<BlockDefinition> blockDefinition = blockContext.get(identifier);
-        //System.err.println("rendering block "+blockDefinition.get().getSource());
+    private BlockDefinition getParentBlockDefinition(String identifier, BlockContext blockContext) {
+        Optional<BlockDefinition> parentBlockDefinitionOptional = blockContext.get(identifier);
 
-        if(!blockDefinition.isPresent()) {
+        if (!parentBlockDefinitionOptional.isPresent()) {
             throw new ParentFunctionWithoutExtending();
         }
 
-        Object renderBlock = NodeRenderHelper.renderBlock(request, blockDefinition);
-        blockContext.addFirst(identifier, currentBlockDefinition.get());
+        return parentBlockDefinitionOptional.get();
+    }
 
-        return renderBlock;
+    private BlockDefinition pollCurrentBlockDefinition(String identifier, BlockContext blockContext) {
+        Optional<BlockDefinition> blockDefinitionOptional = blockContext.pollFirst(identifier);
+
+        if (!blockDefinitionOptional.isPresent()) {
+            throw new ParentFunctionOutsideBlockException();
+        }
+
+        return blockDefinitionOptional.get();
+    }
+
+    private BlockContext getBlockContext(RenderRequest request) {
+        try {
+            return request.getRenderContext().getCurrent(BlockContext.class);
+        } catch (IllegalStateException e) {
+            throw new ParentFunctionOutsideBlockException();
+        }
+    }
+
+    private String getBlockIdentifier(RenderRequest request) {
+        try {
+            return request.getRenderContext().getCurrent(BlockReference.class).getIdentifier();
+        } catch (IllegalStateException e) {
+            throw new ParentFunctionOutsideBlockException();
+        }
     }
 }
