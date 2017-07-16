@@ -64,8 +64,7 @@ public class ParentFunctionTest {
         );
     }
 
-    // FIXME add expected exception class
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void errorWhenCallingParentWithoutExtending() {
         testWith(
                 "{% block a %}B{{ parent() }}{% endblock %}",
