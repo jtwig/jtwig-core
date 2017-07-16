@@ -21,23 +21,27 @@ public class ParentFunctionTest {
 
     @Before
     public void setupModel() {
-        model = JtwigModel.newModel();
+        model = JtwigModel.newModel()
+                .with("aVar", "A")
+                .with("bVar", "B")
+                .with("cVar", "C")
+                .with("zVar", "Z");
     }
 
     @Before
     public void setupConfiguration() {
         TypedResourceLoader templateResourceA = new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
-                .withResource("a", "x{% block a %}A{% endblock %}x{% block z %}{% endblock %}")
+                .withResource("a", "x{% block a %}{{ aVar }}{% endblock %}x{% block z %}{% endblock %}")
                 .build());
 
         TypedResourceLoader templateResourceB = new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                 .withResource("b", "{% extends 'memory:a' %}" +
-                        "{% block a %}B{{ parent() }}B{% endblock %}")
+                        "{% block a %}{{ bVar }}{{ parent() }}B{% endblock %}")
                 .build());
 
         TypedResourceLoader templateResourceC = new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                 .withResource("c", "{% extends 'memory:b' %}" +
-                        "{% block a %}C{{ parent() }}C{{ parent() }}C{% endblock %}")
+                        "{% block a %}C{{ parent() }}{{ cVar }}{{ parent() }}C{% endblock %}")
                 .build());
 
         configTemplate = configuration().resources().resourceLoaders()
@@ -49,7 +53,7 @@ public class ParentFunctionTest {
 
     private void testWith(String template, String expected) {
         String result = JtwigTemplate.inlineTemplate(template, configTemplate)
-                .render(JtwigModel.newModel());
+                .render(model);
 
         assertThat(result, is(expected));
     }
@@ -58,7 +62,7 @@ public class ParentFunctionTest {
     public void inheritsParentBlock() {
         testWith(
                 "{% extends 'memory:a' %}" +
-                        "{% block a %}B{{ parent() }}{% endblock %}",
+                        "{% block a %}{{ bVar }}{{ parent() }}{% endblock %}",
                 "xBAx"
         );
     }
@@ -67,7 +71,7 @@ public class ParentFunctionTest {
     public void inheritsParentBlockWithSuffix() {
         testWith(
                 "{% extends 'memory:a' %}" +
-                        "{% block a %}B{{ parent() }}B{% endblock %}",
+                        "{% block a %}{{ bVar }}{{ parent() }}B{% endblock %}",
                 "xBABx"
         );
     }
