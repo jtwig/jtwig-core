@@ -5,6 +5,7 @@ import org.jtwig.parser.parboiled.ParserContext;
 import org.jtwig.parser.parboiled.base.PositionTrackerParser;
 import org.jtwig.parser.parboiled.base.SpacingParser;
 import org.parboiled.Rule;
+import org.parboiled.annotations.Label;
 
 public class MapSelectionExpressionParser extends ExpressionParser<MapSelectionExpression> {
     public MapSelectionExpressionParser(ParserContext context) {
@@ -12,21 +13,43 @@ public class MapSelectionExpressionParser extends ExpressionParser<MapSelectionE
     }
 
     @Override
+    @Label("MapSelection Expression")
     public Rule ExpressionRule() {
-        BinaryOrPrimaryExpressionParser anyExpressionParser = parserContext().parser(BinaryOrPrimaryExpressionParser.class);
+        BinaryOrPrimaryExpressionParser binaryOrPrimaryExpressionParser = parserContext().parser(BinaryOrPrimaryExpressionParser.class);
         PositionTrackerParser positionTrackerParser = parserContext().parser(PositionTrackerParser.class);
         SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
 
         return Sequence(
                 positionTrackerParser.PushPosition(),
-                anyExpressionParser.ExpressionRule(),
+                binaryOrPrimaryExpressionParser.ExpressionRule(),
                 spacingParser.Spacing(),
                 String("["), spacingParser.Spacing(),
-                anyExpressionParser.ExpressionRule(),
+                binaryOrPrimaryExpressionParser.ExpressionRule(),
                 spacingParser.Spacing(),
                 String("]"),
 
-                push(new MapSelectionExpression(positionTrackerParser.pop(2), anyExpressionParser.pop(1), anyExpressionParser.pop()))
+                push(new MapSelectionExpression(positionTrackerParser.pop(2), binaryOrPrimaryExpressionParser.pop(1), binaryOrPrimaryExpressionParser.pop())),
+
+                MapSelectionExpressionTrail()
+        );
+    }
+
+    public Rule MapSelectionExpressionTrail() {
+        BinaryOrPrimaryExpressionParser binaryOrPrimaryExpressionParser = parserContext().parser(BinaryOrPrimaryExpressionParser.class);
+        PositionTrackerParser positionTrackerParser = parserContext().parser(PositionTrackerParser.class);
+        SpacingParser spacingParser = parserContext().parser(SpacingParser.class);
+
+        return Sequence(
+                ZeroOrMore(
+                        positionTrackerParser.PushPosition(),
+                        String("["), spacingParser.Spacing(),
+                        binaryOrPrimaryExpressionParser.ExpressionRule(),
+                        spacingParser.Spacing(),
+                        String("]"),
+
+                        push(new MapSelectionExpression(positionTrackerParser.pop(1), binaryOrPrimaryExpressionParser.pop(1), binaryOrPrimaryExpressionParser.pop()))
+                ),
+                parserContext().parser(BinaryOperationSuffixExpressionParser.class).ExpressionRule()
         );
     }
 }
