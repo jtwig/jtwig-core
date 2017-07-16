@@ -1,5 +1,6 @@
 package org.jtwig.property.selection.cache;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.jtwig.model.expression.Expression;
 
 public class SelectionPropertyResolverCacheKey {
@@ -30,6 +31,6 @@ public class SelectionPropertyResolverCacheKey {
 
     @Override
     public boolean equals(Object obj) {
-        return obj.getClass() == this.getClass() && obj.hashCode() == this.hashCode();
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 }
