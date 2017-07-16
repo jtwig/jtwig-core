@@ -3,6 +3,8 @@ package org.jtwig.functions.impl;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.environment.EnvironmentConfiguration;
+import org.jtwig.functions.impl.structural.exceptions.ParentFunctionOutsideBlockException;
+import org.jtwig.functions.impl.structural.exceptions.ParentFunctionWithoutExtending;
 import org.jtwig.resource.loader.InMemoryResourceLoader;
 import org.jtwig.resource.loader.TypedResourceLoader;
 import org.junit.Before;
@@ -35,7 +37,7 @@ public class ParentFunctionTest {
 
         TypedResourceLoader templateResourceC = new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
                 .withResource("c", "{% extends 'memory:b' %}" +
-                        "{% block a %}C{{ parent() }}C{% endblock %}")
+                        "{% block a %}C{{ parent() }}C{{ parent() }}C{% endblock %}")
                 .build());
 
         configTemplate = configuration().resources().resourceLoaders()
@@ -70,10 +72,18 @@ public class ParentFunctionTest {
         );
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = ParentFunctionWithoutExtending.class)
     public void errorWhenCallingParentWithoutExtending() {
         testWith(
                 "{% block a %}B{{ parent() }}{% endblock %}",
+                ""
+        );
+    }
+
+    @Test(expected = ParentFunctionOutsideBlockException.class)
+    public void errorWhenCallingParentOutsideOfBlock() {
+        testWith(
+                "z{{ parent() }}z",
                 ""
         );
     }
@@ -92,7 +102,16 @@ public class ParentFunctionTest {
         testWith(
                 "{% extends 'memory:b' %}" +
                         "{% block a %}C{{ parent() }}C{% endblock %}",
-                "cCBABCx"
+                "xCBABCx"
+        );
+    }
+
+    @Test
+    public void inheritsParentBlockTwiceThroughTwoLevels() {
+        testWith(
+                "{% extends 'memory:b' %}" +
+                        "{% block a %}C{{ parent() }}C{{ parent() }}C{% endblock %}",
+                "xCBABCBABCx"
         );
     }
 
@@ -101,7 +120,16 @@ public class ParentFunctionTest {
         testWith(
                 "{% extends 'memory:c' %}" +
                         "{% block a %}D{{ parent() }}D{% endblock %}",
-                "cDCBABCDx"
+                "xDCBABCBABCDx"
+        );
+    }
+
+    @Test
+    public void inheritsParentBlockTwiceThroughThreeLevels() {
+        testWith(
+                "{% extends 'memory:c' %}" +
+                        "{% block a %}D{{ parent() }}D{{ parent() }}D{% endblock %}",
+                "xDCBABCBABCDCBABCBABCDx"
         );
     }
 
