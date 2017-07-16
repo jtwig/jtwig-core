@@ -28,7 +28,7 @@ public class BinaryOperationSuffixExpressionParser extends ExpressionParser<Bina
     @Override
     @Label("BinaryOperationSuffix Expression")
     public Rule ExpressionRule() {
-        Rule initialExpression = null;
+        Rule initialExpression = EMPTY;
         ImmutableListMultimap<Integer, BinaryOperator> index = Multimaps.index(operators, precedence());
 
         List<Integer> integers = new ArrayList<>(index.keySet());
@@ -49,44 +49,25 @@ public class BinaryOperationSuffixExpressionParser extends ExpressionParser<Bina
     }
 
     Rule BinaryOperation(Rule expressionRule, List<BinaryOperator> operators) {
-        if (expressionRule == null) {
-            return Sequence(
-                    parserContext().parser(SpacingParser.class).Spacing(),
-                    ZeroOrMore(
-                            parserContext().parser(PositionTrackerParser.class).PushPosition(),
-                            parserContext().parser(BinaryOperatorParser.class).BinaryOperator(operators),
-                            parserContext().parser(SpacingParser.class).Spacing(),
-                            parserContext().parser(PrimaryExpressionParser.class).ExpressionRule(),
-                            push(new BinaryOperationExpression(
-                                    parserContext().parser(PositionTrackerParser.class).pop(2),
-                                    pop(2),
-                                    parserContext().parser(BinaryOperatorParser.class).pop(1),
-                                    pop()
-                            ))
-                    )
-            );
+        return Sequence(
+                expressionRule,
+                parserContext().parser(SpacingParser.class).Spacing(),
+                ZeroOrMore(
+                        parserContext().parser(PositionTrackerParser.class).PushPosition(),
+                        parserContext().parser(BinaryOperatorParser.class).BinaryOperator(operators),
+                        parserContext().parser(SpacingParser.class).Spacing(),
+                        Sequence(
+                                parserContext().parser(PrimaryExpressionParser.class).ExpressionRule(),
+                                expressionRule
+                        ),
+                        push(new BinaryOperationExpression(
+                                parserContext().parser(PositionTrackerParser.class).pop(2),
+                                pop(2),
+                                parserContext().parser(BinaryOperatorParser.class).pop(1),
+                                pop()
+                        ))
+                )
 
-        } else {
-            return Sequence(
-                    expressionRule,
-                    parserContext().parser(SpacingParser.class).Spacing(),
-                    ZeroOrMore(
-                            parserContext().parser(PositionTrackerParser.class).PushPosition(),
-                            parserContext().parser(BinaryOperatorParser.class).BinaryOperator(operators),
-                            parserContext().parser(SpacingParser.class).Spacing(),
-                            Sequence(
-                                    parserContext().parser(PrimaryExpressionParser.class).ExpressionRule(),
-                                    expressionRule
-                            ),
-                            push(new BinaryOperationExpression(
-                                    parserContext().parser(PositionTrackerParser.class).pop(2),
-                                    pop(2),
-                                    parserContext().parser(BinaryOperatorParser.class).pop(1),
-                                    pop()
-                            ))
-                    )
-
-            );
-        }
+        );
     }
 }
