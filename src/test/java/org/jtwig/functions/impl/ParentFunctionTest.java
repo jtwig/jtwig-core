@@ -27,7 +27,7 @@ public class ParentFunctionTest {
     @Before
     public void setupConfiguration() {
         TypedResourceLoader templateResourceA = new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
-                .withResource("a", "x{% block a %}A{% endblock %}x")
+                .withResource("a", "x{% block a %}A{% endblock %}x{% block z %}{% endblock %}")
                 .build());
 
         TypedResourceLoader templateResourceB = new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
