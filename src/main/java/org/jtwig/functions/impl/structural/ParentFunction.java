@@ -42,7 +42,7 @@ public class ParentFunction extends SimpleJtwigFunction {
             throw new ParentFunctionOutsideBlockException();
         }
 
-        Optional<BlockDefinition> currentBlockDefinition = blockContext.pop(identifier);
+        Optional<BlockDefinition> currentBlockDefinition = blockContext.pollFirst(identifier);
         //System.err.println("parent function in block "+currentBlockDefinition.get().getSource());
 
         if(!currentBlockDefinition.isPresent()) {
@@ -58,7 +58,7 @@ public class ParentFunction extends SimpleJtwigFunction {
         }
 
         Object renderBlock = NodeRenderHelper.renderBlock(request, blockDefinition);
-        blockContext.addTop(identifier, currentBlockDefinition.get());
+        blockContext.addFirst(identifier, currentBlockDefinition.get());
 
         return renderBlock;
     }

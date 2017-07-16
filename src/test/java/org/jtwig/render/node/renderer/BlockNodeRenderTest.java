@@ -36,6 +36,6 @@ public class BlockNodeRenderTest {
         Renderable result = underTest.render(request, node);
 
         assertSame(renderable, result);
-        verify(request.getRenderContext().getCurrent(BlockContext.class)).add(node, reference);
+        verify(request.getRenderContext().getCurrent(BlockContext.class)).addLast(node, reference);
     }
 }
