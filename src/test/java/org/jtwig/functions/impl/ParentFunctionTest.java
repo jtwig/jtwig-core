@@ -44,10 +44,16 @@ public class ParentFunctionTest {
                         "{% block a %}C{{ parent() }}{{ cVar }}{{ parent() }}C{% endblock %}")
                 .build());
 
+        TypedResourceLoader templateResourceWithBlockFunction = new TypedResourceLoader(MEMORY, InMemoryResourceLoader.builder()
+                .withResource("withblockfn", "<title>{% block title %}Title{% endblock %}</title>" +
+                        "{% block body %}<h1>{{ block('title') }}{% endblock %}</h1>")
+                .build());
+
         configTemplate = configuration().resources().resourceLoaders()
                 .add(templateResourceA)
                 .add(templateResourceB)
                 .add(templateResourceC)
+                .add(templateResourceWithBlockFunction)
                 .and().and().build();
     }
 
@@ -164,6 +170,15 @@ public class ParentFunctionTest {
                         "{% block a %}C{{ parent() }}C{% endblock %}" +
                         "{% block z %}Z{{ block('a')}}Z{% endblock %}",
                 "xCBABCxZCBABCZ"
+        );
+    }
+
+    @Test
+    public void blockFunctionInParentTemplateReferencesCurrentBlock() {
+        testWith(
+                "{% extends 'memory:withblockfn' %}" +
+                        "{% block title %}Subtitle - {{ parent() }}{% endblock %}",
+                "<title>Subtitle - Title</title><h1>Subtitle - Title</h1>"
         );
     }
 }
