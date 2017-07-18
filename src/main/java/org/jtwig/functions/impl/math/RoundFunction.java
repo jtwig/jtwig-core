@@ -14,34 +14,54 @@ public class RoundFunction extends SimpleJtwigFunction {
 
     @Override
     public Object execute(FunctionRequest request) {
-        request.maximumNumberOfArguments(2).minimumNumberOfArguments(1);
-        if (request.getNumberOfArguments() == 2) {
-            String strategy = getString(request, 1);
-            switch (RoundStrategy.valueOf(strategy.toUpperCase())) {
-                case CEIL:
-                    return round(request, BigDecimal.ROUND_CEILING);
-                case FLOOR:
-                    return round(request, BigDecimal.ROUND_FLOOR);
-                default:
-                    return round(request, BigDecimal.ROUND_HALF_DOWN);
-            }
+        request.maximumNumberOfArguments(3).minimumNumberOfArguments(1);
+        int precision = 0;
+        RoundStrategy roundingMode = RoundStrategy.COMMON;
+
+        if (request.getNumberOfArguments() == 3) {
+            precision = FunctionValueUtils.getNumber(request, 1).intValue();
+            roundingMode = RoundStrategy.valueOf(FunctionValueUtils.getString(request, 2).toUpperCase());
         }
-        return round(request, BigDecimal.ROUND_HALF_DOWN);
+
+        if (request.getNumberOfArguments() == 2) {
+            roundingMode = RoundStrategy.valueOf(FunctionValueUtils.getString(request, 1).toUpperCase());
+        }
+
+        BigDecimal number = FunctionValueUtils.getNumber(request, 0);
+        return roundingMode.round(number, precision);
     }
 
-
-    private String getString(FunctionRequest request, int index) {
-        return request.getEnvironment().getValueEnvironment().getStringConverter().convert(request.get(index));
-    }
-
-    private Object round(FunctionRequest request, int mode) {
-        BigDecimal conversionResult = FunctionValueUtils.getNumber(request, 0);
-        return conversionResult.setScale(0, mode);
-    }
 
     public enum RoundStrategy {
-        COMMON,
-        CEIL,
-        FLOOR
+        COMMON(new StaticRound(BigDecimal.ROUND_HALF_UP)),
+        CEIL(new StaticRound(BigDecimal.ROUND_CEILING)),
+        FLOOR(new StaticRound(BigDecimal.ROUND_FLOOR));
+
+        private Round round;
+
+        RoundStrategy(Round round) {
+            this.round = round;
+        }
+
+        public BigDecimal round (BigDecimal number, int precision) {
+            return round.round(number, precision);
+        }
+    }
+
+    private interface Round {
+        BigDecimal round (BigDecimal number, int precision);
+    }
+
+    private static class StaticRound implements Round {
+        private final int roundingMode;
+
+        StaticRound(int roundingMode) {
+            this.roundingMode = roundingMode;
+        }
+
+        @Override
+        public BigDecimal round(BigDecimal number, int precision) {
+            return number.setScale(precision, roundingMode);
+        }
     }
 }
