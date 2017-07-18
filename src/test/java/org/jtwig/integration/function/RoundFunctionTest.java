@@ -17,7 +17,22 @@ public class RoundFunctionTest extends AbstractIntegrationTest {
     @Test
     public void round2() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ round(1.5) }}").render(JtwigModel.newModel());
-        assertThat(result, is("1"));
+        assertThat(result, is("2"));
+    }
+    @Test
+    public void roundWithPrecisionCeil() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{{ 1.51 | round(1, 'ceil') }}").render(JtwigModel.newModel());
+        assertThat(result, is("1.6"));
+    }
+    @Test
+    public void roundWithPrecisionFloor() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{{ 1.57 | round(1, 'floor') }}").render(JtwigModel.newModel());
+        assertThat(result, is("1.5"));
+    }
+    @Test
+    public void roundWithPrecisionCommon() throws Exception {
+        String result = JtwigTemplate.inlineTemplate("{{ 1.51 | round(1, 'common') }}").render(JtwigModel.newModel());
+        assertThat(result, is("1.5"));
     }
     @Test
     public void round3() throws Exception {
@@ -32,12 +47,12 @@ public class RoundFunctionTest extends AbstractIntegrationTest {
     @Test
     public void roundCommon2() throws Exception {
         String result = JtwigTemplate.inlineTemplate("{{ round(1.5, 'common') }}").render(JtwigModel.newModel());
-        assertThat(result, is("1"));
+        assertThat(result, is("2"));
     }
     @Test
     public void roundCommon3() throws Exception {
-        String result = JtwigTemplate.inlineTemplate("{{ round(1.6, 'common') }}").render(JtwigModel.newModel());
-        assertThat(result, is("2"));
+        String result = JtwigTemplate.inlineTemplate("{{ round(-1.5, 'common') }}").render(JtwigModel.newModel());
+        assertThat(result, is("-2"));
     }
     @Test
     public void roundCeiling() throws Exception {
