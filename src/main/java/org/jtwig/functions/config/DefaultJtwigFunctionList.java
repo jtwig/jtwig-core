@@ -60,6 +60,7 @@ public class DefaultJtwigFunctionList extends ArrayList<JtwigFunction> {
                 // Mixed
                 new ConstantFunction(new ClasspathFinder(ConstantFunction.class.getClassLoader(), JavaClassManager.classManager())),
                 new ClassFunction(),
+                new DumpFunction(),
 
                 new UrlEncodeFunction(),
                 new FirstFunction(),

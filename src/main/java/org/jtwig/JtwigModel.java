@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JtwigModel {
-    public static JtwigModel newModel (Map<String, Object> values) {
+    public static JtwigModel newModel(Map<String, Object> values) {
         JtwigModel model = newModel();
         for (Map.Entry<String, Object> entry : values.entrySet()) {
             model.with(entry.getKey(), entry.getValue());
@@ -24,7 +24,7 @@ public class JtwigModel {
         this.values = new HashMap<>();
     }
 
-    public JtwigModel with (String name, Object value) {
+    public JtwigModel with(String name, Object value) {
         values.put(name, new Value(value));
         return this;
     }
