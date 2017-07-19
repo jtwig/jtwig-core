@@ -1,9 +1,8 @@
 package org.jtwig.property.configuration;
 
 import org.jtwig.macro.render.MacroRender;
-import org.jtwig.model.expression.Expression;
 import org.jtwig.property.resolver.PropertyResolver;
-import org.jtwig.property.selection.cache.NoSelectionPropertyResolverCache;
+import org.jtwig.property.selection.cache.SelectionPropertyResolverCacheKey;
 import org.jtwig.property.selection.cache.SelectionPropertyResolverPersistentCache;
 import org.jtwig.property.strategy.*;
 import org.jtwig.property.strategy.method.ArgumentsConverter;
@@ -25,7 +24,7 @@ import static java.util.Arrays.asList;
 
 public class DefaultPropertyResolverConfiguration extends PropertyResolverConfiguration {
     public DefaultPropertyResolverConfiguration() {
-        super(NoSelectionPropertyResolverCache.noSelectionPropertyResolverCache(), asList(
+        super(new SelectionPropertyResolverPersistentCache(new ConcurrentHashMap<SelectionPropertyResolverCacheKey, PropertyResolver>()), asList(
                 new MacroPropertyResolverStrategy(new MacroRender()),
                 new MapPropertyResolverStrategy(),
                 new ValueContextPropertyResolverStrategy(),
