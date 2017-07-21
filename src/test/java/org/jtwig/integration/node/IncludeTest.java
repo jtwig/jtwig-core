@@ -178,4 +178,35 @@ public class IncludeTest extends AbstractIntegrationTest {
 
         template.render(newModel());
     }
+
+    @Test
+    public void includeFallbacks() throws Exception {
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include ['memory:b', 'memory:a'] %}", configuration()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader
+                        .builder()
+                        .withResource("a", "{{ 'a' }}")
+                        .build())).and().and()
+                .build()
+        );
+
+        String result = template.render(newModel());
+
+        assertThat(result, is("a"));
+    }
+
+    @Test
+    public void includingFirstAvailableOfFallbacks() throws Exception {
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% include ['memory:b', 'memory:a'] %}", configuration()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader
+                        .builder()
+                        .withResource("a", "{{ 'a' }}")
+                        .withResource("b", "{{ 'b' }}")
+                        .build())).and().and()
+                .build()
+        );
+
+        String result = template.render(newModel());
+
+        assertThat(result, is("b"));
+    }
 }

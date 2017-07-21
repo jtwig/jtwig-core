@@ -25,8 +25,8 @@ public class IncludeNodeRender implements NodeRender<IncludeNode> {
 
         Object path = calculateExpressionService.calculate(renderRequest, node.getResourceExpression());
         ResourceReference current = renderRequest.getRenderContext().getCurrent(ResourceReference.class);
-        String relativePath = environment.getValueEnvironment().getStringConverter().convert(path);
-        ResourceReference newReference = resourceService.resolve(current, relativePath);
+
+        ResourceReference newReference = resourceService.resolve(current, path, environment.getValueEnvironment());
         ResourceMetadata resourceMetadata = resourceService.loadMetadata(newReference);
 
         if (resourceMetadata.exists()) {

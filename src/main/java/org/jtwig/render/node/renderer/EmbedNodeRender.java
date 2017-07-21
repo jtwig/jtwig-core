@@ -27,7 +27,8 @@ public class EmbedNodeRender implements NodeRender<EmbedNode> {
         Object path = calculateExpressionService.calculate(renderRequest, node.getResourceExpression());
         ResourceReference current = renderRequest.getRenderContext().getCurrent(ResourceReference.class);
         ResourceService resourceService = environment.getResourceEnvironment().getResourceService();
-        ResourceReference newReference = resourceService.resolve(current, getString(renderRequest, path));
+
+        ResourceReference newReference = resourceService.resolve(current, path, environment.getValueEnvironment());
         ResourceMetadata resourceMetadata = resourceService.loadMetadata(newReference);
 
         if (resourceMetadata.exists()) {
@@ -54,9 +55,5 @@ public class EmbedNodeRender implements NodeRender<EmbedNode> {
                 throw new ResourceNotFoundException(ErrorMessageFormatter.errorMessage(node.getPosition(), String.format("Resource '%s' not found", path)));
             }
         }
-    }
-
-    private String getString(RenderRequest request, Object input) {
-        return request.getEnvironment().getValueEnvironment().getStringConverter().convert(input);
     }
 }

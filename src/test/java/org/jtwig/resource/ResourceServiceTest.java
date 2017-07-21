@@ -4,9 +4,12 @@ import com.google.common.base.Optional;
 import org.jtwig.resource.exceptions.ResourceException;
 import org.jtwig.resource.loader.ResourceLoader;
 import org.jtwig.resource.loader.TypedResourceLoader;
+import org.jtwig.resource.metadata.ResourceMetadata;
 import org.jtwig.resource.reference.ResourceReference;
 import org.jtwig.resource.reference.ResourceReferenceExtractor;
 import org.jtwig.resource.resolver.RelativeResourceResolver;
+import org.jtwig.value.convert.string.StringConverter;
+import org.jtwig.value.environment.ValueEnvironment;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -157,5 +160,52 @@ public class ResourceServiceTest {
     @Test(expected = ResourceException.class)
     public void loadMetadataNoLoader() throws Exception {
         underTest.loadMetadata(new ResourceReference("haha", "path"));
+    }
+
+    @Test
+    public void resolveGenericResourceFromString() throws Exception {
+        ResourceReference source = mock(ResourceReference.class);
+        ResourceReference reference = mock(ResourceReference.class);
+        ResourceMetadata resourceMetadata = mock(ResourceMetadata.class);
+        ValueEnvironment valueEnvironment = mock(ValueEnvironment.class);
+        StringConverter stringConverter = mock(StringConverter.class);
+
+        ResourceService underTest = mock(ResourceService.class);
+
+        when(stringConverter.convert("path")).thenReturn("path");
+        when(valueEnvironment.getStringConverter()).thenReturn(stringConverter);
+        when(resourceMetadata.exists()).thenReturn(true);
+        when(underTest.loadMetadata(reference)).thenReturn(resourceMetadata);
+        when(underTest.resolve(source, "path")).thenReturn(reference);
+        when(underTest.resolve(source, "path", valueEnvironment)).thenCallRealMethod();
+
+        ResourceReference result = underTest.resolve(source, "path", valueEnvironment);
+
+        assertSame(reference, result);
+    }
+
+    @Test
+    public void resolveGenericResourceFromList() throws Exception {
+        ResourceReference source = mock(ResourceReference.class);
+        ResourceReference reference = mock(ResourceReference.class);
+        ResourceMetadata resourceMetadata = mock(ResourceMetadata.class);
+        ValueEnvironment valueEnvironment = mock(ValueEnvironment.class);
+        StringConverter stringConverter = mock(StringConverter.class);
+
+        ResourceService underTest = mock(ResourceService.class);
+
+        List<String> pathsList = new ArrayList<>();
+        pathsList.add("path");
+
+        when(stringConverter.convert(pathsList.get(0))).thenReturn(pathsList.get(0));
+        when(valueEnvironment.getStringConverter()).thenReturn(stringConverter);
+        when(resourceMetadata.exists()).thenReturn(true);
+        when(underTest.loadMetadata(reference)).thenReturn(resourceMetadata);
+        when(underTest.resolve(source, pathsList.get(0))).thenReturn(reference);
+        when(underTest.resolve(source, pathsList, valueEnvironment)).thenCallRealMethod();
+
+        ResourceReference result = underTest.resolve(source, pathsList, valueEnvironment);
+
+        assertSame(reference, result);
     }
 }

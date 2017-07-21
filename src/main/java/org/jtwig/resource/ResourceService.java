@@ -10,6 +10,7 @@ import org.jtwig.resource.metadata.ResourceResourceMetadata;
 import org.jtwig.resource.reference.ResourceReference;
 import org.jtwig.resource.reference.ResourceReferenceExtractor;
 import org.jtwig.resource.resolver.RelativeResourceResolver;
+import org.jtwig.value.environment.ValueEnvironment;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,6 +29,28 @@ public class ResourceService {
         this.absoluteResourceTypes = absoluteResourceTypes;
         this.relativeResourceResolvers = relativeResourceResolvers;
         this.resourceReferenceExtractor = resourceReferenceExtractor;
+    }
+
+    public ResourceReference resolve(ResourceReference current, Object path, ValueEnvironment valueEnvironment) {
+        ResourceReference resourceReference = null;
+
+        if(path instanceof List) {
+            for(Object relativePath : (List) path) {
+                ResourceReference newReference = resolve(current, valueEnvironment.getStringConverter().convert(relativePath));
+                ResourceMetadata resourceMetadata = loadMetadata(newReference);
+
+                if(resourceMetadata.exists()) {
+                    resourceReference = newReference;
+                    break;
+                }
+            }
+        }
+
+        if(resourceReference == null) {
+            resourceReference = resolve(current, valueEnvironment.getStringConverter().convert(path));
+        }
+
+        return resourceReference;
     }
 
     public ResourceReference resolve(ResourceReference current, String path) {
