@@ -164,4 +164,35 @@ public class ExtendsTest extends AbstractIntegrationTest {
             return title;
         }
     }
+
+    @Test
+    public void extendFallbacks() throws Exception {
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% extends ['memory:b', 'memory:a'] %}", configuration()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader
+                        .builder()
+                        .withResource("a", "{% block one %}{{ 'a' }}{% endblock %}")
+                        .build())).and().and()
+                .build()
+        );
+
+        String result = template.render(JtwigModel.newModel());
+
+        assertThat(result, is("a"));
+    }
+
+    @Test
+    public void extendFirstAvailableOfFallbacks() throws Exception {
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% extends ['memory:b', 'memory:a'] %}", configuration()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader
+                        .builder()
+                        .withResource("a", "{% block one %}{{ 'a' }}{% endblock %}")
+                        .withResource("b", "{% block one %}{{ 'b' }}{% endblock %}")
+                        .build())).and().and()
+                .build()
+        );
+
+        String result = template.render(JtwigModel.newModel());
+
+        assertThat(result, is("b"));
+    }
 }

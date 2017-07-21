@@ -100,4 +100,35 @@ public class EmbedTest extends AbstractIntegrationTest {
         JtwigTemplate.inlineTemplate("{% embed 'asdasd' %}")
                 .render(JtwigModel.newModel());
     }
+
+    @Test
+    public void embedFallbacks() throws Exception {
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% embed ['memory:b', 'memory:a'] %}{% endembed %}", configuration()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader
+                        .builder()
+                        .withResource("a", "{% block one %}{{ 'a' }}{% endblock %}")
+                        .build())).and().and()
+                .build()
+        );
+
+        String result = template.render(JtwigModel.newModel());
+
+        assertThat(result, is("a"));
+    }
+
+    @Test
+    public void embedFirstAvailableOfFallbacks() throws Exception {
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% embed ['memory:b', 'memory:a'] %}{% endembed %}", configuration()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader
+                        .builder()
+                        .withResource("a", "{% block one %}{{ 'a' }}{% endblock %}")
+                        .withResource("b", "{% block one %}{{ 'b' }}{% endblock %}")
+                        .build())).and().and()
+                .build()
+        );
+
+        String result = template.render(JtwigModel.newModel());
+
+        assertThat(result, is("b"));
+    }
 }
