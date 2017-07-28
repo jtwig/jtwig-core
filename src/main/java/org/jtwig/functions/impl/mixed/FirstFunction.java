@@ -20,6 +20,9 @@ public class FirstFunction extends SimpleJtwigFunction {
         request.minimumNumberOfArguments(1).maximumNumberOfArguments(1);
 
         Object input = request.get(0);
+        if (input == null) {
+            throw request.exception("Cannot get first element from a collection: input is null.");
+        }
         Converter.Result<WrappedCollection> collectionResult = request.getEnvironment()
                 .getValueEnvironment().getCollectionConverter()
                 .convert(input);
