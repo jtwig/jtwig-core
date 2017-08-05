@@ -34,8 +34,19 @@ public class ResourceService {
     public ResourceReference resolve(ResourceReference current, Object path, ValueEnvironment valueEnvironment) {
         ResourceReference resourceReference = null;
 
-        if(path instanceof List) {
-            for(Object relativePath : (List) path) {
+        if(path instanceof Iterable) {
+            for(Object relativePath : (Iterable) path) {
+                ResourceReference newReference = resolve(current, valueEnvironment.getStringConverter().convert(relativePath));
+                ResourceMetadata resourceMetadata = loadMetadata(newReference);
+
+                if(resourceMetadata.exists()) {
+                    resourceReference = newReference;
+                    break;
+                }
+            }
+        }
+        else if(path.getClass().isArray()) {
+            for(Object relativePath : (Object[]) path) {
                 ResourceReference newReference = resolve(current, valueEnvironment.getStringConverter().convert(relativePath));
                 ResourceMetadata resourceMetadata = loadMetadata(newReference);
 

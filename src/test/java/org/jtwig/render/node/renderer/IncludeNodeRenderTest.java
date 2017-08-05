@@ -99,7 +99,7 @@ public class IncludeNodeRenderTest {
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, resourceExpression)).thenReturn(path);
         when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(currentResource);
         when(environment.getValueEnvironment().getStringConverter().convert(path)).thenReturn(relativePath);
-        when(environment.getResourceEnvironment().getResourceService().resolve(currentResource, relativePath)).thenReturn(resource);
+        when(environment.getResourceEnvironment().getResourceService().resolve(currentResource, path, environment.getValueEnvironment())).thenReturn(resource);
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, mapExpression)).thenReturn(mapValue);
         when(environment.getValueEnvironment().getCollectionConverter().convert(mapValue)).thenReturn(Converter.Result.defined(empty));
         when(environment.getRenderEnvironment().getRenderResourceService().render(eq(request), argThat(theSame(new RenderResourceRequest(resource, true, !inherit, empty))))).thenReturn(renderable);

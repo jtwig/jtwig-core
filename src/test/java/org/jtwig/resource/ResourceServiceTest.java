@@ -195,13 +195,38 @@ public class ResourceServiceTest {
         ResourceService underTest = mock(ResourceService.class);
 
         List<String> pathsList = new ArrayList<>();
-        pathsList.add("path");
+        pathsList.add("path1");
+        pathsList.add("path2");
 
         when(stringConverter.convert(pathsList.get(0))).thenReturn(pathsList.get(0));
         when(valueEnvironment.getStringConverter()).thenReturn(stringConverter);
         when(resourceMetadata.exists()).thenReturn(true);
         when(underTest.loadMetadata(reference)).thenReturn(resourceMetadata);
         when(underTest.resolve(source, pathsList.get(0))).thenReturn(reference);
+        when(underTest.resolve(source, pathsList, valueEnvironment)).thenCallRealMethod();
+
+        ResourceReference result = underTest.resolve(source, pathsList, valueEnvironment);
+
+        assertSame(reference, result);
+    }
+
+    @Test
+    public void resolveGenericResourceFromArray() throws Exception {
+        ResourceReference source = mock(ResourceReference.class);
+        ResourceReference reference = mock(ResourceReference.class);
+        ResourceMetadata resourceMetadata = mock(ResourceMetadata.class);
+        ValueEnvironment valueEnvironment = mock(ValueEnvironment.class);
+        StringConverter stringConverter = mock(StringConverter.class);
+
+        ResourceService underTest = mock(ResourceService.class);
+
+        String[] pathsList = new String[] {"path1", "path2"};
+
+        when(stringConverter.convert(pathsList[0])).thenReturn(pathsList[0]);
+        when(valueEnvironment.getStringConverter()).thenReturn(stringConverter);
+        when(resourceMetadata.exists()).thenReturn(true);
+        when(underTest.loadMetadata(reference)).thenReturn(resourceMetadata);
+        when(underTest.resolve(source, pathsList[0])).thenReturn(reference);
         when(underTest.resolve(source, pathsList, valueEnvironment)).thenCallRealMethod();
 
         ResourceReference result = underTest.resolve(source, pathsList, valueEnvironment);
