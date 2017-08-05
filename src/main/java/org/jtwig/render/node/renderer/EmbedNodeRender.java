@@ -29,6 +29,7 @@ public class EmbedNodeRender implements NodeRender<EmbedNode> {
         ResourceService resourceService = environment.getResourceEnvironment().getResourceService();
 
         ResourceReference newReference = resourceService.resolve(current, path, environment.getValueEnvironment());
+
         ResourceMetadata resourceMetadata = resourceService.loadMetadata(newReference);
 
         if (resourceMetadata.exists()) {
@@ -56,4 +57,5 @@ public class EmbedNodeRender implements NodeRender<EmbedNode> {
             }
         }
     }
+
 }

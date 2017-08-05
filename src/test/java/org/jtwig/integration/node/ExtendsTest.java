@@ -11,12 +11,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static java.util.Arrays.asList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.StringContains.containsString;
-import static org.jtwig.environment.EnvironmentConfigurationBuilder.configuration;
-import static org.jtwig.resource.reference.ResourceReference.MEMORY;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.Arrays.*;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.core.Is.*;
+import static org.hamcrest.core.StringContains.*;
+import static org.jtwig.environment.EnvironmentConfigurationBuilder.*;
+import static org.jtwig.resource.reference.ResourceReference.*;
 
 public class ExtendsTest extends AbstractIntegrationTest {
     @Rule
@@ -192,6 +197,48 @@ public class ExtendsTest extends AbstractIntegrationTest {
         );
 
         String result = template.render(JtwigModel.newModel());
+
+        assertThat(result, is("b"));
+    }
+
+    @Test
+    public void extendFirstAvailableOfFallbacksFromIterableModel() throws Exception {
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% extends paths %}", configuration()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader
+                        .builder()
+                        .withResource("a", "{% block one %}{{ 'a' }}{% endblock %}")
+                        .withResource("b", "{% block one %}{{ 'b' }}{% endblock %}")
+                        .build())).and().and()
+                .build()
+        );
+
+        List<String> pathList = new ArrayList<>();
+        pathList.add("memory:b");
+        pathList.add("memory:a");
+
+        Map<String, Object> modelData = new HashMap<>();
+        modelData.put("paths", pathList);
+
+        String result = template.render(JtwigModel.newModel(modelData));
+
+        assertThat(result, is("b"));
+    }
+
+    @Test
+    public void extendFirstAvailableOfFallbacksFromArrayModel() throws Exception {
+        JtwigTemplate template = JtwigTemplate.inlineTemplate("{% extends paths %}", configuration()
+                .resources().resourceLoaders().add(new TypedResourceLoader(MEMORY, InMemoryResourceLoader
+                        .builder()
+                        .withResource("a", "{% block one %}{{ 'a' }}{% endblock %}")
+                        .withResource("b", "{% block one %}{{ 'b' }}{% endblock %}")
+                        .build())).and().and()
+                .build()
+        );
+
+        Map<String, Object> modelData = new HashMap<>();
+        modelData.put("paths", new String[] {"memory:b", "memory:a"});
+
+        String result = template.render(JtwigModel.newModel(modelData));
 
         assertThat(result, is("b"));
     }

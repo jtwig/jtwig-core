@@ -78,7 +78,7 @@ public class ExtendsNodeRenderTest {
         when(node.getNodes()).thenReturn(asList(node1, node2));
         when(environment.getRenderEnvironment().getCalculateExpressionService().calculate(request, expression)).thenReturn(pathValue);
         when(environment.getValueEnvironment().getStringConverter().convert(pathValue)).thenReturn(path);
-        when(environment.getResourceEnvironment().getResourceService().resolve(parentResource, path)).thenReturn(newResource);
+        when(environment.getResourceEnvironment().getResourceService().resolve(parentResource, pathValue, environment.getValueEnvironment())).thenReturn(newResource);
         when(environment.getRenderEnvironment().getRenderResourceService().render(eq(request), argThat(theSame(new RenderResourceRequest(newResource, false, false, WrappedCollection.empty()))))).thenReturn(renderable);
         when(environment.getResourceEnvironment().getResourceService().loadMetadata(newResource)).thenReturn(resourceMetadata);
         when(resourceMetadata.exists()).thenReturn(true);

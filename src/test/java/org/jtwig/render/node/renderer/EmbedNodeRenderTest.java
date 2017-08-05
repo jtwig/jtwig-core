@@ -18,12 +18,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.jtwig.support.MatcherUtils.theSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
+import static java.util.Arrays.*;
+import static org.hamcrest.CoreMatchers.*;
+import static org.jtwig.support.MatcherUtils.*;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
@@ -116,7 +114,7 @@ public class EmbedNodeRenderTest {
         when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(resource);
         when(environment.getValueEnvironment().getStringConverter().convert(pathExpressionValue)).thenReturn(pathExpressionValueAsString);
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
-        when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newResource);
+        when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValue, environment.getValueEnvironment())).thenReturn(newResource);
         when(calculateExpressionService.calculate(request, pathExpression)).thenReturn(pathExpressionValue);
         when(calculateExpressionService.calculate(request, mapExpression)).thenReturn(mapExpressionValue);
         when(environment.getValueEnvironment().getCollectionConverter().convert(mapExpressionValue)).thenReturn(Converter.Result.defined(wrappedCollection));
@@ -161,7 +159,7 @@ public class EmbedNodeRenderTest {
         when(request.getRenderContext().getCurrent(ResourceReference.class)).thenReturn(resource);
         when(environment.getValueEnvironment().getStringConverter().convert(pathExpressionValue)).thenReturn(pathExpressionValueAsString);
         when(environment.getRenderEnvironment().getCalculateExpressionService()).thenReturn(calculateExpressionService);
-        when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValueAsString)).thenReturn(newResource);
+        when(environment.getResourceEnvironment().getResourceService().resolve(resource, pathExpressionValue, environment.getValueEnvironment())).thenReturn(newResource);
         when(calculateExpressionService.calculate(request, pathExpression)).thenReturn(pathExpressionValue);
         when(calculateExpressionService.calculate(request, mapExpression)).thenReturn(mapExpressionValue);
         when(environment.getValueEnvironment().getCollectionConverter().convert(mapExpressionValue)).thenReturn(Converter.Result.defined(wrappedCollection));
