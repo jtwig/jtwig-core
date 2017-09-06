@@ -11,4 +11,8 @@ public class EnvironmentHolder {
         instance.set(environment);
         return environment;
     }
+
+    public static void remove () {
+        instance.remove();
+    }
 }

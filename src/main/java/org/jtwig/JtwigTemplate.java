@@ -107,5 +107,8 @@ public class JtwigTemplate {
         renderContext.end(EscapeEngine.class);
         renderContext.end(ResourceReference.class);
         renderContext.end(BlockContext.class);
+
+        EnvironmentHolder.remove();
+        RenderContextHolder.remove();
     }
 }

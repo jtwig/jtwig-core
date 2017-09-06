@@ -13,4 +13,8 @@ public class RenderContextHolder {
     public static RenderContext get () {
         return current.get();
     }
+
+    public static void remove () {
+        current.remove();
+    }
 }
