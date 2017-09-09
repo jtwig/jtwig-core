@@ -1,0 +1,106 @@
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+group = "org.jtwig"
+version = ext.jtwigVersion
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+static def environmentVariable () {
+    return System.getenv("RELEASE_VARIABLE") ?: "TRAVIS_TAG";
+}
+
+static def isRelease () {
+    return !(System.getenv(environmentVariable()) ?: "").trim().isEmpty();
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['MavenCentral']
+
+    publish = true
+
+    pkg {
+        repo = isRelease() ? 'maven' : 'snapshots'
+        name = project.name
+        userOrg = 'jtwig'
+        licenses = ['Apache-2.0']
+
+        version {
+            gpg {
+                sign = isRelease()
+            }
+            mavenCentralSync {
+                sync = isRelease()
+                user = System.getenv('MAVEN_CENTRAL_USER')
+                password = System.getenv('MAVEN_CENTRAL_PASSWORD')
+                close = '1'
+            }
+        }
+    }
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "jtwig"
+            name 'Jtwig Community'
+            email "no-reply@jtwig.org"
+        }
+    }
+
+    scm {
+        url "https://github.com/jtwig/"+project.name
+    }
+}
+
+// Create the publication with the pom configuration:
+publishing {
+    publications {
+        MavenCentral(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            groupId project.group
+            artifactId project.name
+            version project.version
+
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Jtwig '+project.name)
+                root.appendNode('name', project.name)
+                root.appendNode('url', 'http://jtwig.org')
+                root.children().last() + pomConfig
+
+
+                asNode().dependencies.'*'.findAll() {
+                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        dep.name == it.artifactId.text()
+                    }
+                }.each { it.scope*.value = 'compile'}
+            }
+        }
+    }
+}
