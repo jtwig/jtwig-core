@@ -40,6 +40,7 @@ bintray {
         name = project.name
         userOrg = 'jtwig'
         licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/jtwig/'+project.name+'.git'
 
         version {
             gpg {
