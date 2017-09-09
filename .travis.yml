@@ -13,8 +13,9 @@ script:
   - ./gradlew test jacoco
 
 after_success:
- - bash <(curl -s https://codecov.io/bash)
- - if [[ ( "$TRAVIS_BRANCH" == "master" ) && ( "$TRAVIS_PULL_REQUEST" == "false" ) || ( ! -z "$TRAVIS_TAG" ) ]]; then ./gradlew bintrayUpload; fi
-
+  - bash <(curl -s https://codecov.io/bash)
+  - if [[ ( "$TRAVIS_BRANCH" == "master" ) && ( "$TRAVIS_PULL_REQUEST" == "false" ) && ( -z "$TRAVIS_TAG" ) ]]; then ./gradlew bintrayUpload; fi
+  - if [ ! -z "$TRAVIS_TAG" ]; then ./gradlew bintrayUpload -PjtwigVersion="$TRAVIS_TAG"; fi
+ 
 notifications:
   webhooks: http://jtwig.org/rest/travis
