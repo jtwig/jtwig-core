@@ -1,4 +1,3 @@
-// The content of this file is generated, don't change it manually unless you know what you're doing.
 ext {
-    jtwigVersion = "5.CURRENT"
+    jtwigVersion = project.hasProperty('jtwigVersion') ? project.getProperty('jtwigVersion') : '5.CURRENT'
 }
