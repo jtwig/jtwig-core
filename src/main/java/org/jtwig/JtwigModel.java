@@ -14,14 +14,35 @@ public class JtwigModel {
         }
         return model;
     }
-    public static JtwigModel newModel () {
+
+    public static JtwigModel newEmptyModel(Map<String, Object> values) {
+        JtwigModel model = newEmptyModel();
+        for (Map.Entry<String, Object> entry : values.entrySet()) {
+            model.with(entry.getKey(), entry.getValue());
+        }
+        return model;
+    }
+
+    public static JtwigModel newModel() {
         return new JtwigModel();
+    }
+
+    public static JtwigModel newEmptyModel() {
+        return new JtwigModel(false);
     }
 
     private final Map<String, Value> values;
 
+    public JtwigModel(boolean useGlobal) {
+        if (useGlobal) {
+            this.values = JtwigGlobalModel.INSTANCE.getGobalModel();
+        } else {
+            this.values = new HashMap<>();
+        }
+    }
+
     public JtwigModel() {
-        this.values = new HashMap<>();
+        this(true);
     }
 
     public JtwigModel with(String name, Object value) {
@@ -29,7 +50,7 @@ public class JtwigModel {
         return this;
     }
 
-    public Optional<Value> get (String key) {
+    public Optional<Value> get(String key) {
         return Optional.fromNullable(values.get(key));
     }
 }
