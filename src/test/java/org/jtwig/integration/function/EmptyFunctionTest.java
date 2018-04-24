@@ -98,4 +98,22 @@ public class EmptyFunctionTest extends AbstractIntegrationTest {
 
         assertThat(result, is("ok"));
     }
+
+    @Test
+    public void emptyWhenEmptyString() throws Exception {
+
+        String result = JtwigTemplate.inlineTemplate("{% if (empty('')) %}ok{% else %}ko{% endif %}")
+            .render(JtwigModel.newModel());
+
+        assertThat(result, is("ok"));
+    }
+
+    @Test
+    public void emptyWhenNonEmptyString() throws Exception {
+
+        String result = JtwigTemplate.inlineTemplate("{% if (empty('no')) %}kk{% else %}ok{% endif %}")
+            .render(JtwigModel.newModel());
+
+        assertThat(result, is("ok"));
+    }
 }

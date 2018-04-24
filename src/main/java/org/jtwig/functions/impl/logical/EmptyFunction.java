@@ -6,6 +6,7 @@ import org.jtwig.value.WrappedCollection;
 import org.jtwig.value.convert.Converter;
 
 import java.math.BigDecimal;
+import org.jtwig.value.convert.string.StringConverter;
 
 public class EmptyFunction extends SimpleJtwigFunction {
     private final DefinedFunction definedFunction = new DefinedFunction();
@@ -20,7 +21,8 @@ public class EmptyFunction extends SimpleJtwigFunction {
         return request.get(0) == null ||
                 !definedFunction.execute(request) ||
                 isEmptyIterable(request) ||
-                isZero(request)
+                isZero(request) ||
+                isEmptyString(request)
                 ;
     }
 
@@ -33,5 +35,11 @@ public class EmptyFunction extends SimpleJtwigFunction {
     private boolean isEmptyIterable(FunctionRequest request) {
         Converter.Result<WrappedCollection> result = request.getEnvironment().getValueEnvironment().getCollectionConverter().convert(request.get(0));
         return result.isDefined() && result.get().size() == 0;
+    }
+
+    private boolean isEmptyString(FunctionRequest request) {
+        StringConverter converter = request.getEnvironment().getValueEnvironment().getStringConverter();
+        String param = converter.convert(request.get(0));
+        return param.isEmpty();
     }
 }
