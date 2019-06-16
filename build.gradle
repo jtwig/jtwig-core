@@ -35,7 +35,7 @@ repositories {
 dependencies {
     compile "org.jtwig:jtwig-reflection:$jtwigVersion"
 
-    compile 'com.google.guava:guava:18.0'
+    compile 'com.google.guava:guava:28.0-jre'
     compile 'org.apache.commons:commons-lang3:3.6'
     compile 'org.parboiled:parboiled-java:1.1.7'
     compile 'org.slf4j:slf4j-api:1.7.12'
