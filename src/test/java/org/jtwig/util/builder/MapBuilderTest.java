@@ -89,6 +89,11 @@ public class MapBuilderTest {
             public boolean apply(Map.Entry<String, Object> input) {
                 return input.getKey().equals(preAddedKey2);
             }
+
+            @Override
+            public boolean test(Map.Entry<String, Object>  input) {
+                return apply(input);
+            }
         }).build();
 
         assertThat(result.get(preAddedKey2), is(preAddedValue2));

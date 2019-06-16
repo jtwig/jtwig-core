@@ -66,6 +66,11 @@ public class ListBuilderTest {
             public boolean apply(String input) {
                 return input.equals(preAdded2);
             }
+
+            @Override
+            public boolean test(String input) {
+                return apply(input);
+            }
         }).build();
 
         assertThat(result.size(), is(1));
